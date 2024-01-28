@@ -15,11 +15,11 @@ if(HYPERION_USE_FETCH_CONTENT)
         )
     FetchContent_MakeAvailable(doctest)
 
-    FetchContent_Declare(hyperion_mpl
-        GIT_REPOSITORY "https://github.com/braxtons12/hyperion_mpl"
+    FetchContent_Declare(hyperion_platform
+        GIT_REPOSITORY "https://github.com/braxtons12/hyperion_platform"
         GIT_TAG "origin/main"
         )
-    FetchContent_MakeAvailable(hyperion_mpl)
+    FetchContent_MakeAvailable(hyperion_platform)
 else()
     find_package(doctest REQUIRED)
 endif()
