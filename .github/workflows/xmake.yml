@@ -1,0 +1,130 @@
+name: XMake
+
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+    branches: ["*"]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: seanmiddleditch/gha-setup-ninja@v4
+
+      - name: Install XMake
+        run: |
+          sudo add-apt-repository ppa:xmake-io/xmake
+          sudo apt-get -y update
+          sudo apt-get -y install xmake
+
+      - name: Install LLVM and Clang
+        run: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 16
+          sudo apt-get -y install clang-tidy-16
+
+      - name: Replace clang-tidy
+        run: sudo cp /usr/bin/clang-tidy-16 /usr/bin/clang-tidy -f
+
+      - name: Install GCC 12
+        run: sudo apt-get -y install gcc-12
+
+      - name: Configure GCC
+        env:
+          CC: gcc-12
+          CXX: gcc-12
+        working-directory: ${{github.workspace}}
+        run: xmake f -c -y --toolchain=envs
+
+      - name: Build GCC
+        env:
+          CC: gcc-12
+          CXX: gcc-12
+          ACTIONS_STEP_DEBUG: true
+        working-directory: ${{github.workspace}}
+        run: xmake b
+
+      - name: Configure Clang
+        env:
+          CC: clang-16
+          CXX: clang-16
+        working-directory: ${{github.workspace}}
+        run: |
+          rm -rf build .xmake
+          xmake f -c -y --toolchain=envs
+
+      - name: Build Clang
+        env:
+          CC: clang-16
+          CXX: clang-16
+          ACTIONS_STEP_DEBUG: true
+        working-directory: ${{github.workspace}}
+        run: |
+          xmake b
+          xmake check clang.tidy
+
+  build-windows:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: seanmiddleditch/gha-setup-ninja@v4
+
+      - name: Setup scoop
+        uses: MinoruSekine/setup-scoop@v2
+        with:
+          buckets: extras
+          scoop_checkup: true
+          scoop_update: true
+          update_path: true
+
+      - name: Setup MSVC
+        uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: x64
+
+      - name: Install XMake
+        run: scoop install xmake
+
+      - name: Configure
+        working-directory: ${{github.workspace}}
+        run: xmake f -c -y --toolchain=msvc
+          
+      - name: Build
+        env:
+          ACTIONS_STEP_DEBUG: true
+        working-directory: ${{github.workspace}}
+        run: xmake b
+
+  build-macos:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: seanmiddleditch/gha-setup-ninja@v4
+
+      - name: Install XMake
+        run: brew install xmake
+
+      - name: Install LLVM
+        run: xrepo install -y llvm
+
+      - name: Configure
+        working-directory: ${{github.workspace}}
+        run: xmake f -c -y --toolchain=xcode
+
+      - name: Build
+        env:
+          ACTIONS_STEP_DEBUG: true
+        working-directory: ${{github.workspace}}
+        run: |
+          xmake b -y
+          xmake check clang.tidy
+

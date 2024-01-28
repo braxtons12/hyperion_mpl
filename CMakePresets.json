@@ -1,0 +1,139 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "gcc-base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+              "CMAKE_BUILD_TYPE": "Debug",
+              "CMAKE_C_COMPILER": "gcc",
+              "CMAKE_CXX_COMPILER": "g++",
+              "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        },
+        {
+            "name": "clang-base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+              "CMAKE_BUILD_TYPE": "Debug",
+              "CMAKE_C_COMPILER": "clang",
+              "CMAKE_CXX_COMPILER": "clang++",
+              "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        },
+        {
+            "name": "msvc-base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+              "CMAKE_BUILD_TYPE": "Debug",
+              "CMAKE_C_COMPILER": "cl",
+              "CMAKE_CXX_COMPILER": "cl",
+              "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        },
+        {
+            "name": "env-cc-base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+              "CMAKE_BUILD_TYPE": "Debug",
+              "CMAKE_C_COMPILER": "$env{CC}",
+              "CMAKE_CXX_COMPILER": "$env{CXX}",
+              "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        },
+        {
+            "name": "gcc-debug",
+            "displayName": "gcc-debug",
+            "inherits": "gcc-base"
+        },
+        {
+            "name": "gcc-release",
+            "displayName": "gcc-release",
+            "inherits": "gcc-base",
+            "cacheVariables": {
+              "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "clang-debug",
+            "displayName": "clang-debug",
+            "inherits": "clang-base"
+        },
+        {
+            "name": "clang-release",
+            "displayName": "clang-release",
+            "inherits": "clang-base",
+            "cacheVariables": {
+              "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "msvc-debug",
+            "displayName": "msvc-debug",
+            "inherits": "msvc-base"
+        },
+        {
+            "name": "msvc-release",
+            "displayName": "msvc-release",
+            "inherits": "msvc-base",
+            "cacheVariables": {
+              "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "env-cc-debug",
+            "displayName": "env-cc-debug",
+            "inherits": "env-cc-base"
+        },
+        {
+            "name": "env-cc-release",
+            "displayName": "env-cc-release",
+            "inherits": "env-cc-base",
+            "cacheVariables": {
+              "CMAKE_BUILD_TYPE": "Release"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "gcc-debug",
+            "configurePreset": "gcc-debug"
+        },
+        {
+            "name": "gcc-release",
+            "configurePreset": "gcc-release"
+        },
+        {
+            "name": "clang-debug",
+            "configurePreset": "clang-debug"
+        },
+        {
+            "name": "clang-release",
+            "configurePreset": "clang-release"
+        },
+        {
+            "name": "msvc-debug",
+            "configurePreset": "msvc-debug"
+        },
+        {
+            "name": "msvc-release",
+            "configurePreset": "msvc-release"
+        },
+        {
+            "name": "env-cc-debug",
+            "configurePreset": "env-cc-debug"
+        },
+        {
+            "name": "env-cc-release",
+            "configurePreset": "env-cc-release"
+        }
+    ]
+}

@@ -1,0 +1,64 @@
+name: Update Documentation
+
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+    branches: ["*"]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Doxygen
+        run: sudo apt-get -y install doxygen
+
+      - name: Install Graphviz
+        run: sudo apt-get -y install graphviz
+
+      - name: Install LibGS
+        run: sudo apt-get -y install libgs9 libgs9-common
+
+      - name: Install GCC 12
+        run: sudo apt-get -y install gcc-12
+
+      - name: Install xmake
+        run: |
+          sudo add-apt-repository ppa:xmake-io/xmake
+          sudo apt-get -y update
+          sudo apt-get -y install xmake
+
+      - name: Install Sphinx Tools
+        run: |
+          pip install sphinx breathe exhale myst-parser docutils pydata-sphinx-theme sphinx-sitemap
+
+      - name: Configure Linux
+        env:
+          CC: gcc-12
+          CXX: gcc-12
+        working-directory: ${{github.workspace}}
+        run: xmake f -c -y --toolchain=envs
+
+      - name: Build Linux
+        env:
+          CC: gcc-12
+          CXX: gcc-12
+        working-directory: ${{github.workspace}}
+        run: |
+          mkdir -p docs/_build/html
+          touch docs/_build/html/.nojekyll
+          xmake b hyperion_platform_docs
+
+      - name: Push Docs
+        if: github.ref == 'refs/heads/main'
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: self
+          BRANCH: gh-pages
+          FOLDER: docs/_build/html
+
