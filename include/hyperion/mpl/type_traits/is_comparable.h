@@ -104,8 +104,8 @@ namespace hyperion::mpl::type_traits {
     template<typename TLhs, typename TRhs>
     struct is_greater_than_comparable
         : std::bool_constant<requires(const TLhs& lhs, const TRhs& rhs) {
-            lhs > rhs;
-            rhs > lhs;
+            (lhs > rhs);
+            (rhs > lhs);
           }>
     {};
 
