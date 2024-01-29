@@ -89,9 +89,10 @@ namespace hyperion::mpl {
     }
 
     template<ValueType TType>
-        requires(!std::same_as<TType, Value<TType::value>>)
-    [[nodiscard]] constexpr auto
-    as_value([[maybe_unused]] const TType& value) noexcept -> Value<TType::value> {
+        requires(
+            !std::same_as<TType, Value<TType::value, std::remove_cvref_t<decltype(TType::value)>>>)
+    [[nodiscard]] constexpr auto as_value([[maybe_unused]] const TType& value) noexcept
+        -> Value<TType::value, std::remove_cvref_t<decltype(TType::value)>> {
         return {};
     }
 
@@ -264,9 +265,8 @@ namespace hyperion::mpl {
         static_assert(Value<3>{} == 3,
                       "hyperion::mpl::Value implicit conversion test case (failing)");
 
-        static_assert(
-            std::same_as<decltype(as_value(std::integral_constant<int, 3>{})), Value<3, int>>,
-            "hyperion::mpl::as_value test case 1 (failing)");
+        static_assert(std::same_as<decltype(as_value(std::integral_constant<int, 3>{})), Value<3>>,
+                      "hyperion::mpl::as_value test case 1 (failing)");
 
         static_assert(Value<3>{} == 3_value,
                       "hyperion::mpl::operator"
