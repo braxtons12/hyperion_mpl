@@ -51,7 +51,7 @@ jobs:
         run: |
           mkdir -p docs/_build/html
           touch docs/_build/html/.nojekyll
-          xmake b hyperion_platform_docs
+          xmake b hyperion_mpl_docs
 
       - name: Push Docs
         if: github.ref == 'refs/heads/main'
