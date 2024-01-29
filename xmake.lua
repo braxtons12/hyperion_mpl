@@ -49,9 +49,18 @@ local hyperion_mpl_headers = {
     "$(projectdir)/include/hyperion/mpl/type_traits.h",
     "$(projectdir)/include/hyperion/mpl/value.h",
 }
-
 local hyperion_mpl_algorithms_headers = {
     "$(projectdir)/include/hyperion/mpl/algorithms/all_of.h",
+}
+local hyperion_mpl_concepts_headers = {
+    "$(projectdir)/include/hyperion/mpl/concepts/comparable.h",
+    "$(projectdir)/include/hyperion/mpl/concepts/operator_able.h",
+    "$(projectdir)/include/hyperion/mpl/concepts/std_supplemental.h",
+}
+local hyperion_mpl_type_traits_headers = {
+    "$(projectdir)/include/hyperion/mpl/type_traits/is_comparable.h",
+    "$(projectdir)/include/hyperion/mpl/type_traits/is_operator_able.h",
+    "$(projectdir)/include/hyperion/mpl/type_traits/std_supplemental.h",
 }
 
 target("hyperion_mpl", function()
@@ -60,17 +69,19 @@ target("hyperion_mpl", function()
     add_includedirs("$(projectdir)/include", { public = true })
     add_headerfiles(hyperion_mpl_headers, { prefixdir = "hyperion/mpl", public = true })
     add_headerfiles(hyperion_mpl_algorithms_headers, { prefixdir = "hyperion/mpl/algorithms", public = true })
+    add_headerfiles(hyperion_mpl_concepts_headers, { prefixdir = "hyperion/mpl/concepts", public = true })
+    add_headerfiles(hyperion_mpl_type_traits_headers, { prefixdir = "hyperion/mpl/type_traits", public = true })
     set_default(true)
     on_config(function(target)
-        import("hyperion_compiler_settings", {alias = "settings"})
+        import("hyperion_compiler_settings", { alias = "settings" })
         settings.set_compiler_settings(target)
     end)
     add_options("hyperion_enable_tracy")
 
-    add_packages("doctest", {public = true})
-    add_packages("hyperion_platform", {public = true})
+    add_packages("doctest", { public = true })
+    add_packages("hyperion_platform", { public = true })
     if has_package("tracy") then
-        add_packages("tracy", {public = true})
+        add_packages("tracy", { public = true })
     end
 end)
 
@@ -81,7 +92,7 @@ target("hyperion_mpl_main", function()
     add_deps("hyperion_mpl")
     set_default(true)
     on_config(function(target)
-        import("hyperion_compiler_settings", {alias = "settings"})
+        import("hyperion_compiler_settings", { alias = "settings" })
         settings.set_compiler_settings(target)
     end)
 end)

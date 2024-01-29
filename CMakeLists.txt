@@ -48,13 +48,19 @@ set(HYPERION_PLATFORM_INCLUDE_PATH
     "${CMAKE_CURRENT_SOURCE_DIR}/include/hyperion"
 )
 set(HYPERION_PLATFORM_HEADERS
-    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/concepts.h"
     "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/index.h"
     "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/list.h"
-    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/type_traits.h"
     "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/value.h"
     "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/algorithms.h"
     "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/algorithms/all_of.h"
+    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/concepts.h"
+    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/concepts/comparable.h"
+    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/concepts/operator_able.h"
+    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/concepts/std_supplemental.h"
+    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/type_traits.h"
+    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/type_traits/is_comparable.h"
+    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/type_traits/is_operator_able.h"
+    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/type_traits/std_supplemental.h"
 )
 
 add_library(hyperion_mpl INTERFACE)

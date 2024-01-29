@@ -1,6 +1,7 @@
-/// @file concepts.h
+/// @file std_supplemental.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
-/// @brief Meta-programming C++20 concept definitions
+/// @brief Supplemental C++20 concept definitions to those provided in
+/// `#include <concepts>` to provide functionality missing from the standard
 /// @version 0.1
 /// @date 2024-01-27
 ///
@@ -25,11 +26,16 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
 
-#ifndef HYPERION_MPL_CONCEPTS_H
-#define HYPERION_MPL_CONCEPTS_H
+#ifndef HYPERION_MPL_CONCEPTS_STD_SUPPLEMENTAL_H
+#define HYPERION_MPL_CONCEPTS_STD_SUPPLEMENTAL_H
 
-#include <hyperion/mpl/concepts/comparable.h>
-#include <hyperion/mpl/concepts/operator_able.h>
-#include <hyperion/mpl/concepts/std_supplemental.h>
+#include <hyperion/mpl/type_traits/std_supplemental.h>
 
-#endif // HYPERION_MPL_CONCEPTS_H
+namespace hyperion::mpl::concepts {
+
+    template<typename TType>
+    concept TriviallyMovable = type_traits::is_trivially_movable_v<TType>;
+
+} // namespace hyperion::mpl::concepts
+
+#endif // HYPERION_MPL_CONCEPTS_STD_SUPPLEMENTAL_H

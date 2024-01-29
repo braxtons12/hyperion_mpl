@@ -1,6 +1,7 @@
-/// @file concepts.h
+/// @file std_supplemental.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
-/// @brief Meta-programming C++20 concept definitions
+/// @brief Supplemental type traits to those provided in `#include <type_traits>`
+/// to provide functionality missing from the standard
 /// @version 0.1
 /// @date 2024-01-27
 ///
@@ -25,11 +26,20 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
 
-#ifndef HYPERION_MPL_CONCEPTS_H
-#define HYPERION_MPL_CONCEPTS_H
+#ifndef HYPERION_MPL_TYPE_TRAITS_STD_SUPPLEMENTAL_H
+#define HYPERION_MPL_TYPE_TRAITS_STD_SUPPLEMENTAL_H
 
-#include <hyperion/mpl/concepts/comparable.h>
-#include <hyperion/mpl/concepts/operator_able.h>
-#include <hyperion/mpl/concepts/std_supplemental.h>
+#include <type_traits>
 
-#endif // HYPERION_MPL_CONCEPTS_H
+namespace hyperion::mpl::type_traits {
+
+    template<typename TType>
+    struct is_trivially_movable
+        : public std::bool_constant<std::is_trivially_move_constructible_v<TType>
+                                    && std::is_trivially_move_assignable_v<TType>> { };
+
+    template<typename TType>
+    static inline constexpr auto is_trivially_movable_v = is_trivially_movable<TType>::value;
+} // namespace hyperion::mpl::type_traits
+
+#endif // HYPERION_MPL_TYPE_TRAITS_STD_SUPPLEMENTAL_H

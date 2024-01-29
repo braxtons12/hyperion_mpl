@@ -25,3 +25,11 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
 
+#ifndef HYPERION_MPL_TYPE_TRAITS_H
+#define HYPERION_MPL_TYPE_TRAITS_H
+
+#include <hyperion/mpl/type_traits/is_comparable.h>
+#include <hyperion/mpl/type_traits/is_operator_able.h>
+#include <hyperion/mpl/type_traits/std_supplemental.h>
+
+#endif // HYPERION_MPL_TYPE_TRAITS_H
