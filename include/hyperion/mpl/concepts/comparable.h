@@ -52,8 +52,12 @@ namespace hyperion::mpl::concepts {
     concept GreaterThanOrEqualComparable
         = type_traits::is_greater_than_or_equal_comparable_v<TLhs, TRhs>;
 
+#if HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
+
     template<typename TLhs, typename TRhs>
     concept ThreeWayComparable = type_traits::is_three_way_comparable_v<TLhs, TRhs>;
+
+#endif // HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
 
     namespace _test {
 

@@ -131,19 +131,17 @@ namespace hyperion::mpl::type_traits {
         = is_greater_than_or_equal_comparable<TLhs, TRhs>::value;
     // clang-format off
 
+#if HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
+
     template<typename TLhs, typename TRhs>
     struct is_three_way_comparable : std::false_type {
-#if HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
         using result_type = void;
-#endif
     };
 
     template<typename TLhs, typename TRhs>
         requires std::three_way_comparable_with<TLhs, TRhs>
     struct is_three_way_comparable<TLhs, TRhs> : std::true_type {
-#if HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
         using result_type = std::compare_three_way_result_t<TLhs, TRhs>;
-#endif
     };
     // clang-format on
 
@@ -153,6 +151,8 @@ namespace hyperion::mpl::type_traits {
 
     template<typename TLhs, typename TRhs>
     using three_way_compare_result_t = typename is_three_way_comparable<TLhs, TRhs>::result_type;
+
+#endif // HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
 
     namespace _test {
 
