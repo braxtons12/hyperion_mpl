@@ -206,6 +206,8 @@ namespace hyperion::mpl::type_traits {
             !is_greater_than_or_equal_comparable_v<int, not_comparable>,
             "hyperion::mpl::type_traits::is_greater_than_or_equal_comparable test case 3 failing");
 
+#if HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
+
         static_assert(is_three_way_comparable_v<int, int>,
                       "hyperion::mpl::type_traits::is_three_way_comparable test case 1 failing");
         static_assert(is_three_way_comparable_v<int, double>,
@@ -213,13 +215,13 @@ namespace hyperion::mpl::type_traits {
         static_assert(!is_three_way_comparable_v<int, not_comparable>,
                       "hyperion::mpl::type_traits::is_three_way_comparable test case 3 failing");
 
-#if HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
         static_assert(std::same_as<three_way_compare_result_t<int, int>, std::strong_ordering>,
                       "hyperion::mpl::type_traits::is_three_way_comparable test case 1 failing");
         static_assert(std::same_as<three_way_compare_result_t<int, double>, std::partial_ordering>,
                       "hyperion::mpl::type_traits::is_three_way_comparable test case 2 failing");
         static_assert(std::same_as<three_way_compare_result_t<int, not_comparable>, void>,
                       "hyperion::mpl::type_traits::is_three_way_comparable test case 3 failing");
+
 #endif // HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
     }  // namespace _test
 } // namespace hyperion::mpl::type_traits

@@ -105,13 +105,17 @@ namespace hyperion::mpl::concepts {
         static_assert(!GreaterThanOrEqualComparable<int, not_comparable>,
                       "hyperion::mpl::concepts::GreaterThanOrEqualComparable test case 3 failing");
 
+#if HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
+
         static_assert(ThreeWayComparable<int, int>,
                       "hyperion::mpl::concepts::ThreeWayComparable test case 1 failing");
         static_assert(ThreeWayComparable<int, double>,
                       "hyperion::mpl::concepts::ThreeWayComparable test case 2 failing");
         static_assert(!ThreeWayComparable<int, not_comparable>,
                       "hyperion::mpl::concepts::ThreeWayComparable test case 3 failing");
-    } // namespace _test
+
+#endif // HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
+    }  // namespace _test
 } // namespace hyperion::mpl::concepts
 
 #endif // HYPERION_MPL_CONCEPTS_IS_COMPARABLE_H
