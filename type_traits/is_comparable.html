@@ -1,0 +1,807 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="dark">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Comparison Operator Detection &#8212; hyperion::mpl  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'type_traits/is_comparable';</script>
+    <link rel="canonical" href="braxtons12.github.io/hyperion_mpl/type_traits/is_comparable.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="General Operator Detection" href="is_operator_able.html" />
+    <link rel="prev" title="hyperion::mpl::type_traits" href="../type_traits.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="dark">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">hyperion::mpl  documentation</p>
+  
+</a></div>
+    
+      <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../quick_start.html">
+                        Quick Start Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../genindex.html">
+                        Index
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../type_traits.html">
+                        hyperion::mpl::type_traits
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../concepts.html">
+                        hyperion::mpl::concepts
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/braxtons12/hyperion_mpl" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../quick_start.html">
+                        Quick Start Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../genindex.html">
+                        Index
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../type_traits.html">
+                        hyperion::mpl::type_traits
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../concepts.html">
+                        hyperion::mpl::concepts
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/braxtons12/hyperion_mpl" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+        <div class="sidebar-primary-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../quick_start.html">
+                        Quick Start Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../genindex.html">
+                        Index
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../type_traits.html">
+                        hyperion::mpl::type_traits
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../concepts.html">
+                        hyperion::mpl::concepts
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="list-caption"><li class="toctree-l0 has-children"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Comparison Operator Detection</span></p><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="label-parts" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Comparison Operator Detection</a></li>
+</ul></li><li class="toctree-l0 has-children"><p aria-level="2" class="caption" role="heading"><span class="caption-text">General Operator Detection</span></p><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="label-parts" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="is_operator_able.html">General Operator Detection</a></li>
+</ul></li></ul></div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../type_traits.html" class="nav-link">hyperion::mpl::type_traits</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Comparison...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="comparison-operator-detection">
+<h1>Comparison Operator Detection<a class="headerlink" href="#comparison-operator-detection" title="Link to this heading">#</a></h1>
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="group__comparison__operator__detection"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">comparison_operator_detection</span></span></dt>
+<dd><p>Assortment of type traits to determine if two types are comparable.</p>
+<section id="group__comparison__operator__detection_1autotoc_md7">
+<h2>Example:<a class="headerlink" href="#group__comparison__operator__detection_1autotoc_md7" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate" id="group__comparison__operator__detection_1autotoc_md7"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/mpl/type_traits/is_comparable.h&gt;</span>
+
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">hyperion</span><span class="o">::</span><span class="nn">mpl</span><span class="o">::</span><span class="nn">type_traits</span><span class="p">;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">not_comparable</span><span class="w"> </span><span class="p">{};</span>
+
+<span class="k">static_assert</span><span class="p">(</span><span class="n">is_equality_comparable_v</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">is_equality_comparable_v</span><span class="o">&lt;</span><span class="n">not_comparable</span><span class="p">,</span><span class="w"> </span><span class="n">not_comparable</span><span class="o">&gt;</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-typedefs">Typedefs</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4I00E26three_way_compare_result_t">
+<span id="_CPPv3I00E26three_way_compare_result_t"></span><span id="_CPPv2I00E26three_way_compare_result_t"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="group__comparison__operator__detection_1gaf8f1f9395adb37ae929e1e984ec252a7"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">three_way_compare_result_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="n"><span class="pre">is_three_way_comparable</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00E26three_way_compare_result_t" title="three_way_compare_result_t::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00E26three_way_compare_result_t" title="three_way_compare_result_t::TRhs"><span class="n"><span class="pre">TRhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">result_type</span></span><a class="headerlink" href="#_CPPv4I00E26three_way_compare_result_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Alias to the <code class="docutils literal notranslate"><span class="pre">result_type</span></code> member typedef of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1type__traits_1_1is__three__way__comparable"><span class="std std-ref"><span class="pre">is_three_way_comparable</span></span></a></code>. Used to determine the type of the returned result of three-way comparing a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code>, i.e. <code class="docutils literal notranslate"><span class="pre">decltype(std::declval&lt;TLhs&gt;()</span> <span class="pre">&lt;=&gt;</span> <span class="pre">std::declval&lt;TRhs&gt;())</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TLhs</strong> – The left-hand side argument of the comparison </p></li>
+<li><p><strong>TRhs</strong> – The right-hand side argument of the comparison </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-variables">Variables</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4I00E24is_equality_comparable_v">
+<span id="_CPPv3I00E24is_equality_comparable_v"></span><span id="_CPPv2I00E24is_equality_comparable_v"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="group__comparison__operator__detection_1ga07734893131aa16de3b9005e18706069"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_equality_comparable_v</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">is_equality_comparable</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00E24is_equality_comparable_v" title="is_equality_comparable_v::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00E24is_equality_comparable_v" title="is_equality_comparable_v::TRhs"><span class="n"><span class="pre">TRhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><a class="headerlink" href="#_CPPv4I00E24is_equality_comparable_v" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value of the type trait <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1type__traits_1_1is__equality__comparable"><span class="std std-ref"><span class="pre">is_equality_comparable</span></span></a></code>. Used to determine whether a value of type <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is equality comparable with a value of type <code class="docutils literal notranslate"><span class="pre">TRhs</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TLhs</strong> – The left-hand side argument of the comparison </p></li>
+<li><p><strong>TRhs</strong> – The right-hand side argument of the comparison </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4I00E26is_inequality_comparable_v">
+<span id="_CPPv3I00E26is_inequality_comparable_v"></span><span id="_CPPv2I00E26is_inequality_comparable_v"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="group__comparison__operator__detection_1ga7d975d4ec573e4d5b7a8e845f6132009"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_inequality_comparable_v</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">is_inequality_comparable</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00E26is_inequality_comparable_v" title="is_inequality_comparable_v::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00E26is_inequality_comparable_v" title="is_inequality_comparable_v::TRhs"><span class="n"><span class="pre">TRhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><a class="headerlink" href="#_CPPv4I00E26is_inequality_comparable_v" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value of the type trait <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1type__traits_1_1is__inequality__comparable"><span class="std std-ref"><span class="pre">is_inequality_comparable</span></span></a></code>. Used to determine whether a value of type <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is inequality comparable with a value of type <code class="docutils literal notranslate"><span class="pre">TRhs</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TLhs</strong> – The left-hand side argument of the comparison </p></li>
+<li><p><strong>TRhs</strong> – The right-hand side argument of the comparison </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4I00E25is_less_than_comparable_v">
+<span id="_CPPv3I00E25is_less_than_comparable_v"></span><span id="_CPPv2I00E25is_less_than_comparable_v"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="group__comparison__operator__detection_1ga379c689641ee29dc3def2a8bc7294c8f"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_less_than_comparable_v</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">is_less_than_comparable</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00E25is_less_than_comparable_v" title="is_less_than_comparable_v::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00E25is_less_than_comparable_v" title="is_less_than_comparable_v::TRhs"><span class="n"><span class="pre">TRhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><a class="headerlink" href="#_CPPv4I00E25is_less_than_comparable_v" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value of the type trait <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1type__traits_1_1is__less__than__comparable"><span class="std std-ref"><span class="pre">is_less_than_comparable</span></span></a></code>. Used to determine whether a value of type <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is less-than comparable with a value of type <code class="docutils literal notranslate"><span class="pre">TRhs</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TLhs</strong> – The left-hand side argument of the comparison </p></li>
+<li><p><strong>TRhs</strong> – The right-hand side argument of the comparison </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4I00E34is_less_than_or_equal_comparable_v">
+<span id="_CPPv3I00E34is_less_than_or_equal_comparable_v"></span><span id="_CPPv2I00E34is_less_than_or_equal_comparable_v"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="group__comparison__operator__detection_1ga23e6747c0d1556890b4b702ef46813f5"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_less_than_or_equal_comparable_v</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">is_less_than_or_equal_comparable</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00E34is_less_than_or_equal_comparable_v" title="is_less_than_or_equal_comparable_v::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00E34is_less_than_or_equal_comparable_v" title="is_less_than_or_equal_comparable_v::TRhs"><span class="n"><span class="pre">TRhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><a class="headerlink" href="#_CPPv4I00E34is_less_than_or_equal_comparable_v" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value of the type trait <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1type__traits_1_1is__less__than__or__equal__comparable"><span class="std std-ref"><span class="pre">is_less_than_or_equal_comparable</span></span></a></code>. Used to determine whether a value of type <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is less-than-or-equal comparable with a value of type <code class="docutils literal notranslate"><span class="pre">TRhs</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TLhs</strong> – The left-hand side argument of the comparison </p></li>
+<li><p><strong>TRhs</strong> – The right-hand side argument of the comparison </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4I00E28is_greater_than_comparable_v">
+<span id="_CPPv3I00E28is_greater_than_comparable_v"></span><span id="_CPPv2I00E28is_greater_than_comparable_v"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="group__comparison__operator__detection_1ga1c27f34e8608332f18963665298d5022"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_greater_than_comparable_v</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">is_greater_than_comparable</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00E28is_greater_than_comparable_v" title="is_greater_than_comparable_v::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00E28is_greater_than_comparable_v" title="is_greater_than_comparable_v::TRhs"><span class="n"><span class="pre">TRhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><a class="headerlink" href="#_CPPv4I00E28is_greater_than_comparable_v" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value of the type trait <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1type__traits_1_1is__greater__than__comparable"><span class="std std-ref"><span class="pre">is_greater_than_comparable</span></span></a></code>. Used to determine whether a value of type <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is greater-than comparable with a value of type <code class="docutils literal notranslate"><span class="pre">TRhs</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TLhs</strong> – The left-hand side argument of the comparison </p></li>
+<li><p><strong>TRhs</strong> – The right-hand side argument of the comparison </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4I00E37is_greater_than_or_equal_comparable_v">
+<span id="_CPPv3I00E37is_greater_than_or_equal_comparable_v"></span><span id="_CPPv2I00E37is_greater_than_or_equal_comparable_v"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="group__comparison__operator__detection_1gad237ff8dc3d9d0f573e8df3201eab42e"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_greater_than_or_equal_comparable_v</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">is_greater_than_or_equal_comparable</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00E37is_greater_than_or_equal_comparable_v" title="is_greater_than_or_equal_comparable_v::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00E37is_greater_than_or_equal_comparable_v" title="is_greater_than_or_equal_comparable_v::TRhs"><span class="n"><span class="pre">TRhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><a class="headerlink" href="#_CPPv4I00E37is_greater_than_or_equal_comparable_v" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value of the type trait <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1type__traits_1_1is__greater__than__or__equal__comparable"><span class="std std-ref"><span class="pre">is_greater_than_or_equal_comparable</span></span></a></code>. Used to determine whether a value of type <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is greater-than-or-equal comparable with a value of type <code class="docutils literal notranslate"><span class="pre">TRhs</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TLhs</strong> – The left-hand side argument of the comparison </p></li>
+<li><p><strong>TRhs</strong> – The right-hand side argument of the comparison </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4I00E25is_three_way_comparable_v">
+<span id="_CPPv3I00E25is_three_way_comparable_v"></span><span id="_CPPv2I00E25is_three_way_comparable_v"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="group__comparison__operator__detection_1gaf7242bb95c6c286c8691d2ad682926fb"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_three_way_comparable_v</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">is_three_way_comparable</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00E25is_three_way_comparable_v" title="is_three_way_comparable_v::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00E25is_three_way_comparable_v" title="is_three_way_comparable_v::TRhs"><span class="n"><span class="pre">TRhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><a class="headerlink" href="#_CPPv4I00E25is_three_way_comparable_v" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value of the type trait <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1type__traits_1_1is__three__way__comparable"><span class="std std-ref"><span class="pre">is_three_way_comparable</span></span></a></code>. Used to determine whether a value of type <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is three-way comparable to a value of type <code class="docutils literal notranslate"><span class="pre">TRhs</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TLhs</strong> – The left-hand side argument of the comparison </p></li>
+<li><p><strong>TRhs</strong> – The right-hand side argument of the comparison </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl11type_traits22is_equality_comparableE">
+<span id="_CPPv3I00EN8hyperion3mpl11type_traits22is_equality_comparableE"></span><span id="_CPPv2I00EN8hyperion3mpl11type_traits22is_equality_comparableE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structhyperion_1_1mpl_1_1type__traits_1_1is__equality__comparable"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_equality_comparable</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">bool_constant</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">concepts</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">EqualityComparable</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl11type_traits22is_equality_comparableE" title="hyperion::mpl::type_traits::is_equality_comparable::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl11type_traits22is_equality_comparableE" title="hyperion::mpl::type_traits::is_equality_comparable::TRhs"><span class="n"><span class="pre">TRhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl11type_traits22is_equality_comparableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/type_traits/is_comparable.h&gt;</em></div>
+<p>Type trait to determine whether a value of type <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is equality comparable with a value of type <code class="docutils literal notranslate"><span class="pre">TRhs</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TLhs</strong> – The left-hand side argument of the comparison </p></li>
+<li><p><strong>TRhs</strong> – The right-hand side argument of the comparison </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl11type_traits24is_inequality_comparableE">
+<span id="_CPPv3I00EN8hyperion3mpl11type_traits24is_inequality_comparableE"></span><span id="_CPPv2I00EN8hyperion3mpl11type_traits24is_inequality_comparableE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structhyperion_1_1mpl_1_1type__traits_1_1is__inequality__comparable"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_inequality_comparable</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">bool_constant</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">concepts</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">InequalityComparable</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl11type_traits24is_inequality_comparableE" title="hyperion::mpl::type_traits::is_inequality_comparable::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl11type_traits24is_inequality_comparableE" title="hyperion::mpl::type_traits::is_inequality_comparable::TRhs"><span class="n"><span class="pre">TRhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl11type_traits24is_inequality_comparableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/type_traits/is_comparable.h&gt;</em></div>
+<p>Type trait to determine whether a value of type <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is inequality comparable with a value of type <code class="docutils literal notranslate"><span class="pre">TRhs</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TLhs</strong> – The left-hand side argument of the comparison </p></li>
+<li><p><strong>TRhs</strong> – The right-hand side argument of the comparison </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl11type_traits23is_less_than_comparableE">
+<span id="_CPPv3I00EN8hyperion3mpl11type_traits23is_less_than_comparableE"></span><span id="_CPPv2I00EN8hyperion3mpl11type_traits23is_less_than_comparableE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structhyperion_1_1mpl_1_1type__traits_1_1is__less__than__comparable"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_less_than_comparable</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">bool_constant</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">concepts</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">LessThanComparable</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl11type_traits23is_less_than_comparableE" title="hyperion::mpl::type_traits::is_less_than_comparable::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl11type_traits23is_less_than_comparableE" title="hyperion::mpl::type_traits::is_less_than_comparable::TRhs"><span class="n"><span class="pre">TRhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl11type_traits23is_less_than_comparableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/type_traits/is_comparable.h&gt;</em></div>
+<p>Type trait to determine whether a value of type <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is less-than comparable to a value of type <code class="docutils literal notranslate"><span class="pre">TRhs</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TLhs</strong> – The left-hand side argument of the comparison </p></li>
+<li><p><strong>TRhs</strong> – The right-hand side argument of the comparison </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl11type_traits32is_less_than_or_equal_comparableE">
+<span id="_CPPv3I00EN8hyperion3mpl11type_traits32is_less_than_or_equal_comparableE"></span><span id="_CPPv2I00EN8hyperion3mpl11type_traits32is_less_than_or_equal_comparableE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structhyperion_1_1mpl_1_1type__traits_1_1is__less__than__or__equal__comparable"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_less_than_or_equal_comparable</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">bool_constant</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">concepts</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">LessThanOrEqualComparable</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl11type_traits32is_less_than_or_equal_comparableE" title="hyperion::mpl::type_traits::is_less_than_or_equal_comparable::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl11type_traits32is_less_than_or_equal_comparableE" title="hyperion::mpl::type_traits::is_less_than_or_equal_comparable::TRhs"><span class="n"><span class="pre">TRhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl11type_traits32is_less_than_or_equal_comparableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/type_traits/is_comparable.h&gt;</em></div>
+<p>Type trait to determine whether a value of type <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is less-than-or-equal comparable to a value of type <code class="docutils literal notranslate"><span class="pre">TRhs</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TLhs</strong> – The left-hand side argument of the comparison </p></li>
+<li><p><strong>TRhs</strong> – The right-hand side argument of the comparison </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl11type_traits26is_greater_than_comparableE">
+<span id="_CPPv3I00EN8hyperion3mpl11type_traits26is_greater_than_comparableE"></span><span id="_CPPv2I00EN8hyperion3mpl11type_traits26is_greater_than_comparableE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structhyperion_1_1mpl_1_1type__traits_1_1is__greater__than__comparable"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_greater_than_comparable</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">bool_constant</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">concepts</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">GreaterThanComparable</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl11type_traits26is_greater_than_comparableE" title="hyperion::mpl::type_traits::is_greater_than_comparable::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl11type_traits26is_greater_than_comparableE" title="hyperion::mpl::type_traits::is_greater_than_comparable::TRhs"><span class="n"><span class="pre">TRhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl11type_traits26is_greater_than_comparableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/type_traits/is_comparable.h&gt;</em></div>
+<p>Type trait to determine whether a value of type <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is greater-than comparable to a value of type <code class="docutils literal notranslate"><span class="pre">TRhs</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TLhs</strong> – The left-hand side argument of the comparison </p></li>
+<li><p><strong>TRhs</strong> – The right-hand side argument of the comparison </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl11type_traits35is_greater_than_or_equal_comparableE">
+<span id="_CPPv3I00EN8hyperion3mpl11type_traits35is_greater_than_or_equal_comparableE"></span><span id="_CPPv2I00EN8hyperion3mpl11type_traits35is_greater_than_or_equal_comparableE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structhyperion_1_1mpl_1_1type__traits_1_1is__greater__than__or__equal__comparable"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_greater_than_or_equal_comparable</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">bool_constant</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">concepts</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">GreaterThanOrEqualComparable</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl11type_traits35is_greater_than_or_equal_comparableE" title="hyperion::mpl::type_traits::is_greater_than_or_equal_comparable::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl11type_traits35is_greater_than_or_equal_comparableE" title="hyperion::mpl::type_traits::is_greater_than_or_equal_comparable::TRhs"><span class="n"><span class="pre">TRhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl11type_traits35is_greater_than_or_equal_comparableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/type_traits/is_comparable.h&gt;</em></div>
+<p>Type trait to determine whether a value of type <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is greater-than-or-equal comparable to a value of type <code class="docutils literal notranslate"><span class="pre">TRhs</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TLhs</strong> – The left-hand side argument of the comparison </p></li>
+<li><p><strong>TRhs</strong> – The right-hand side argument of the comparison </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl11type_traits23is_three_way_comparableE">
+<span id="_CPPv3I00EN8hyperion3mpl11type_traits23is_three_way_comparableE"></span><span id="_CPPv2I00EN8hyperion3mpl11type_traits23is_three_way_comparableE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structhyperion_1_1mpl_1_1type__traits_1_1is__three__way__comparable"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_three_way_comparable</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">false_type</span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl11type_traits23is_three_way_comparableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/type_traits/is_comparable.h&gt;</em></div>
+<p>Type trait to determine whether a value of type <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is three-way comparable to a value of type <code class="docutils literal notranslate"><span class="pre">TRhs</span></code>. </p>
+<p>In addition to providing the static member <code class="docutils literal notranslate"><span class="pre">value</span></code>, indicating whether a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is three-way comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code>, also provides the member <code class="docutils literal notranslate"><span class="pre">typedef</span></code> type <code class="docutils literal notranslate"><span class="pre">result_type</span></code> equal to the type of the returned result of three-way comparing a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code>, i.e. <code class="docutils literal notranslate"><span class="pre">decltype(std::declval&lt;TLhs&gt;()</span> <span class="pre">&lt;=&gt;</span> <span class="pre">std::declval&lt;TRhs&gt;())</span></code></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Presence of <code class="docutils literal notranslate"><span class="pre">result_type</span></code> should not be used as a short-hand or alternaitve to checking <code class="docutils literal notranslate"><span class="pre">value</span></code> in any way (e.g. in a SFINAE-compatible context or C++20 <code class="docutils literal notranslate"><span class="pre">requires</span></code> clause): if <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1type__traits_1_1is__three__way__comparable"><span class="std std-ref"><span class="pre">is_three_way_comparable</span></span></a><span class="pre">&lt;TLhs,</span> <span class="pre">TRHs&gt;::value</span> <span class="pre">==</span> <span class="pre">false</span></code>, then <code class="docutils literal notranslate"><span class="pre">result_type</span></code> will be <code class="docutils literal notranslate"><span class="pre">void</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TLhs</strong> – The left-hand side argument of the comparison </p></li>
+<li><p><strong>TRhs</strong> – The right-hand side argument of the comparison </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../type_traits.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">hyperion::mpl::type_traits</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="is_operator_able.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">General Operator Detection</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00E26three_way_compare_result_t"><code class="docutils literal notranslate"><span class="pre">three_way_compare_result_t</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00E24is_equality_comparable_v"><code class="docutils literal notranslate"><span class="pre">is_equality_comparable_v</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00E26is_inequality_comparable_v"><code class="docutils literal notranslate"><span class="pre">is_inequality_comparable_v</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00E25is_less_than_comparable_v"><code class="docutils literal notranslate"><span class="pre">is_less_than_comparable_v</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00E34is_less_than_or_equal_comparable_v"><code class="docutils literal notranslate"><span class="pre">is_less_than_or_equal_comparable_v</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00E28is_greater_than_comparable_v"><code class="docutils literal notranslate"><span class="pre">is_greater_than_comparable_v</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00E37is_greater_than_or_equal_comparable_v"><code class="docutils literal notranslate"><span class="pre">is_greater_than_or_equal_comparable_v</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00E25is_three_way_comparable_v"><code class="docutils literal notranslate"><span class="pre">is_three_way_comparable_v</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl11type_traits22is_equality_comparableE"><code class="docutils literal notranslate"><span class="pre">is_equality_comparable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl11type_traits24is_inequality_comparableE"><code class="docutils literal notranslate"><span class="pre">is_inequality_comparable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl11type_traits23is_less_than_comparableE"><code class="docutils literal notranslate"><span class="pre">is_less_than_comparable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl11type_traits32is_less_than_or_equal_comparableE"><code class="docutils literal notranslate"><span class="pre">is_less_than_or_equal_comparable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl11type_traits26is_greater_than_comparableE"><code class="docutils literal notranslate"><span class="pre">is_greater_than_comparable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl11type_traits35is_greater_than_or_equal_comparableE"><code class="docutils literal notranslate"><span class="pre">is_greater_than_or_equal_comparable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl11type_traits23is_three_way_comparableE"><code class="docutils literal notranslate"><span class="pre">is_three_way_comparable</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, Braxton Salyer &lt;braxtonsalyer@gmail.com&gt;.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

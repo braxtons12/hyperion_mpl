@@ -1,0 +1,600 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="dark">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Comparability Concepts &#8212; hyperion::mpl  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'concepts/comparable';</script>
+    <link rel="canonical" href="braxtons12.github.io/hyperion_mpl/concepts/comparable.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="hyperion::mpl::concepts" href="../concepts.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="dark">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">hyperion::mpl  documentation</p>
+  
+</a></div>
+    
+      <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../quick_start.html">
+                        Quick Start Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../genindex.html">
+                        Index
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../type_traits.html">
+                        hyperion::mpl::type_traits
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../concepts.html">
+                        hyperion::mpl::concepts
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/braxtons12/hyperion_mpl" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../quick_start.html">
+                        Quick Start Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../genindex.html">
+                        Index
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../type_traits.html">
+                        hyperion::mpl::type_traits
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../concepts.html">
+                        hyperion::mpl::concepts
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/braxtons12/hyperion_mpl" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+        <div class="sidebar-primary-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../quick_start.html">
+                        Quick Start Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../genindex.html">
+                        Index
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../type_traits.html">
+                        hyperion::mpl::type_traits
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../concepts.html">
+                        hyperion::mpl::concepts
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="list-caption"><li class="toctree-l0 has-children"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Comparison Operator Detection</span></p><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="label-parts" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Comparability Concepts</a></li>
+</ul></li></ul></div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../concepts.html" class="nav-link">hyperion::mpl::concepts</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Comparabilit...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="comparability-concepts">
+<h1>Comparability Concepts<a class="headerlink" href="#comparability-concepts" title="Link to this heading">#</a></h1>
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="group__comparability__concepts"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">comparability_concepts</span></span></dt>
+<dd><p>Assortment of <code class="docutils literal notranslate"><span class="pre">concept</span></code> definitions requiring types to be comparable in various ways.</p>
+<section id="group__comparability__concepts_1autotoc_md6">
+<h2>Example:<a class="headerlink" href="#group__comparability__concepts_1autotoc_md6" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate" id="group__comparability__concepts_1autotoc_md6"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/mpl/concepts/comparable.h</span>
+
+<span class="cpf">using namespace hyperion::mpl::concepts;</span>
+<span class="cpf">struct not_comparable {};</span>
+
+<span class="cpf">static_assert(EqualityComparable&lt;int, int&gt;</span><span class="c1">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">EqualityComparable</span><span class="o">&lt;</span><span class="n">not_comparable</span><span class="p">,</span><span class="w"> </span><span class="n">not_comparable</span><span class="o">&gt;</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-variables">Variables</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="target" id="group__comparability__concepts_1ga06c811429f542e08b9495ea9ff92b82a"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">EqualityComparable</span>&#160; <span class="pre">=</span> <span class="pre">requires(const</span> <span class="pre">TLhs&amp;</span> <span class="pre">lhs,</span> <span class="pre">const</span> <span class="pre">TRhs&amp;</span> <span class="pre">rhs)</span> <span class="pre">{lhs</span> <span class="pre">==</span> <span class="pre">rhs;rhs</span> <span class="pre">==</span> <span class="pre">lhs;}</span></span></dt>
+<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is equality comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="target" id="group__comparability__concepts_1ga958c18d8cafc39bc1095d7ffb3aa2593"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">InequalityComparable</span>&#160; <span class="pre">=</span> <span class="pre">requires(const</span> <span class="pre">TLhs&amp;</span> <span class="pre">lhs,</span> <span class="pre">const</span> <span class="pre">TRhs&amp;</span> <span class="pre">rhs)</span> <span class="pre">{lhs</span> <span class="pre">!=</span> <span class="pre">rhs;rhs</span> <span class="pre">!=</span> <span class="pre">lhs;}</span></span></dt>
+<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is inequality comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="target" id="group__comparability__concepts_1ga872d4103cdb78b58df4d8575058f1a47"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">LessThanComparable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">requires(const</span> <span class="pre">TLhs&amp;</span> <span class="pre">lhs,</span> <span class="pre">const</span> <span class="pre">TRhs&amp;</span> <span class="pre">rhs)</span> <span class="pre">{</span> <span class="pre">lhs</span> <span class="pre">&lt;</span> <span class="pre">rhs;</span> <span class="pre">}</span></span></dt>
+<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is less-than comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="target" id="group__comparability__concepts_1ga4ae2631fbd477f6b3251ca5310f96adb"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">LessThanOrEqualComparable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">requires(const</span> <span class="pre">TLhs&amp;</span> <span class="pre">lhs,</span> <span class="pre">const</span> <span class="pre">TRhs&amp;</span> <span class="pre">rhs)</span> <span class="pre">{</span> <span class="pre">lhs</span> <span class="pre">&lt;=</span> <span class="pre">rhs;</span> <span class="pre">}</span></span></dt>
+<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is less-than-or-equal comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="target" id="group__comparability__concepts_1ga622c5f6ce21565962f14c832e931aba2"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">GreaterThanComparable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">requires(const</span> <span class="pre">TLhs&amp;</span> <span class="pre">lhs,</span> <span class="pre">const</span> <span class="pre">TRhs&amp;</span> <span class="pre">rhs)</span> <span class="pre">{</span> <span class="pre">lhs</span> <span class="pre">&gt;</span> <span class="pre">rhs;</span> <span class="pre">}</span></span></dt>
+<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is greater-than comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="target" id="group__comparability__concepts_1ga902adfa85207b65e22ad2dc5e8c9e92f"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">GreaterThanOrEqualComparable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">requires(const</span> <span class="pre">TLhs&amp;</span> <span class="pre">lhs,</span> <span class="pre">const</span> <span class="pre">TRhs&amp;</span> <span class="pre">rhs)</span> <span class="pre">{</span> <span class="pre">lhs</span> <span class="pre">&gt;=</span> <span class="pre">rhs;</span> <span class="pre">}</span></span></dt>
+<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is greater-than-or-equal comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="target" id="group__comparability__concepts_1ga275b341cb1b7b3a54c93c03abea8bee7"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">ThreeWayComparable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">std::three_way_comparable_with&lt;TLhs,</span> <span class="pre">TRhs&gt;</span></span></dt>
+<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is three-way comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::EqualityComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::InequalityComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::LessThanComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::LessThanOrEqualComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::GreaterThanComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::GreaterThanOrEqualComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::ThreeWayComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
+</div>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../concepts.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">hyperion::mpl::concepts</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, Braxton Salyer &lt;braxtonsalyer@gmail.com&gt;.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

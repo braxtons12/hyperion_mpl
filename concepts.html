@@ -6,8 +6,9 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; hyperion::mpl  documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>hyperion::mpl::concepts &#8212; hyperion::mpl  documentation</title>
   
   
   
@@ -38,10 +39,12 @@
     <script src="_static/documentation_options.js?v=5929fcd5"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
-    <link rel="canonical" href="braxtons12.github.io/hyperion_mpl/genindex.html" />
-    <link rel="index" title="Index" href="#" />
+    <script>DOCUMENTATION_OPTIONS.pagename = 'concepts';</script>
+    <link rel="canonical" href="braxtons12.github.io/hyperion_mpl/concepts.html" />
+    <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Comparability Concepts" href="concepts/comparable.html" />
+    <link rel="prev" title="General Operator Detection" href="type_traits/is_operator_able.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -147,8 +150,8 @@ document.write(`
                     </li>
                 
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="#">
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="genindex.html">
                         Index
                       </a>
                     </li>
@@ -161,8 +164,8 @@ document.write(`
                     </li>
                 
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="concepts.html">
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
                         hyperion::mpl::concepts
                       </a>
                     </li>
@@ -256,8 +259,8 @@ document.write(`
                     </li>
                 
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="#">
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="genindex.html">
                         Index
                       </a>
                     </li>
@@ -270,8 +273,8 @@ document.write(`
                     </li>
                 
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="concepts.html">
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
                         hyperion::mpl::concepts
                       </a>
                     </li>
@@ -334,8 +337,8 @@ document.write(`
                     </li>
                 
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="#">
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="genindex.html">
                         Index
                       </a>
                     </li>
@@ -348,8 +351,8 @@ document.write(`
                     </li>
                 
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="concepts.html">
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
                         hyperion::mpl::concepts
                       </a>
                     </li>
@@ -360,7 +363,9 @@ document.write(`
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"></div>
+  <div class="bd-toc-item navbar-nav"><ul class="list-caption"><li class="toctree-l0 has-children"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Comparison Operator Detection</span></p><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="label-parts" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="concepts/comparable.html">Comparability Concepts</a></li>
+</ul></li></ul></div>
 </nav></div>
     </div>
   
@@ -379,7 +384,33 @@ document.write(`
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article"></div>
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">hyperion::mp...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
               
               
               
@@ -387,207 +418,21 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
+  <section id="hyperion-mpl-concepts">
+<h1>hyperion::mpl::concepts<a class="headerlink" href="#hyperion-mpl-concepts" title="Link to this heading">#</a></h1>
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="group__concepts"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">concepts</span></span></dt>
+<dd><p>Hyperion provides an assortment of metaprogramming <code class="docutils literal notranslate"><span class="pre">concept</span></code> definitions used to define various conceptual models and characteristics of types. Some of these are purely novel, such as comparability, while others are supplemental to, or less stringent than, those provided by the standard, doing something similar to existing <code class="docutils literal notranslate"><span class="pre">concept</span></code>s, but filling in gaps in the API surface that were overlooked or missing for other reasons, or provided an alternative definition that is narrower in scope. </p>
+</dd></dl>
 
-<h1 id="index">Index</h1>
-
-<div class="genindex-jumpbox">
- <a href="#A"><strong>A</strong></a>
- | <a href="#B"><strong>B</strong></a>
- | <a href="#D"><strong>D</strong></a>
- | <a href="#H"><strong>H</strong></a>
- | <a href="#I"><strong>I</strong></a>
- | <a href="#M"><strong>M</strong></a>
- | <a href="#S"><strong>S</strong></a>
- | <a href="#T"><strong>T</strong></a>
- | <a href="#U"><strong>U</strong></a>
- 
+<div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Comparison Operator Detection</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="concepts/comparable.html">Comparability Concepts</a></li>
+</ul>
 </div>
-<h2 id="A">A</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00E12add_result_t">add_result_t (C++ type)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0E16address_result_t">address_result_t (C++ type)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0E14arrow_result_t">arrow_result_t (C++ type)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="B">B</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00E19binary_and_result_t">binary_and_result_t (C++ type)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0E19binary_not_result_t">binary_not_result_t (C++ type)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00E18binary_or_result_t">binary_or_result_t (C++ type)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00E20boolean_and_result_t">boolean_and_result_t (C++ type)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0E20boolean_not_result_t">boolean_not_result_t (C++ type)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00E19boolean_or_result_t">boolean_or_result_t (C++ type)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="D">D</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0E20dereference_result_t">dereference_result_t (C++ type)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00E15divide_result_t">divide_result_t (C++ type)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="H">H</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00EN8hyperion3mpl11type_traits10is_addableE">hyperion::mpl::type_traits::is_addable (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0EN8hyperion3mpl11type_traits14is_addressableE">hyperion::mpl::type_traits::is_addressable (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0EN8hyperion3mpl11type_traits12is_arrowableE">hyperion::mpl::type_traits::is_arrowable (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00EN8hyperion3mpl11type_traits17is_binary_andableE">hyperion::mpl::type_traits::is_binary_andable (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0EN8hyperion3mpl11type_traits17is_binary_notableE">hyperion::mpl::type_traits::is_binary_notable (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00EN8hyperion3mpl11type_traits16is_binary_orableE">hyperion::mpl::type_traits::is_binary_orable (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00EN8hyperion3mpl11type_traits18is_boolean_andableE">hyperion::mpl::type_traits::is_boolean_andable (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0EN8hyperion3mpl11type_traits18is_boolean_notableE">hyperion::mpl::type_traits::is_boolean_notable (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00EN8hyperion3mpl11type_traits17is_boolean_orableE">hyperion::mpl::type_traits::is_boolean_orable (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0EN8hyperion3mpl11type_traits17is_dereferencibleE">hyperion::mpl::type_traits::is_dereferencible (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00EN8hyperion3mpl11type_traits12is_dividibleE">hyperion::mpl::type_traits::is_dividible (C++ struct)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="type_traits/is_comparable.html#_CPPv4I00EN8hyperion3mpl11type_traits22is_equality_comparableE">hyperion::mpl::type_traits::is_equality_comparable (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_comparable.html#_CPPv4I00EN8hyperion3mpl11type_traits26is_greater_than_comparableE">hyperion::mpl::type_traits::is_greater_than_comparable (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_comparable.html#_CPPv4I00EN8hyperion3mpl11type_traits35is_greater_than_or_equal_comparableE">hyperion::mpl::type_traits::is_greater_than_or_equal_comparable (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_comparable.html#_CPPv4I00EN8hyperion3mpl11type_traits24is_inequality_comparableE">hyperion::mpl::type_traits::is_inequality_comparable (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_comparable.html#_CPPv4I00EN8hyperion3mpl11type_traits23is_less_than_comparableE">hyperion::mpl::type_traits::is_less_than_comparable (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_comparable.html#_CPPv4I00EN8hyperion3mpl11type_traits32is_less_than_or_equal_comparableE">hyperion::mpl::type_traits::is_less_than_or_equal_comparable (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00EN8hyperion3mpl11type_traits15is_multipliableE">hyperion::mpl::type_traits::is_multipliable (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00EN8hyperion3mpl11type_traits15is_subtractableE">hyperion::mpl::type_traits::is_subtractable (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_comparable.html#_CPPv4I00EN8hyperion3mpl11type_traits23is_three_way_comparableE">hyperion::mpl::type_traits::is_three_way_comparable (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0EN8hyperion3mpl11type_traits18is_unary_minusableE">hyperion::mpl::type_traits::is_unary_minusable (C++ struct)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0EN8hyperion3mpl11type_traits17is_unary_plusableE">hyperion::mpl::type_traits::is_unary_plusable (C++ struct)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="I">I</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00E12is_addable_v">is_addable_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0E16is_addressable_v">is_addressable_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0E14is_arrowable_v">is_arrowable_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00E19is_binary_andable_v">is_binary_andable_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0E19is_binary_notable_v">is_binary_notable_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00E18is_binary_orable_v">is_binary_orable_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00E20is_boolean_andable_v">is_boolean_andable_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0E20is_boolean_notable_v">is_boolean_notable_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00E19is_boolean_orable_v">is_boolean_orable_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0E19is_dereferencible_v">is_dereferencible_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00E14is_dividible_v">is_dividible_v (C++ member)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="type_traits/is_comparable.html#_CPPv4I00E24is_equality_comparable_v">is_equality_comparable_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_comparable.html#_CPPv4I00E28is_greater_than_comparable_v">is_greater_than_comparable_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_comparable.html#_CPPv4I00E37is_greater_than_or_equal_comparable_v">is_greater_than_or_equal_comparable_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_comparable.html#_CPPv4I00E26is_inequality_comparable_v">is_inequality_comparable_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_comparable.html#_CPPv4I00E25is_less_than_comparable_v">is_less_than_comparable_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_comparable.html#_CPPv4I00E34is_less_than_or_equal_comparable_v">is_less_than_or_equal_comparable_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00E17is_multipliable_v">is_multipliable_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00E17is_subtractable_v">is_subtractable_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_comparable.html#_CPPv4I00E25is_three_way_comparable_v">is_three_way_comparable_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0E20is_unary_minusable_v">is_unary_minusable_v (C++ member)</a>
-</li>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0E19is_unary_plusable_v">is_unary_plusable_v (C++ member)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="M">M</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00E17multiply_result_t">multiply_result_t (C++ type)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="S">S</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I00E17subtract_result_t">subtract_result_t (C++ type)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="T">T</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="type_traits/is_comparable.html#_CPPv4I00E26three_way_compare_result_t">three_way_compare_result_t (C++ type)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="U">U</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0E20unary_minus_result_t">unary_minus_result_t (C++ type)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="type_traits/is_operator_able.html#_CPPv4I0E19unary_plus_result_t">unary_plus_result_t (C++ type)</a>
-</li>
-  </ul></td>
-</tr></table>
-
+</section>
 
 
                 </article>
@@ -599,6 +444,24 @@ document.write(`
                 <footer class="prev-next-footer">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="type_traits/is_operator_able.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">General Operator Detection</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="concepts/comparable.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Comparability Concepts</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
