@@ -30,7 +30,11 @@
 #define HYPERION_MPL_TYPE_TRAITS_IS_OPERATOR_ABLE_H
 
 #include <hyperion/mpl/concepts/operator_able.h>
+#include <hyperion/platform/def.h>
+
 #include <type_traits>
+
+HYPERION_IGNORE_DOCUMENTATION_WARNING_START
 
 /// @ingroup type_traits
 /// @{
@@ -263,7 +267,7 @@ namespace hyperion::mpl::type_traits {
     static inline constexpr auto is_binary_notable_v = is_binary_notable<TLhs>::value;
 
     /// @brief Alias to the `result_type` member `typedef` of `is_binary_notable`.
-    /// Used to determine the type of the returned result of invoking 
+    /// Used to determine the type of the returned result of invoking
     /// `operator~` on a `TLhs`, i.e. `decltype(~std::declval<TLhs>())`
     ///
     /// @tparam TLhs The type to check
@@ -341,7 +345,7 @@ namespace hyperion::mpl::type_traits {
     static inline constexpr auto is_boolean_notable_v = is_boolean_notable<TLhs>::value;
 
     /// @brief Alias to the `result_type` member `typedef` of `is_boolean_notable`.
-    /// Used to determine the type of the returned result of invoking 
+    /// Used to determine the type of the returned result of invoking
     /// `operator!` on a `TLhs`, i.e. `decltype(!std::declval<TLhs>())`
     ///
     /// @tparam TLhs The type to check
@@ -420,7 +424,7 @@ namespace hyperion::mpl::type_traits {
     static inline constexpr auto is_addressable_v = is_addressable<TLhs>::value;
 
     /// @brief Alias to the `result_type` member `typedef` of `is_addressable`.
-    /// Used to determine the type of the returned result of invoking 
+    /// Used to determine the type of the returned result of invoking
     /// unary `operator&` on a `TLhs`, i.e. `decltype(&std::declval<TLhs>())`
     ///
     /// @tparam TLhs The type to check
@@ -500,7 +504,7 @@ namespace hyperion::mpl::type_traits {
     static inline constexpr auto is_arrowable_v = is_arrowable<TLhs>::value;
 
     /// @brief Alias to the `result_type` member `typedef` of `is_arrowable`.
-    /// Used to determine the type of the returned result of invoking 
+    /// Used to determine the type of the returned result of invoking
     /// `operator->` on a `TLhs`, i.e. `decltype(std::declval<TLhs>()->)`
     ///
     /// @tparam TLhs The type to check
@@ -580,7 +584,7 @@ namespace hyperion::mpl::type_traits {
     static inline constexpr auto is_dereferencible_v = is_dereferencible<TLhs>::value;
 
     /// @brief Alias to the `result_type` member `typedef` of `is_dereferencible`.
-    /// Used to determine the type of the returned result of invoking 
+    /// Used to determine the type of the returned result of invoking
     /// unary `operator*` on a `TLhs`, i.e. `decltype(*std::declval<TLhs>())`
     ///
     /// @tparam TLhs The type to check
@@ -615,7 +619,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Presence of `result_type` should not be used  as a short-hand
     /// or alternaitve to checking `value` in any way
     /// (e.g. in a SFINAE-compatible context or C++20 `requires` clause):
@@ -649,7 +653,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Due to overloadability by cv-ref qualification, care should be taken
     /// to ensure that use of `result_type` (and this trait in general) is
     /// associated with the correct cv-ref qualification(s) of the unqualified types
@@ -671,7 +675,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Presence of `result_type` should not be used  as a short-hand
     /// or alternaitve to checking `value` in any way
     /// (e.g. in a SFINAE-compatible context or C++20 `requires` clause):
@@ -702,7 +706,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Presence of `result_type` should not be used  as a short-hand
     /// or alternaitve to checking `value` in any way
     /// (e.g. in a SFINAE-compatible context or C++20 `requires` clause):
@@ -736,7 +740,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Due to overloadability by cv-ref qualification, care should be taken
     /// to ensure that use of `result_type` (and this trait in general) is
     /// associated with the correct cv-ref qualification(s) of the unqualified types
@@ -758,7 +762,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Presence of `result_type` should not be used  as a short-hand
     /// or alternaitve to checking `value` in any way
     /// (e.g. in a SFINAE-compatible context or C++20 `requires` clause):
@@ -789,7 +793,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Presence of `result_type` should not be used  as a short-hand
     /// or alternaitve to checking `value` in any way
     /// (e.g. in a SFINAE-compatible context or C++20 `requires` clause):
@@ -823,7 +827,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Due to overloadability by cv-ref qualification, care should be taken
     /// to ensure that use of `result_type` (and this trait in general) is
     /// associated with the correct cv-ref qualification(s) of the unqualified types
@@ -845,7 +849,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Presence of `result_type` should not be used  as a short-hand
     /// or alternaitve to checking `value` in any way
     /// (e.g. in a SFINAE-compatible context or C++20 `requires` clause):
@@ -876,7 +880,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Presence of `result_type` should not be used  as a short-hand
     /// or alternaitve to checking `value` in any way
     /// (e.g. in a SFINAE-compatible context or C++20 `requires` clause):
@@ -910,7 +914,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Due to overloadability by cv-ref qualification, care should be taken
     /// to ensure that use of `result_type` (and this trait in general) is
     /// associated with the correct cv-ref qualification(s) of the unqualified types
@@ -932,7 +936,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Presence of `result_type` should not be used  as a short-hand
     /// or alternaitve to checking `value` in any way
     /// (e.g. in a SFINAE-compatible context or C++20 `requires` clause):
@@ -963,7 +967,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Presence of `result_type` should not be used  as a short-hand
     /// or alternaitve to checking `value` in any way
     /// (e.g. in a SFINAE-compatible context or C++20 `requires` clause):
@@ -997,7 +1001,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Due to overloadability by cv-ref qualification, care should be taken
     /// to ensure that use of `result_type` (and this trait in general) is
     /// associated with the correct cv-ref qualification(s) of the unqualified types
@@ -1019,7 +1023,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Presence of `result_type` should not be used  as a short-hand
     /// or alternaitve to checking `value` in any way
     /// (e.g. in a SFINAE-compatible context or C++20 `requires` clause):
@@ -1050,7 +1054,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Presence of `result_type` should not be used  as a short-hand
     /// or alternaitve to checking `value` in any way
     /// (e.g. in a SFINAE-compatible context or C++20 `requires` clause):
@@ -1084,7 +1088,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Due to overloadability by cv-ref qualification, care should be taken
     /// to ensure that use of `result_type` (and this trait in general) is
     /// associated with the correct cv-ref qualification(s) of the unqualified types
@@ -1106,7 +1110,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Presence of `result_type` should not be used  as a short-hand
     /// or alternaitve to checking `value` in any way
     /// (e.g. in a SFINAE-compatible context or C++20 `requires` clause):
@@ -1137,7 +1141,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Presence of `result_type` should not be used  as a short-hand
     /// or alternaitve to checking `value` in any way
     /// (e.g. in a SFINAE-compatible context or C++20 `requires` clause):
@@ -1171,7 +1175,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Due to overloadability by cv-ref qualification, care should be taken
     /// to ensure that use of `result_type` (and this trait in general) is
     /// associated with the correct cv-ref qualification(s) of the unqualified types
@@ -1193,7 +1197,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Presence of `result_type` should not be used  as a short-hand
     /// or alternaitve to checking `value` in any way
     /// (e.g. in a SFINAE-compatible context or C++20 `requires` clause):
@@ -1224,7 +1228,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Presence of `result_type` should not be used  as a short-hand
     /// or alternaitve to checking `value` in any way
     /// (e.g. in a SFINAE-compatible context or C++20 `requires` clause):
@@ -1258,7 +1262,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Due to overloadability by cv-ref qualification, care should be taken
     /// to ensure that use of `result_type` (and this trait in general) is
     /// associated with the correct cv-ref qualification(s) of the unqualified types
@@ -1280,7 +1284,7 @@ namespace hyperion::mpl::type_traits {
     /// @tparam TRhs The type of the right-hand parameter. Defaults to `TLhs`
     /// @ingroup general_operator_detection
     /// @headerfile hyperion/mpl/type_traits/is_operator_able.h
-    /// 
+    ///
     /// @note Presence of `result_type` should not be used  as a short-hand
     /// or alternaitve to checking `value` in any way
     /// (e.g. in a SFINAE-compatible context or C++20 `requires` clause):
@@ -1300,5 +1304,7 @@ namespace hyperion::mpl::type_traits {
     using boolean_or_result_t = typename is_boolean_orable<TLhs, TRhs>::result_type;
 
 } // namespace hyperion::mpl::type_traits
+
+HYPERION_IGNORE_DOCUMENTATION_WARNING_STOP
 
 #endif // HYPERION_MPL_TYPE_TRAITS_IS_OPERATOR_ABLE_H
