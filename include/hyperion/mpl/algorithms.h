@@ -1,4 +1,4 @@
-/// @file all_of.h
+/// @file algorithms.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Collection of Meta-programming algorithms
 /// @version 0.1
