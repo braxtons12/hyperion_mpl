@@ -38,7 +38,7 @@
 
 #include <type_traits>
 
-HYPERION_IGNORE_DOCUMENTATION_WARNING_START
+HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
 
 /// @ingroup type_traits
 /// @{
@@ -350,5 +350,5 @@ namespace hyperion::mpl::type_traits {
     }  // namespace _test
 } // namespace hyperion::mpl::type_traits
 
-HYPERION_IGNORE_DOCUMENTATION_WARNING_STOP
+HYPERION_IGNORE_DOCUMENTATION_WARNING_STOP;
 #endif // HYPERION_MPL_TYPE_TRAITS_IS_COMPARABLE_H
