@@ -28,6 +28,4 @@
 #ifndef HYPERION_MPL_ALGORITHMS_H
 #define HYPERION_MPL_ALGORITHMS_H
 
-#include <hyperion/mpl/algorithms/all_of.h>
-
 #endif // HYPERION_MPL_ALGORITHMS_H
