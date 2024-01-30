@@ -38,6 +38,8 @@
 
 #include <type_traits>
 
+HYPERION_IGNORE_DOCUMENTATION_WARNING_START
+
 /// @ingroup type_traits
 /// @{
 /// @defgroup comparison_operator_detection Comparison Operator Detection
@@ -59,9 +61,7 @@
 
 namespace hyperion::mpl::type_traits {
 
-    namespace detail {
-
-    }
+    namespace detail { }
 
     // clang-format off
 
@@ -350,4 +350,5 @@ namespace hyperion::mpl::type_traits {
     }  // namespace _test
 } // namespace hyperion::mpl::type_traits
 
+HYPERION_IGNORE_DOCUMENTATION_WARNING_STOP
 #endif // HYPERION_MPL_TYPE_TRAITS_IS_COMPARABLE_H
