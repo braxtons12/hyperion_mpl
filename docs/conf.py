@@ -114,5 +114,4 @@ breathe_projects = {
         "hyperion::mpl": "_build/xml"
 }
 breathe_default_project = "hyperion::mpl"
-breathe_default_members = ('members')
 

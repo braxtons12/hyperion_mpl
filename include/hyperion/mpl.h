@@ -1,6 +1,6 @@
-/// @file concepts.h
+/// @file mpl.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
-/// @brief Meta-programming C++20 concept definitions
+/// @brief Catch-all header for the Hyperion meta-programming library
 /// @version 0.1
 /// @date 2024-01-27
 ///
@@ -25,24 +25,15 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
 
-#ifndef HYPERION_MPL_CONCEPTS_H
-#define HYPERION_MPL_CONCEPTS_H
+#ifndef HYPERION_MPL_H
+#define HYPERION_MPL_H
 
-/// @ingroup mpl
-/// @{
-/// @defgroup concepts Concepts
-/// Hyperion provides an assortment of metaprogramming `concept` definitions used to
-/// define various conceptual models and characteristics of types.
-/// Some of these are purely novel, such as comparability, while others are supplemental
-/// to, or less stringent than, those provided by the standard, doing something similar
-/// to existing `concept`s, but filling in gaps in the API surface that were overlooked
-/// or missing for other reasons, or provided an alternative definition that is narrower
-/// in scope.
-/// @headerfile hyperion/mpl/concepts.h
-/// @}
+/// @defgroup mpl Metaprogramming Library
+/// Hyperion's metaprogramming library provides a full-featured set of basic
+/// metaprogramming operations, inspired by Boost.Hana. It uses `constexpr` and value
+/// semantics to make metaprogramming functional, simple, and (mostly) read and write
+/// like normal code for users, instead of needing to rely on complex template-based
+/// techniques that are difficult to reason about.
+/// @headerfile "hyperion/mpl.h"
 
-#include <hyperion/mpl/concepts/comparable.h>
-#include <hyperion/mpl/concepts/operator_able.h>
-#include <hyperion/mpl/concepts/std_supplemental.h>
-
-#endif // HYPERION_MPL_CONCEPTS_H
+#endif // HYPERION_MPL_H

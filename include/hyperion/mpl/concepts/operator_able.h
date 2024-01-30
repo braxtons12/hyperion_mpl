@@ -29,51 +29,78 @@
 #ifndef HYPERION_MPL_CONCEPTS_OPERATOR_ABLE_H
 #define HYPERION_MPL_CONCEPTS_OPERATOR_ABLE_H
 
-#include <hyperion/mpl/type_traits/is_operator_able.h>
+#include <type_traits>
 
 namespace hyperion::mpl::concepts {
 
     template<typename TLhs>
-    concept UnaryPlusable = type_traits::is_unary_plusable_v<TLhs>;
+    concept UnaryPlusable = requires(const TLhs& lhs) { +lhs; };
 
     template<typename TLhs>
-    concept UnaryMinusable = type_traits::is_unary_minusable_v<TLhs>;
+    concept UnaryMinusable = requires(const TLhs& lhs) { -lhs; };
 
     template<typename TLhs>
-    concept BinaryNotable = type_traits::is_binary_notable_v<TLhs>;
+    concept BinaryNotable = requires(const TLhs& lhs) { ~lhs; };
 
     template<typename TLhs>
-    concept BooleanNotable = type_traits::is_boolean_notable_v<TLhs>;
+    concept BooleanNotable = requires(const TLhs& lhs) { !lhs; };
 
     template<typename TLhs>
-    concept Addressable = type_traits::is_addressable_v<TLhs>;
+    concept Addressable = requires(const TLhs& lhs) { &lhs; };
 
     template<typename TLhs>
-    concept Arrowable = type_traits::is_arrowable_v<TLhs>;
+    concept Dereferencible = std::is_pointer_v<TLhs> || requires(const TLhs& lhs) { *lhs; };
+
+    template<typename TLhs>
+    concept Arrowable = std::is_pointer_v<TLhs> || requires(const TLhs& lhs) { lhs.operator->(); };
 
     template<typename TLhs, typename TRhs = TLhs>
-    concept Addable = type_traits::is_addable_v<TLhs, TRhs>;
+    concept Addable = requires(const TLhs& lhs, const TRhs& rhs) {
+        lhs + rhs;
+        rhs + lhs;
+    };
 
     template<typename TLhs, typename TRhs = TLhs>
-    concept Subtractable = type_traits::is_subtractable_v<TLhs, TRhs>;
+    concept Subtractable = requires(const TLhs& lhs, const TRhs& rhs) {
+        lhs - rhs;
+        rhs - lhs;
+    };
 
     template<typename TLhs, typename TRhs = TLhs>
-    concept Multipliable = type_traits::is_multipliable_v<TLhs, TRhs>;
+    concept Multipliable = requires(const TLhs& lhs, const TRhs& rhs) {
+        lhs* rhs;
+        rhs* lhs;
+    };
 
     template<typename TLhs, typename TRhs = TLhs>
-    concept Dividible = type_traits::is_dividible_v<TLhs, TRhs>;
+    concept Dividible = requires(const TLhs& lhs, const TRhs& rhs) {
+        lhs / rhs;
+        rhs / lhs;
+    };
 
     template<typename TLhs, typename TRhs = TLhs>
-    concept BinaryAndable = type_traits::is_binary_andable_v<TLhs, TRhs>;
+    concept BinaryAndable = requires(const TLhs& lhs, const TRhs& rhs) {
+        lhs & rhs;
+        rhs & lhs;
+    };
 
     template<typename TLhs, typename TRhs = TLhs>
-    concept BinaryOrable = type_traits::is_binary_orable_v<TLhs, TRhs>;
+    concept BinaryOrable = requires(const TLhs& lhs, const TRhs& rhs) {
+        lhs | rhs;
+        rhs | lhs;
+    };
 
     template<typename TLhs, typename TRhs = TLhs>
-    concept BooleanAndable = type_traits::is_boolean_andable_v<TLhs, TRhs>;
+    concept BooleanAndable = requires(const TLhs& lhs, const TRhs& rhs) {
+        lhs&& rhs;
+        rhs&& lhs;
+    };
 
     template<typename TLhs, typename TRhs = TLhs>
-    concept BooleanOrable = type_traits::is_boolean_orable_v<TLhs, TRhs>;
+    concept BooleanOrable = requires(const TLhs& lhs, const TRhs& rhs) {
+        lhs || rhs;
+        rhs || lhs;
+    };
 
 } // namespace hyperion::mpl::concepts
 

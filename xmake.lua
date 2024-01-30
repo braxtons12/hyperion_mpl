@@ -41,6 +41,9 @@ option("hyperion_enable_tracy", function()
     end)
 end)
 
+local hyperion_mpl_main_header = {
+    "$(projectdir)/include/hyperion/mpl.h",
+}
 local hyperion_mpl_headers = {
     "$(projectdir)/include/hyperion/mpl/algorithms.h",
     "$(projectdir)/include/hyperion/mpl/concepts.h",
@@ -67,6 +70,7 @@ target("hyperion_mpl", function()
     set_kind("headeronly")
     set_languages("cxx20")
     add_includedirs("$(projectdir)/include", { public = true })
+    add_headerfiles(hyperion_mpl_main_header, { prefixdir = "hyperion", public = true })
     add_headerfiles(hyperion_mpl_headers, { prefixdir = "hyperion/mpl", public = true })
     add_headerfiles(hyperion_mpl_algorithms_headers, { prefixdir = "hyperion/mpl/algorithms", public = true })
     add_headerfiles(hyperion_mpl_concepts_headers, { prefixdir = "hyperion/mpl/concepts", public = true })

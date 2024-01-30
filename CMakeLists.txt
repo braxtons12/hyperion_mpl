@@ -41,26 +41,27 @@ endif()
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/hyperion_compiler_settings.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/hyperion_enable_warnings.cmake)
 
-set(HYPERION_PLATFORM_INCLUDE_DIRECTORIES
+set(HYPERION_MPL_INCLUDE_DIRECTORIES
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
-set(HYPERION_PLATFORM_INCLUDE_PATH
+set(HYPERION_MPL_INCLUDE_PATH
     "${CMAKE_CURRENT_SOURCE_DIR}/include/hyperion"
 )
-set(HYPERION_PLATFORM_HEADERS
-    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/index.h"
-    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/list.h"
-    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/value.h"
-    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/algorithms.h"
-    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/algorithms/all_of.h"
-    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/concepts.h"
-    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/concepts/comparable.h"
-    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/concepts/operator_able.h"
-    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/concepts/std_supplemental.h"
-    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/type_traits.h"
-    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/type_traits/is_comparable.h"
-    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/type_traits/is_operator_able.h"
-    "${HYPERION_PLATFORM_INCLUDE_PATH}/mpl/type_traits/std_supplemental.h"
+set(HYPERION_MPL_HEADERS
+    "${HYPERION_MPL_INCLUDE_PATH}/mpl.h"
+    "${HYPERION_MPL_INCLUDE_PATH}/mpl/index.h"
+    "${HYPERION_MPL_INCLUDE_PATH}/mpl/list.h"
+    "${HYPERION_MPL_INCLUDE_PATH}/mpl/value.h"
+    "${HYPERION_MPL_INCLUDE_PATH}/mpl/algorithms.h"
+    "${HYPERION_MPL_INCLUDE_PATH}/mpl/algorithms/all_of.h"
+    "${HYPERION_MPL_INCLUDE_PATH}/mpl/concepts.h"
+    "${HYPERION_MPL_INCLUDE_PATH}/mpl/concepts/comparable.h"
+    "${HYPERION_MPL_INCLUDE_PATH}/mpl/concepts/operator_able.h"
+    "${HYPERION_MPL_INCLUDE_PATH}/mpl/concepts/std_supplemental.h"
+    "${HYPERION_MPL_INCLUDE_PATH}/mpl/type_traits.h"
+    "${HYPERION_MPL_INCLUDE_PATH}/mpl/type_traits/is_comparable.h"
+    "${HYPERION_MPL_INCLUDE_PATH}/mpl/type_traits/is_operator_able.h"
+    "${HYPERION_MPL_INCLUDE_PATH}/mpl/type_traits/std_supplemental.h"
 )
 
 add_library(hyperion_mpl INTERFACE)
@@ -68,12 +69,12 @@ add_library(hyperion::mpl ALIAS hyperion_mpl)
 target_include_directories(
     hyperion_mpl
     INTERFACE
-    ${HYPERION_PLATFORM_INCLUDE_DIRECTORIES}
+    ${HYPERION_MPL_INCLUDE_DIRECTORIES}
 )
 target_sources(
     hyperion_mpl
     INTERFACE
-    ${HYPERION_PLATFORM_HEADERS}
+    ${HYPERION_MPL_HEADERS}
 )
 target_link_libraries(
     hyperion_mpl
@@ -95,20 +96,20 @@ target_link_libraries(hyperion_mpl_main
 hyperion_compile_settings(hyperion_mpl_main)
 hyperion_enable_warnings(hyperion_mpl_main)
 
-set(HYPERION_PLATFORM_DOXYGEN_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/docs/_build/html")
-set(HYPERION_PLATFORM_DOXYGEN_HTML "${HYPERION_PLATFORM_DOXYGEN_OUTPUT_DIR}/index.html")
+set(HYPERION_MPL_DOXYGEN_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/docs/_build/html")
+set(HYPERION_MPL_DOXYGEN_HTML "${HYPERION_MPL_DOXYGEN_OUTPUT_DIR}/index.html")
 
-set(HYPERION_PLATFORM_DOCS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/docs")
-set(HYPERION_PLATFORM_DOCS_FILES
-    "${HYPERION_PLATFORM_DOCS_DIR}/index.rst"
-    "${HYPERION_PLATFORM_DOCS_DIR}/quick_start.rst"
+set(HYPERION_MPL_DOCS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/docs")
+set(HYPERION_MPL_DOCS_FILES
+    "${HYPERION_MPL_DOCS_DIR}/index.rst"
+    "${HYPERION_MPL_DOCS_DIR}/quick_start.rst"
 )
 
 add_custom_command(
-    OUTPUT ${HYPERION_PLATFORM_DOXYGEN_HTML}
-    DEPENDS ${HYPERION_PLATFORM_HEADERS} ${DOCS_FILES}
+    OUTPUT ${HYPERION_MPL_DOXYGEN_HTML}
+    DEPENDS ${HYPERION_MPL_HEADERS} ${DOCS_FILES}
     COMMAND sphix-build -M html . _build
-    WORKING_DIRECTORY ${HYPERION_PLATFORM_DOCS_DIR}
+    WORKING_DIRECTORY ${HYPERION_MPL_DOCS_DIR}
     MAIN_DEPENDENCY
     COMMENT "Generating documentation with doxygen, sphinx, and breathe"
     VERBATIM
@@ -117,6 +118,6 @@ add_custom_command(
 add_custom_target(hyperion_mpl_doxygen DEPENDS ${DOXYGEN_HTML})
 
 include(GNUInstallDirs)
-install(DIRECTORY ${HYPERION_PLATFORM_DOXYGEN_OUTPUT_DIR} DESTINATION ${CMAKE_INSTALL_DOCDIR})
+install(DIRECTORY ${HYPERION_MPL_DOXYGEN_OUTPUT_DIR} DESTINATION ${CMAKE_INSTALL_DOCDIR})
 install(DIRECTORY include/ DESTINATION include)
 install(TARGETS hyperion_mpl DESTINATION lib)

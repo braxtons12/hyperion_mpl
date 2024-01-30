@@ -26,3 +26,12 @@ For an overview of each module, see the links in the left sidebar or below.
 
     genindex
 
+.. toctree::
+    :caption: Type Traits
+    
+    type_traits
+
+.. toctree::
+    :caption: Concept Definitions
+    
+    concepts

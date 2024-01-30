@@ -28,6 +28,18 @@
 #ifndef HYPERION_MPL_TYPE_TRAITS_H
 #define HYPERION_MPL_TYPE_TRAITS_H
 
+/// @ingroup mpl
+/// @{
+/// @defgroup type_traits Type Traits
+/// Hyperion provides an assortment of metaprogramming type traits used to detect
+/// various characteristics of given type(s). Some of these are purely novel,
+/// such as detection of an operator overload, while others are supplemental to
+/// those provided by the standard, doing something similar to existing traits,
+/// but filling in gaps in the API surface that were overlooked or missing for
+/// other reasons.
+/// @headerfile hyperion/mpl/type_traits.h
+/// @}
+
 #include <hyperion/mpl/type_traits/is_comparable.h>
 #include <hyperion/mpl/type_traits/is_operator_able.h>
 #include <hyperion/mpl/type_traits/std_supplemental.h>
