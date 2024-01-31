@@ -367,11 +367,13 @@ document.write(`
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="list-caption"><li class="toctree-l0 has-children"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Comparison Operator Detection</span></p><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="label-parts" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current nav bd-sidenav">
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Comparison Operator Detection</a></li>
-</ul></li><li class="toctree-l0 has-children"><p aria-level="2" class="caption" role="heading"><span class="caption-text">General Operator Detection</span></p><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="label-parts" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="nav bd-sidenav">
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="is_operator_able.html">General Operator Detection</a></li>
-</ul></li></ul></div>
+</ul>
+</div>
 </nav></div>
     </div>
   
@@ -433,9 +435,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__comparison__operator__detection"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">comparison_operator_detection</span></span></dt>
 <dd><p>Assortment of type traits to determine if two types are comparable.</p>
-<section id="group__comparison__operator__detection_1autotoc_md7">
-<h2>Example:<a class="headerlink" href="#group__comparison__operator__detection_1autotoc_md7" title="Link to this heading">#</a></h2>
-<div class="highlight-cpp notranslate" id="group__comparison__operator__detection_1autotoc_md7"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/mpl/type_traits/is_comparable.h&gt;</span>
+<section id="group__comparison__operator__detection_1autotoc_md8">
+<h2>Example:<a class="headerlink" href="#group__comparison__operator__detection_1autotoc_md8" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate" id="group__comparison__operator__detection_1autotoc_md8"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/mpl/type_traits/is_comparable.h&gt;</span>
 
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">hyperion</span><span class="o">::</span><span class="nn">mpl</span><span class="o">::</span><span class="nn">type_traits</span><span class="p">;</span>
 <span class="k">struct</span><span class="w"> </span><span class="nc">not_comparable</span><span class="w"> </span><span class="p">{};</span>
