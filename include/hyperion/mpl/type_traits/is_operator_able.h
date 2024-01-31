@@ -31,6 +31,7 @@
 
 #include <concepts>
 #include <hyperion/mpl/concepts/operator_able.h>
+#include <hyperion/platform.h>
 #include <hyperion/platform/def.h>
 #include <type_traits>
 
@@ -908,7 +909,15 @@ namespace hyperion::mpl::type_traits {
     template<typename TLhs, typename TRhs>
         requires concepts::Dividible<TLhs, TRhs>
     struct is_dividible<TLhs, TRhs> : std::true_type {
+        // disable MSVC warning about unsafe usaoge of `bool` here
+#if HYPERION_PLATFORM_COMPILER_IS_MSVC
+        _Pragma("warning( push )");
+        _Pragma("warning( disable : 4804 )");
+#endif // HYPERION_PLATFORM_COMPILER_IS_MSVC
         using result_type = decltype(std::declval<TLhs>() / std::declval<TRhs>());
+#if HYPERION_PLATFORM_COMPILER_IS_MSVC
+        _Pragma("warning( pop )");
+#endif // HYPERION_PLATFORM_COMPILER_IS_MSVC
     };
 
     /// @brief Value of the type trait `is_dividible` .
