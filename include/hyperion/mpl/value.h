@@ -66,30 +66,22 @@ HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
 
 namespace hyperion::mpl {
 
-    // this hack doesn't work w/ GCC
-    // TODO(braxtons12): Find a way to do this on GCC
-#if !HYPERION_PLATFORM_COMPILER_IS_GCC
-
     namespace detail {
 
-        template<typename TType, int = (TType::value, 0)>
-        [[nodiscard]] consteval auto
-        has_static_constexpr_value([[maybe_unused]] TType val) noexcept -> bool {
-            return true;
-        }
+        template<typename TType, int = 0>
+        struct has_static_constexpr_value : std::false_type { };
+
+        HYPERION_IGNORE_COMMA_MISUSE_WARNING_START;
+        HYPERION_IGNORE_UNUSED_VALUES_WARNING_START;
+        template<typename TType>
+        struct has_static_constexpr_value<TType, (int(TType::value), 0)> : std::true_type { };
+        HYPERION_IGNORE_UNUSED_VALUES_WARNING_STOP;
+        HYPERION_IGNORE_COMMA_MISUSE_WARNING_STOP;
 
         template<typename TType>
-        // NOLINTNEXTLINE(cert-dcl50-cpp)
-        [[nodiscard]] constexpr auto has_static_constexpr_value(...) noexcept -> bool {
-            return false;
-        }
-
-        template<typename TType>
-        concept HasStaticConstexprValue = has_static_constexpr_value(TType{});
+        concept HasStaticConstexprValue = has_static_constexpr_value<TType>::value;
 
     } // namespace detail
-
-#endif // !HYPERION_PLATFORM_COMPILER_IS_GCC
 
     /// @brief Concept specifying the requirements for a metaprogramming
     /// value type.
@@ -103,14 +95,7 @@ namespace hyperion::mpl {
     /// @ingroup value
     /// @headerfile hyperion/mpl/value.h
     template<typename TType>
-    concept ValueType =
-#if !HYPERION_PLATFORM_COMPILER_IS_GCC
-        // this hack doesn't work w/ GCC
-        // TODO(braxtons12): Find a way to do this on GCC
-        requires { TType::value; } && detail::HasStaticConstexprValue<TType>;
-#else
-        requires { TType::value; };
-#endif // !HYPERION_PLATFORM_COMPILER_IS_GCC
+    concept ValueType = requires { TType::value; } && detail::HasStaticConstexprValue<TType>;
 
     /// @brief Type trait to determine whether type `TType` is a metaprogramming value type.
     ///
@@ -607,11 +592,9 @@ namespace hyperion::mpl {
         static_assert(ValueType<std::bool_constant<true>>,
                       "hyperion::mpl::ValueType not satisfied by std::bool_constant "
                       "(implementation failing)");
-#if !HYPERION_PLATFORM_COMPILER_IS_GCC
         static_assert(!ValueType<not_value_type>,
                       "hyperion::mpl::ValueType not satisfied by _test::not_value_type "
                       "(implementation failing)");
-#endif // !HYPERION_PLATFORM_COMPILER_IS_GCC
 
         static_assert(value_of(Value<3>{}) == 3, "hyperion::mpl::value_of test case 1 (failing)");
         static_assert(value_of(std::integral_constant<int, 3>{}) == 3,
