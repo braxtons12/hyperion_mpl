@@ -34,70 +34,74 @@
 namespace hyperion::mpl::concepts {
 
     template<typename TLhs>
-    concept UnaryPlusable = requires(const TLhs& lhs) { +lhs; };
+    concept UnaryPlusable = requires(TLhs lhs) { +lhs; };
 
     template<typename TLhs>
-    concept UnaryMinusable = requires(const TLhs& lhs) { -lhs; };
+    concept UnaryMinusable = requires(TLhs lhs) { -lhs; };
 
     template<typename TLhs>
-    concept BinaryNotable = requires(const TLhs& lhs) { ~lhs; };
+    concept BinaryNotable = requires(TLhs lhs) { ~lhs; };
 
     template<typename TLhs>
-    concept BooleanNotable = requires(const TLhs& lhs) { !lhs; };
+    concept BooleanNotable = requires(TLhs lhs) { !lhs; };
 
     template<typename TLhs>
-    concept Addressable = requires(const TLhs& lhs) { &lhs; };
+    concept Addressable = requires(TLhs lhs) { &lhs; };
 
     template<typename TLhs>
-    concept Dereferencible = std::is_pointer_v<TLhs> || requires(const TLhs& lhs) { *lhs; };
+    concept Dereferencible = std::is_pointer_v<TLhs> || requires(TLhs lhs) { *lhs; };
 
     template<typename TLhs>
-    concept Arrowable = std::is_pointer_v<TLhs> || requires(const TLhs& lhs) { lhs.operator->(); };
+    concept Arrowable = (std::is_class_v<std::remove_pointer_t<TLhs>>
+                         || std::is_union_v<std::remove_pointer_t<TLhs>>)&&(std::is_pointer_v<TLhs>
+                                                                            || requires(TLhs lhs) {
+                                                                                   lhs.operator->();
+                                                                               });
 
     template<typename TLhs, typename TRhs = TLhs>
-    concept Addable = requires(const TLhs& lhs, const TRhs& rhs) {
+    concept Addable = requires(TLhs lhs, TRhs rhs) {
         lhs + rhs;
         rhs + lhs;
     };
 
     template<typename TLhs, typename TRhs = TLhs>
-    concept Subtractable = requires(const TLhs& lhs, const TRhs& rhs) {
+    concept Subtractable = requires(TLhs lhs, TRhs rhs) {
         lhs - rhs;
         rhs - lhs;
     };
 
     template<typename TLhs, typename TRhs = TLhs>
-    concept Multipliable = requires(const TLhs& lhs, const TRhs& rhs) {
+    concept Multipliable = requires(TLhs lhs, TRhs rhs) {
         lhs* rhs;
         rhs* lhs;
     };
 
     template<typename TLhs, typename TRhs = TLhs>
-    concept Dividible = requires(const TLhs& lhs, const TRhs& rhs) {
+    concept Dividible = requires(TLhs lhs, TRhs rhs) {
         lhs / rhs;
         rhs / lhs;
     };
 
     template<typename TLhs, typename TRhs = TLhs>
-    concept BinaryAndable = requires(const TLhs& lhs, const TRhs& rhs) {
+    concept BinaryAndable = requires(TLhs lhs, TRhs rhs) {
         lhs & rhs;
         rhs & lhs;
     };
 
     template<typename TLhs, typename TRhs = TLhs>
-    concept BinaryOrable = requires(const TLhs& lhs, const TRhs& rhs) {
+    concept BinaryOrable = requires(TLhs lhs, TRhs rhs) {
         lhs | rhs;
         rhs | lhs;
     };
 
     template<typename TLhs, typename TRhs = TLhs>
-    concept BooleanAndable = requires(const TLhs& lhs, const TRhs& rhs) {
+    concept BooleanAndable = requires(TLhs lhs, TRhs rhs) {
         lhs&& rhs;
         rhs&& lhs;
     };
 
     template<typename TLhs, typename TRhs = TLhs>
-    concept BooleanOrable = requires(const TLhs& lhs, const TRhs& rhs) {
+    concept BooleanOrable = requires(TLhs lhs, TRhs rhs) {
         lhs || rhs;
         rhs || lhs;
     };
