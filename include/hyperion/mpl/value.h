@@ -40,6 +40,8 @@
 #include <concepts>
 #include <type_traits>
 
+HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
+
 /// @ingroup mpl
 /// @{
 /// @defgroup value Metaprogramming Value Type
@@ -741,5 +743,7 @@ namespace hyperion::mpl {
 #endif
     } // namespace _test
 } // namespace hyperion::mpl
+
+HYPERION_IGNORE_DOCUMENTATION_WARNING_STOP;
 
 #endif // HYPERION_MPL_VALUE_H
