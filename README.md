@@ -19,7 +19,16 @@ After following the Quick Start Guide, you'll be able to use hyperion::mpl in yo
 A basic example of what you can do with hyperion::mpl is below:
 
 ```cpp
-#include <hyperion/mpl/list.h>
+#include <hyperion/mpl/value.h>
+
+using namespace hyperion::mpl;
+
+constexpr auto val1 = Value<4>{};
+constexpr auto val2 = Value<2>{};
+
+constexpr auto meaning_of_life = (val1 * 10_value) + val2;
+
+static_assert(meaning_of_life == 42);
 ```
 
 ### Contributing

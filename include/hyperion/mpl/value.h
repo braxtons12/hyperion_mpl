@@ -58,6 +58,8 @@ HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
 /// constexpr auto val2 = Value<2>{};
 ///
 /// constexpr auto meaning_of_life = (val1 * 10_value) + val2;
+///
+/// static_assert(meaning_of_life == 42);
 /// @endcode
 /// @headerfile hyperion/mpl/type_traits.h
 /// @}
