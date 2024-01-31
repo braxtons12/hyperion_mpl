@@ -3,7 +3,7 @@
 /// @brief Meta-programming type traits to determine if a type (or types)
 /// support an operator
 /// @version 0.1
-/// @date 2024-01-27
+/// @date 2024-01-30
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
