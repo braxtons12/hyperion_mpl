@@ -66,23 +66,6 @@ HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
 
 namespace hyperion::mpl {
 
-    namespace detail {
-
-        template<typename TType, typename TEnable = void>
-        struct has_static_constexpr_value : std::false_type { };
-
-        template<typename TType>
-        struct has_static_constexpr_value<
-            TType,
-            // NOLINTNEXTLINE(readability-simplify-boolean-expr,readability-implicit-bool-conversion)
-            std::void_t<std::conditional_t<int(TType::value) || true, void, void>>>
-            : std::true_type { };
-
-        template<typename TType>
-        concept HasStaticConstexprValue = has_static_constexpr_value<TType>::value;
-
-    } // namespace detail
-
     /// @brief Concept specifying the requirements for a metaprogramming
     /// value type.
     ///
@@ -95,7 +78,11 @@ namespace hyperion::mpl {
     /// @ingroup value
     /// @headerfile hyperion/mpl/value.h
     template<typename TType>
-    concept ValueType = requires { TType::value; } && detail::HasStaticConstexprValue<TType>;
+    concept ValueType = requires {
+        {
+            std::integral_constant<decltype(TType::value), TType::value>{}
+        };
+    };
 
     /// @brief Type trait to determine whether type `TType` is a metaprogramming value type.
     ///
