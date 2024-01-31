@@ -1384,8 +1384,8 @@ namespace hyperion::mpl::type_traits {
                       "hyperion::mpl::type_traits::is_addressable test case 6 (failing)");
 
         struct arrow_able {
-            auto operator->() -> arrow_able&;
-            auto operator->() const -> const arrow_able&;
+            auto operator->() -> int*;
+            auto operator->() const -> const int*;
         };
 
         static_assert(is_arrowable_v<arrow_able>,
@@ -1400,7 +1400,7 @@ namespace hyperion::mpl::type_traits {
                       "hyperion::mpl::type_traits::is_arrowable test case 5 (failing)");
         static_assert(!is_arrowable_v<nothing_able>,
                       "hyperion::mpl::type_traits::is_arrowable test case 6 (failing)");
-        static_assert(std::same_as<arrow_result_t<arrow_able>, arrow_able&>,
+        static_assert(std::same_as<arrow_result_t<arrow_able>, int*>,
                       "hyperion::mpl::type_traits::is_arrowable test case 7 (failing)");
         static_assert(std::same_as<arrow_result_t<int>, void>,
                       "hyperion::mpl::type_traits::is_arrowable test case 8 (failing)");
