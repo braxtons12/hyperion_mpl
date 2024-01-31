@@ -1,5 +1,5 @@
 hyperion::mpl
-******************
+*************
 
 hyperion::mpl is a C++20 meta programming library similar to Boost.Hana.
 
@@ -25,6 +25,11 @@ For an overview of each module, see the links in the left sidebar or below.
     :caption: Quick Reference
 
     genindex
+
+.. toctree::
+    :caption: Metaprogramming Value Type
+    
+    value
 
 .. toctree::
     :caption: Type Traits

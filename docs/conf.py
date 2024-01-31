@@ -114,4 +114,4 @@ breathe_projects = {
         "hyperion::mpl": "_build/xml"
 }
 breathe_default_project = "hyperion::mpl"
-
+breathe_order_parameters_first = True
