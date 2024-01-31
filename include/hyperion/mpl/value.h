@@ -62,6 +62,10 @@
 
 namespace hyperion::mpl {
 
+    // this hack doesn't work w/ GCC
+    // TODO(braxtons12): Find a way to do this on GCC
+#if !HYPERION_PLATFORM_COMPILER_IS_GCC
+
     namespace detail {
 
         template<typename TType, int = (TType::value, 0)>
@@ -81,6 +85,8 @@ namespace hyperion::mpl {
 
     } // namespace detail
 
+#endif // !HYPERION_PLATFORM_COMPILER_IS_GCC
+
     /// @brief Concept specifying the requirements for a metaprogramming
     /// value type.
     ///
@@ -93,7 +99,14 @@ namespace hyperion::mpl {
     /// @ingroup value
     /// @headerfile hyperion/mpl/value.h
     template<typename TType>
-    concept ValueType = requires { TType::value; } && detail::HasStaticConstexprValue<TType>;
+    concept ValueType =
+#if !HYPERION_PLATFORM_COMPILER_IS_GCC
+        // this hack doesn't work w/ GCC
+        // TODO(braxtons12): Find a way to do this on GCC
+        requires { TType::value; } && detail::HasStaticConstexprValue<TType>;
+#else
+        requires { TType::value; };
+#endif // !HYPERION_PLATFORM_COMPILER_IS_GCC
 
     /// @brief Type trait to determine whether type `TType` is a metaprogramming value type.
     ///
@@ -418,7 +431,8 @@ namespace hyperion::mpl {
     template<auto TValue, typename TType = decltype(TValue)>
         requires concepts::BooleanNotable<TType>
     [[nodiscard]] constexpr auto
-    operator!([[maybe_unused]] const Value<TValue, TType>& value) noexcept -> Value<!TValue, TType> {
+    operator!([[maybe_unused]] const Value<TValue, TType>& value) noexcept
+        -> Value<!TValue, TType> {
         return {};
     }
 
@@ -486,7 +500,8 @@ namespace hyperion::mpl {
     template<auto TValue, typename TType = decltype(TValue)>
         requires concepts::BinaryNotable<TType>
     [[nodiscard]] constexpr auto
-    operator~([[maybe_unused]] const Value<TValue, TType>& value) noexcept -> Value<~TValue, TType> {
+    operator~([[maybe_unused]] const Value<TValue, TType>& value) noexcept
+        -> Value<~TValue, TType> {
         return {};
     }
 
@@ -588,9 +603,11 @@ namespace hyperion::mpl {
         static_assert(ValueType<std::bool_constant<true>>,
                       "hyperion::mpl::ValueType not satisfied by std::bool_constant "
                       "(implementation failing)");
+#if !HYPERION_PLATFORM_COMPILER_IS_GCC
         static_assert(!ValueType<not_value_type>,
                       "hyperion::mpl::ValueType not satisfied by _test::not_value_type "
                       "(implementation failing)");
+#endif // !HYPERION_PLATFORM_COMPILER_IS_GCC
 
         static_assert(value_of(Value<3>{}) == 3, "hyperion::mpl::value_of test case 1 (failing)");
         static_assert(value_of(std::integral_constant<int, 3>{}) == 3,
