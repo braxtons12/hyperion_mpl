@@ -457,6 +457,8 @@ document.write(`
 <span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">val2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Value</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">{};</span>
 
 <span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">meaning_of_life</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">val1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">10</span><span class="n">_value</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">val2</span><span class="p">;</span>
+
+<span class="k">static_assert</span><span class="p">(</span><span class="n">meaning_of_life</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">42</span><span class="p">);</span>
 </pre></div>
 </div>
 </section>
