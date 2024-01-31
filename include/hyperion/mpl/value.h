@@ -68,15 +68,15 @@ namespace hyperion::mpl {
 
     namespace detail {
 
-        template<typename TType, int = 0>
+        template<typename TType, typename TEnable = void>
         struct has_static_constexpr_value : std::false_type { };
 
-        HYPERION_IGNORE_COMMA_MISUSE_WARNING_START;
-        HYPERION_IGNORE_UNUSED_VALUES_WARNING_START;
         template<typename TType>
-        struct has_static_constexpr_value<TType, (int(TType::value), 0)> : std::true_type { };
-        HYPERION_IGNORE_UNUSED_VALUES_WARNING_STOP;
-        HYPERION_IGNORE_COMMA_MISUSE_WARNING_STOP;
+        struct has_static_constexpr_value<
+            TType,
+            // NOLINTNEXTLINE(readability-simplify-boolean-expr,readability-implicit-bool-conversion)
+            std::void_t<std::conditional_t<int(TType::value) || true, void, void>>>
+            : std::true_type { };
 
         template<typename TType>
         concept HasStaticConstexprValue = has_static_constexpr_value<TType>::value;
