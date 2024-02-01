@@ -707,7 +707,7 @@ namespace hyperion::mpl {
 
 #endif // HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
 
-    namespace _test {
+    namespace _test::value {
 
         struct not_value_type {
             int value;
@@ -900,7 +900,7 @@ namespace hyperion::mpl {
                       "hyperion::mpl::Value::apply(MetaFunction(ValueType)) -> ValueType test case "
                       "3 (failing)");
 
-    } // namespace _test
+    } // namespace _test::value
 } // namespace hyperion::mpl
 
 // NOLINTNEXTLINE(misc-header-include-cycle)
