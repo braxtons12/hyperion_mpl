@@ -89,10 +89,9 @@ namespace hyperion::mpl {
         template<typename TFunction>
             requires std::invocable<TFunction, Type<type>>
                      && MetaType<std::invoke_result_t<TFunction, Type<type>>>
-                     && (MetaType<typename std::invoke_result_t<TFunction, Type<type>>::type>
-                         || ValueType<typename std::invoke_result_t<TFunction, Type<type>>::type>)
-        [[nodiscard]] constexpr auto apply(TFunction&& func) noexcept
-            -> std::invoke_result_t<TFunction, Type<type>> {
+                     && ValueType<typename std::invoke_result_t<TFunction, Type<type>>::type>
+        [[nodiscard]] constexpr auto
+        apply(TFunction&& func) noexcept -> std::invoke_result_t<TFunction, Type<type>> {
             return std::forward<TFunction>(func)(Type<type>{});
         }
 
@@ -101,9 +100,10 @@ namespace hyperion::mpl {
                      && MetaType<std::invoke_result_t<TFunction, Type<type>>>
                      && (!MetaType<typename std::invoke_result_t<TFunction, Type<type>>::type>)
                      && (!ValueType<typename std::invoke_result_t<TFunction, Type<type>>::type>)
-        [[nodiscard]] constexpr auto apply(TFunction&& func) noexcept
-            -> std::invoke_result_t<TFunction, Type<type>> {
-            return std::forward<TFunction>(func)(Type<type>{});
+        [[nodiscard]] constexpr auto apply(
+            [[maybe_unused]] TFunction&& func) noexcept // NOLINT(*-missing-std-forward)
+            -> Type<typename std::invoke_result_t<TFunction, Type<type>>::type> {
+            return {};
         }
 
         template<typename TFunction>
@@ -389,7 +389,51 @@ namespace hyperion::mpl {
         return {};
     }
 
+    template<typename TType>
+    [[nodiscard]] constexpr auto decltype_() noexcept -> Type<TType> {
+        return {};
+    }
+
+    template<typename TLhs, typename TRhs>
+    [[nodiscard]] constexpr auto
+    operator==([[maybe_unused]] const Type<TLhs>& lhs,
+               [[maybe_unused]] const Type<TRhs>& rhs) noexcept -> bool {
+        return Type<TLhs>{}.is(Type<TRhs>{});
+    }
+
+    template<typename TLhs, typename TRhs>
+    [[nodiscard]] constexpr auto
+    operator!=([[maybe_unused]] const Type<TLhs>& lhs,
+               [[maybe_unused]] const Type<TRhs>& rhs) noexcept -> bool {
+        return !(Type<TLhs>{}.is(Type<TRhs>{}));
+    }
+
     namespace _test {
+        constexpr int test_val = 1;
+
+        static_assert(std::same_as<int, typename decltype(decltype_(1))::type>,
+                      "hyperion::mpl::decltype_ test case 1 (failing)");
+        static_assert(std::same_as<const int&, typename decltype(decltype_(test_val))::type>,
+                      "hyperion::mpl::decltype_ test case 2 (failing)");
+        static_assert(std::same_as<const int&, typename decltype(decltype_<const int&>())::type>,
+                      "hyperion::mpl::decltype_ test case 3 (failing)");
+
+        static_assert(Type<int>{} == Type<int>{},
+                      "hyperion::mpl::Type::operator== test case 1 (failing)");
+        static_assert(Type<const int>{} == Type<const int>{},
+                      "hyperion::mpl::Type::operator== test case 2 (failing)");
+        static_assert(!(Type<const int>{} == Type<int>{}),
+                      "hyperion::mpl::Type::operator== test case 3 (failing)");
+        static_assert(!(Type<double>{} == Type<int>{}),
+                      "hyperion::mpl::Type::operator== test case 4 (failing)");
+
+        static_assert(Type<const int>{} != Type<int>{},
+                      "hyperion::mpl::Type::operator!= test case 1 (failing)");
+        static_assert(Type<double>{} != Type<int>{},
+                      "hyperion::mpl::Type::operator!= test case 2 (failing)");
+        static_assert(!(Type<int>{} != Type<int>{}),
+                      "hyperion::mpl::Type::operator!= test case 3 (failing)");
+
         struct not_copy_or_move {
             not_copy_or_move() = default;
             ~not_copy_or_move() = default;
@@ -400,11 +444,9 @@ namespace hyperion::mpl {
             auto operator=(not_copy_or_move&&) -> not_copy_or_move& = default;
         };
 
-        constexpr int test_val = 1;
-
-        static_assert(Type<int>{}.satisfies<std::is_integral>(),
+        static_assert(decltype_<int>().satisfies<std::is_integral>(),
                       "hyperion::mpl::Type::satisfies test case 1 (failing)");
-        static_assert(!Type<double>{}.satisfies<std::is_integral>(),
+        static_assert(!decltype_<double>().satisfies<std::is_integral>(),
                       "hyperion::mpl::Type::satisfies test case 2 (failing)");
 
         template<ValueType TValue>
@@ -418,12 +460,12 @@ namespace hyperion::mpl {
         };
 
         static_assert(decltype_(1_value).apply<add_one>() == 2,
-                      "hyperion::mpl::Type::apply<ValueType> test case 1 (failing)");
+                      "hyperion::mpl::Type::apply<MetaFunction<ValueType>> test case 1 (failing)");
         static_assert(decltype_(2_value).apply<times_two>() == 4_value,
-                      "hyperion::mpl::Type::apply<ValueType> test case 3 (failing)");
+                      "hyperion::mpl::Type::apply<MetaFunction<ValueType>> test case 3 (failing)");
         static_assert(decltype_(2_value).apply<times_two>().apply<add_one>().apply<times_two>()
                           == 10_value,
-                      "hyperion::mpl::Type::apply<ValueType> test case 3 (failing)");
+                      "hyperion::mpl::Type::apply<MetaFunction<ValueType>> test case 3 (failing)");
 
         constexpr auto add1
             = [](const auto& value) -> Value<std::remove_cvref_t<decltype(value)>::value + 1>
@@ -503,24 +545,85 @@ namespace hyperion::mpl {
                       "hyperion::mpl::Type::apply(MetaFunction(Type)) -> Type<ValueType> test case "
                       "3 (failing)");
 
-        static_assert(
-            std::same_as<typename decltype(decltype_(1).apply<std::add_lvalue_reference>())::type,
-                         int&>,
-            "hyperion::mpl::Type::apply<MetaType> test case 1 (failing)");
-        static_assert(
-            std::same_as<typename decltype(decltype_(1).apply<std::add_const>())::type, const int>,
-            "hyperion::mpl::Type::apply<MetaType> test case 2 (failing)");
-        static_assert(std::same_as<typename decltype(decltype_(test_val)
-                                                         .apply<std::remove_reference>()
-                                                         .apply<std::remove_const>()
-                                                         .apply<std::add_rvalue_reference>())::type,
-                                   int&&>,
-                      "hyperion::mpl::Type::apply<MetaType> test case 3 (failing)");
+        static_assert(decltype_(1).apply<std::add_lvalue_reference>() == Type<int&>{},
+                      "hyperion::mpl::Type::apply<MetaFunction<type>> test case 1 (failing)");
+        static_assert(decltype_(1).apply<std::add_const>() == Type<const int>{},
+                      "hyperion::mpl::Type::apply<MetaFunction<type>> test case 2 (failing)");
+        static_assert(decltype_(test_val)
+                              .apply<std::remove_reference>()
+                              .apply<std::remove_const>()
+                              .apply<std::add_rvalue_reference>()
+                          == decltype_<int&&>(),
+                      "hyperion::mpl::Type::apply<MetaFunction<type>> test case 3 (failing)");
 
-        static_assert(std::same_as<int, typename decltype(decltype_(1))::type>,
-                      "hyperion::mpl::decltype_ test case 1 (failing)");
-        static_assert(std::same_as<const int&, typename decltype(decltype_(test_val))::type>,
-                      "hyperion::mpl::decltype_ test case 2 (failing)");
+        constexpr auto add_const = [](const auto& type)
+            -> std::add_const<typename std::remove_cvref_t<decltype(type)>::type>
+            requires MetaType<std::remove_cvref_t<decltype(type)>>
+        {
+            return {};
+        };
+
+        constexpr auto add_lvalue_reference = [](const auto& type)
+            -> std::add_lvalue_reference<typename std::remove_cvref_t<decltype(type)>::type>
+            requires MetaType<std::remove_cvref_t<decltype(type)>>
+        {
+            return {};
+        };
+
+        constexpr auto remove_reference = [](const auto& type)
+            -> std::remove_reference<typename std::remove_cvref_t<decltype(type)>::type>
+            requires MetaType<std::remove_cvref_t<decltype(type)>>
+        {
+            return {};
+        };
+
+        static_assert(
+            decltype_<int>().apply(add_const) == decltype_<const int>(),
+            "hyperion::mpl::Type::apply(MetaFunction(Type)) -> Type<type> test case 1 (failing)");
+        static_assert(
+            decltype_<int>().apply(add_const).apply(add_lvalue_reference)
+                == decltype_<const int&>(),
+            "hyperion::mpl::Type::apply(MetaFunction(Type)) -> Type<type> test case 2 (failing)");
+        static_assert(
+            decltype_<int&&>().apply(remove_reference).apply(add_const).apply(add_lvalue_reference)
+                == decltype_<const int&>(),
+            "hyperion::mpl::Type::apply(MetaFunction(Type)) -> Type<type> test case 3 (failing)");
+
+        constexpr auto add_const_typed = [](const auto& type)
+            -> Type<std::add_const_t<typename std::remove_cvref_t<decltype(type)>::type>>
+            requires MetaType<std::remove_cvref_t<decltype(type)>>
+        {
+            return {};
+        };
+
+        constexpr auto add_lvalue_reference_typed = [](const auto& type)
+            -> Type<std::add_lvalue_reference_t<typename std::remove_cvref_t<decltype(type)>::type>>
+            requires MetaType<std::remove_cvref_t<decltype(type)>>
+        {
+            return {};
+        };
+
+        constexpr auto remove_reference_typed = [](const auto& type)
+            -> Type<std::remove_reference_t<typename std::remove_cvref_t<decltype(type)>::type>>
+            requires MetaType<std::remove_cvref_t<decltype(type)>>
+        {
+            return {};
+        };
+
+        static_assert(
+            decltype_<int>().apply(add_const_typed) == decltype_<const int>(),
+            "hyperion::mpl::Type::apply(MetaFunction(Type)) -> Type<type> test case 1 (failing)");
+        static_assert(
+            decltype_<int>().apply(add_const_typed).apply(add_lvalue_reference_typed)
+                == decltype_<const int&>(),
+            "hyperion::mpl::Type::apply(MetaFunction(Type)) -> Type<type> test case 2 (failing)");
+        static_assert(
+            decltype_<int&&>()
+                    .apply(remove_reference_typed)
+                    .apply(add_const_typed)
+                    .apply(add_lvalue_reference_typed)
+                == decltype_<const int&>(),
+            "hyperion::mpl::Type::apply(MetaFunction(Type)) -> Type<type> test case 3 (failing)");
 
     } // namespace _test
 } // namespace hyperion::mpl
