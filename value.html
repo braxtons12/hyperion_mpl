@@ -447,9 +447,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">value</span></span></dt>
 <dd><p>Hyperion provides <code class="docutils literal notranslate"><span class="pre">mpl::Value</span></code> as a metaprogramming type for storing, communicating, working with, and calculating compile-time values.</p>
-<section id="group__value_1autotoc_md14">
-<h2>Example<a class="headerlink" href="#group__value_1autotoc_md14" title="Link to this heading">#</a></h2>
-<div class="highlight-cpp notranslate" id="group__value_1autotoc_md14"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/mpl/value.h&gt;</span>
+<section id="group__value_1autotoc_md15">
+<h2>Example<a class="headerlink" href="#group__value_1autotoc_md15" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate" id="group__value_1autotoc_md15"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/mpl/value.h&gt;</span>
 
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">hyperion</span><span class="o">::</span><span class="nn">mpl</span><span class="p">;</span>
 
@@ -501,18 +501,18 @@ document.write(`
 <span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">ValueType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">requires</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="o"><span class="pre">!</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">same_as</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_9ValueTypeEIQntNSt7same_asI5TType5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEEEEE8value_ofDTN5TType5valueEERK5TType" title="value_of::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Value</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_9ValueTypeEIQntNSt7same_asI5TType5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEEEEE8value_ofDTN5TType5valueEERK5TType" title="value_of::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">remove_cvref_t</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">decltype</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#_CPPv4I_9ValueTypeEIQntNSt7same_asI5TType5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEEEEE8value_ofDTN5TType5valueEERK5TType" title="value_of::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">)</span></span><br /><span class="target" id="group__value_1ga3b7470539bc05234ad55e7a00384112b"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">expr</span></span><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value_of</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_9ValueTypeEIQntNSt7same_asI5TType5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEEEEE8value_ofDTN5TType5valueEERK5TType" title="value_of::TType"><span class="n"><span class="pre">TType</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><span class="w"> </span><span class="o"><span class="pre">-&gt;</span></span><span class="w"> </span><span class="k"><span class="pre">decltype</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#_CPPv4I_9ValueTypeEIQntNSt7same_asI5TType5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEEEEE8value_ofDTN5TType5valueEERK5TType" title="value_of::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv4I_9ValueTypeEIQntNSt7same_asI5TType5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEEEEE8value_ofDTN5TType5valueEERK5TType" title="Link to this definition">#</a><br /></dt>
 <dd><p>Returns the compile-time value of the given <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code></p>
 <p>Returns the given <code class="docutils literal notranslate"><span class="pre">mpl::ValueType</span></code> into an <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code></p>
-<section id="group__value_1autotoc_md16">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md16" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md16"><ul class="simple">
+<section id="group__value_1autotoc_md17">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md17" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md17"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must be an <code class="docutils literal notranslate"><span class="pre">mpl::ValueType</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must not be a specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code></p></li>
 </ul>
 </p>
 <p></p>
 </section>
-<section id="group__value_1autotoc_md17">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md17" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md17"><ul class="simple">
+<section id="group__value_1autotoc_md18">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md18" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md18"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must be an <code class="docutils literal notranslate"><span class="pre">mpl::ValueType</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must not be a specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code></p></li>
 </ul>
@@ -545,9 +545,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1ga0b2768447cd0fa8d871161ecf3ef1dd4"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TValue,</span> <span class="pre">typename</span> <span class="pre">TType</span> <span class="pre">=</span> <span class="pre">decltype(TValue)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::UnaryPlusable&lt;</span> <span class="pre">decltype(TValue)&gt;</span> <span class="pre">auto</span> <span class="pre">operator+</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TValue,</span> <span class="pre">TType</span> <span class="pre">&gt;</span> <span class="pre">&amp;value)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TValue</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Unary plus operator for <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code>. </p>
-<section id="group__value_1autotoc_md18">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md18" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md18"><ul class="simple">
+<section id="group__value_1autotoc_md19">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md19" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md19"><ul class="simple">
 <li><p>The type of <code class="docutils literal notranslate"><span class="pre">TValue</span></code> must be <code class="docutils literal notranslate"><span class="pre">UnaryPlusable</span></code> (it must support unary <code class="docutils literal notranslate"><span class="pre">operator+</span></code>).</p></li>
 </ul>
 </p>
@@ -573,9 +573,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1ga089cbe6aa34206ae39a42f341d45ed2b"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TValue,</span> <span class="pre">typename</span> <span class="pre">TType</span> <span class="pre">=</span> <span class="pre">decltype(TValue)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::UnaryMinusable&lt;</span> <span class="pre">decltype(TValue)&gt;</span> <span class="pre">auto</span> <span class="pre">operator-</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TValue,</span> <span class="pre">TType</span> <span class="pre">&gt;</span> <span class="pre">&amp;value)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;-TValue</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Unary minus operator for <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code>. </p>
-<section id="group__value_1autotoc_md19">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md19" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md19"><ul class="simple">
+<section id="group__value_1autotoc_md20">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md20" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md20"><ul class="simple">
 <li><p>The type of <code class="docutils literal notranslate"><span class="pre">TValue</span></code> must be <code class="docutils literal notranslate"><span class="pre">UnaryMinusable</span></code> (it must support unary <code class="docutils literal notranslate"><span class="pre">operator-</span></code>).</p></li>
 </ul>
 </p>
@@ -601,9 +601,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1gac069b792bd68391aa9a28ffa98e26ed7"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::Addable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator+</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs+TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Adds the two given <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code>s and returns the result as another <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code> specialization. </p>
-<section id="group__value_1autotoc_md20">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md20" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md20"><ul class="simple">
+<section id="group__value_1autotoc_md21">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md21" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md21"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be addable</p></li>
 </ul>
 </p>
@@ -634,9 +634,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1ga402b4e466a5e4591d0013399f0600a0f"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::Subtractable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator-</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs</span> <span class="pre">-</span> <span class="pre">TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Subtracts <code class="docutils literal notranslate"><span class="pre">rhs</span></code> from <code class="docutils literal notranslate"><span class="pre">lhs</span></code> and returns the result as another <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code> specialization. </p>
-<section id="group__value_1autotoc_md21">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md21" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md21"><ul class="simple">
+<section id="group__value_1autotoc_md22">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md22" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md22"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be subtractable</p></li>
 </ul>
 </p>
@@ -667,9 +667,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1ga2cf93b6de280658cd20a56e20b81bc8f"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::Multipliable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator*</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs</span> <span class="pre">*TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Multiplies the two given <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code>s and returns the result as another <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code> specialization. </p>
-<section id="group__value_1autotoc_md22">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md22" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md22"><ul class="simple">
+<section id="group__value_1autotoc_md23">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md23" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md23"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be multipliable</p></li>
 </ul>
 </p>
@@ -700,9 +700,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1ga710751dd918f6b45013e531f792e18ee"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::Dividible&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator/</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs/TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Divides <code class="docutils literal notranslate"><span class="pre">lhs</span></code> by <code class="docutils literal notranslate"><span class="pre">rhs</span></code> and returns the result as another <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code> specialization. </p>
-<section id="group__value_1autotoc_md23">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md23" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md23"><ul class="simple">
+<section id="group__value_1autotoc_md24">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md24" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md24"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be dividible</p></li>
 </ul>
 </p>
@@ -733,9 +733,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1gaff3193e681e60efae68a1d3dce3dd18c"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::BooleanAndable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator&amp;&amp;</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs</span> <span class="pre">&amp;&amp;TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Performs the boolean and of <code class="docutils literal notranslate"><span class="pre">lhs</span></code> and <code class="docutils literal notranslate"><span class="pre">rhs</span></code></p>
-<section id="group__value_1autotoc_md24">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md24" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md24"><ul class="simple">
+<section id="group__value_1autotoc_md25">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md25" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md25"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be boolean andable</p></li>
 </ul>
 </p>
@@ -766,9 +766,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1ga788cedfab8c6b2c16ff857690a093019"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::BooleanOrable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator||</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs||TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Performs the boolean or of <code class="docutils literal notranslate"><span class="pre">lhs</span></code> and <code class="docutils literal notranslate"><span class="pre">rhs</span></code></p>
-<section id="group__value_1autotoc_md25">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md25" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md25"><ul class="simple">
+<section id="group__value_1autotoc_md26">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md26" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md26"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be boolean orable</p></li>
 </ul>
 </p>
@@ -799,9 +799,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1ga121da678c0c161d2edbaae67f5f3d8c4"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TValue,</span> <span class="pre">typename</span> <span class="pre">TType</span> <span class="pre">=</span> <span class="pre">decltype(TValue)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::BooleanNotable&lt;</span> <span class="pre">TType</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator!</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TValue,</span> <span class="pre">TType</span> <span class="pre">&gt;</span> <span class="pre">&amp;value)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;!TValue,</span> <span class="pre">TType</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Performs the boolean not of <code class="docutils literal notranslate"><span class="pre">value</span></code></p>
-<section id="group__value_1autotoc_md26">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md26" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md26"><ul class="simple">
+<section id="group__value_1autotoc_md27">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md27" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md27"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TValue</span></code> boolean notable</p></li>
 </ul>
 </p>
@@ -827,9 +827,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1gafea777ba6f9d19bcffade72abc6a94e2"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::BinaryAndable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator&amp;</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs</span> <span class="pre">&amp;TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Performs the binary and of <code class="docutils literal notranslate"><span class="pre">lhs</span></code> and <code class="docutils literal notranslate"><span class="pre">rhs</span></code></p>
-<section id="group__value_1autotoc_md27">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md27" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md27"><ul class="simple">
+<section id="group__value_1autotoc_md28">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md28" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md28"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be binary andable</p></li>
 </ul>
 </p>
@@ -860,9 +860,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1ga5de954f9f608025365a1ce86ba70767b"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::BinaryOrable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator|</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs|TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Performs the binary or of <code class="docutils literal notranslate"><span class="pre">lhs</span></code> and <code class="docutils literal notranslate"><span class="pre">rhs</span></code></p>
-<section id="group__value_1autotoc_md28">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md28" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md28"><ul class="simple">
+<section id="group__value_1autotoc_md29">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md29" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md29"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be binary orable</p></li>
 </ul>
 </p>
@@ -893,9 +893,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1ga6de98256e31a5a08c918bee81f545212"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TValue,</span> <span class="pre">typename</span> <span class="pre">TType</span> <span class="pre">=</span> <span class="pre">decltype(TValue)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::BinaryNotable&lt;</span> <span class="pre">TType</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator~</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TValue,</span> <span class="pre">TType</span> <span class="pre">&gt;</span> <span class="pre">&amp;value)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;~TValue,</span> <span class="pre">TType</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Performs the binary not of <code class="docutils literal notranslate"><span class="pre">value</span></code></p>
-<section id="group__value_1autotoc_md29">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md29" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md29"><ul class="simple">
+<section id="group__value_1autotoc_md30">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md30" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md30"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TValue</span></code> binary notable</p></li>
 </ul>
 </p>
@@ -921,9 +921,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1gac830505b81d15b5e652c66f17c6ae946"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::EqualityComparable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator==</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs==TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Equality comparison operator between two <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code>s. </p>
-<section id="group__value_1autotoc_md30">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md30" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md30"><ul class="simple">
+<section id="group__value_1autotoc_md31">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md31" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md31"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be equality comparable</p></li>
 </ul>
 </p>
@@ -954,9 +954,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1gab43dfb2c94d8d274e49d85ce8fbcd453"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::InequalityComparable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator!=</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs</span> <span class="pre">!=TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Inequality comparison operator between two <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code>s. </p>
-<section id="group__value_1autotoc_md31">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md31" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md31"><ul class="simple">
+<section id="group__value_1autotoc_md32">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md32" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md32"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be inequality comparable</p></li>
 </ul>
 </p>
@@ -987,9 +987,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1gab2009a0b6fcb21bab860b9feadc4f2d9"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::ThreeWayComparable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator&lt;=&gt;</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs&lt;=&gt;</span> <span class="pre">TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Three-way comparison operator between two <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code>s. </p>
-<section id="group__value_1autotoc_md32">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md32" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md32"><ul class="simple">
+<section id="group__value_1autotoc_md33">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md33" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md33"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be three-way comparable</p></li>
 </ul>
 </p>
@@ -1024,9 +1024,9 @@ document.write(`
 <span class="target" id="group__value_1gafd705f5d84676e0af3d9ad57d54056ed"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TType&gt;</span> <span class="pre">concept</span> <span class="pre">ValueType</span>&#160; <span class="pre">=</span> <span class="pre">requires</span> <span class="pre">{{TType::value};{std::integral_constant&lt;decltype(TType::value),</span> <span class="pre">TType::value&gt;{}};}</span></span></dt>
 <dd><p>Concept specifying the requirements for a metaprogramming value type. </p>
 <p>A metaprogramming value type is any type that has a <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">constexpr</span></code> member variable named <code class="docutils literal notranslate"><span class="pre">value</span></code>.</p>
-<section id="group__value_1autotoc_md15">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md15" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md15"><ul class="simple">
+<section id="group__value_1autotoc_md16">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md16" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md16"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must have a <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">constexpr</span></code> member variable named <code class="docutils literal notranslate"><span class="pre">value</span></code>. </p></li>
 </ul>
 </p>
