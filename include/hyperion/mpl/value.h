@@ -859,6 +859,47 @@ namespace hyperion::mpl {
         static_assert(!MetaType<int>, "hyperion::mpl::MetaType test case 2 (failing)");
         static_assert(!MetaType<Value<1>>, "hyperion::mpl::MetaType test case 3 (failing)");
 
+        template<ValueType TValue>
+        struct add_one {
+            static inline constexpr auto value = TValue::value + 1;
+        };
+
+        template<ValueType TValue>
+        struct times_two {
+            static inline constexpr auto value = TValue::value * 2;
+        };
+
+        static_assert((1_value).apply<add_one>() == 2,
+                      "hyperion::mpl::Value::apply<MetaFunction<ValueType>> test case 1 (failing)");
+        static_assert((2_value).apply<times_two>() == 4_value,
+                      "hyperion::mpl::Value::apply<MetaFunction<ValueType>> test case 3 (failing)");
+        static_assert((2_value).apply<times_two>().apply<add_one>().apply<times_two>() == 10_value,
+                      "hyperion::mpl::Value::apply<MetaFunction<ValueType>> test case 3 (failing)");
+
+        constexpr auto add1
+            = [](const auto& value) -> Value<std::remove_cvref_t<decltype(value)>::value + 1>
+            requires ValueType<std::remove_cvref_t<decltype(value)>>
+        {
+            return {};
+        };
+
+        constexpr auto times2
+            = [](const auto& value) -> Value<std::remove_cvref_t<decltype(value)>::value * 2>
+            requires ValueType<std::remove_cvref_t<decltype(value)>>
+        {
+            return {};
+        };
+
+        static_assert((1_value).apply(add1) == 2,
+                      "hyperion::mpl::Value::apply(MetaFunction(ValueType)) -> ValueType test case "
+                      "1 (failing)");
+        static_assert((2_value).apply(times2) == 4,
+                      "hyperion::mpl::Value::apply(MetaFunction(ValueType)) -> ValueType test case "
+                      "2 (failing)");
+        static_assert((2_value).apply(times2).apply(add1).apply(times2) == 10_value,
+                      "hyperion::mpl::Value::apply(MetaFunction(ValueType)) -> ValueType test case "
+                      "3 (failing)");
+
     } // namespace _test
 } // namespace hyperion::mpl
 
