@@ -58,15 +58,6 @@
 namespace hyperion::mpl {
 
     template<typename TType>
-    concept Metatype = requires { typename TType::type; };
-
-    template<typename TType>
-    struct is_metatype : std::bool_constant<Metatype<TType>> { };
-
-    template<typename TType>
-    static inline constexpr auto is_metatype_v = is_metatype<TType>::value;
-
-    template<typename TType>
     struct Type {
         using type = TType;
 
@@ -347,8 +338,60 @@ namespace hyperion::mpl {
     }
 
     namespace _test {
+        struct not_copy_or_move {
+            not_copy_or_move() = default;
+            ~not_copy_or_move() = default;
+            not_copy_or_move(const not_copy_or_move&) = delete;
+            not_copy_or_move(not_copy_or_move&&) = default;
+
+            auto operator=(const not_copy_or_move&) -> not_copy_or_move& = delete;
+            auto operator=(not_copy_or_move&&) -> not_copy_or_move& = default;
+        };
+
+        static_assert(Metatype<std::add_lvalue_reference<int>>,
+                      "hyperion::mpl::Metatype test case 1 (failing)");
+        static_assert(!Metatype<int>, "hyperion::mpl::Metatype test case 2 (failing)");
+        static_assert(!Metatype<Value<1>>, "hyperion::mpl::Metatype test case 3 (failing)");
 
         constexpr int test_val = 1;
+
+        static_assert(Type<int>{}.satisfies<std::is_integral>(),
+                      "hyperion::mpl::Type::satisfies test case 1 (failing)");
+        static_assert(!Type<double>{}.satisfies<std::is_integral>(),
+                      "hyperion::mpl::Type::satisfies test case 2 (failing)");
+
+        template<ValueType TValue>
+        struct add_one {
+            static inline constexpr auto value = TValue::value + 1;
+        };
+
+        template<ValueType TValue>
+        struct times_two {
+            static inline constexpr auto value = TValue::value * 2;
+        };
+
+        static_assert(decltype_(1_value).apply<add_one>() == 2,
+                      "hyperion::mpl::Type::apply<ValueType> test case 1 (failing)");
+        static_assert(decltype_(2_value).apply<times_two>() == 4_value,
+                      "hyperion::mpl::Type::apply<ValueType> test case 3 (failing)");
+        static_assert(decltype_(2_value).apply<times_two>().apply<add_one>().apply<times_two>()
+                          == 10_value,
+                      "hyperion::mpl::Type::apply<ValueType> test case 3 (failing)");
+
+        static_assert(
+            std::same_as<typename decltype(decltype_(1).apply<std::add_lvalue_reference>())::type,
+                         int&>,
+            "hyperion::mpl::Type::apply<Metatype> test case 1 (failing)");
+        static_assert(
+            std::same_as<typename decltype(decltype_(1).apply<std::add_const>())::type, const int>,
+            "hyperion::mpl::Type::apply<Metatype> test case 2 (failing)");
+        static_assert(std::same_as<typename decltype(decltype_(test_val)
+                                                         .apply<std::remove_reference>()
+                                                         .apply<std::remove_const>()
+                                                         .apply<std::add_rvalue_reference>())::type,
+                                   int&&>,
+                      "hyperion::mpl::Type::apply<Metatype> test case 3 (failing)");
+
         static_assert(std::same_as<int, typename decltype(decltype_(1))::type>,
                       "hyperion::mpl::decltype_ test case 1 (failing)");
         static_assert(std::same_as<const int&, typename decltype(decltype_(test_val))::type>,

@@ -110,6 +110,18 @@ namespace hyperion::mpl {
     template<typename TType>
     static inline constexpr auto is_value_type_v = is_value_type<TType>::value;
 
+    template<typename TType>
+    concept Metatype = requires { typename TType::type; };
+
+    template<typename TType>
+    struct is_metatype : std::bool_constant<Metatype<TType>> { };
+
+    template<typename TType>
+    static inline constexpr auto is_metatype_v = is_metatype<TType>::value;
+
+    template<typename TType>
+    struct Type;
+
     /// @brief `Value` is Hyperion's preferred metaprogramming value type.
     ///
     /// `Value` represents a compile time value, storing that value in its
@@ -136,6 +148,16 @@ namespace hyperion::mpl {
         [[nodiscard]] constexpr auto value_of() const -> TType {
             return value;
         }
+
+        template<template<typename> typename TMetaFunction>
+            requires ValueType<TMetaFunction<Value>>
+        [[nodiscard]] constexpr auto apply() noexcept -> Value<TMetaFunction<Value>::value> {
+            return {};
+        }
+
+        template<template<typename> typename TMetaFunction>
+        [[nodiscard]] constexpr auto apply() noexcept -> Type<typename TMetaFunction<Value>::type>
+            requires Metatype<TMetaFunction<Value>>;
     };
 
     /// @brief Numeric literal operator to create a compile-time `Value`.
@@ -815,6 +837,22 @@ namespace hyperion::mpl {
                       "hyperion::mpl::operator<=>(Value, Value) test case 3 failing");
 #endif
     } // namespace _test
+} // namespace hyperion::mpl
+
+// NOLINTNEXTLINE(misc-header-include-cycle)
+#include <hyperion/mpl/type.h>
+namespace hyperion::mpl {
+
+    template<auto TValue, typename TType>
+    template<template<typename> typename TMetaFunction>
+    [[nodiscard]] constexpr auto
+    Value<TValue, TType>::apply() noexcept -> Type<typename TMetaFunction<Value>::type>
+
+        requires Metatype<TMetaFunction<Value>>
+    {
+        return {};
+    }
+
 } // namespace hyperion::mpl
 
 HYPERION_IGNORE_DOCUMENTATION_WARNING_STOP;
