@@ -10,3 +10,7 @@ hyperion::mpl::concepts
 .. toctree::
     
     concepts/operator_able
+
+.. toctree::
+    
+    concepts/std_supplemental

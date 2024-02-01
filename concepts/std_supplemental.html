@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Comparability Concepts &#8212; hyperion::mpl  documentation</title>
+    <title>Standard Supplemental Concepts &#8212; hyperion::mpl  documentation</title>
   
   
   
@@ -39,12 +39,11 @@
     <script src="../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'concepts/comparable';</script>
-    <link rel="canonical" href="braxtons12.github.io/hyperion_mpl/concepts/comparable.html" />
+    <script>DOCUMENTATION_OPTIONS.pagename = 'concepts/std_supplemental';</script>
+    <link rel="canonical" href="braxtons12.github.io/hyperion_mpl/concepts/std_supplemental.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Operatorability Concepts" href="operator_able.html" />
-    <link rel="prev" title="hyperion::mpl::concepts" href="../concepts.html" />
+    <link rel="prev" title="Operatorability Concepts" href="operator_able.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -384,14 +383,14 @@ document.write(`
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Comparability Concepts</a></li>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="comparable.html">Comparability Concepts</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="operator_able.html">Operatorability Concepts</a></li>
 </ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="std_supplemental.html">Standard Supplemental Concepts</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Standard Supplemental Concepts</a></li>
 </ul>
 </div>
 </nav></div>
@@ -432,7 +431,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../concepts.html" class="nav-link">hyperion::mpl::concepts</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">Comparabilit...</li>
+    <li class="breadcrumb-item active" aria-current="page">Standard...</li>
   </ul>
 </nav>
 </div>
@@ -449,98 +448,37 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="comparability-concepts">
-<h1>Comparability Concepts<a class="headerlink" href="#comparability-concepts" title="Link to this heading">#</a></h1>
+  <section id="standard-supplemental-concepts">
+<h1>Standard Supplemental Concepts<a class="headerlink" href="#standard-supplemental-concepts" title="Link to this heading">#</a></h1>
 <dl>
 <dt class="sig sig-object cpp">
-<span class="target" id="group__comparability__concepts"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">comparability_concepts</span></span></dt>
-<dd><p>Assortment of <code class="docutils literal notranslate"><span class="pre">concept</span></code> definitions requiring types to be comparable in various ways.</p>
-<section id="group__comparability__concepts_1autotoc_md6">
-<h2>Example:<a class="headerlink" href="#group__comparability__concepts_1autotoc_md6" title="Link to this heading">#</a></h2>
-<div class="highlight-cpp notranslate" id="group__comparability__concepts_1autotoc_md6"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/mpl/concepts/comparable.h</span>
+<span class="target" id="group__std__supplemental__concepts"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">std_supplemental_concepts</span></span></dt>
+<dd><p>Assortment of concept definitions to supplement those provided by the standard. These are generally either similar to existing concepts, but implemented more or less stringently to account for use-cases in which the standard implementations are incompatible, completely novel concepts, filling in gaps in the API surface that the standard doesn’t cover, or concept definitions corresponding to standard type traits that have not had corresponding concept definitions defined for them.</p>
+<section id="group__std__supplemental__concepts_1autotoc_md8">
+<h2>Example:<a class="headerlink" href="#group__std__supplemental__concepts_1autotoc_md8" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate" id="group__std__supplemental__concepts_1autotoc_md8"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/mpl/concepts/std_supplemental.h&gt;</span>
 
-<span class="cpf">using namespace hyperion::mpl::concepts;</span>
-<span class="cpf">struct not_comparable {};</span>
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">hyperion</span><span class="o">::</span><span class="nn">mpl</span><span class="o">::</span><span class="nn">concepts</span><span class="p">;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">trivially_move_but_not_copyable</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">trivially_move_but_not_copyable</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">trivially_move_but_not_copyable</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">    </span><span class="n">trivially_move_but_not_copyable</span><span class="p">(</span><span class="n">trivially_move_but_not_copyable</span><span class="o">&amp;&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
 
-<span class="cpf">static_assert(EqualityComparable&lt;int, int&gt;</span><span class="c1">);</span>
-<span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">EqualityComparable</span><span class="o">&lt;</span><span class="n">not_comparable</span><span class="p">,</span><span class="w"> </span><span class="n">not_comparable</span><span class="o">&gt;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">trivially_move_but_not_copyable</span><span class="o">&amp;</span><span class="p">)</span>
+<span class="w">        </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">trivially_move_but_not_copyable</span><span class="o">&amp;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">trivially_move_but_not_copyable</span><span class="o">&amp;&amp;</span><span class="p">)</span>
+<span class="w">        </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">trivially_move_but_not_copyable</span><span class="o">&amp;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">static_assert</span><span class="p">(</span><span class="n">TriviallyMovable</span><span class="o">&lt;</span><span class="n">trivially_move_but_not_copyable</span><span class="o">&gt;</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">TriviallyMovable</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="p">);</span>
 </pre></div>
 </div>
 </section>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-variables">Variables</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__comparability__concepts_1ga06c811429f542e08b9495ea9ff92b82a"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">EqualityComparable</span>&#160; <span class="pre">=</span> <span class="pre">requires(const</span> <span class="pre">TLhs&amp;</span> <span class="pre">lhs,</span> <span class="pre">const</span> <span class="pre">TRhs&amp;</span> <span class="pre">rhs)</span> <span class="pre">{lhs</span> <span class="pre">==</span> <span class="pre">rhs;rhs</span> <span class="pre">==</span> <span class="pre">lhs;}</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is equality comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__comparability__concepts_1ga958c18d8cafc39bc1095d7ffb3aa2593"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">InequalityComparable</span>&#160; <span class="pre">=</span> <span class="pre">requires(const</span> <span class="pre">TLhs&amp;</span> <span class="pre">lhs,</span> <span class="pre">const</span> <span class="pre">TRhs&amp;</span> <span class="pre">rhs)</span> <span class="pre">{lhs</span> <span class="pre">!=</span> <span class="pre">rhs;rhs</span> <span class="pre">!=</span> <span class="pre">lhs;}</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is inequality comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__comparability__concepts_1ga872d4103cdb78b58df4d8575058f1a47"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">LessThanComparable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">requires(const</span> <span class="pre">TLhs&amp;</span> <span class="pre">lhs,</span> <span class="pre">const</span> <span class="pre">TRhs&amp;</span> <span class="pre">rhs)</span> <span class="pre">{</span> <span class="pre">lhs</span> <span class="pre">&lt;</span> <span class="pre">rhs;</span> <span class="pre">}</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is less-than comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__comparability__concepts_1ga4ae2631fbd477f6b3251ca5310f96adb"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">LessThanOrEqualComparable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">requires(const</span> <span class="pre">TLhs&amp;</span> <span class="pre">lhs,</span> <span class="pre">const</span> <span class="pre">TRhs&amp;</span> <span class="pre">rhs)</span> <span class="pre">{</span> <span class="pre">lhs</span> <span class="pre">&lt;=</span> <span class="pre">rhs;</span> <span class="pre">}</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is less-than-or-equal comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__comparability__concepts_1ga622c5f6ce21565962f14c832e931aba2"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">GreaterThanComparable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">requires(const</span> <span class="pre">TLhs&amp;</span> <span class="pre">lhs,</span> <span class="pre">const</span> <span class="pre">TRhs&amp;</span> <span class="pre">rhs)</span> <span class="pre">{</span> <span class="pre">lhs</span> <span class="pre">&gt;</span> <span class="pre">rhs;</span> <span class="pre">}</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is greater-than comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__comparability__concepts_1ga902adfa85207b65e22ad2dc5e8c9e92f"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">GreaterThanOrEqualComparable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">requires(const</span> <span class="pre">TLhs&amp;</span> <span class="pre">lhs,</span> <span class="pre">const</span> <span class="pre">TRhs&amp;</span> <span class="pre">rhs)</span> <span class="pre">{</span> <span class="pre">lhs</span> <span class="pre">&gt;=</span> <span class="pre">rhs;</span> <span class="pre">}</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is greater-than-or-equal comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__comparability__concepts_1ga275b341cb1b7b3a54c93c03abea8bee7"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">ThreeWayComparable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">std::three_way_comparable_with&lt;TLhs,</span> <span class="pre">TRhs&gt;</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is three-way comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
-</dd></dl>
-
-</div>
 </dd></dl>
 
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::EqualityComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::InequalityComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::LessThanComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::LessThanOrEqualComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::GreaterThanComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::GreaterThanOrEqualComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::ThreeWayComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
+<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::TriviallyMovable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
 </div>
 </section>
 
@@ -555,22 +493,13 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../concepts.html"
+       href="operator_able.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">hyperion::mpl::concepts</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="operator_able.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">Operatorability Concepts</p>
       </div>
-      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
