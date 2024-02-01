@@ -80,6 +80,9 @@ namespace hyperion::mpl {
     template<typename TType>
     concept ValueType = requires {
         {
+            TType::value
+        };
+        {
             std::integral_constant<decltype(TType::value), TType::value>{}
         };
     };

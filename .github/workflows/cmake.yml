@@ -25,20 +25,17 @@ jobs:
       - name: Replace clang-tidy
         run: sudo cp /usr/bin/clang-tidy-16 /usr/bin/clang-tidy -f
 
-      - name: Install GCC 12
-        run: sudo apt-get -y install gcc-12
-
       - name: Configure GCC
         env:
-          CC: gcc-12
-          CXX: gcc-12
+          CC: gcc-13
+          CXX: gcc-13
         working-directory: ${{github.workspace}}
         run: cmake --preset env-cc-release
 
       - name: Build GCC
         env:
-          CC: gcc-12
-          CXX: gcc-12
+          CC: gcc-13
+          CXX: gcc-13
           ACTIONS_STEP_DEBUG: true
         working-directory: ${{github.workspace}}
         run: cmake --build --preset env-cc-release
