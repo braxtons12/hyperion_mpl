@@ -10,3 +10,7 @@ hyperion::mpl::type_traits
 .. toctree::
     
     type_traits/is_operator_able
+
+.. toctree::
+    
+    type_traits/std_supplemental

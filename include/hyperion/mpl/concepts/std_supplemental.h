@@ -3,7 +3,7 @@
 /// @brief Supplemental C++20 concept definitions to those provided in
 /// `#include <concepts>` to provide functionality missing from the standard
 /// @version 0.1
-/// @date 2024-01-27
+/// @date 2024-01-31
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -30,12 +30,74 @@
 #define HYPERION_MPL_CONCEPTS_STD_SUPPLEMENTAL_H
 
 #include <hyperion/mpl/type_traits/std_supplemental.h>
+#include <hyperion/platform/def.h>
+
+HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
+
+/// @ingroup concepts
+/// @{
+/// @defgroup std_supplemental_concepts Standard Supplemental Concepts
+/// Assortment of concept definitions to supplement those provided by the standard.
+/// These are generally either similar to existing concepts, but implemented more or less
+/// stringently to account for use-cases in which the standard implementations are incompatible,
+/// completely novel concepts, filling in gaps in the API surface that the standard doesn't cover,
+/// or concept definitions corresponding to standard type traits that have not had corresponding
+/// concept definitions defined for them.
+///
+/// # Example:
+/// @code {.cpp}
+/// #include <hyperion/mpl/concepts/std_supplemental.h>
+///
+/// using namespace hyperion::mpl::concepts;
+/// struct trivially_move_but_not_copyable {
+///     trivially_move_but_not_copyable(const trivially_move_but_not_copyable&) = delete;
+///     trivially_move_but_not_copyable(trivially_move_but_not_copyable&&) = default;
+///
+///     auto operator=(const trivially_move_but_not_copyable&)
+///         -> trivially_move_but_not_copyable& = delete;
+///     auto operator=(trivially_move_but_not_copyable&&)
+///         -> trivially_move_but_not_copyable& = default;
+/// };
+///
+/// static_assert(TriviallyMovable<trivially_move_but_not_copyable>);
+/// static_assert(!TriviallyMovable<std::vector<int>>);
+///
+/// @endcode
+/// @headerfile hyperion/mpl/concepts/std_supplemental.h
+/// @}
 
 namespace hyperion::mpl::concepts {
 
+    /// @brief Concept defining what a trivially movable type is.
+    /// A type that is trivially movable is both trivially move constructible
+    /// and trivially move assignable.
+    ///
+    /// For a type to be trivially move constructible, the type must be move
+    /// constructible, and its move constructor must either _not_ be user provided
+    /// in any way, or explicitly defaulted by declaring it as `= default`.
+    /// Similarly, for a type to be trivially move assignable, the type must be move
+    /// assignable, and its move assignment operator must either _not_ be user provided
+    /// in any way, or explicitly defaulted by declaring it as `= default`.
+    ///
+    /// # Requirements
+    /// - `TType` must be trivially move constructible
+    /// - `TType` must be trivially move assignable
+    ///
+    /// @tparam TType The type to check
+    /// @ingroup std_supplemental_traits
+    /// @headerfile hyperion/mpl/type_traits/std_supplemental
     template<typename TType>
     concept TriviallyMovable = type_traits::is_trivially_movable_v<TType>;
 
+    namespace _test {
+
+        static_assert(TriviallyMovable<type_traits::_test::trivially_move_but_not_copyable>,
+                      "hyperion::mpl::concepts::TriviallyMovable test case 1 (failing)");
+        static_assert(!TriviallyMovable<type_traits::_test::not_trivially_movable>,
+                      "hyperion::mpl::concepts::TriviallyMovable test case 2 (failing)");
+    } // namespace _test
 } // namespace hyperion::mpl::concepts
+
+HYPERION_IGNORE_DOCUMENTATION_WARNING_STOP;
 
 #endif // HYPERION_MPL_CONCEPTS_STD_SUPPLEMENTAL_H
