@@ -484,6 +484,20 @@ namespace hyperion::mpl {
         return {};
     }
 
+    /// @brief Equality comparison operator between two `mpl::Value`s
+    ///
+    /// # Requirements
+    /// - `TLhs` and `TRhs` must be equality comparable
+    ///
+    /// @tparam TLhs The value of the left-hand `mpl::Value`
+    /// @tparam TRhs The value of the right-hand` mpl::Value`
+    /// @tparam TTypeLhs The type of `TLhs`
+    /// @tparam TTypeRhs The type of `RLhs`
+    /// @param lhs The left-hand `mpl::Value` to compare
+    /// @param rhs The right-hand `mpl::Value` to compare with
+    /// @return Whether the value of `lhs` is equal to the value of `rhs`
+    /// @ingroup value
+    /// @headerfile hyperion/mpl/value.h
     template<auto TLhs,
              auto TRhs,
              typename TTypeLhs = decltype(TLhs),
@@ -495,6 +509,20 @@ namespace hyperion::mpl {
         return {};
     }
 
+    /// @brief Inequality comparison operator between two `mpl::Value`s
+    ///
+    /// # Requirements
+    /// - `TLhs` and `TRhs` must be inequality comparable
+    ///
+    /// @tparam TLhs The value of the left-hand `mpl::Value`
+    /// @tparam TRhs The value of the right-hand` mpl::Value`
+    /// @tparam TTypeLhs The type of `TLhs`
+    /// @tparam TTypeRhs The type of `RLhs`
+    /// @param lhs The left-hand `mpl::Value` to compare
+    /// @param rhs The right-hand `mpl::Value` to compare with
+    /// @return Whether the value of `lhs` is _not_ equal to the value of `rhs`
+    /// @ingroup value
+    /// @headerfile hyperion/mpl/value.h
     template<auto TLhs,
              auto TRhs,
              typename TTypeLhs = decltype(TLhs),
@@ -508,6 +536,20 @@ namespace hyperion::mpl {
 
 #if HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
 
+    /// @brief Three-way comparison operator between two `mpl::Value`s
+    ///
+    /// # Requirements
+    /// - `TLhs` and `TRhs` must be three-way comparable
+    ///
+    /// @tparam TLhs The value of the left-hand `mpl::Value`
+    /// @tparam TRhs The value of the right-hand` mpl::Value`
+    /// @tparam TTypeLhs The type of `TLhs`
+    /// @tparam TTypeRhs The type of `RLhs`
+    /// @param lhs The left-hand `mpl::Value` to compare
+    /// @param rhs The right-hand `mpl::Value` to compare with
+    /// @return The result of three-way comparing the value of `lhs` with the value of `rhs`
+    /// @ingroup value
+    /// @headerfile hyperion/mpl/value.h
     template<auto TLhs,
              auto TRhs,
              typename TTypeLhs = decltype(TLhs),
@@ -522,6 +564,20 @@ namespace hyperion::mpl {
 
 #else
 
+    /// @brief Less-than comparison operator between two `mpl::Value`s
+    ///
+    /// # Requirements
+    /// - `TLhs` and `TRhs` must be less-than comparable
+    ///
+    /// @tparam TLhs The value of the left-hand `mpl::Value`
+    /// @tparam TRhs The value of the right-hand` mpl::Value`
+    /// @tparam TTypeLhs The type of `TLhs`
+    /// @tparam TTypeRhs The type of `RLhs`
+    /// @param lhs The left-hand `mpl::Value` to compare
+    /// @param rhs The right-hand `mpl::Value` to compare with
+    /// @return Whether the value of `lhs` is less than the value of `rhs`
+    /// @ingroup value
+    /// @headerfile hyperion/mpl/value.h
     template<auto TLhs,
              auto TRhs,
              typename TTypeLhs = decltype(TLhs),
@@ -533,6 +589,20 @@ namespace hyperion::mpl {
         return {};
     }
 
+    /// @brief Less-than-or-equal comparison operator between two `mpl::Value`s
+    ///
+    /// # Requirements
+    /// - `TLhs` and `TRhs` must be less-than-or-equal comparable
+    ///
+    /// @tparam TLhs The value of the left-hand `mpl::Value`
+    /// @tparam TRhs The value of the right-hand` mpl::Value`
+    /// @tparam TTypeLhs The type of `TLhs`
+    /// @tparam TTypeRhs The type of `RLhs`
+    /// @param lhs The left-hand `mpl::Value` to compare
+    /// @param rhs The right-hand `mpl::Value` to compare with
+    /// @return Whether the value of `lhs` is less than or equal to the value of `rhs`
+    /// @ingroup value
+    /// @headerfile hyperion/mpl/value.h
     template<auto TLhs,
              auto TRhs,
              typename TTypeLhs = decltype(TLhs),
@@ -545,6 +615,20 @@ namespace hyperion::mpl {
         return {};
     }
 
+    /// @brief Greater-than comparison operator between two `mpl::Value`s
+    ///
+    /// # Requirements
+    /// - `TLhs` and `TRhs` must be greater-than comparable
+    ///
+    /// @tparam TLhs The value of the left-hand `mpl::Value`
+    /// @tparam TRhs The value of the right-hand` mpl::Value`
+    /// @tparam TTypeLhs The type of `TLhs`
+    /// @tparam TTypeRhs The type of `RLhs`
+    /// @param lhs The left-hand `mpl::Value` to compare
+    /// @param rhs The right-hand `mpl::Value` to compare with
+    /// @return Whether the value of `lhs` is greater than the value of `rhs`
+    /// @ingroup value
+    /// @headerfile hyperion/mpl/value.h
     template<auto TLhs,
              auto TRhs,
              typename TTypeLhs = decltype(TLhs),
@@ -556,6 +640,20 @@ namespace hyperion::mpl {
         return {};
     }
 
+    /// @brief Greater-than-or-equal comparison operator between two `mpl::Value`s
+    ///
+    /// # Requirements
+    /// - `TLhs` and `TRhs` must be greater-than-or-equal comparable
+    ///
+    /// @tparam TLhs The value of the left-hand `mpl::Value`
+    /// @tparam TRhs The value of the right-hand` mpl::Value`
+    /// @tparam TTypeLhs The type of `TLhs`
+    /// @tparam TTypeRhs The type of `RLhs`
+    /// @param lhs The left-hand `mpl::Value` to compare
+    /// @param rhs The right-hand `mpl::Value` to compare with
+    /// @return Whether the value of `lhs` is greater than or equal to the value of `rhs`
+    /// @ingroup value
+    /// @headerfile hyperion/mpl/value.h
     template<auto TLhs,
              auto TRhs,
              typename TTypeLhs = decltype(TLhs),
