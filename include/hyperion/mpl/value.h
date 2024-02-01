@@ -157,7 +157,7 @@ namespace hyperion::mpl {
 
         template<template<typename> typename TMetaFunction>
         [[nodiscard]] constexpr auto apply() noexcept -> Type<typename TMetaFunction<Value>::type>
-            requires Metatype<TMetaFunction<Value>>;
+            requires Metatype<TMetaFunction<Value<TValue, TType>>>;
     };
 
     /// @brief Numeric literal operator to create a compile-time `Value`.
@@ -848,7 +848,7 @@ namespace hyperion::mpl {
     [[nodiscard]] constexpr auto
     Value<TValue, TType>::apply() noexcept -> Type<typename TMetaFunction<Value>::type>
 
-        requires Metatype<TMetaFunction<Value>>
+        requires Metatype<TMetaFunction<Value<TValue, TType>>>
     {
         return {};
     }
