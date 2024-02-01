@@ -27,13 +27,6 @@ For an overview of each module, see the links in the left sidebar or below.
 
     static_assert(meaning_of_life == 42);
 
-    constexpr auto val3 = 10;
-    static_assert(std::same_as<typename decltype(decltype_(val3)
-                                                 .apply<std::remove_reference>()
-                                                 .apply<std::remove_const>()
-                                                 .apply<std::add_rvalue_reference>())::type,
-                               int&&>);
-
     template<ValueType TValue>
     struct add_one {
         static inline constexpr auto value = TValue::value + 1;
@@ -44,10 +37,44 @@ For an overview of each module, see the links in the left sidebar or below.
         static inline constexpr auto value = TValue::value * 2;
     };
 
-    static_assert(decltype_(2_value)
+    static_assert(2_value
                   .apply<add_one>()
                   .apply<times_two>()
                   .apply<add_one>() == 7);
+
+    constexpr auto val3 = 10;
+    static_assert(decltype_(val3)
+                  .apply<std::remove_reference>()
+                  .apply<std::remove_const>()
+                  .apply<std::add_rvalue_reference>()
+                  == decltype_<int&&>());
+
+    constexpr auto add_const = [](const auto& type)
+        -> std::add_const<typename std::remove_cvref_t<decltype(type)>::type>
+        requires MetaType<std::remove_cvref_t<decltype(type)>>
+    {
+        return {};
+    };
+
+    constexpr auto add_lvalue_reference = [](const auto& type)
+        -> std::add_lvalue_reference<typename std::remove_cvref_t<decltype(type)>::type>
+        requires MetaType<std::remove_cvref_t<decltype(type)>>
+    {
+        return {};
+    };
+
+    constexpr auto remove_reference = [](const auto& type)
+        -> std::remove_reference<typename std::remove_cvref_t<decltype(type)>::type>
+        requires MetaType<std::remove_cvref_t<decltype(type)>>
+    {
+        return {};
+    };
+
+    static_assert(decltype_<int&&>()
+                  .apply(remove_reference)
+                  .apply(add_const)
+                  .apply(add_lvalue_reference)
+                  == decltype_<const int&>());
 
 
 .. toctree::
