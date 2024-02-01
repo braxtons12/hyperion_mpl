@@ -20,6 +20,9 @@ A basic example of what you can do with hyperion::mpl is below:
 
 ```cpp
 #include <hyperion/mpl/value.h>
+#include <hyperion/mpl/type.h>
+
+#include <concepts>
 
 using namespace hyperion::mpl;
 
@@ -29,6 +32,28 @@ constexpr auto val2 = Value<2>{};
 constexpr auto meaning_of_life = (val1 * 10_value) + val2;
 
 static_assert(meaning_of_life == 42);
+
+constexpr auto val3 = 10;
+static_assert(std::same_as<typename decltype(decltype_(val3)
+                                             .apply<std::remove_reference>()
+                                             .apply<std::remove_const>()
+                                             .apply<std::add_rvalue_reference>())::type,
+                           int&&>);
+
+template<ValueType TValue>
+struct add_one {
+    static inline constexpr auto value = TValue::value + 1;
+};
+
+template<ValueType TValue>
+struct times_two {
+    static inline constexpr auto value = TValue::value * 2;
+};
+
+static_assert(decltype_(2_value)
+              .apply<add_one>()
+              .apply<times_two>()
+              .apply<add_one>() == 7);
 ```
 
 ### Contributing
