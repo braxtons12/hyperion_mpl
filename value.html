@@ -917,6 +917,105 @@ document.write(`
 </dl>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="group__value_1gac830505b81d15b5e652c66f17c6ae946"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::EqualityComparable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator==</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs==TRhs</span> <span class="pre">&gt;</span></span></dt>
+<dd><p>Equality comparison operator between two <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code>s. </p>
+<section id="group__value_1autotoc_md26">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md26" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md26"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be equality comparable</p></li>
+</ul>
+</p>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TLhs</strong> – The value of the left-hand <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code></p></li>
+<li><p><strong>TRhs</strong> – The value of the right-hand<code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code></p></li>
+<li><p><strong>TTypeLhs</strong> – The type of <code class="docutils literal notranslate"><span class="pre">TLhs</span></code></p></li>
+<li><p><strong>TTypeRhs</strong> – The type of <code class="docutils literal notranslate"><span class="pre">RLhs</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>lhs</strong> – The left-hand <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code> to compare </p></li>
+<li><p><strong>rhs</strong> – The right-hand <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code> to compare with </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Whether the value of <code class="docutils literal notranslate"><span class="pre">lhs</span></code> is equal to the value of <code class="docutils literal notranslate"><span class="pre">rhs</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="group__value_1gab43dfb2c94d8d274e49d85ce8fbcd453"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::InequalityComparable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator!=</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs</span> <span class="pre">!=TRhs</span> <span class="pre">&gt;</span></span></dt>
+<dd><p>Inequality comparison operator between two <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code>s. </p>
+<section id="group__value_1autotoc_md27">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md27" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md27"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be inequality comparable</p></li>
+</ul>
+</p>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TLhs</strong> – The value of the left-hand <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code></p></li>
+<li><p><strong>TRhs</strong> – The value of the right-hand<code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code></p></li>
+<li><p><strong>TTypeLhs</strong> – The type of <code class="docutils literal notranslate"><span class="pre">TLhs</span></code></p></li>
+<li><p><strong>TTypeRhs</strong> – The type of <code class="docutils literal notranslate"><span class="pre">RLhs</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>lhs</strong> – The left-hand <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code> to compare </p></li>
+<li><p><strong>rhs</strong> – The right-hand <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code> to compare with </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Whether the value of <code class="docutils literal notranslate"><span class="pre">lhs</span></code> is <em>not</em> equal to the value of <code class="docutils literal notranslate"><span class="pre">rhs</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="group__value_1gab2009a0b6fcb21bab860b9feadc4f2d9"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::ThreeWayComparable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator&lt;=&gt;</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs&lt;=&gt;</span> <span class="pre">TRhs</span> <span class="pre">&gt;</span></span></dt>
+<dd><p>Three-way comparison operator between two <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code>s. </p>
+<section id="group__value_1autotoc_md28">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md28" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md28"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be three-way comparable</p></li>
+</ul>
+</p>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TLhs</strong> – The value of the left-hand <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code></p></li>
+<li><p><strong>TRhs</strong> – The value of the right-hand<code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code></p></li>
+<li><p><strong>TTypeLhs</strong> – The type of <code class="docutils literal notranslate"><span class="pre">TLhs</span></code></p></li>
+<li><p><strong>TTypeRhs</strong> – The type of <code class="docutils literal notranslate"><span class="pre">RLhs</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>lhs</strong> – The left-hand <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code> to compare </p></li>
+<li><p><strong>rhs</strong> – The right-hand <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code> to compare with </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The result of three-way comparing the value of <code class="docutils literal notranslate"><span class="pre">lhs</span></code> with the value of <code class="docutils literal notranslate"><span class="pre">rhs</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-variables">Variables</p>
