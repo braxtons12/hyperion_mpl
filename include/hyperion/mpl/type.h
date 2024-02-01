@@ -68,10 +68,29 @@ namespace hyperion::mpl {
             return {};
         }
 
+        /// @brief Returns the inner `MetaType` or `ValueType` `type` of `this` `Type`
+        ///
+        /// # Requirements
+        /// - `type` is default constructible
+        /// - `type` is a `MetaType` or a `ValueType`
+        ///
+        /// @return The inner `MetaType` or `ValueType` of `this` `Type`
+        ///
+        /// @ingroup type
+        /// @headerfile hyperion/mpl/type.h
         [[nodiscard]] constexpr auto inner() noexcept -> type
             requires std::is_default_constructible_v<type> && (MetaType<type> || ValueType<type>)
         {
             return {};
+        }
+
+        /// @brief Returns whether the `type` of this `Type` is also a `MetaType` or `ValueType`
+        /// (in which case, you may call `this->inner()` to obtain that `MetaType` or `ValueType`).
+        /// @return Whether the `type` of this `Type` is also a `MetaType` or `ValueType`
+        /// @ingroup type
+        /// @headerfile hyperion/mpl/type.h
+        [[nodiscard]] constexpr auto has_inner() noexcept -> bool {
+            return MetaType<type> || ValueType<type>;
         }
 
         template<template<typename> typename TMetaFunction>
@@ -408,7 +427,7 @@ namespace hyperion::mpl {
         return !(Type<TLhs>{}.is(Type<TRhs>{}));
     }
 
-    namespace _test {
+    namespace _test::type {
         constexpr int test_val = 1;
 
         static_assert(std::same_as<int, typename decltype(decltype_(1))::type>,
@@ -625,7 +644,7 @@ namespace hyperion::mpl {
                 == decltype_<const int&>(),
             "hyperion::mpl::Type::apply(MetaFunction(Type)) -> Type<type> test case 3 (failing)");
 
-    } // namespace _test
+    } // namespace _test::type
 } // namespace hyperion::mpl
 
 #endif // HYPERION_MPL_TYPE_H
