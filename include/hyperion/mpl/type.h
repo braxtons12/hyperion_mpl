@@ -261,6 +261,7 @@ namespace hyperion::mpl {
         }
 
         template<template<typename...> typename TList, typename... TTypes>
+            requires(!MetaType<TList<TTypes...>>)
         [[nodiscard]] constexpr auto
         is_constructible_from([[maybe_unused]] const TList<TTypes...>& list) noexcept
             -> Value<std::is_constructible_v<type, TTypes...>> {
@@ -275,6 +276,7 @@ namespace hyperion::mpl {
         }
 
         template<template<typename...> typename TList, typename... TTypes>
+            requires(!MetaType<TList<TTypes...>>)
         [[nodiscard]] constexpr auto
         is_noexcept_constructible_from([[maybe_unused]] const TList<TTypes...>& list) noexcept
             -> Value<std::is_nothrow_constructible_v<type, TTypes...>> {
@@ -288,102 +290,142 @@ namespace hyperion::mpl {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto
-        is_default_constructible() noexcept -> Value<std::is_default_constructible_v<type>> {
+        is_default_constructible() noexcept -> Value<std::is_default_constructible_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto is_noexcept_default_constructible() noexcept
-            -> Value<std::is_nothrow_default_constructible_v<type>> {
+            -> Value<std::is_nothrow_default_constructible_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto is_trivially_default_constructible() noexcept
-            -> Value<std::is_trivially_default_constructible_v<type>> {
+            -> Value<std::is_trivially_default_constructible_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto
-        is_copy_constructible() noexcept -> Value<std::is_copy_constructible_v<type>> {
+        is_copy_constructible() noexcept -> Value<std::is_copy_constructible_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto is_noexcept_copy_constructible() noexcept
-            -> Value<std::is_nothrow_copy_constructible_v<type>> {
+            -> Value<std::is_nothrow_copy_constructible_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto is_trivially_copy_constructible() noexcept
-            -> Value<std::is_trivially_copy_constructible_v<type>> {
+            -> Value<std::is_trivially_copy_constructible_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto
-        is_move_constructible() noexcept -> Value<std::is_move_constructible_v<type>> {
+        is_move_constructible() noexcept -> Value<std::is_move_constructible_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto is_noexcept_move_constructible() noexcept
-            -> Value<std::is_nothrow_move_constructible_v<type>> {
+            -> Value<std::is_nothrow_move_constructible_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto is_trivially_move_constructible() noexcept
-            -> Value<std::is_trivially_move_constructible_v<type>> {
+            -> Value<std::is_trivially_move_constructible_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto
-        is_copy_assignable() noexcept -> Value<std::is_copy_assignable_v<type>> {
+        is_copy_assignable() noexcept -> Value<std::is_copy_assignable_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto
-        is_noexcept_copy_assignable() noexcept -> Value<std::is_nothrow_copy_assignable_v<type>> {
+        is_noexcept_copy_assignable() noexcept -> Value<std::is_nothrow_copy_assignable_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto is_trivially_copy_assignable() noexcept
-            -> Value<std::is_trivially_copy_assignable_v<type>> {
+            -> Value<std::is_trivially_copy_assignable_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto
-        is_move_assignable() noexcept -> Value<std::is_move_assignable_v<type>> {
+        is_move_assignable() noexcept -> Value<std::is_move_assignable_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto
-        is_noexcept_move_assignable() noexcept -> Value<std::is_nothrow_move_assignable_v<type>> {
+        is_noexcept_move_assignable() noexcept -> Value<std::is_nothrow_move_assignable_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto is_trivially_move_assignable() noexcept
-            -> Value<std::is_trivially_move_assignable_v<type>> {
+            -> Value<std::is_trivially_move_assignable_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto
-        is_destructible() noexcept -> Value<std::is_destructible_v<type>> {
+        is_destructible() noexcept -> Value<std::is_destructible_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto
-        is_noexcept_destructible() noexcept -> Value<std::is_nothrow_destructible_v<type>> {
+        is_noexcept_destructible() noexcept -> Value<std::is_nothrow_destructible_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto
-        is_trivially_destructible() noexcept -> Value<std::is_trivially_destructible_v<type>> {
+        is_trivially_destructible() noexcept -> Value<std::is_trivially_destructible_v<TDelay>> {
             return {};
         }
 
-        [[nodiscard]] constexpr auto is_swappable() noexcept -> Value<std::is_swappable_v<type>> {
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
+        [[nodiscard]] constexpr auto is_swappable() noexcept -> Value<std::is_swappable_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto
-        is_noexcept_swappable() noexcept -> Value<std::is_nothrow_swappable_v<type>> {
+        is_noexcept_swappable() noexcept -> Value<std::is_nothrow_swappable_v<TDelay>> {
             return {};
         }
 
@@ -736,13 +778,104 @@ namespace hyperion::mpl {
                       "hyperion::mpl::Type::is_derived_from test case 4 (failing)");
 
         static_assert(decltype_<base_type>().is_base_of(decltype_<derived_type>()),
-                      "hyperion::mpl::TYpe::is_base_of test case 1 (failing)");
+                      "hyperion::mpl::Type::is_base_of test case 1 (failing)");
         static_assert(!decltype_<int>().is_base_of(decltype_<base_type>()),
-                      "hyperion::mpl::TYpe::is_base_of test case 2 (failing)");
+                      "hyperion::mpl::Type::is_base_of test case 2 (failing)");
         static_assert(!decltype_<base_type>().is_base_of(decltype_<base_type>()),
-                      "hyperion::mpl::TYpe::is_base_of test case 3 (failing)");
+                      "hyperion::mpl::Type::is_base_of test case 3 (failing)");
         static_assert(!decltype_<derived_type>().is_base_of(decltype_<base_type>()),
-                      "hyperion::mpl::TYpe::is_base_of test case 3 (failing)");
+                      "hyperion::mpl::Type::is_base_of test case 4 (failing)");
+
+        struct constructible_from_int {
+            explicit constructible_from_int(int) noexcept;
+        };
+
+        struct constructible_from_anything {
+            template<typename TType>
+                requires(!bool(decltype_<TType>().is_qualification_of(
+                    decltype_<constructible_from_anything>())))
+            explicit constructible_from_anything(TType&&);
+
+            template<typename... TTypes>
+                requires(sizeof...(TTypes) > 1)
+            explicit constructible_from_anything(TTypes&&...) noexcept;
+        };
+
+        template<typename... TTypes>
+        struct test_list { };
+
+        static_assert(decltype_<constructible_from_int>().is_constructible_from(decltype_<int>()),
+                      "hyperion::mpl::Type::is_constructible_from(MetaType) test case 1 (failing)");
+        static_assert(
+            decltype_<constructible_from_int>().is_constructible_from(decltype_<double>()),
+            "hyperion::mpl::Type::is_constructible_from(MetaType) test case 2 (failing)");
+        static_assert(
+            !decltype_<constructible_from_int>().is_constructible_from(decltype_<void*>()),
+            "hyperion::mpl::Type::is_constructible_from(MetaType) test case 3 (failing)");
+        static_assert(
+            decltype_<constructible_from_anything>().is_constructible_from(decltype_<int>()),
+            "hyperion::mpl::Type::is_constructible_from(MetaType) test case 4 (failing)");
+        static_assert(
+            decltype_<constructible_from_anything>().is_constructible_from(decltype_<void*>()),
+            "hyperion::mpl::Type::is_constructible_from(MetaType) test case 5 (failing)");
+
+        static_assert(decltype_<constructible_from_int>().is_constructible_from(test_list<int>{}),
+                      "hyperion::mpl::Type::is_constructible_from(List) test case 1 (failing)");
+        static_assert(
+            decltype_<constructible_from_int>().is_constructible_from(test_list<double>{}),
+            "hyperion::mpl::Type::is_constructible_from(List) test case 2 (failing)");
+        static_assert(
+            !decltype_<constructible_from_int>().is_constructible_from(test_list<void*>{}),
+            "hyperion::mpl::Type::is_constructible_from(List) test case 3 (failing)");
+        static_assert(
+            !decltype_<constructible_from_int>().is_constructible_from(test_list<int, double>{}),
+            "hyperion::mpl::Type::is_constructible_from(List) test case 4 (failing)");
+        static_assert(
+            decltype_<constructible_from_anything>().is_constructible_from(test_list<void*>{}),
+            "hyperion::mpl::Type::is_constructible_from(List) test case 5 (failing)");
+        static_assert(decltype_<constructible_from_anything>().is_constructible_from(
+                          test_list<int, double>{}),
+                      "hyperion::mpl::Type::is_constructible_from(List) test case 6 (failing)");
+
+        static_assert(
+            decltype_<constructible_from_int>().is_noexcept_constructible_from(decltype_<int>()),
+            "hyperion::mpl::Type::is_noexcept_constructible_from(MetaType) test case 1 (failing)");
+        static_assert(
+            decltype_<constructible_from_int>().is_noexcept_constructible_from(decltype_<double>()),
+            "hyperion::mpl::Type::is_noexcept_constructible_from(MetaType) test case 2 (failing)");
+        static_assert(
+            !decltype_<constructible_from_int>().is_noexcept_constructible_from(decltype_<void*>()),
+            "hyperion::mpl::Type::is_noexcept_constructible_from(MetaType) test case 3 (failing)");
+        static_assert(
+            !decltype_<constructible_from_anything>().is_noexcept_constructible_from(
+                decltype_<int>()),
+            "hyperion::mpl::Type::is_noexcept_constructible_from(MetaType) test case 4 (failing)");
+        static_assert(
+            !decltype_<constructible_from_anything>().is_noexcept_constructible_from(
+                decltype_<void*>()),
+            "hyperion::mpl::Type::is_noexcept_constructible_from(MetaType) test case 5 (failing)");
+
+        static_assert(
+            decltype_<constructible_from_int>().is_noexcept_constructible_from(test_list<int>{}),
+            "hyperion::mpl::Type::is_noexcept_constructible_from(List) test case 1 (failing)");
+        static_assert(
+            decltype_<constructible_from_int>().is_noexcept_constructible_from(test_list<double>{}),
+            "hyperion::mpl::Type::is_noexcept_constructible_from(List) test case 2 (failing)");
+        static_assert(
+            !decltype_<constructible_from_int>().is_noexcept_constructible_from(test_list<void*>{}),
+            "hyperion::mpl::Type::is_noexcept_constructible_from(List) test case 3 (failing)");
+        static_assert(
+            !decltype_<constructible_from_int>().is_noexcept_constructible_from(
+                test_list<int, double>{}),
+            "hyperion::mpl::Type::is_noexcept_constructible_from(List) test case 4 (failing)");
+        static_assert(
+            !decltype_<constructible_from_anything>().is_noexcept_constructible_from(
+                test_list<void*>{}),
+            "hyperion::mpl::Type::is_noexcept_constructible_from(List) test case 5 (failing)");
+        static_assert(
+            decltype_<constructible_from_anything>().is_noexcept_constructible_from(
+                test_list<int, double>{}),
+            "hyperion::mpl::Type::is_noexcept_constructible_from(List) test case 6 (failing)");
 
     } // namespace _test::type
 } // namespace hyperion::mpl
