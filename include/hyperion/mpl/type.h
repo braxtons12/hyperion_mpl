@@ -250,13 +250,13 @@ namespace hyperion::mpl {
         template<typename TRhs>
         [[nodiscard]] constexpr auto
         is_derived_from([[maybe_unused]] const Type<TRhs>& rhs) noexcept
-            -> Value<std::derived_from<type, TRhs>> {
+            -> Value<std::derived_from<type, TRhs> && !std::same_as<type, TRhs>> {
             return {};
         }
 
         template<typename TRhs>
         [[nodiscard]] constexpr auto is_base_of([[maybe_unused]] const Type<TRhs>& rhs) noexcept
-            -> Value<std::derived_from<TRhs, type>> {
+            -> Value<std::derived_from<TRhs, type> && !std::same_as<type, TRhs>> {
             return {};
         }
 
@@ -712,6 +712,37 @@ namespace hyperion::mpl {
                       "hyperion::mpl::Type::as_rvalue_reference test case 2 (failing)");
         static_assert(decltype_<int>().as_rvalue_reference() != decltype_<int>(),
                       "hyperion::mpl::Type::as_rvalue_reference test case 3 (failing)");
+
+        struct not_convertible { };
+
+        static_assert(decltype_<int>().is_convertible_to(decltype_<double>()),
+                      "hyperion::mpl::Type::is_convertible_to test case 1 (failing)");
+        static_assert(decltype_<float>().is_convertible_to(decltype_<double>()),
+                      "hyperion::mpl::Type::is_convertible_to test case 2 (failing)");
+        static_assert(!decltype_<int>().is_convertible_to(decltype_<not_convertible>()),
+                      "hyperion::mpl::Type::is_convertible_to test case 3 (failing)");
+
+        struct base_type { };
+
+        struct derived_type : base_type { };
+
+        static_assert(decltype_<derived_type>().is_derived_from(decltype_<base_type>()),
+                      "hyperion::mpl::Type::is_derived_from test case 1 (failing)");
+        static_assert(!decltype_<int>().is_derived_from(decltype_<base_type>()),
+                      "hyperion::mpl::Type::is_derived_from test case 2 (failing)");
+        static_assert(!decltype_<base_type>().is_derived_from(decltype_<base_type>()),
+                      "hyperion::mpl::Type::is_derived_from test case 3 (failing)");
+        static_assert(!decltype_<base_type>().is_derived_from(decltype_<derived_type>()),
+                      "hyperion::mpl::Type::is_derived_from test case 4 (failing)");
+
+        static_assert(decltype_<base_type>().is_base_of(decltype_<derived_type>()),
+                      "hyperion::mpl::TYpe::is_base_of test case 1 (failing)");
+        static_assert(!decltype_<int>().is_base_of(decltype_<base_type>()),
+                      "hyperion::mpl::TYpe::is_base_of test case 2 (failing)");
+        static_assert(!decltype_<base_type>().is_base_of(decltype_<base_type>()),
+                      "hyperion::mpl::TYpe::is_base_of test case 3 (failing)");
+        static_assert(!decltype_<derived_type>().is_base_of(decltype_<base_type>()),
+                      "hyperion::mpl::TYpe::is_base_of test case 3 (failing)");
 
     } // namespace _test::type
 } // namespace hyperion::mpl
