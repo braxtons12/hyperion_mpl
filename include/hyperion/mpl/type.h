@@ -902,7 +902,7 @@ namespace hyperion::mpl {
         };
 
         struct default_constructible {
-            default_constructible() noexcept(false) = default;
+            default_constructible() = default;
         };
 
         struct noexcept_default_constructible {
@@ -911,7 +911,9 @@ namespace hyperion::mpl {
 
         struct not_trivially_default_constructible {
             // NOLINTNEXTLINE(*-use-equals-default)
-            not_trivially_default_constructible() {
+            not_trivially_default_constructible() noexcept(false) {
+                // NOLINTNEXTLINE(hicpp-exception-baseclass)
+                throw 0;
             }
         };
 
@@ -928,7 +930,7 @@ namespace hyperion::mpl {
             decltype_<int>().is_noexcept_default_constructible(),
             "hyperion::mpl::Type::is_noexcept_default_constructible test case 1 (failing)");
         static_assert(
-            !decltype_<default_constructible>().is_noexcept_default_constructible(),
+            !decltype_<not_trivially_default_constructible>().is_noexcept_default_constructible(),
             "hyperion::mpl::Type::is_noexcept_default_constructible test case 2 (failing)");
         static_assert(
             decltype_<noexcept_default_constructible>().is_noexcept_default_constructible(),
