@@ -143,6 +143,12 @@ namespace hyperion::mpl {
             return value;
         }
 
+        [[nodiscard]] explicit constexpr operator bool() const noexcept
+            requires std::convertible_to<TType, bool> && (!std::same_as<TType, bool>)
+        {
+            return value;
+        }
+
         /// @brief Returns the `value` of this `Value` specialization
         /// @return `value`
         [[nodiscard]] constexpr auto value_of() const -> TType {
