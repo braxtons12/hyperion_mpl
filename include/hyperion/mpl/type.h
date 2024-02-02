@@ -889,6 +889,12 @@ namespace hyperion::mpl {
             noexcept_default_constructible() noexcept = default;
         };
 
+        struct not_trivially_default_constructible {
+            // NOLINTNEXTLINE(*-use-equals-default)
+            not_trivially_default_constructible() {
+            }
+        };
+
         static_assert(decltype_<int>().is_default_constructible(),
                       "hyperion::mpl::Type::is_default_constructible test case 1 (failing)");
         static_assert(decltype_<default_constructible>().is_default_constructible(),
@@ -898,14 +904,34 @@ namespace hyperion::mpl {
         static_assert(!decltype_<not_default_constructible>().is_default_constructible(),
                       "hyperion::mpl::Type::is_default_constructible test case 4 (failing)");
 
-        static_assert(decltype_<int>().is_noexcept_default_constructible(),
-                      "hyperion::mpl::Type::is_noexcept_default_constructible test case 1 (failing)");
-        static_assert(!decltype_<default_constructible>().is_noexcept_default_constructible(),
-                      "hyperion::mpl::Type::is_noexcept_default_constructible test case 2 (failing)");
-        static_assert(decltype_<noexcept_default_constructible>().is_noexcept_default_constructible(),
-                      "hyperion::mpl::Type::is_noexcept_default_constructible test case 3 (failing)");
-        static_assert(!decltype_<not_default_constructible>().is_noexcept_default_constructible(),
-                      "hyperion::mpl::Type::is_noexcept_default_constructible test case 4 (failing)");
+        static_assert(
+            decltype_<int>().is_noexcept_default_constructible(),
+            "hyperion::mpl::Type::is_noexcept_default_constructible test case 1 (failing)");
+        static_assert(
+            !decltype_<default_constructible>().is_noexcept_default_constructible(),
+            "hyperion::mpl::Type::is_noexcept_default_constructible test case 2 (failing)");
+        static_assert(
+            decltype_<noexcept_default_constructible>().is_noexcept_default_constructible(),
+            "hyperion::mpl::Type::is_noexcept_default_constructible test case 3 (failing)");
+        static_assert(
+            !decltype_<not_default_constructible>().is_noexcept_default_constructible(),
+            "hyperion::mpl::Type::is_noexcept_default_constructible test case 4 (failing)");
+
+        static_assert(
+            decltype_<int>().is_trivially_default_constructible(),
+            "hyperion::mpl::Type::is_trivially_default_constructible test case 1 (failing)");
+        static_assert(
+            decltype_<default_constructible>().is_trivially_default_constructible(),
+            "hyperion::mpl::Type::is_trivially_default_constructible test case 2 (failing)");
+        static_assert(
+            decltype_<noexcept_default_constructible>().is_trivially_default_constructible(),
+            "hyperion::mpl::Type::is_trivially_default_constructible test case 3 (failing)");
+        static_assert(
+            !decltype_<not_default_constructible>().is_trivially_default_constructible(),
+            "hyperion::mpl::Type::is_trivially_default_constructible test case 4 (failing)");
+        static_assert(
+            !decltype_<not_trivially_default_constructible>().is_trivially_default_constructible(),
+            "hyperion::mpl::Type::is_trivially_default_constructible test case 5 (failing)");
 
     } // namespace _test::type
 } // namespace hyperion::mpl
