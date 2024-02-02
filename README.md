@@ -55,23 +55,20 @@ static_assert(decltype_(val3)
               .apply<std::add_rvalue_reference>()
               == decltype_<int&&>());
 
-constexpr auto add_const = [](const auto& type)
+constexpr auto add_const = [](const MetaType auto& type)
     -> std::add_const<typename std::remove_cvref_t<decltype(type)>::type>
-    requires MetaType<std::remove_cvref_t<decltype(type)>>
 {
     return {};
 };
 
-constexpr auto add_lvalue_reference = [](const auto& type)
+constexpr auto add_lvalue_reference = [](const MetaType auto& type)
     -> std::add_lvalue_reference<typename std::remove_cvref_t<decltype(type)>::type>
-    requires MetaType<std::remove_cvref_t<decltype(type)>>
 {
     return {};
 };
 
-constexpr auto remove_reference = [](const auto& type)
+constexpr auto remove_reference = [](const MetaType auto& type)
     -> std::remove_reference<typename std::remove_cvref_t<decltype(type)>::type>
-    requires MetaType<std::remove_cvref_t<decltype(type)>>
 {
     return {};
 };
