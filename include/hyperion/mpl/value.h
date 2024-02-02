@@ -876,17 +876,13 @@ namespace hyperion::mpl {
         static_assert((2_value).apply<times_two>().apply<add_one>().apply<times_two>() == 10_value,
                       "hyperion::mpl::Value::apply<MetaFunction<ValueType>> test case 3 (failing)");
 
-        constexpr auto add1
-            = [](const auto& value) -> Value<std::remove_cvref_t<decltype(value)>::value + 1>
-            requires ValueType<std::remove_cvref_t<decltype(value)>>
-        {
+        constexpr auto add1 = [](const ValueType auto& value)
+            -> Value<std::remove_cvref_t<decltype(value)>::value + 1> {
             return {};
         };
 
-        constexpr auto times2
-            = [](const auto& value) -> Value<std::remove_cvref_t<decltype(value)>::value * 2>
-            requires ValueType<std::remove_cvref_t<decltype(value)>>
-        {
+        constexpr auto times2 = [](const ValueType auto& value)
+            -> Value<std::remove_cvref_t<decltype(value)>::value * 2> {
             return {};
         };
 
