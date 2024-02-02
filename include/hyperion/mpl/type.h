@@ -877,6 +877,36 @@ namespace hyperion::mpl {
                 test_list<int, double>{}),
             "hyperion::mpl::Type::is_noexcept_constructible_from(List) test case 6 (failing)");
 
+        struct not_default_constructible {
+            not_default_constructible() = delete;
+        };
+
+        struct default_constructible {
+            default_constructible() noexcept(false) = default;
+        };
+
+        struct noexcept_default_constructible {
+            noexcept_default_constructible() noexcept = default;
+        };
+
+        static_assert(decltype_<int>().is_default_constructible(),
+                      "hyperion::mpl::Type::is_default_constructible test case 1 (failing)");
+        static_assert(decltype_<default_constructible>().is_default_constructible(),
+                      "hyperion::mpl::Type::is_default_constructible test case 2 (failing)");
+        static_assert(decltype_<noexcept_default_constructible>().is_default_constructible(),
+                      "hyperion::mpl::Type::is_default_constructible test case 3 (failing)");
+        static_assert(!decltype_<not_default_constructible>().is_default_constructible(),
+                      "hyperion::mpl::Type::is_default_constructible test case 4 (failing)");
+
+        static_assert(decltype_<int>().is_noexcept_default_constructible(),
+                      "hyperion::mpl::Type::is_noexcept_default_constructible test case 1 (failing)");
+        static_assert(!decltype_<default_constructible>().is_noexcept_default_constructible(),
+                      "hyperion::mpl::Type::is_noexcept_default_constructible test case 2 (failing)");
+        static_assert(decltype_<noexcept_default_constructible>().is_noexcept_default_constructible(),
+                      "hyperion::mpl::Type::is_noexcept_default_constructible test case 3 (failing)");
+        static_assert(!decltype_<not_default_constructible>().is_noexcept_default_constructible(),
+                      "hyperion::mpl::Type::is_noexcept_default_constructible test case 4 (failing)");
+
     } // namespace _test::type
 } // namespace hyperion::mpl
 
