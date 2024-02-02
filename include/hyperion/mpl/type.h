@@ -77,8 +77,11 @@ namespace hyperion::mpl {
         ///
         /// @ingroup type
         /// @headerfile hyperion/mpl/type.h
-        [[nodiscard]] constexpr auto inner() noexcept -> type
-            requires std::is_default_constructible_v<type> && (MetaType<type> || ValueType<type>)
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
+        [[nodiscard]] constexpr auto inner() noexcept -> TDelay
+            requires std::is_default_constructible_v<TDelay>
+                     && (MetaType<TDelay> || ValueType<TDelay>)
         {
             return {};
         }
@@ -92,8 +95,10 @@ namespace hyperion::mpl {
         /// @return Whether the `type` of this `Type` is also a `MetaType` or `ValueType`
         /// @ingroup type
         /// @headerfile hyperion/mpl/type.h
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto has_inner() noexcept -> bool {
-            return MetaType<type> || ValueType<type>;
+            return MetaType<TDelay> || ValueType<TDelay>;
         }
 
         template<template<typename> typename TMetaFunction>
@@ -173,33 +178,42 @@ namespace hyperion::mpl {
             return Type<TRhs>{}.is(Type<std::remove_cvref_t<type>>{});
         }
 
-        [[nodiscard]] constexpr auto is_const() noexcept
-            -> Value<std::is_const_v<type> || std::is_const_v<std::remove_reference_t<type>>> {
-            return {};
-        }
-
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto
-        is_lvalue_reference() noexcept -> Value<std::is_lvalue_reference_v<type>> {
+        is_const() noexcept -> Value<std::is_const_v<std::remove_reference_t<TDelay>>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto
-        is_rvalue_reference() noexcept -> Value<std::is_rvalue_reference_v<type>> {
+        is_lvalue_reference() noexcept -> Value<std::is_lvalue_reference_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto
-        is_volatile() noexcept -> Value<std::is_volatile_v<type>
-                                        || std::is_volatile_v<std::remove_reference_t<type>>> {
+        is_rvalue_reference() noexcept -> Value<std::is_rvalue_reference_v<TDelay>> {
             return {};
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
+        [[nodiscard]] constexpr auto
+        is_volatile() noexcept -> Value<std::is_volatile_v<std::remove_reference_t<TDelay>>> {
+            return {};
+        }
+
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto as_const() noexcept {
-            using constified = std::add_const_t<std::remove_reference_t<type>>;
-            if constexpr(Type{}.is_lvalue_reference()) {
+            using constified = std::add_const_t<std::remove_reference_t<TDelay>>;
+            if constexpr(Type<TDelay>{}.is_lvalue_reference()) {
                 return Type<std::add_lvalue_reference_t<constified>>{};
             }
-            else if constexpr(Type{}.is_rvalue_reference()) {
+            else if constexpr(Type<TDelay>{}.is_rvalue_reference()) {
                 return Type<std::add_rvalue_reference_t<constified>>{};
             }
             else {
@@ -207,32 +221,38 @@ namespace hyperion::mpl {
             }
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto as_lvalue_reference() noexcept {
-            using base_type = std::remove_reference_t<type>;
-            if constexpr(Type{}.is_lvalue_reference()) {
-                return Type<type>{};
+            using base_type = std::remove_reference_t<TDelay>;
+            if constexpr(Type<TDelay>{}.is_lvalue_reference()) {
+                return Type<TDelay>{};
             }
             else {
                 return Type<std::add_lvalue_reference_t<base_type>>{};
             }
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto as_rvalue_reference() noexcept {
-            using base_type = std::remove_reference_t<type>;
-            if constexpr(Type{}.is_rvalue_reference()) {
-                return Type<type>{};
+            using base_type = std::remove_reference_t<TDelay>;
+            if constexpr(Type<TDelay>{}.is_rvalue_reference()) {
+                return Type<TDelay>{};
             }
             else {
                 return Type<std::add_rvalue_reference_t<base_type>>{};
             }
         }
 
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto as_volatile() noexcept {
-            using volatilified = std::add_volatile_t<std::remove_reference_t<type>>;
-            if constexpr(Type{}.is_lvalue_reference()) {
+            using volatilified = std::add_volatile_t<std::remove_reference_t<TDelay>>;
+            if constexpr(Type<TDelay>{}.is_lvalue_reference()) {
                 return Type<std::add_lvalue_reference_t<volatilified>>{};
             }
-            else if constexpr(Type{}.is_rvalue_reference()) {
+            else if constexpr(Type<TDelay>{}.is_rvalue_reference()) {
                 return Type<std::add_rvalue_reference_t<volatilified>>{};
             }
             else {
