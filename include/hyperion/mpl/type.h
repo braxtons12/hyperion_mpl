@@ -910,13 +910,11 @@ namespace hyperion::mpl {
         };
 
         struct not_trivially_default_constructible {
-            HYPERION_IGNORE_MISSING_NORETURN_WARNING_START
             // NOLINTNEXTLINE(*-use-equals-default)
-            not_trivially_default_constructible() noexcept(false) {
+            [[noreturn]] not_trivially_default_constructible() noexcept(false) {
                 // NOLINTNEXTLINE(hicpp-exception-baseclass)
                 throw 0;
             }
-            HYPERION_IGNORE_MISSING_NORETURN_WARNING_STOP
         };
 
         static_assert(decltype_<int>().is_default_constructible(),
