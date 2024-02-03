@@ -621,16 +621,12 @@ namespace hyperion::mpl {
                       "hyperion::mpl::Type::satisfies<TypeMetaFunction> test case 2 (failing)");
 
         constexpr auto is_const_type_type = [](const MetaType auto& type) noexcept
-            -> Type<Value<std::remove_cvref_t<decltype(type)> {
-        }.is_const(),
-                          bool>> {
+            -> Type<Value<(std::remove_cvref_t<decltype(type)>{}).is_const(), bool>> {
             return {};
         };
 
-        constexpr auto is_const_type_value
-            = [](const MetaType auto& type) noexcept -> Value<std::remove_cvref_t<decltype(type)> {
-        }.is_const(),
-                                                              bool> {
+        constexpr auto is_const_type_value = [](const MetaType auto& type) noexcept
+            -> Value<(std::remove_cvref_t<decltype(type)>{}).is_const(), bool> {
             return {};
         };
 
