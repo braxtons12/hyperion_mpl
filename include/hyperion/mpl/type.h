@@ -449,17 +449,28 @@ namespace hyperion::mpl {
             return {};
         }
 
-        template<typename TRhs>
+        template<typename TRhs = std::conditional_t<std::is_reference_v<type>,
+                                                    type,
+                                                    std::add_lvalue_reference_t<type>>>
         [[nodiscard]] constexpr auto
-        is_swappable_with([[maybe_unused]] const Type<TRhs>& rhs) noexcept
-            -> Value<std::is_swappable_with_v<type, TRhs>> {
+        is_swappable_with([[maybe_unused]] const Type<TRhs>& rhs = Type<TRhs>{}) noexcept
+            -> Value<std::is_swappable_with_v<std::conditional_t<std::is_reference_v<type>,
+                                                                 type,
+                                                                 std::add_lvalue_reference_t<type>>,
+                                              TRhs>> {
             return {};
         }
 
-        template<typename TRhs>
+        template<typename TRhs = std::conditional_t<std::is_reference_v<type>,
+                                                    type,
+                                                    std::add_lvalue_reference_t<type>>>
         [[nodiscard]] constexpr auto
-        is_noexcept_swappable_with([[maybe_unused]] const Type<TRhs>& rhs) noexcept
-            -> Value<std::is_nothrow_swappable_with_v<type, TRhs>> {
+        is_noexcept_swappable_with([[maybe_unused]] const Type<TRhs>& rhs = Type<TRhs>{}) noexcept
+            -> Value<std::is_nothrow_swappable_with_v<
+                std::conditional_t<std::is_reference_v<type>,
+                                   type,
+                                   std::add_lvalue_reference_t<type>>,
+                TRhs>> {
             return {};
         }
     };
@@ -910,7 +921,6 @@ namespace hyperion::mpl {
         };
 
         struct not_trivially_default_constructible {
-            // NOLINTNEXTLINE(*-use-equals-default)
             [[noreturn]] not_trivially_default_constructible() noexcept(false) {
                 // NOLINTNEXTLINE(hicpp-exception-baseclass)
                 throw 0;
@@ -954,6 +964,339 @@ namespace hyperion::mpl {
         static_assert(
             !decltype_<not_trivially_default_constructible>().is_trivially_default_constructible(),
             "hyperion::mpl::Type::is_trivially_default_constructible test case 5 (failing)");
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct not_copy_constructible {
+            not_copy_constructible(const not_copy_constructible&) = delete;
+        };
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct copy_constructible {
+            copy_constructible(const copy_constructible&) = default;
+        };
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct noexcept_copy_constructible {
+            noexcept_copy_constructible(const noexcept_copy_constructible&) noexcept = default;
+        };
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct not_trivially_copy_constructible {
+            [[noreturn]] not_trivially_copy_constructible(
+                [[maybe_unused]] const not_trivially_copy_constructible& copy) noexcept(false) {
+                // NOLINTNEXTLINE(hicpp-exception-baseclass)
+                throw 0;
+            }
+        };
+
+        static_assert(decltype_<int>().is_copy_constructible(),
+                      "hyperion::mpl::Type::is_copy_constructible test case 1 (failing)");
+        static_assert(decltype_<copy_constructible>().is_copy_constructible(),
+                      "hyperion::mpl::Type::is_copy_constructible test case 2 (failing)");
+        static_assert(decltype_<noexcept_copy_constructible>().is_copy_constructible(),
+                      "hyperion::mpl::Type::is_copy_constructible test case 3 (failing)");
+        static_assert(!decltype_<not_copy_constructible>().is_copy_constructible(),
+                      "hyperion::mpl::Type::is_copy_constructible test case 4 (failing)");
+
+        static_assert(decltype_<int>().is_noexcept_copy_constructible(),
+                      "hyperion::mpl::Type::is_noexcept_copy_constructible test case 1 (failing)");
+        static_assert(
+            !decltype_<not_trivially_copy_constructible>().is_noexcept_copy_constructible(),
+            "hyperion::mpl::Type::is_noexcept_copy_constructible test case 2 (failing)");
+        static_assert(decltype_<noexcept_copy_constructible>().is_noexcept_copy_constructible(),
+                      "hyperion::mpl::Type::is_noexcept_copy_constructible test case 3 (failing)");
+        static_assert(!decltype_<not_copy_constructible>().is_noexcept_copy_constructible(),
+                      "hyperion::mpl::Type::is_noexcept_copy_constructible test case 4 (failing)");
+
+        static_assert(decltype_<int>().is_trivially_copy_constructible(),
+                      "hyperion::mpl::Type::is_trivially_copy_constructible test case 1 (failing)");
+        static_assert(decltype_<copy_constructible>().is_trivially_copy_constructible(),
+                      "hyperion::mpl::Type::is_trivially_copy_constructible test case 2 (failing)");
+        static_assert(decltype_<noexcept_copy_constructible>().is_trivially_copy_constructible(),
+                      "hyperion::mpl::Type::is_trivially_copy_constructible test case 3 (failing)");
+        static_assert(!decltype_<not_copy_constructible>().is_trivially_copy_constructible(),
+                      "hyperion::mpl::Type::is_trivially_copy_constructible test case 4 (failing)");
+        static_assert(
+            !decltype_<not_trivially_copy_constructible>().is_trivially_copy_constructible(),
+            "hyperion::mpl::Type::is_trivially_copy_constructible test case 5 (failing)");
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct not_move_constructible {
+            not_move_constructible(not_move_constructible&&) = delete;
+        };
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct move_constructible {
+            move_constructible(move_constructible&&) = default;
+        };
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct noexcept_move_constructible {
+            noexcept_move_constructible(noexcept_move_constructible&&) noexcept = default;
+        };
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct not_trivially_move_constructible {
+            [[noreturn]] not_trivially_move_constructible(
+                [[maybe_unused]] not_trivially_move_constructible&& move) noexcept(false) {
+                // NOLINTNEXTLINE(hicpp-exception-baseclass)
+                throw 0;
+            }
+        };
+
+        static_assert(decltype_<int>().is_move_constructible(),
+                      "hyperion::mpl::Type::is_move_constructible test case 1 (failing)");
+        static_assert(decltype_<move_constructible>().is_move_constructible(),
+                      "hyperion::mpl::Type::is_move_constructible test case 2 (failing)");
+        static_assert(decltype_<noexcept_move_constructible>().is_move_constructible(),
+                      "hyperion::mpl::Type::is_move_constructible test case 3 (failing)");
+        static_assert(!decltype_<not_move_constructible>().is_move_constructible(),
+                      "hyperion::mpl::Type::is_move_constructible test case 4 (failing)");
+
+        static_assert(decltype_<int>().is_noexcept_move_constructible(),
+                      "hyperion::mpl::Type::is_noexcept_move_constructible test case 1 (failing)");
+        static_assert(
+            !decltype_<not_trivially_move_constructible>().is_noexcept_move_constructible(),
+            "hyperion::mpl::Type::is_noexcept_move_constructible test case 2 (failing)");
+        static_assert(decltype_<noexcept_move_constructible>().is_noexcept_move_constructible(),
+                      "hyperion::mpl::Type::is_noexcept_move_constructible test case 3 (failing)");
+        static_assert(!decltype_<not_move_constructible>().is_noexcept_move_constructible(),
+                      "hyperion::mpl::Type::is_noexcept_move_constructible test case 4 (failing)");
+
+        static_assert(decltype_<int>().is_trivially_move_constructible(),
+                      "hyperion::mpl::Type::is_trivially_move_constructible test case 1 (failing)");
+        static_assert(decltype_<move_constructible>().is_trivially_move_constructible(),
+                      "hyperion::mpl::Type::is_trivially_move_constructible test case 2 (failing)");
+        static_assert(decltype_<noexcept_move_constructible>().is_trivially_move_constructible(),
+                      "hyperion::mpl::Type::is_trivially_move_constructible test case 3 (failing)");
+        static_assert(!decltype_<not_move_constructible>().is_trivially_move_constructible(),
+                      "hyperion::mpl::Type::is_trivially_move_constructible test case 4 (failing)");
+        static_assert(
+            !decltype_<not_trivially_move_constructible>().is_trivially_move_constructible(),
+            "hyperion::mpl::Type::is_trivially_move_constructible test case 5 (failing)");
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct not_copy_assignable {
+            auto operator=(const not_copy_assignable&) -> not_copy_assignable& = delete;
+        };
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct copy_assignable {
+            auto operator=(const copy_assignable&) -> copy_assignable& = default;
+        };
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct noexcept_copy_assignable {
+            auto operator=(const noexcept_copy_assignable&) noexcept
+                -> noexcept_copy_assignable& = default;
+        };
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct not_trivially_copy_assignable {
+            auto
+            operator=([[maybe_unused]] const not_trivially_copy_assignable& copy) noexcept(false)
+                -> not_trivially_copy_assignable& {
+                if(this == &copy) {
+                    // NOLINTNEXTLINE(hicpp-exception-baseclass)
+                    throw 0;
+                    return *this;
+                }
+
+                return *this;
+            }
+        };
+
+        static_assert(decltype_<int>().is_copy_assignable(),
+                      "hyperion::mpl::Type::is_copy_assignable test case 1 (failing)");
+        static_assert(decltype_<copy_assignable>().is_copy_assignable(),
+                      "hyperion::mpl::Type::is_copy_assignable test case 2 (failing)");
+        static_assert(decltype_<noexcept_copy_assignable>().is_copy_assignable(),
+                      "hyperion::mpl::Type::is_copy_assignable test case 3 (failing)");
+        static_assert(!decltype_<not_copy_assignable>().is_copy_assignable(),
+                      "hyperion::mpl::Type::is_copy_assignable test case 4 (failing)");
+
+        static_assert(decltype_<int>().is_noexcept_copy_assignable(),
+                      "hyperion::mpl::Type::is_noexcept_copy_assignable test case 1 (failing)");
+        static_assert(!decltype_<not_trivially_copy_assignable>().is_noexcept_copy_assignable(),
+                      "hyperion::mpl::Type::is_noexcept_copy_assignable test case 2 (failing)");
+        static_assert(decltype_<noexcept_copy_assignable>().is_noexcept_copy_assignable(),
+                      "hyperion::mpl::Type::is_noexcept_copy_assignable test case 3 (failing)");
+        static_assert(!decltype_<not_copy_assignable>().is_noexcept_copy_assignable(),
+                      "hyperion::mpl::Type::is_noexcept_copy_assignable test case 4 (failing)");
+
+        static_assert(decltype_<int>().is_trivially_copy_assignable(),
+                      "hyperion::mpl::Type::is_trivially_copy_assignable test case 1 (failing)");
+        static_assert(decltype_<copy_assignable>().is_trivially_copy_assignable(),
+                      "hyperion::mpl::Type::is_trivially_copy_assignable test case 2 (failing)");
+        static_assert(decltype_<noexcept_copy_assignable>().is_trivially_copy_assignable(),
+                      "hyperion::mpl::Type::is_trivially_copy_assignable test case 3 (failing)");
+        static_assert(!decltype_<not_copy_assignable>().is_trivially_copy_assignable(),
+                      "hyperion::mpl::Type::is_trivially_copy_assignable test case 4 (failing)");
+        static_assert(!decltype_<not_trivially_copy_assignable>().is_trivially_copy_assignable(),
+                      "hyperion::mpl::Type::is_trivially_copy_assignable test case 5 (failing)");
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct not_move_assignable {
+            auto operator=(not_move_assignable&&) -> not_move_assignable& = delete;
+        };
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct move_assignable {
+            auto operator=(move_assignable&&) -> move_assignable& = default;
+        };
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct noexcept_move_assignable {
+            auto
+            operator=(noexcept_move_assignable&&) noexcept -> noexcept_move_assignable& = default;
+        };
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct not_trivially_move_assignable {
+            [[noreturn]] auto
+            operator=([[maybe_unused]] not_trivially_move_assignable&& move) noexcept(false)
+                -> not_trivially_move_assignable& {
+                // NOLINTNEXTLINE(hicpp-exception-baseclass)
+                throw 0;
+            }
+        };
+
+        static_assert(decltype_<int>().is_move_assignable(),
+                      "hyperion::mpl::Type::is_move_assignable test case 1 (failing)");
+        static_assert(decltype_<move_assignable>().is_move_assignable(),
+                      "hyperion::mpl::Type::is_move_assignable test case 2 (failing)");
+        static_assert(decltype_<noexcept_move_assignable>().is_move_assignable(),
+                      "hyperion::mpl::Type::is_move_assignable test case 3 (failing)");
+        static_assert(!decltype_<not_move_assignable>().is_move_assignable(),
+                      "hyperion::mpl::Type::is_move_assignable test case 4 (failing)");
+
+        static_assert(decltype_<int>().is_noexcept_move_assignable(),
+                      "hyperion::mpl::Type::is_noexcept_move_assignable test case 1 (failing)");
+        static_assert(!decltype_<not_trivially_move_assignable>().is_noexcept_move_assignable(),
+                      "hyperion::mpl::Type::is_noexcept_move_assignable test case 2 (failing)");
+        static_assert(decltype_<noexcept_move_assignable>().is_noexcept_move_assignable(),
+                      "hyperion::mpl::Type::is_noexcept_move_assignable test case 3 (failing)");
+        static_assert(!decltype_<not_move_assignable>().is_noexcept_move_assignable(),
+                      "hyperion::mpl::Type::is_noexcept_move_assignable test case 4 (failing)");
+
+        static_assert(decltype_<int>().is_trivially_move_assignable(),
+                      "hyperion::mpl::Type::is_trivially_move_assignable test case 1 (failing)");
+        static_assert(decltype_<move_assignable>().is_trivially_move_assignable(),
+                      "hyperion::mpl::Type::is_trivially_move_assignable test case 2 (failing)");
+        static_assert(decltype_<noexcept_move_assignable>().is_trivially_move_assignable(),
+                      "hyperion::mpl::Type::is_trivially_move_assignable test case 3 (failing)");
+        static_assert(!decltype_<not_move_assignable>().is_trivially_move_assignable(),
+                      "hyperion::mpl::Type::is_trivially_move_assignable test case 4 (failing)");
+        static_assert(!decltype_<not_trivially_move_assignable>().is_trivially_move_assignable(),
+                      "hyperion::mpl::Type::is_trivially_move_assignable test case 5 (failing)");
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct not_destructible {
+            ~not_destructible() = delete;
+        };
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct destructible {
+            ~destructible() = default;
+        };
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct noexcept_destructible {
+            ~noexcept_destructible() noexcept = default;
+        };
+
+        // NOLINTNEXTLINE(*-special-member-functions)
+        struct not_trivially_destructible {
+            [[noreturn]] ~not_trivially_destructible() noexcept(false) {
+                // NOLINTNEXTLINE(hicpp-exception-baseclass)
+                throw 0;
+            }
+        };
+
+        static_assert(decltype_<int>().is_destructible(),
+                      "hyperion::mpl::Type::is_destructible test case 1 (failing)");
+        static_assert(decltype_<destructible>().is_destructible(),
+                      "hyperion::mpl::Type::is_destructible test case 2 (failing)");
+        static_assert(decltype_<noexcept_destructible>().is_destructible(),
+                      "hyperion::mpl::Type::is_destructible test case 3 (failing)");
+        static_assert(!decltype_<not_destructible>().is_destructible(),
+                      "hyperion::mpl::Type::is_destructible test case 4 (failing)");
+
+        static_assert(decltype_<int>().is_noexcept_destructible(),
+                      "hyperion::mpl::Type::is_noexcept_destructible test case 1 (failing)");
+        static_assert(!decltype_<not_trivially_destructible>().is_noexcept_destructible(),
+                      "hyperion::mpl::Type::is_noexcept_destructible test case 2 (failing)");
+        static_assert(decltype_<noexcept_destructible>().is_noexcept_destructible(),
+                      "hyperion::mpl::Type::is_noexcept_destructible test case 3 (failing)");
+        static_assert(!decltype_<not_destructible>().is_noexcept_destructible(),
+                      "hyperion::mpl::Type::is_noexcept_destructible test case 4 (failing)");
+
+        static_assert(decltype_<int>().is_trivially_destructible(),
+                      "hyperion::mpl::Type::is_trivially_destructible test case 1 (failing)");
+        static_assert(decltype_<destructible>().is_trivially_destructible(),
+                      "hyperion::mpl::Type::is_trivially_destructible test case 2 (failing)");
+        static_assert(decltype_<noexcept_destructible>().is_trivially_destructible(),
+                      "hyperion::mpl::Type::is_trivially_destructible test case 3 (failing)");
+        static_assert(!decltype_<not_destructible>().is_trivially_destructible(),
+                      "hyperion::mpl::Type::is_trivially_destructible test case 4 (failing)");
+        static_assert(!decltype_<not_trivially_destructible>().is_trivially_destructible(),
+                      "hyperion::mpl::Type::is_trivially_destructible test case 5 (failing)");
+
+        struct swappable {
+            friend void swap(swappable& lhs, swappable& rhs) noexcept(false);
+        };
+
+        struct not_swappable {
+            friend void swap(not_swappable& lhs, not_swappable& rhs) = delete;
+        };
+
+        struct noexcept_swappable {
+            friend void swap(noexcept_swappable& lhs, noexcept_swappable& rhs) noexcept;
+        };
+
+        static_assert(decltype_<int>().is_swappable(),
+                      "hyperion::mpl::Type::is_swappable test case 1 (failing)");
+        static_assert(decltype_<swappable>().is_swappable(),
+                      "hyperion::mpl::Type::is_swappable test case 2 (failing)");
+        static_assert(decltype_<noexcept_swappable>().is_swappable(),
+                      "hyperion::mpl::Type::is_swappable test case 3 (failing)");
+        static_assert(!decltype_<not_swappable>().is_swappable(),
+                      "hyperion::mpl::Type::is_swappable test case 4 (failing)");
+
+        static_assert(decltype_<int>().is_noexcept_swappable(),
+                      "hyperion::mpl::Type::is_noexcept_swappable test case 1 (failing)");
+        static_assert(decltype_<noexcept_swappable>().is_noexcept_swappable(),
+                      "hyperion::mpl::Type::is_noexcept_swappable test case 2 (failing)");
+        static_assert(!decltype_<swappable>().is_noexcept_swappable(),
+                      "hyperion::mpl::Type::is_noexcept_swappable test case 3 (failing)");
+        static_assert(!decltype_<not_swappable>().is_noexcept_swappable(),
+                      "hyperion::mpl::Type::is_noexcept_swappable test case 3 (failing)");
+
+        struct swappable_with {
+            friend void swap(swappable_with& lhs, int& rhs) noexcept(false);
+        };
+
+        struct noexcept_swappable_with {
+            friend void swap(noexcept_swappable_with& lhs, int& rhs) noexcept;
+        };
+
+        static_assert(decltype_<int>().is_swappable_with(),
+                      "hyperion::mpl::Type::is_swappable_with test case 1 (failing)");
+        static_assert(decltype_<swappable>().is_swappable_with(),
+                      "hyperion::mpl::Type::is_swappable_with test case 2 (failing)");
+        static_assert(decltype_<noexcept_swappable>().is_swappable_with(),
+                      "hyperion::mpl::Type::is_swappable_with test case 3 (failing)");
+        static_assert(!decltype_<not_swappable>().is_swappable_with(),
+                      "hyperion::mpl::Type::is_swappable_with test case 4 (failing)");
+
+        static_assert(decltype_<int>().is_noexcept_swappable_with(),
+                      "hyperion::mpl::Type::is_noexcept_swappable_with test case 1 (failing)");
+        static_assert(decltype_<noexcept_swappable>().is_noexcept_swappable_with(),
+                      "hyperion::mpl::Type::is_noexcept_swappable_with test case 2 (failing)");
+        static_assert(!decltype_<swappable>().is_noexcept_swappable_with(),
+                      "hyperion::mpl::Type::is_noexcept_swappable_with test case 3 (failing)");
+        static_assert(!decltype_<not_swappable>().is_noexcept_swappable_with(),
+                      "hyperion::mpl::Type::is_noexcept_swappable_with test case 3 (failing)");
 
     } // namespace _test::type
 } // namespace hyperion::mpl
