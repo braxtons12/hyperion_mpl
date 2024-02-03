@@ -28,6 +28,7 @@
 #ifndef HYPERION_MPL_TYPE_H
 #define HYPERION_MPL_TYPE_H
 
+#include <hyperion/mpl/metatypes.h>
 #include <hyperion/mpl/value.h>
 #include <hyperion/platform/def.h>
 
@@ -67,13 +68,13 @@ namespace hyperion::mpl {
         _Pragma("GCC diagnostic ignored \"-Wdeprecated-volatile\"");
 #endif // HYPERION_PLATFORM_COMPILER_IS_CLANG
 
-        /// @brief Returns the inner `MetaType` or `ValueType` `type` of `this` `Type`
+        /// @brief Returns the inner `MetaType` or `MetaValue` `type` of `this` `Type`
         ///
         /// # Requirements
         /// - `type` is default constructible
-        /// - `type` is a `MetaType` or a `ValueType`
+        /// - `type` is a `MetaType` or a `MetaValue`
         ///
-        /// @return The inner `MetaType` or `ValueType` of `this` `Type`
+        /// @return The inner `MetaType` or `MetaValue` of `this` `Type`
         ///
         /// @ingroup type
         /// @headerfile hyperion/mpl/type.h
@@ -81,7 +82,7 @@ namespace hyperion::mpl {
             requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto inner() noexcept -> TDelay
             requires std::is_default_constructible_v<TDelay>
-                     && (MetaType<TDelay> || ValueType<TDelay>)
+                     && (MetaType<TDelay> || MetaValue<TDelay>)
         {
             return {};
         }
@@ -90,19 +91,19 @@ namespace hyperion::mpl {
         _Pragma("GCC diagnostic pop");
 #endif // HYPERION_PLATFORM_COMPILER_IS_CLANG
 
-        /// @brief Returns whether the `type` of this `Type` is also a `MetaType` or `ValueType`
-        /// (in which case, you may call `this->inner()` to obtain that `MetaType` or `ValueType`).
-        /// @return Whether the `type` of this `Type` is also a `MetaType` or `ValueType`
+        /// @brief Returns whether the `type` of this `Type` is also a `MetaType` or `MetaValue`
+        /// (in which case, you may call `this->inner()` to obtain that `MetaType` or `MetaValue`).
+        /// @return Whether the `type` of this `Type` is also a `MetaType` or `MetaValue`
         /// @ingroup type
         /// @headerfile hyperion/mpl/type.h
         template<typename TDelay = type>
             requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto has_inner() noexcept -> bool {
-            return MetaType<TDelay> || ValueType<TDelay>;
+            return MetaType<TDelay> || MetaValue<TDelay>;
         }
 
         template<template<typename> typename TMetaFunction>
-            requires ValueType<TMetaFunction<type>>
+            requires MetaValue<TMetaFunction<type>>
         [[nodiscard]] constexpr auto apply() noexcept -> Value<TMetaFunction<type>::value> {
             return {};
         }
@@ -114,53 +115,54 @@ namespace hyperion::mpl {
         }
 
         template<typename TFunction>
-            requires std::invocable<TFunction, Type<type>>
-                     && MetaType<std::invoke_result_t<TFunction, Type<type>>>
-                     && ValueType<typename std::invoke_result_t<TFunction, Type<type>>::type>
+            requires MetaFunctionOf<TFunction, Type<type>>
+                     && MetaType<meta_result_t<TFunction, Type<type>>>
+                     && MetaValue<typename meta_result_t<TFunction, Type<type>>::type>
         [[nodiscard]] constexpr auto
-        apply(TFunction&& func) noexcept -> std::invoke_result_t<TFunction, Type<type>> {
+        apply(TFunction&& func) noexcept -> meta_result_t<TFunction, Type<type>> {
             return std::forward<TFunction>(func)(Type<type>{});
         }
 
         template<typename TFunction>
-            requires std::invocable<TFunction, Type<type>>
-                     && MetaType<std::invoke_result_t<TFunction, Type<type>>>
-                     && (!MetaType<typename std::invoke_result_t<TFunction, Type<type>>::type>)
-                     && (!ValueType<typename std::invoke_result_t<TFunction, Type<type>>::type>)
+            requires MetaFunctionOf<TFunction, Type<type>>
+                     && MetaType<meta_result_t<TFunction, Type<type>>>
+                     && (!MetaType<typename meta_result_t<TFunction, Type<type>>::type>)
+                     && (!MetaValue<typename meta_result_t<TFunction, Type<type>>::type>)
         [[nodiscard]] constexpr auto apply(
             [[maybe_unused]] TFunction&& func) noexcept // NOLINT(*-missing-std-forward)
-            -> Type<typename std::invoke_result_t<TFunction, Type<type>>::type> {
+            -> Type<typename meta_result_t<TFunction, Type<type>>::type> {
             return {};
         }
 
         template<typename TFunction>
-            requires std::invocable<TFunction, Type<type>>
-                     && ValueType<std::invoke_result_t<TFunction, Type<type>>>
+            requires MetaFunctionOf<TFunction, Type<type>>
+                     && MetaValue<meta_result_t<TFunction, Type<type>>>
         [[nodiscard]] constexpr auto
-        apply(TFunction&& func) noexcept -> std::invoke_result_t<TFunction, Type<type>> {
-            return std::forward<TFunction>(func)(Type<type>{});
+        apply([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
+            noexcept -> meta_result_t<TFunction, Type<type>> {
+            return {};
         }
 
         template<typename TFunction>
-            requires std::invocable<TFunction, type>
-                     && MetaType<std::invoke_result_t<TFunction, type>>
-                     && (MetaType<type> || ValueType<type>)
-        [[nodiscard]] constexpr auto apply(TFunction&& func) noexcept
-            -> std::invoke_result_t<TFunction, type> {
-            return std::forward<TFunction>(func)(inner());
+            requires MetaFunctionOf<TFunction, type> && MetaType<meta_result_t<TFunction, type>>
+                     && (MetaType<type> || MetaValue<type>)
+        [[nodiscard]] constexpr auto apply(
+            [[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
+            noexcept -> meta_result_t<TFunction, type> {
+            return {};
         }
 
         template<typename TFunction>
-            requires std::invocable<TFunction, type>
-                     && ValueType<std::invoke_result_t<TFunction, type>>
-                     && (MetaType<type> || ValueType<type>)
-        [[nodiscard]] constexpr auto apply(TFunction&& func) noexcept
-            -> std::invoke_result_t<TFunction, type> {
-            return std::forward<TFunction>(func)(inner());
+            requires MetaFunctionOf<TFunction, type> && MetaValue<meta_result_t<TFunction, type>>
+                     && (MetaType<type> || MetaValue<type>)
+        [[nodiscard]] constexpr auto apply(
+            [[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
+            noexcept -> meta_result_t<TFunction, type> {
+            return {};
         }
 
         template<template<typename> typename TPredicate>
-            requires ValueType<TPredicate<type>>
+            requires MetaValue<TPredicate<type>>
                      && std::same_as<std::remove_const_t<decltype(TPredicate<type>::value)>, bool>
         [[nodiscard]] constexpr auto satisfies() noexcept -> Value<TPredicate<type>::value> {
             return {};
@@ -551,88 +553,88 @@ namespace hyperion::mpl {
         static_assert(!decltype_<double>().satisfies<std::is_integral>(),
                       "hyperion::mpl::Type::satisfies test case 2 (failing)");
 
-        template<ValueType TValue>
+        template<MetaValue TValue>
         struct add_one {
             static inline constexpr auto value = TValue::value + 1;
         };
 
-        template<ValueType TValue>
+        template<MetaValue TValue>
         struct times_two {
             static inline constexpr auto value = TValue::value * 2;
         };
 
         static_assert(decltype_(1_value).apply<add_one>() == 2,
-                      "hyperion::mpl::Type::apply<MetaFunction<ValueType>> test case 1 (failing)");
+                      "hyperion::mpl::Type::apply<MetaFunction<MetaValue>> test case 1 (failing)");
         static_assert(decltype_(2_value).apply<times_two>() == 4_value,
-                      "hyperion::mpl::Type::apply<MetaFunction<ValueType>> test case 3 (failing)");
+                      "hyperion::mpl::Type::apply<MetaFunction<MetaValue>> test case 3 (failing)");
         static_assert(decltype_(2_value).apply<times_two>().apply<add_one>().apply<times_two>()
                           == 10_value,
-                      "hyperion::mpl::Type::apply<MetaFunction<ValueType>> test case 3 (failing)");
+                      "hyperion::mpl::Type::apply<MetaFunction<MetaValue>> test case 3 (failing)");
 
-        constexpr auto add1 = [](const ValueType auto& value)
+        constexpr auto add1 = [](const MetaValue auto& value)
             -> Value<std::remove_cvref_t<decltype(value)>::value + 1> {
             return {};
         };
 
-        constexpr auto times2 = [](const ValueType auto& value)
+        constexpr auto times2 = [](const MetaValue auto& value)
             -> Value<std::remove_cvref_t<decltype(value)>::value * 2> {
             return {};
         };
 
         static_assert(decltype_(1_value).apply(add1) == 2,
-                      "hyperion::mpl::Type::apply(MetaFunction(ValueType)) -> ValueType test case "
+                      "hyperion::mpl::Type::apply(MetaFunction(MetaValue)) -> MetaValue test case "
                       "1 (failing)");
         static_assert(decltype_(2_value).apply(times2) == 4,
-                      "hyperion::mpl::Type::apply(MetaFunction(ValueType)) -> ValueType test case "
+                      "hyperion::mpl::Type::apply(MetaFunction(MetaValue)) -> MetaValue test case "
                       "2 (failing)");
         static_assert(decltype_(2_value).apply(times2).apply(add1).apply(times2) == 10_value,
-                      "hyperion::mpl::Type::apply(MetaFunction(ValueType)) -> ValueType test case "
+                      "hyperion::mpl::Type::apply(MetaFunction(MetaValue)) -> MetaValue test case "
                       "3 (failing)");
 
         constexpr auto add1_semi_typely = [](const MetaType auto& type)
             -> Value<std::remove_cvref_t<decltype(type)>::type::value + 1>
-            requires ValueType<typename std::remove_cvref_t<decltype(type)>::type>
+            requires MetaValue<typename std::remove_cvref_t<decltype(type)>::type>
         {
             return {};
         };
 
         constexpr auto times2_semi_typely = [](const MetaType auto& type)
             -> Value<std::remove_cvref_t<decltype(type)>::type::value * 2>
-            requires ValueType<typename std::remove_cvref_t<decltype(type)>::type>
+            requires MetaValue<typename std::remove_cvref_t<decltype(type)>::type>
         {
             return {};
         };
 
         static_assert(decltype_(1_value).apply(add1_semi_typely) == 2,
-                      "hyperion::mpl::Type::apply(MetaFunction(Type)) -> ValueType test case "
+                      "hyperion::mpl::Type::apply(MetaFunction(Type)) -> MetaValue test case "
                       "1 (failing)");
         static_assert(decltype_(2_value).apply(times2_semi_typely) == 4,
-                      "hyperion::mpl::Type::apply(MetaFunction(Type)) -> ValueType test case "
+                      "hyperion::mpl::Type::apply(MetaFunction(Type)) -> MetaValue test case "
                       "2 (failing)");
         static_assert(decltype_(2_value).apply(times2_semi_typely).apply(add1).apply(times2)
                           == 10_value,
-                      "hyperion::mpl::Type::apply(MetaFunction(Type)) -> ValueType test case "
+                      "hyperion::mpl::Type::apply(MetaFunction(Type)) -> MetaValue test case "
                       "3 (failing)");
 
         constexpr auto add1_fully_typely = [](const MetaType auto& type)
             -> Type<Value<std::remove_cvref_t<decltype(type)>::type::value + 1>>
-            requires ValueType<typename std::remove_cvref_t<decltype(type)>::type>
+            requires MetaValue<typename std::remove_cvref_t<decltype(type)>::type>
         {
             return {};
         };
 
         constexpr auto times2_fully_typely = [](const MetaType auto& type)
             -> Type<Value<std::remove_cvref_t<decltype(type)>::type::value * 2>>
-            requires ValueType<typename std::remove_cvref_t<decltype(type)>::type>
+            requires MetaValue<typename std::remove_cvref_t<decltype(type)>::type>
         {
             return {};
         };
 
         static_assert(decltype_(1_value).apply(add1_fully_typely).inner() == 2,
-                      "hyperion::mpl::Type::apply(MetaFunction(Type)) -> Type<ValueType> test case "
+                      "hyperion::mpl::Type::apply(MetaFunction(Type)) -> Type<MetaValue> test case "
                       "1 (failing)");
         static_assert(decltype_(2_value).apply(times2_fully_typely).inner() == 4,
-                      "hyperion::mpl::Type::apply(MetaFunction(Type)) -> Type<ValueType> test case "
+                      "hyperion::mpl::Type::apply(MetaFunction(Type)) -> Type<MetaValue> test case "
                       "2 (failing)");
         static_assert(decltype_(2_value)
                               .apply(times2_fully_typely)
@@ -640,7 +642,7 @@ namespace hyperion::mpl {
                               .apply(times2_fully_typely)
                               .inner()
                           == 10_value,
-                      "hyperion::mpl::Type::apply(MetaFunction(Type)) -> Type<ValueType> test case "
+                      "hyperion::mpl::Type::apply(MetaFunction(Type)) -> Type<MetaValue> test case "
                       "3 (failing)");
 
         static_assert(decltype_(1).apply<std::add_lvalue_reference>() == Type<int&>{},
