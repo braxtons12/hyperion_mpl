@@ -80,7 +80,7 @@ namespace hyperion::mpl {
     /// to be an `int`, instead of `std::size_t`)
     /// @ingroup value
     /// @headerfile hyperion/mpl/value.h
-    template<auto TValue, typename TType = decltype(TValue)>
+    template<auto TValue, typename TType = std::remove_cvref_t<decltype(TValue)>>
     struct Value {
         /// @brief The value of this metaprogramming value
         static inline constexpr auto value = static_cast<TType>(TValue);
@@ -127,6 +127,36 @@ namespace hyperion::mpl {
         [[nodiscard]] constexpr auto
         apply(TFunction&& func) noexcept -> meta_result_t<TFunction, Value<value, TType>> {
             return std::forward<TFunction>(func)(Value<value, TType>{});
+        }
+
+        template<template<auto> typename TPredicate>
+            requires ValueMetaFunction<TPredicate> && MetaValue<TPredicate<value>>
+                     && std::same_as<std::remove_const_t<decltype(TPredicate<value>::value)>, bool>
+        [[nodiscard]] constexpr auto satisfies() noexcept -> Value<TPredicate<value>::value> {
+            return {};
+        }
+
+        template<template<typename> typename TPredicate>
+            requires TypeMetaFunction<TPredicate> && MetaValue<TPredicate<Value<value, TType>>>
+                     && std::same_as<
+                         std::remove_const_t<decltype(TPredicate<Value<value, TType>>::value)>,
+                         bool>
+        [[nodiscard]] constexpr auto
+        satisfies() noexcept -> Value<TPredicate<Value<value, TType>>::value> {
+            return {};
+        }
+
+        template<typename TPredicate>
+            requires MetaFunctionOf<TPredicate, Value<value, TType>>
+                     && MetaValue<meta_result_t<TPredicate, Value<value, TType>>>
+                     && std::same_as<
+                         std::remove_cvref_t<
+                             decltype(meta_result_t<TPredicate, Value<value, TType>>::value)>,
+                         bool>
+        [[nodiscard]] constexpr auto
+        satisfies([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
+            noexcept -> meta_result_t<TPredicate, Value<value, TType>> {
+            return {};
         }
     };
 
@@ -829,6 +859,38 @@ namespace hyperion::mpl {
         static_assert((2_value).apply(times2).apply(add1).apply(times2) == 10_value,
                       "hyperion::mpl::Value::apply(MetaFunction(MetaValue)) -> MetaValue test case "
                       "3 (failing)");
+
+        template<auto TValue>
+        struct is_const_value : public std::bool_constant<bool(TValue)> { };
+
+        template<MetaValue TValue>
+        struct is_const_meta : public std::bool_constant<bool(TValue::value)> { };
+
+        constexpr auto is_const = [](const MetaValue auto& value) noexcept
+            -> Value<std::remove_cvref_t<decltype(value)>::value, bool> {
+            return {};
+        };
+
+        static_assert((1_value).satisfies<is_const_value>(),
+                      "hyperion::mpl::Value::satisfies<ValueMetaFunction> -> MetaValue test case 1 "
+                      "(failing)");
+        static_assert(!(0_value).satisfies<is_const_value>(),
+                      "hyperion::mpl::Value::satisfies<ValueMetaFunction> -> MetaValue test case 2 "
+                      "(failing)");
+
+        static_assert((1_value).satisfies<is_const_meta>(),
+                      "hyperion::mpl::Value::satisfies<TypeMetaFunction> -> MetaValue test case 1 "
+                      "(failing)");
+        static_assert(!(0_value).satisfies<is_const_meta>(),
+                      "hyperion::mpl::Value::satisfies<TypeMetaFunction> -> MetaValue test case 2 "
+                      "(failing)");
+
+        static_assert((1_value).satisfies(is_const),
+                      "hyperion::mpl::Value::satisfies(MetaFunction) -> MetaValue test case 1 "
+                      "(failing)");
+        static_assert(!(0_value).satisfies(is_const),
+                      "hyperion::mpl::Value::satisfies(MetaFunction) -> MetaValue test case 2 "
+                      "(failing)");
 
     } // namespace _test::value
 } // namespace hyperion::mpl
