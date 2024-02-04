@@ -1,0 +1,900 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" data-theme="dark">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Metaprogramming Type Categories (Concept Definitions) &#8212; hyperion::mpl  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'metatypes';</script>
+    <link rel="canonical" href="braxtons12.github.io/hyperion_mpl/metatypes.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="hyperion::mpl::Value" href="value.html" />
+    <link rel="prev" title="Index" href="genindex.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="dark">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">hyperion::mpl  documentation</p>
+  
+</a></div>
+    
+      <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="quick_start.html">
+                        Quick Start Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="genindex.html">
+                        Index
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
+                        Metaprogramming Type Categories (Concept Definitions)
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="value.html">
+                        hyperion::mpl::Value
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="type_traits.html">
+                        hyperion::mpl::type_traits
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="concepts.html">
+                        hyperion::mpl::concepts
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/braxtons12/hyperion_mpl" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="quick_start.html">
+                        Quick Start Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="genindex.html">
+                        Index
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
+                        Metaprogramming Type Categories (Concept Definitions)
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="value.html">
+                        hyperion::mpl::Value
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="type_traits.html">
+                        hyperion::mpl::type_traits
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="concepts.html">
+                        hyperion::mpl::concepts
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/braxtons12/hyperion_mpl" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+        <div class="sidebar-primary-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="quick_start.html">
+                        Quick Start Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="genindex.html">
+                        Index
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
+                        Metaprogramming Type Categories (Concept Definitions)
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="value.html">
+                        hyperion::mpl::Value
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="type_traits.html">
+                        hyperion::mpl::type_traits
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="concepts.html">
+                        hyperion::mpl::concepts
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"></div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Metaprogramm...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="metaprogramming-type-categories-concept-definitions">
+<h1>Metaprogramming Type Categories (Concept Definitions)<a class="headerlink" href="#metaprogramming-type-categories-concept-definitions" title="Link to this heading">#</a></h1>
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="group__metatypes"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">metatypes</span></span></dt>
+<dd><p>Hyperion provides <code class="docutils literal notranslate"><span class="pre">concept</span></code> and type trait definitions outlining the requirements for various categories of metaprogramming types.</p>
+<section id="group__metatypes_1autotoc_md10">
+<h2>Example<a class="headerlink" href="#group__metatypes_1autotoc_md10" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate" id="group__metatypes_1autotoc_md10"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/mpl/metatypes.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/mpl/value.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/mpl/type.h&gt;</span>
+
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">hyperion</span><span class="o">::</span><span class="nn">mpl</span><span class="p">;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">not_meta</span><span class="w"> </span><span class="p">{};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">metatype</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">void</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">metavalue</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">TType</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">metatype_typefunction</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">add_const_t</span><span class="o">&lt;</span><span class="n">TType</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">TType</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">metatype_valuefunction</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_const_v</span><span class="o">&lt;</span><span class="n">TType</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">auto</span><span class="w"> </span><span class="n">TValue</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">metavalue_typefunction</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">conditional_t</span><span class="o">&lt;</span><span class="n">TValue</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">auto</span><span class="w"> </span><span class="n">TValue</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">metavalue_valuefunction</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TValue</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">type_to_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]([[</span><span class="n">maybe_unused</span><span class="p">]]</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">MetaType</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Type</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span>
+<span class="p">};</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">type_to_value</span>
+<span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="p">[]([[</span><span class="n">maybe_unused</span><span class="p">]]</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">MetaType</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Value</span><span class="o">&lt;</span><span class="nb">true</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span>
+<span class="p">};</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">value_to_type</span>
+<span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="p">[]([[</span><span class="n">maybe_unused</span><span class="p">]]</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">MetaValue</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Type</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span>
+<span class="p">};</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">value_to_value</span>
+<span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="p">[]([[</span><span class="n">maybe_unused</span><span class="p">]]</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">MetaValue</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Value</span><span class="o">&lt;</span><span class="nb">true</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span>
+<span class="p">};</span>
+
+<span class="k">static_assert</span><span class="p">(</span><span class="n">MetaType</span><span class="o">&lt;</span><span class="n">metatype</span><span class="o">&gt;</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="k">not</span><span class="w"> </span><span class="n">MetaType</span><span class="o">&lt;</span><span class="n">not_meta</span><span class="o">&gt;</span><span class="p">);</span>
+
+<span class="k">static_assert</span><span class="p">(</span><span class="n">MetaValue</span><span class="o">&lt;</span><span class="n">metavalue</span><span class="o">&gt;</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="k">not</span><span class="w"> </span><span class="n">MetaValue</span><span class="o">&lt;</span><span class="n">not_meta</span><span class="o">&gt;</span><span class="p">);</span>
+
+<span class="k">static_assert</span><span class="p">(</span><span class="n">TypeMetaFunction</span><span class="o">&lt;</span><span class="n">metatype_typefunction</span><span class="o">&gt;</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">TypeMetaFunction</span><span class="o">&lt;</span><span class="n">metatype_valuefunction</span><span class="o">&gt;</span><span class="p">);</span>
+
+<span class="k">static_assert</span><span class="p">(</span><span class="n">ValueMetaFunction</span><span class="o">&lt;</span><span class="n">metavalue_typefunction</span><span class="o">&gt;</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">ValueMetaFunction</span><span class="o">&lt;</span><span class="n">metavalue_valuefunction</span><span class="o">&gt;</span><span class="p">);</span>
+
+<span class="k">static_assert</span><span class="p">(</span><span class="n">MetaFunction</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">type_to_type</span><span class="p">)</span><span class="o">&gt;</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">MetaFunction</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">type_to_value</span><span class="p">)</span><span class="o">&gt;</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">MetaFunction</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">value_to_type</span><span class="p">)</span><span class="o">&gt;</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">MetaFunction</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">value_to_value</span><span class="p">)</span><span class="o">&gt;</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-typedefs">Typedefs</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4I00E13meta_result_t">
+<span id="_CPPv3I00E13meta_result_t"></span><span id="_CPPv2I00E13meta_result_t"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TFunction</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="group__metatypes_1ga3d6a8f39a59e50662623b9955f69c03f"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">meta_result_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="n"><span class="pre">meta_result</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00E13meta_result_t" title="meta_result_t::TFunction"><span class="n"><span class="pre">TFunction</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00E13meta_result_t" title="meta_result_t::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type</span></span><a class="headerlink" href="#_CPPv4I00E13meta_result_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Shorthand alias to the member using alias type, <code class="docutils literal notranslate"><span class="pre">type</span></code>, of the type trait <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1meta__result"><span class="std std-ref"><span class="pre">meta_result</span></span></a></code>. Represents the invoke result of a callable metafunction, <code class="docutils literal notranslate"><span class="pre">TFunction</span></code>, with a metaprogramming type, <code class="docutils literal notranslate"><span class="pre">TType</span></code></p>
+<p>If <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> is a <code class="docutils literal notranslate"><span class="pre">MetaFunctionOf&lt;TType&gt;</span></code>, using aliases to the resulting type of invoking a <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> with a <code class="docutils literal notranslate"><span class="pre">TType</span></code>. If <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> is not a <code class="docutils literal notranslate"><span class="pre">MetaFunctionOf&lt;TType&gt;</span></code>, the program is ill-formed.</p>
+<section id="group__metatypes_1autotoc_md16">
+<h2>Requirements<a class="headerlink" href="#group__metatypes_1autotoc_md16" title="Link to this heading">#</a></h2>
+<p id="group__metatypes_1autotoc_md16"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TFunction</span></code> must be a <code class="docutils literal notranslate"><span class="pre">MetaFunctionOf&lt;TType&gt;</span></code><ul>
+<li><p>It must be a callable invocable with <code class="docutils literal notranslate"><span class="pre">TType</span></code></p></li>
+<li><p>The result of invoking <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> with <code class="docutils literal notranslate"><span class="pre">TType</span></code> must be either a <code class="docutils literal notranslate"><span class="pre">MetaType</span></code> or a <code class="docutils literal notranslate"><span class="pre">MetaValue</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TFunction</strong> – The callable metafunction to get the invoke result of </p></li>
+<li><p><strong>TType</strong> – The metaprogramming type to invoke <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> with </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-variables">Variables</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="target" id="group__metatypes_1ga0ee7f31ea539e1b2c72b1c0dc55e221d"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TType&gt;</span> <span class="pre">concept</span> <span class="pre">MetaValue</span>&#160; <span class="pre">=</span> <span class="pre">requires</span> <span class="pre">{{TType::value};{std::integral_constant&lt;decltype(TType::value),</span> <span class="pre">TType::value&gt;{}};}</span></span></dt>
+<dd><p>Concept specifying the requirements for a metaprogramming value type. </p>
+<p>A metaprogramming value type is any type that has a <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">constexpr</span></code> member variable named <code class="docutils literal notranslate"><span class="pre">value</span></code>.</p>
+<section id="group__metatypes_1autotoc_md11">
+<h2>Requirements<a class="headerlink" href="#group__metatypes_1autotoc_md11" title="Link to this heading">#</a></h2>
+<p id="group__metatypes_1autotoc_md11"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must have a <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">constexpr</span></code> member variable named <code class="docutils literal notranslate"><span class="pre">value</span></code>.</p></li>
+</ul>
+</p>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TType</strong> – The type to check </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4I0E15is_meta_value_v">
+<span id="_CPPv3I0E15is_meta_value_v"></span><span id="_CPPv2I0E15is_meta_value_v"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="group__metatypes_1ga50f0e1525c878469eb93b2e66715556a"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_meta_value_v</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">is_meta_value</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E15is_meta_value_v" title="is_meta_value_v::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><a class="headerlink" href="#_CPPv4I0E15is_meta_value_v" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="value.html#structhyperion_1_1mpl_1_1Value"><span class="std std-ref">Value</span></a> of the type trait <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1is__meta__value"><span class="std std-ref"><span class="pre">is_meta_value</span></span></a></code>. Used to determine whether type <code class="docutils literal notranslate"><span class="pre">TType</span></code> is a metaprogramming value type. </p>
+<p>A metaprogramming value type is any type that has a <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">constexpr</span></code> member variable named <code class="docutils literal notranslate"><span class="pre">value</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TType</strong> – The type to check </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="target" id="group__metatypes_1ga4dda4dfdd42f77d1cc57b3746555013f"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TType&gt;</span> <span class="pre">concept</span> <span class="pre">MetaType</span>&#160;&#160; <span class="pre">=</span> <span class="pre">requires</span> <span class="pre">{</span> <span class="pre">typename</span> <span class="pre">TType::type;</span> <span class="pre">}</span></span></dt>
+<dd><p>Concept specifying the requirements for a metaprogramming type wrapper type. </p>
+<p>A metaprogramming type wrapper type is any type that represents another type, via a member using alias type <code class="docutils literal notranslate"><span class="pre">type</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">bool;</span></code>).</p>
+<section id="group__metatypes_1autotoc_md12">
+<h2>Requirements<a class="headerlink" href="#group__metatypes_1autotoc_md12" title="Link to this heading">#</a></h2>
+<p id="group__metatypes_1autotoc_md12"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must have a member using alias type <code class="docutils literal notranslate"><span class="pre">type</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">bool;</span></code>).</p></li>
+</ul>
+</p>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TType</strong> – The type to check </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4I0E14is_meta_type_v">
+<span id="_CPPv3I0E14is_meta_type_v"></span><span id="_CPPv2I0E14is_meta_type_v"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="group__metatypes_1gacfb0accbe86aff99af93542f465521c7"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_meta_type_v</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">is_meta_type</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E14is_meta_type_v" title="is_meta_type_v::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><a class="headerlink" href="#_CPPv4I0E14is_meta_type_v" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="value.html#structhyperion_1_1mpl_1_1Value"><span class="std std-ref">Value</span></a> of the type trait <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1is__meta__type"><span class="std std-ref"><span class="pre">is_meta_type</span></span></a></code>. Used to determine whether type <code class="docutils literal notranslate"><span class="pre">TType</span></code> is a metaprogramming type wrapper type. </p>
+<p>A metaprogramming type wrapper type is any type that represents another type, via a member using alias type <code class="docutils literal notranslate"><span class="pre">type</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">bool;</span></code>).</p>
+<section id="group__metatypes_1autotoc_md14">
+<h2>Requirements<a class="headerlink" href="#group__metatypes_1autotoc_md14" title="Link to this heading">#</a></h2>
+<p id="group__metatypes_1autotoc_md14"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must have a member using alias type <code class="docutils literal notranslate"><span class="pre">type</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">bool;</span></code>).</p></li>
+</ul>
+</p>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TType</strong> – The type to check </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="target" id="group__metatypes_1ga820e95a29c095ba7ef0e0c982495d8d5"></span><span class="sig-name descname"><span class="pre">template&lt;template&lt;</span> <span class="pre">typename</span> <span class="pre">&gt;</span> <span class="pre">typename</span> <span class="pre">TTemplate&gt;</span> <span class="pre">concept</span> <span class="pre">TypeMetaFunction</span>&#160;&#160; <span class="pre">=</span> <span class="pre">detail::is_type_to_type&lt;TTemplate&gt;::value</span> <span class="pre">||</span> <span class="pre">detail::is_type_to_value&lt;TTemplate&gt;::value</span></span></dt>
+<dd><p>A <code class="docutils literal notranslate"><span class="pre">TypeMetaFunction</span></code> is a template metafunction that accepts a single type parameter and contains either a <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">constexpr</span></code> member variable, <code class="docutils literal notranslate"><span class="pre">value</span></code>, or a member using alias type, <code class="docutils literal notranslate"><span class="pre">type</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TTemplate</strong> – The template to check </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="target" id="group__metatypes_1gac083fc00fe0cfd1f56838ec6c8c72da4"></span><span class="sig-name descname"><span class="pre">template&lt;template&lt;</span> <span class="pre">auto</span> <span class="pre">&gt;</span> <span class="pre">typename</span> <span class="pre">TTemplate&gt;</span> <span class="pre">concept</span> <span class="pre">ValueMetaFunction</span>&#160;&#160; <span class="pre">=</span> <span class="pre">detail::is_value_to_type&lt;TTemplate&gt;::value</span> <span class="pre">||</span> <span class="pre">detail::is_value_to_value&lt;TTemplate&gt;::value</span></span></dt>
+<dd><p>A <code class="docutils literal notranslate"><span class="pre">TypeMetaFunction</span></code> is a template metafunction that accepts a single value parameter and contains either a <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">constexpr</span></code> member variable, <code class="docutils literal notranslate"><span class="pre">value</span></code>, or a member using alias type, <code class="docutils literal notranslate"><span class="pre">type</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TTemplate</strong> – The template to check </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="target" id="group__metatypes_1ga31ab0ea63d8a6717b1c4a3f90a20aad7"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TFunction,</span> <span class="pre">typename</span> <span class="pre">TType&gt;</span> <span class="pre">concept</span> <span class="pre">MetaFunctionOf</span>&#160;&#160; <span class="pre">=</span> <span class="pre">std::is_invocable_v&lt;TFunction,</span> <span class="pre">TType&gt;</span> <span class="pre">&amp;&amp;</span> <span class="pre">(MetaType&lt;TType&gt;</span> <span class="pre">||</span> <span class="pre">MetaValue&lt;TType&gt;)</span></span></dt>
+<dd><p>A <code class="docutils literal notranslate"><span class="pre">MetaFunctionOf</span></code> is a callable metafunction that accepts a single value parameter of the specified type, <code class="docutils literal notranslate"><span class="pre">TType</span></code> and returns either a <code class="docutils literal notranslate"><span class="pre">MetaType</span></code> or a <code class="docutils literal notranslate"><span class="pre">MetaValue</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TFunction</strong> – The callable to check </p></li>
+<li><p><strong>TType</strong> – The metaprogramming type to check that <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> is invocable with </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="target" id="group__metatypes_1ga6210189cc9c8cf459907c570e5fd5a74"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TFunction&gt;</span> <span class="pre">concept</span> <span class="pre">MetaFunction</span>&#160; <span class="pre">=</span> <span class="pre">MetaFunctionOf&lt;TFunction,</span> <span class="pre">detail::Type&lt;bool&gt;&gt;||</span> <span class="pre">MetaFunctionOf&lt;TFunction,</span> <span class="pre">detail::Value&lt;true&gt;&gt;</span></span></dt>
+<dd><p>A <code class="docutils literal notranslate"><span class="pre">MetaFunction</span></code> is a callable metafunction that accepts a single value parameter of either <code class="docutils literal notranslate"><span class="pre">MetaType</span></code> or <code class="docutils literal notranslate"><span class="pre">MetaValue</span></code> metaprogramming type category and returns either a <code class="docutils literal notranslate"><span class="pre">MetaType</span></code> or a <code class="docutils literal notranslate"><span class="pre">MetaValue</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TFunction</strong> – The callable to check </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN8hyperion3mpl13is_meta_valueE">
+<span id="_CPPv3I0EN8hyperion3mpl13is_meta_valueE"></span><span id="_CPPv2I0EN8hyperion3mpl13is_meta_valueE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structhyperion_1_1mpl_1_1is__meta__value"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_meta_value</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">bool_constant</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">MetaValue</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN8hyperion3mpl13is_meta_valueE" title="hyperion::mpl::is_meta_value::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I0EN8hyperion3mpl13is_meta_valueE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/metatypes.h&gt;</em></div>
+<p>Type trait to determine whether type <code class="docutils literal notranslate"><span class="pre">TType</span></code> is a metaprogramming value type. </p>
+<p>A metaprogramming value type is any type that has a <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">constexpr</span></code> member variable named <code class="docutils literal notranslate"><span class="pre">value</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TType</strong> – The type to check </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN8hyperion3mpl12is_meta_typeE">
+<span id="_CPPv3I0EN8hyperion3mpl12is_meta_typeE"></span><span id="_CPPv2I0EN8hyperion3mpl12is_meta_typeE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structhyperion_1_1mpl_1_1is__meta__type"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_meta_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">bool_constant</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">MetaType</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN8hyperion3mpl12is_meta_typeE" title="hyperion::mpl::is_meta_type::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I0EN8hyperion3mpl12is_meta_typeE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/metatypes.h&gt;</em></div>
+<p>Type trait to determine whether type <code class="docutils literal notranslate"><span class="pre">TType</span></code> is a metaprogramming type wrapper type. </p>
+<p>A metaprogramming type wrapper type is any type that represents another type, via a member using alias type <code class="docutils literal notranslate"><span class="pre">type</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">bool;</span></code>).</p>
+<section id="structhyperion_1_1mpl_1_1is__meta__type_1autotoc_md13">
+<h2>Requirements<a class="headerlink" href="#structhyperion_1_1mpl_1_1is__meta__type_1autotoc_md13" title="Link to this heading">#</a></h2>
+<p id="structhyperion_1_1mpl_1_1is__meta__type_1autotoc_md13"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must have a member using alias type <code class="docutils literal notranslate"><span class="pre">type</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">bool;</span></code>).</p></li>
+</ul>
+</p>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TType</strong> – The type to check </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl11meta_resultE">
+<span id="_CPPv3I00EN8hyperion3mpl11meta_resultE"></span><span id="_CPPv2I00EN8hyperion3mpl11meta_resultE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TFunction</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structhyperion_1_1mpl_1_1meta__result"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">meta_result</span></span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl11meta_resultE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/metatypes.h&gt;</em></div>
+<p><code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1meta__result"><span class="std std-ref"><span class="pre">meta_result</span></span></a></code> is a type trait representing the invoke result of a callable metafunction, <code class="docutils literal notranslate"><span class="pre">TFunction</span></code>, with a metaprogramming type, <code class="docutils literal notranslate"><span class="pre">TType</span></code></p>
+<p>If <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> is a <code class="docutils literal notranslate"><span class="pre">MetaFunctionOf&lt;TType&gt;</span></code>, contains the member using alias type, <code class="docutils literal notranslate"><span class="pre">type</span></code>, that is the resulting type of invoking a <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> with a <code class="docutils literal notranslate"><span class="pre">TType</span></code>. If <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> is not a <code class="docutils literal notranslate"><span class="pre">MetaFunctionOf&lt;TType&gt;</span></code>, the program is ill-formed.</p>
+<section id="structhyperion_1_1mpl_1_1meta__result_1autotoc_md15">
+<h2>Requirements<a class="headerlink" href="#structhyperion_1_1mpl_1_1meta__result_1autotoc_md15" title="Link to this heading">#</a></h2>
+<p id="structhyperion_1_1mpl_1_1meta__result_1autotoc_md15"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TFunction</span></code> must be a <code class="docutils literal notranslate"><span class="pre">MetaFunctionOf&lt;TType&gt;</span></code><ul>
+<li><p>It must be a callable invocable with <code class="docutils literal notranslate"><span class="pre">TType</span></code></p></li>
+<li><p>The result of invoking <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> with <code class="docutils literal notranslate"><span class="pre">TType</span></code> must be either a <code class="docutils literal notranslate"><span class="pre">MetaType</span></code> or a <code class="docutils literal notranslate"><span class="pre">MetaValue</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TFunction</strong> – The callable metafunction to get the invoke result of </p></li>
+<li><p><strong>TType</strong> – The metaprogramming type to invoke <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> with </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenconcept: Cannot find concept “hyperion::mpl::MetaValue” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenconcept: Cannot find concept “hyperion::mpl::MetaType” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenconcept: Cannot find concept “hyperion::mpl::ValueMetaFunction” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenconcept: Cannot find concept “hyperion::mpl::TypeMetaFunction” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenconcept: Cannot find concept “hyperion::mpl::MetaFunctionOf” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenconcept: Cannot find concept “hyperion::mpl::MetaFunction” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
+</div>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="genindex.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Index</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="value.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">hyperion::mpl::Value</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00E13meta_result_t"><code class="docutils literal notranslate"><span class="pre">meta_result_t</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0E15is_meta_value_v"><code class="docutils literal notranslate"><span class="pre">is_meta_value_v</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0E14is_meta_type_v"><code class="docutils literal notranslate"><span class="pre">is_meta_type_v</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN8hyperion3mpl13is_meta_valueE"><code class="docutils literal notranslate"><span class="pre">is_meta_value</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN8hyperion3mpl12is_meta_typeE"><code class="docutils literal notranslate"><span class="pre">is_meta_type</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl11meta_resultE"><code class="docutils literal notranslate"><span class="pre">meta_result</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, Braxton Salyer &lt;braxtonsalyer@gmail.com&gt;.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

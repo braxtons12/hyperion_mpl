@@ -44,7 +44,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="hyperion::mpl::type_traits" href="type_traits.html" />
-    <link rel="prev" title="Index" href="genindex.html" />
+    <link rel="prev" title="Metaprogramming Type Categories (Concept Definitions)" href="metatypes.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -153,6 +153,13 @@ document.write(`
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="genindex.html">
                         Index
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="metatypes.html">
+                        Metaprogramming Type Categories (Concept Definitions)
                       </a>
                     </li>
                 
@@ -277,6 +284,13 @@ document.write(`
                     </li>
                 
 
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="metatypes.html">
+                        Metaprogramming Type Categories (Concept Definitions)
+                      </a>
+                    </li>
+                
+
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="#">
                         hyperion::mpl::Value
@@ -358,6 +372,13 @@ document.write(`
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="genindex.html">
                         Index
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="metatypes.html">
+                        Metaprogramming Type Categories (Concept Definitions)
                       </a>
                     </li>
                 
@@ -447,9 +468,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">value</span></span></dt>
 <dd><p>Hyperion provides <code class="docutils literal notranslate"><span class="pre">mpl::Value</span></code> as a metaprogramming type for storing, communicating, working with, and calculating compile-time values.</p>
-<section id="group__value_1autotoc_md20">
-<h2>Example<a class="headerlink" href="#group__value_1autotoc_md20" title="Link to this heading">#</a></h2>
-<div class="highlight-cpp notranslate" id="group__value_1autotoc_md20"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/mpl/value.h&gt;</span>
+<section id="group__value_1autotoc_md22">
+<h2>Example<a class="headerlink" href="#group__value_1autotoc_md22" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate" id="group__value_1autotoc_md22"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/mpl/value.h&gt;</span>
 
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">hyperion</span><span class="o">::</span><span class="nn">mpl</span><span class="p">;</span>
 
@@ -500,9 +521,9 @@ document.write(`
 <dt class="sig sig-object cpp" id="_CPPv4I_9MetaValueEIQntNSt7same_asI5TType5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEEEEE8value_ofDTN5TType5valueEERK5TType">
 <span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">MetaValue</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">requires</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="o"><span class="pre">!</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">same_as</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_9MetaValueEIQntNSt7same_asI5TType5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEEEEE8value_ofDTN5TType5valueEERK5TType" title="value_of::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Value</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_9MetaValueEIQntNSt7same_asI5TType5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEEEEE8value_ofDTN5TType5valueEERK5TType" title="value_of::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">remove_cvref_t</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">decltype</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#_CPPv4I_9MetaValueEIQntNSt7same_asI5TType5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEEEEE8value_ofDTN5TType5valueEERK5TType" title="value_of::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">)</span></span><br /><span class="target" id="group__value_1ga3b7470539bc05234ad55e7a00384112b"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">expr</span></span><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value_of</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_9MetaValueEIQntNSt7same_asI5TType5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEEEEE8value_ofDTN5TType5valueEERK5TType" title="value_of::TType"><span class="n"><span class="pre">TType</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><span class="w"> </span><span class="o"><span class="pre">-&gt;</span></span><span class="w"> </span><span class="k"><span class="pre">decltype</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#_CPPv4I_9MetaValueEIQntNSt7same_asI5TType5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEEEEE8value_ofDTN5TType5valueEERK5TType" title="value_of::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv4I_9MetaValueEIQntNSt7same_asI5TType5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEEEEE8value_ofDTN5TType5valueEERK5TType" title="Link to this definition">#</a><br /></dt>
 <dd><p>Returns the compile-time value of the given <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code></p>
-<section id="group__value_1autotoc_md21">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md21" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md21"><ul class="simple">
+<section id="group__value_1autotoc_md23">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md23" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md23"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must be an <code class="docutils literal notranslate"><span class="pre">mpl::MetaValue</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must not be a specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code></p></li>
 </ul>
@@ -526,9 +547,9 @@ document.write(`
 <dt class="sig sig-object cpp" id="_CPPv4I_9MetaValueE8as_value5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEERK5TType">
 <span id="_CPPv3I_9MetaValueE8as_valueRK5TType"></span><span id="_CPPv2I_9MetaValueE8as_valueRK5TType"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">MetaValue</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="group__value_1gacf1128fe5122741e88ed54c3eb991868"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">as_value</span></span></span><span class="sig-paren">(</span><span class="p"><span class="pre">[[</span></span><span class="pre">maybe_unused</span><span class="p"><span class="pre">]]</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_9MetaValueE8as_value5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEERK5TType" title="as_value::TType"><span class="n"><span class="pre">TType</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><span class="w"> </span><span class="o"><span class="pre">-&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">Value</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_9MetaValueE8as_value5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEERK5TType" title="as_value::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">remove_cvref_t</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">decltype</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#_CPPv4I_9MetaValueE8as_value5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEERK5TType" title="as_value::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I_9MetaValueE8as_value5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEERK5TType" title="Link to this definition">#</a><br /></dt>
 <dd><p>Returns the given <code class="docutils literal notranslate"><span class="pre">mpl::MetaValue</span></code> into an <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code></p>
-<section id="group__value_1autotoc_md22">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md22" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md22"><ul class="simple">
+<section id="group__value_1autotoc_md24">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md24" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md24"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must be an <code class="docutils literal notranslate"><span class="pre">mpl::MetaValue</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must not be a specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code></p></li>
 </ul>
@@ -552,9 +573,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1ga0b2768447cd0fa8d871161ecf3ef1dd4"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TValue,</span> <span class="pre">typename</span> <span class="pre">TType</span> <span class="pre">=</span> <span class="pre">decltype(TValue)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::UnaryPlusable&lt;</span> <span class="pre">decltype(TValue)&gt;</span> <span class="pre">auto</span> <span class="pre">operator+</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TValue,</span> <span class="pre">TType</span> <span class="pre">&gt;</span> <span class="pre">&amp;value)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TValue</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Unary plus operator for <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code>. </p>
-<section id="group__value_1autotoc_md23">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md23" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md23"><ul class="simple">
+<section id="group__value_1autotoc_md25">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md25" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md25"><ul class="simple">
 <li><p>The type of <code class="docutils literal notranslate"><span class="pre">TValue</span></code> must be <code class="docutils literal notranslate"><span class="pre">UnaryPlusable</span></code> (it must support unary <code class="docutils literal notranslate"><span class="pre">operator+</span></code>).</p></li>
 </ul>
 </p>
@@ -580,9 +601,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1ga089cbe6aa34206ae39a42f341d45ed2b"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TValue,</span> <span class="pre">typename</span> <span class="pre">TType</span> <span class="pre">=</span> <span class="pre">decltype(TValue)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::UnaryMinusable&lt;</span> <span class="pre">decltype(TValue)&gt;</span> <span class="pre">auto</span> <span class="pre">operator-</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TValue,</span> <span class="pre">TType</span> <span class="pre">&gt;</span> <span class="pre">&amp;value)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;-TValue</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Unary minus operator for <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code>. </p>
-<section id="group__value_1autotoc_md24">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md24" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md24"><ul class="simple">
+<section id="group__value_1autotoc_md26">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md26" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md26"><ul class="simple">
 <li><p>The type of <code class="docutils literal notranslate"><span class="pre">TValue</span></code> must be <code class="docutils literal notranslate"><span class="pre">UnaryMinusable</span></code> (it must support unary <code class="docutils literal notranslate"><span class="pre">operator-</span></code>).</p></li>
 </ul>
 </p>
@@ -608,9 +629,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1gac069b792bd68391aa9a28ffa98e26ed7"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::Addable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator+</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs+TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Adds the two given <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code>s and returns the result as another <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code> specialization. </p>
-<section id="group__value_1autotoc_md25">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md25" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md25"><ul class="simple">
+<section id="group__value_1autotoc_md27">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md27" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md27"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be addable</p></li>
 </ul>
 </p>
@@ -641,9 +662,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1ga402b4e466a5e4591d0013399f0600a0f"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::Subtractable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator-</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs</span> <span class="pre">-</span> <span class="pre">TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Subtracts <code class="docutils literal notranslate"><span class="pre">rhs</span></code> from <code class="docutils literal notranslate"><span class="pre">lhs</span></code> and returns the result as another <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code> specialization. </p>
-<section id="group__value_1autotoc_md26">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md26" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md26"><ul class="simple">
+<section id="group__value_1autotoc_md28">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md28" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md28"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be subtractable</p></li>
 </ul>
 </p>
@@ -674,9 +695,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1ga2cf93b6de280658cd20a56e20b81bc8f"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::Multipliable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator*</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs</span> <span class="pre">*TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Multiplies the two given <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code>s and returns the result as another <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code> specialization. </p>
-<section id="group__value_1autotoc_md27">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md27" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md27"><ul class="simple">
+<section id="group__value_1autotoc_md29">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md29" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md29"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be multipliable</p></li>
 </ul>
 </p>
@@ -707,9 +728,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1ga710751dd918f6b45013e531f792e18ee"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::Dividible&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator/</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs/TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Divides <code class="docutils literal notranslate"><span class="pre">lhs</span></code> by <code class="docutils literal notranslate"><span class="pre">rhs</span></code> and returns the result as another <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code> specialization. </p>
-<section id="group__value_1autotoc_md28">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md28" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md28"><ul class="simple">
+<section id="group__value_1autotoc_md30">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md30" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md30"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be dividible</p></li>
 </ul>
 </p>
@@ -740,9 +761,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1gaff3193e681e60efae68a1d3dce3dd18c"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::BooleanAndable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator&amp;&amp;</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs</span> <span class="pre">&amp;&amp;TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Performs the boolean and of <code class="docutils literal notranslate"><span class="pre">lhs</span></code> and <code class="docutils literal notranslate"><span class="pre">rhs</span></code></p>
-<section id="group__value_1autotoc_md29">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md29" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md29"><ul class="simple">
+<section id="group__value_1autotoc_md31">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md31" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md31"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be boolean andable</p></li>
 </ul>
 </p>
@@ -773,9 +794,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1ga788cedfab8c6b2c16ff857690a093019"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::BooleanOrable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator||</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs||TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Performs the boolean or of <code class="docutils literal notranslate"><span class="pre">lhs</span></code> and <code class="docutils literal notranslate"><span class="pre">rhs</span></code></p>
-<section id="group__value_1autotoc_md30">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md30" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md30"><ul class="simple">
+<section id="group__value_1autotoc_md32">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md32" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md32"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be boolean orable</p></li>
 </ul>
 </p>
@@ -806,9 +827,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1ga121da678c0c161d2edbaae67f5f3d8c4"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TValue,</span> <span class="pre">typename</span> <span class="pre">TType</span> <span class="pre">=</span> <span class="pre">decltype(TValue)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::BooleanNotable&lt;</span> <span class="pre">TType</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator!</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TValue,</span> <span class="pre">TType</span> <span class="pre">&gt;</span> <span class="pre">&amp;value)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;!TValue,</span> <span class="pre">TType</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Performs the boolean not of <code class="docutils literal notranslate"><span class="pre">value</span></code></p>
-<section id="group__value_1autotoc_md31">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md31" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md31"><ul class="simple">
+<section id="group__value_1autotoc_md33">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md33" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md33"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TValue</span></code> boolean notable</p></li>
 </ul>
 </p>
@@ -834,9 +855,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1gafea777ba6f9d19bcffade72abc6a94e2"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::BinaryAndable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator&amp;</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs</span> <span class="pre">&amp;TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Performs the binary and of <code class="docutils literal notranslate"><span class="pre">lhs</span></code> and <code class="docutils literal notranslate"><span class="pre">rhs</span></code></p>
-<section id="group__value_1autotoc_md32">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md32" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md32"><ul class="simple">
+<section id="group__value_1autotoc_md34">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md34" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md34"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be binary andable</p></li>
 </ul>
 </p>
@@ -867,9 +888,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1ga5de954f9f608025365a1ce86ba70767b"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::BinaryOrable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator|</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs|TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Performs the binary or of <code class="docutils literal notranslate"><span class="pre">lhs</span></code> and <code class="docutils literal notranslate"><span class="pre">rhs</span></code></p>
-<section id="group__value_1autotoc_md33">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md33" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md33"><ul class="simple">
+<section id="group__value_1autotoc_md35">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md35" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md35"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be binary orable</p></li>
 </ul>
 </p>
@@ -900,9 +921,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1ga6de98256e31a5a08c918bee81f545212"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TValue,</span> <span class="pre">typename</span> <span class="pre">TType</span> <span class="pre">=</span> <span class="pre">decltype(TValue)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::BinaryNotable&lt;</span> <span class="pre">TType</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator~</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TValue,</span> <span class="pre">TType</span> <span class="pre">&gt;</span> <span class="pre">&amp;value)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;~TValue,</span> <span class="pre">TType</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Performs the binary not of <code class="docutils literal notranslate"><span class="pre">value</span></code></p>
-<section id="group__value_1autotoc_md34">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md34" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md34"><ul class="simple">
+<section id="group__value_1autotoc_md36">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md36" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md36"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TValue</span></code> binary notable</p></li>
 </ul>
 </p>
@@ -928,9 +949,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1gac830505b81d15b5e652c66f17c6ae946"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::EqualityComparable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator==</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs==TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Equality comparison operator between two <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code>s. </p>
-<section id="group__value_1autotoc_md35">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md35" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md35"><ul class="simple">
+<section id="group__value_1autotoc_md37">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md37" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md37"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be equality comparable</p></li>
 </ul>
 </p>
@@ -961,9 +982,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1gab43dfb2c94d8d274e49d85ce8fbcd453"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::InequalityComparable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator!=</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs</span> <span class="pre">!=TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Inequality comparison operator between two <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code>s. </p>
-<section id="group__value_1autotoc_md36">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md36" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md36"><ul class="simple">
+<section id="group__value_1autotoc_md38">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md38" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md38"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be inequality comparable</p></li>
 </ul>
 </p>
@@ -994,9 +1015,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__value_1gab2009a0b6fcb21bab860b9feadc4f2d9"></span><span class="sig-name descname"><span class="pre">template&lt;auto</span> <span class="pre">TLhs,</span> <span class="pre">auto</span> <span class="pre">TRhs,</span> <span class="pre">typename</span> <span class="pre">TTypeLhs</span> <span class="pre">=</span> <span class="pre">decltype(TLhs),</span> <span class="pre">typename</span> <span class="pre">TTypeRhs</span> <span class="pre">=</span> <span class="pre">decltype(TRhs)&gt;</span> <span class="pre">requires</span> <span class="pre">constexpr</span> <span class="pre">concepts::ThreeWayComparable&lt;</span> <span class="pre">TTypeLhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">operator&lt;=&gt;</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs,</span> <span class="pre">TTypeLhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;lhs,</span> <span class="pre">[[maybe_unused]]</span> <span class="pre">const</span> <span class="pre">Value&lt;</span> <span class="pre">TRhs,</span> <span class="pre">TTypeRhs</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TLhs&lt;=&gt;</span> <span class="pre">TRhs</span> <span class="pre">&gt;</span></span></dt>
 <dd><p>Three-way comparison operator between two <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">mpl::Value</span></span></a></code>s. </p>
-<section id="group__value_1autotoc_md37">
-<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md37" title="Link to this heading">#</a></h2>
-<p id="group__value_1autotoc_md37"><ul class="simple">
+<section id="group__value_1autotoc_md39">
+<h2>Requirements<a class="headerlink" href="#group__value_1autotoc_md39" title="Link to this heading">#</a></h2>
+<p id="group__value_1autotoc_md39"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> must be three-way comparable</p></li>
 </ul>
 </p>
@@ -1056,9 +1077,9 @@ document.write(`
 <dt class="sig sig-object cpp" id="_CPPv4IQStENK8hyperion3mpl5ValuecvbEv">
 <span class="target" id="structhyperion_1_1mpl_1_1Value_1a33d1d780835205cd3ddf94962f52fd8a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4IQStENK8hyperion3mpl5ValuecvbEv" title="Link to this definition">#</a><br /><span class="k"><span class="pre">requires</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><br /></dt>
 <dd><p>Conversion operator to <code class="docutils literal notranslate"><span class="pre">bool</span></code>. Converts the <code class="docutils literal notranslate"><span class="pre">value</span></code> of this specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> to <code class="docutils literal notranslate"><span class="pre">bool</span></code>. </p>
-<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md38">
-<h2>Requirements<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md38" title="Link to this heading">#</a></h2>
-<p id="structhyperion_1_1mpl_1_1Value_1autotoc_md38"><ul class="simple">
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md40">
+<h2>Requirements<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md40" title="Link to this heading">#</a></h2>
+<p id="structhyperion_1_1mpl_1_1Value_1autotoc_md40"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must be convertible to <code class="docutils literal notranslate"><span class="pre">bool</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must not be <code class="docutils literal notranslate"><span class="pre">bool</span></code></p></li>
 </ul>
@@ -1086,11 +1107,11 @@ document.write(`
 <dl class="cpp function">
 <dt class="sig sig-object cpp">
 <span class="target" id="structhyperion_1_1mpl_1_1Value_1afdf65b65f12bdedfa00c54eff670217b"></span><span class="sig-name descname"><span class="pre">template&lt;template&lt;</span> <span class="pre">typename</span> <span class="pre">&gt;</span> <span class="pre">typename</span> <span class="pre">TMetaFunction&gt;</span> <span class="pre">inline</span> <span class="pre">requires</span> <span class="pre">TypeMetaFunction&lt;</span> <span class="pre">TMetaFunction</span> <span class="pre">&gt;</span> <span class="pre">&amp;&amp;constexpr</span> <span class="pre">MetaValue&lt;</span> <span class="pre">TMetaFunction&lt;</span> <span class="pre">Value</span> <span class="pre">&gt;</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">apply</span> <span class="pre">()</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TMetaFunction&lt;</span> <span class="pre">Value</span> <span class="pre">&gt;::value</span> <span class="pre">&gt;</span></span></dt>
-<dd><p>Applies the specified template metafunction to this specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code></p>
-<p>Applies <code class="docutils literal notranslate"><span class="pre">TMetaFunction</span></code> to this specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> and returns the calculated value as a (potentially different) <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization</p>
-<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md39">
-<h2>Requirements<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md39" title="Link to this heading">#</a></h2>
-<p id="structhyperion_1_1mpl_1_1Value_1autotoc_md39"><ul class="simple">
+<dd><p>Applies the specified template metafunction to this specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code>. </p>
+<p>Applies <code class="docutils literal notranslate"><span class="pre">TMetaFunction</span></code> to this specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> and returns the calculated value as a (potentially different) <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization.</p>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md41">
+<h2>Requirements<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md41" title="Link to this heading">#</a></h2>
+<p id="structhyperion_1_1mpl_1_1Value_1autotoc_md41"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TMetaFunction</span></code> must be a <code class="docutils literal notranslate"><span class="pre">TypeMetaFunction</span></code>:<ul>
 <li><p>It must be a template taking a single type parameter,</p></li>
 <li><p>It must have a <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">constexpr</span></code> member variable, <code class="docutils literal notranslate"><span class="pre">value</span></code>, or a using alias type, <code class="docutils literal notranslate"><span class="pre">type</span></code></p></li>
@@ -1107,6 +1128,416 @@ document.write(`
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The result of applying <code class="docutils literal notranslate"><span class="pre">TMetaFunction</span></code>, as a <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4II0E0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa16TypeMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5ValueEEnt9MetaValueIN13TMetaFunctionI5ValueE4typeEEE4TypeIN13TMetaFunctionI5ValueE4typeEEEEv">
+<span id="_CPPv3II0E0EN8hyperion3mpl5Value5applyEv"></span><span id="_CPPv2II0E0EN8hyperion3mpl5Value5applyEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TMetaFunction</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structhyperion_1_1mpl_1_1Value_1a2a7babf34b1b3c4e30f8f27a4d680b99"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">apply</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><span class="w"> </span><span class="o"><span class="pre">-&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">enable_if_t</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">TypeMetaFunction</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4II0E0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa16TypeMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5ValueEEnt9MetaValueIN13TMetaFunctionI5ValueE4typeEEE4TypeIN13TMetaFunctionI5ValueE4typeEEEEv" title="hyperion::mpl::Value::apply::TMetaFunction"><span class="n"><span class="pre">TMetaFunction</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="o"><span class="pre">&amp;&amp;</span></span><span class="w"> </span><span class="n"><span class="pre">MetaType</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4II0E0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa16TypeMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5ValueEEnt9MetaValueIN13TMetaFunctionI5ValueE4typeEEE4TypeIN13TMetaFunctionI5ValueE4typeEEEEv" title="hyperion::mpl::Value::apply::TMetaFunction"><span class="n"><span class="pre">TMetaFunction</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_Da0EN8hyperion3mpl5ValueE" title="hyperion::mpl::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="o"><span class="pre">&amp;&amp;</span></span><span class="w"> </span><span class="o"><span class="pre">!</span></span><span class="n"><span class="pre">MetaValue</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4II0E0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa16TypeMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5ValueEEnt9MetaValueIN13TMetaFunctionI5ValueE4typeEEE4TypeIN13TMetaFunctionI5ValueE4typeEEEEv" title="hyperion::mpl::Value::apply::TMetaFunction"><span class="n"><span class="pre">TMetaFunction</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_Da0EN8hyperion3mpl5ValueE" title="hyperion::mpl::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4II0E0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa16TypeMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5ValueEEnt9MetaValueIN13TMetaFunctionI5ValueE4typeEEE4TypeIN13TMetaFunctionI5ValueE4typeEEEEv" title="hyperion::mpl::Value::apply::TMetaFunction"><span class="n"><span class="pre">TMetaFunction</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_Da0EN8hyperion3mpl5ValueE" title="hyperion::mpl::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4II0E0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa16TypeMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5ValueEEnt9MetaValueIN13TMetaFunctionI5ValueE4typeEEE4TypeIN13TMetaFunctionI5ValueE4typeEEEEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Applies the specified template metafunction to this specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code>. </p>
+<p>Applies <code class="docutils literal notranslate"><span class="pre">TMetaFunction</span></code> to this specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> and returns the calculated result as a <code class="docutils literal notranslate"><span class="pre">Type</span></code> specialization.</p>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md42">
+<h2>Requirements<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md42" title="Link to this heading">#</a></h2>
+<p id="structhyperion_1_1mpl_1_1Value_1autotoc_md42"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TMetaFunction</span></code> must be a <code class="docutils literal notranslate"><span class="pre">TypeMetaFunction</span></code>:<ul>
+<li><p>It must be a template taking a single type parameter,</p></li>
+<li><p>It must have a <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">constexpr</span></code> member variable, <code class="docutils literal notranslate"><span class="pre">value</span></code>, or a using alias type, <code class="docutils literal notranslate"><span class="pre">type</span></code></p></li>
+</ul>
+</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TMetaFunction&lt;</span><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a><span class="pre">&gt;</span></code> must be a <code class="docutils literal notranslate"><span class="pre">MetaType</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">typename</span> <span class="pre">TMetaFunction&lt;</span><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a><span class="pre">&gt;::type</span></code> must not be a <code class="docutils literal notranslate"><span class="pre">MetaValue</span></code></p></li>
+</ul>
+</p>
+</section>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md43">
+<h2>Example<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md43" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate" id="structhyperion_1_1mpl_1_1Value_1autotoc_md43"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">auto</span><span class="w"> </span><span class="n">TValue</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">add_one</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Type</span><span class="o">&lt;</span><span class="n">Value</span><span class="o">&lt;</span><span class="n">TValue</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">two</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="n">_value</span><span class="p">).</span><span class="n">apply</span><span class="o">&lt;</span><span class="n">add_one</span><span class="o">&gt;</span><span class="p">().</span><span class="n">inner</span><span class="p">();</span><span class="w"> </span><span class="c1">// `two` is `Value&lt;2, usize&gt;`</span>
+</pre></div>
+</div>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TMetaFunction</strong> – The template metafunction to apply to this <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The result of applying <code class="docutils literal notranslate"><span class="pre">TMetaFunction</span></code>, as a <code class="docutils literal notranslate"><span class="pre">Type</span></code> specialization </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4II0E0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa16TypeMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5ValueEE9MetaValueIN13TMetaFunctionI5ValueE4typeEEE5ValueIN13TMetaFunctionI5ValueE4type5valueEEEEv">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TMetaFunction</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structhyperion_1_1mpl_1_1Value_1aa78dd6a3027efdfc6b5217107f17e4f6"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">apply</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><span class="w"> </span><span class="o"><span class="pre">-&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">enable_if_t</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">TypeMetaFunction</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4II0E0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa16TypeMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5ValueEE9MetaValueIN13TMetaFunctionI5ValueE4typeEEE5ValueIN13TMetaFunctionI5ValueE4type5valueEEEEv" title="hyperion::mpl::Value::apply::TMetaFunction"><span class="n"><span class="pre">TMetaFunction</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="o"><span class="pre">&amp;&amp;</span></span><span class="w"> </span><span class="n"><span class="pre">MetaType</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4II0E0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa16TypeMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5ValueEE9MetaValueIN13TMetaFunctionI5ValueE4typeEEE5ValueIN13TMetaFunctionI5ValueE4type5valueEEEEv" title="hyperion::mpl::Value::apply::TMetaFunction"><span class="n"><span class="pre">TMetaFunction</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_Da0EN8hyperion3mpl5ValueE" title="hyperion::mpl::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="o"><span class="pre">&amp;&amp;</span></span><span class="w"> </span><span class="n"><span class="pre">MetaValue</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4II0E0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa16TypeMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5ValueEE9MetaValueIN13TMetaFunctionI5ValueE4typeEEE5ValueIN13TMetaFunctionI5ValueE4type5valueEEEEv" title="hyperion::mpl::Value::apply::TMetaFunction"><span class="n"><span class="pre">TMetaFunction</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_Da0EN8hyperion3mpl5ValueE" title="hyperion::mpl::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_Da0EN8hyperion3mpl5ValueE" title="hyperion::mpl::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4II0E0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa16TypeMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5ValueEE9MetaValueIN13TMetaFunctionI5ValueE4typeEEE5ValueIN13TMetaFunctionI5ValueE4type5valueEEEEv" title="hyperion::mpl::Value::apply::TMetaFunction"><span class="n"><span class="pre">TMetaFunction</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_Da0EN8hyperion3mpl5ValueE" title="hyperion::mpl::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4II0E0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa16TypeMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5ValueEE9MetaValueIN13TMetaFunctionI5ValueE4typeEEE5ValueIN13TMetaFunctionI5ValueE4type5valueEEEEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Applies the specified template metafunction to this specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code>. </p>
+<p>Applies <code class="docutils literal notranslate"><span class="pre">TMetaFunction</span></code> to this specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> and returns the calculated value as a (potentially different) <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization.</p>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md44">
+<h2>Requirements<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md44" title="Link to this heading">#</a></h2>
+<p id="structhyperion_1_1mpl_1_1Value_1autotoc_md44"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TMetaFunction</span></code> must be a <code class="docutils literal notranslate"><span class="pre">TypeMetaFunction</span></code>:<ul>
+<li><p>It must be a template taking a single type parameter,</p></li>
+<li><p>It must have a <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">constexpr</span></code> member variable, <code class="docutils literal notranslate"><span class="pre">value</span></code>, or a using alias type, <code class="docutils literal notranslate"><span class="pre">type</span></code></p></li>
+</ul>
+</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TMetaFunction&lt;</span><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a><span class="pre">&gt;</span></code> must be a <code class="docutils literal notranslate"><span class="pre">MetaType</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">typename</span> <span class="pre">TMetaFunction&lt;</span><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a><span class="pre">&gt;::type</span></code> must be a <code class="docutils literal notranslate"><span class="pre">MetaValue</span></code></p></li>
+</ul>
+</p>
+</section>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md45">
+<h2>Example<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md45" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate" id="structhyperion_1_1mpl_1_1Value_1autotoc_md45"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">auto</span><span class="w"> </span><span class="n">TValue</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">add_one</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Value</span><span class="o">&lt;</span><span class="n">TValue</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">two</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="n">_value</span><span class="p">).</span><span class="n">apply</span><span class="o">&lt;</span><span class="n">add_one</span><span class="o">&gt;</span><span class="p">();</span><span class="w"> </span><span class="c1">// `two` is `Value&lt;2, usize&gt;`</span>
+</pre></div>
+</div>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TMetaFunction</strong> – The template metafunction to apply to this <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The result of applying <code class="docutils literal notranslate"><span class="pre">TMetaFunction</span></code>, as a <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="structhyperion_1_1mpl_1_1Value_1a41f97578be629b9b9a975efa8feb0c31"></span><span class="sig-name descname"><span class="pre">template&lt;template&lt;</span> <span class="pre">auto</span> <span class="pre">&gt;</span> <span class="pre">typename</span> <span class="pre">TMetaFunction&gt;</span> <span class="pre">inline</span> <span class="pre">requires</span> <span class="pre">ValueMetaFunction&lt;</span> <span class="pre">TMetaFunction</span> <span class="pre">&gt;</span> <span class="pre">&amp;&amp;constexpr</span> <span class="pre">MetaValue&lt;</span> <span class="pre">TMetaFunction&lt;</span> <span class="pre">value</span> <span class="pre">&gt;</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">apply</span> <span class="pre">()</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TMetaFunction&lt;</span> <span class="pre">value</span> <span class="pre">&gt;::value</span> <span class="pre">&gt;</span></span></dt>
+<dd><p>Applies the specified template metafunction to this specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code>. </p>
+<p>Applies <code class="docutils literal notranslate"><span class="pre">TMetaFunction</span></code> to this specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> and returns the calculated value as a (potentially different) <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization.</p>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md46">
+<h2>Requirements<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md46" title="Link to this heading">#</a></h2>
+<p id="structhyperion_1_1mpl_1_1Value_1autotoc_md46"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TMetaFunction</span></code> must be a <code class="docutils literal notranslate"><span class="pre">ValueMetaFunction</span></code>:<ul>
+<li><p>It must be a template taking a single value parameter,</p></li>
+<li><p>It must have a <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">constexpr</span></code> member variable, <code class="docutils literal notranslate"><span class="pre">value</span></code>, or a using alias type, <code class="docutils literal notranslate"><span class="pre">type</span></code></p></li>
+</ul>
+</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TMetaFunction&lt;value&gt;</span></code> must be a <code class="docutils literal notranslate"><span class="pre">MetaValue</span></code></p></li>
+</ul>
+</p>
+</section>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md47">
+<h2>Example<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md47" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate" id="structhyperion_1_1mpl_1_1Value_1autotoc_md47"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">auto</span><span class="w"> </span><span class="n">TValue</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">add_one</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TValue</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">two</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="n">_value</span><span class="p">).</span><span class="n">apply</span><span class="o">&lt;</span><span class="n">add_one</span><span class="o">&gt;</span><span class="p">();</span><span class="w"> </span><span class="c1">// `two` is `Value&lt;2, usize&gt;`</span>
+</pre></div>
+</div>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TMetaFunction</strong> – The template metafunction to apply to this <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The result of applying <code class="docutils literal notranslate"><span class="pre">TMetaFunction</span></code>, as a <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4II_DaE0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa17ValueMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5valueEEnt9MetaValueIN13TMetaFunctionI5valueE4typeEEE4TypeIN13TMetaFunctionI5valueE4typeEEEEv">
+<span id="_CPPv3II_DaE0EN8hyperion3mpl5Value5applyEv"></span><span id="_CPPv2II_DaE0EN8hyperion3mpl5Value5applyEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">auto</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TMetaFunction</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structhyperion_1_1mpl_1_1Value_1a328be0cccddf59f2c9b76fe373e27bd1"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">apply</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><span class="w"> </span><span class="o"><span class="pre">-&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">enable_if_t</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">ValueMetaFunction</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4II_DaE0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa17ValueMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5valueEEnt9MetaValueIN13TMetaFunctionI5valueE4typeEEE4TypeIN13TMetaFunctionI5valueE4typeEEEEv" title="hyperion::mpl::Value::apply::TMetaFunction"><span class="n"><span class="pre">TMetaFunction</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="o"><span class="pre">&amp;&amp;</span></span><span class="w"> </span><span class="n"><span class="pre">MetaType</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4II_DaE0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa17ValueMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5valueEEnt9MetaValueIN13TMetaFunctionI5valueE4typeEEE4TypeIN13TMetaFunctionI5valueE4typeEEEEv" title="hyperion::mpl::Value::apply::TMetaFunction"><span class="n"><span class="pre">TMetaFunction</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N8hyperion3mpl5Value5valueE" title="hyperion::mpl::Value::value"><span class="n"><span class="pre">value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="o"><span class="pre">&amp;&amp;</span></span><span class="w"> </span><span class="o"><span class="pre">!</span></span><span class="n"><span class="pre">MetaValue</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4II_DaE0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa17ValueMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5valueEEnt9MetaValueIN13TMetaFunctionI5valueE4typeEEE4TypeIN13TMetaFunctionI5valueE4typeEEEEv" title="hyperion::mpl::Value::apply::TMetaFunction"><span class="n"><span class="pre">TMetaFunction</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N8hyperion3mpl5Value5valueE" title="hyperion::mpl::Value::value"><span class="n"><span class="pre">value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4II_DaE0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa17ValueMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5valueEEnt9MetaValueIN13TMetaFunctionI5valueE4typeEEE4TypeIN13TMetaFunctionI5valueE4typeEEEEv" title="hyperion::mpl::Value::apply::TMetaFunction"><span class="n"><span class="pre">TMetaFunction</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N8hyperion3mpl5Value5valueE" title="hyperion::mpl::Value::value"><span class="n"><span class="pre">value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4II_DaE0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa17ValueMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5valueEEnt9MetaValueIN13TMetaFunctionI5valueE4typeEEE4TypeIN13TMetaFunctionI5valueE4typeEEEEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Applies the specified template metafunction to this specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code>. </p>
+<p>Applies <code class="docutils literal notranslate"><span class="pre">TMetaFunction</span></code> to this specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> and returns the calculated result as a <code class="docutils literal notranslate"><span class="pre">Type</span></code> specialization.</p>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md48">
+<h2>Requirements<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md48" title="Link to this heading">#</a></h2>
+<p id="structhyperion_1_1mpl_1_1Value_1autotoc_md48"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TMetaFunction</span></code> must be a <code class="docutils literal notranslate"><span class="pre">ValueMetaFunction</span></code>:<ul>
+<li><p>It must be a template taking a single value parameter,</p></li>
+<li><p>It must have a <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">constexpr</span></code> member variable, <code class="docutils literal notranslate"><span class="pre">value</span></code>, or a using alias type, <code class="docutils literal notranslate"><span class="pre">type</span></code></p></li>
+</ul>
+</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TMetaFunction&lt;value&gt;</span></code> must be a <code class="docutils literal notranslate"><span class="pre">MetaType</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">typename</span> <span class="pre">TMetaFunction&lt;value&gt;::type</span></code> must not be a <code class="docutils literal notranslate"><span class="pre">MetaValue</span></code></p></li>
+</ul>
+</p>
+</section>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md49">
+<h2>Example<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md49" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate" id="structhyperion_1_1mpl_1_1Value_1autotoc_md49"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">auto</span><span class="w"> </span><span class="n">TValue</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">add_one</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Type</span><span class="o">&lt;</span><span class="n">Value</span><span class="o">&lt;</span><span class="n">TValue</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">two</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="n">_value</span><span class="p">).</span><span class="n">apply</span><span class="o">&lt;</span><span class="n">add_one</span><span class="o">&gt;</span><span class="p">().</span><span class="n">inner</span><span class="p">();</span><span class="w"> </span><span class="c1">// `two` is `Value&lt;2, usize&gt;`</span>
+</pre></div>
+</div>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TMetaFunction</strong> – The template metafunction to apply to this <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The result of applying <code class="docutils literal notranslate"><span class="pre">TMetaFunction</span></code>, as a <code class="docutils literal notranslate"><span class="pre">Type</span></code> specialization </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4II_DaE0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa17ValueMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5valueEE9MetaValueIN13TMetaFunctionI5valueE4typeEEE5ValueIN13TMetaFunctionI5valueE4type5valueEEEEv">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">auto</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TMetaFunction</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structhyperion_1_1mpl_1_1Value_1a6148f56a19c6dc3ef866a8e53a7bf0b2"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">apply</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><span class="w"> </span><span class="o"><span class="pre">-&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">enable_if_t</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">ValueMetaFunction</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4II_DaE0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa17ValueMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5valueEE9MetaValueIN13TMetaFunctionI5valueE4typeEEE5ValueIN13TMetaFunctionI5valueE4type5valueEEEEv" title="hyperion::mpl::Value::apply::TMetaFunction"><span class="n"><span class="pre">TMetaFunction</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="o"><span class="pre">&amp;&amp;</span></span><span class="w"> </span><span class="n"><span class="pre">MetaType</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4II_DaE0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa17ValueMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5valueEE9MetaValueIN13TMetaFunctionI5valueE4typeEEE5ValueIN13TMetaFunctionI5valueE4type5valueEEEEv" title="hyperion::mpl::Value::apply::TMetaFunction"><span class="n"><span class="pre">TMetaFunction</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N8hyperion3mpl5Value5valueE" title="hyperion::mpl::Value::value"><span class="n"><span class="pre">value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="o"><span class="pre">&amp;&amp;</span></span><span class="w"> </span><span class="n"><span class="pre">MetaValue</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4II_DaE0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa17ValueMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5valueEE9MetaValueIN13TMetaFunctionI5valueE4typeEEE5ValueIN13TMetaFunctionI5valueE4type5valueEEEEv" title="hyperion::mpl::Value::apply::TMetaFunction"><span class="n"><span class="pre">TMetaFunction</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N8hyperion3mpl5Value5valueE" title="hyperion::mpl::Value::value"><span class="n"><span class="pre">value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_Da0EN8hyperion3mpl5ValueE" title="hyperion::mpl::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4II_DaE0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa17ValueMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5valueEE9MetaValueIN13TMetaFunctionI5valueE4typeEEE5ValueIN13TMetaFunctionI5valueE4type5valueEEEEv" title="hyperion::mpl::Value::apply::TMetaFunction"><span class="n"><span class="pre">TMetaFunction</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N8hyperion3mpl5Value5valueE" title="hyperion::mpl::Value::value"><span class="n"><span class="pre">value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4II_DaE0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa17ValueMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5valueEE9MetaValueIN13TMetaFunctionI5valueE4typeEEE5ValueIN13TMetaFunctionI5valueE4type5valueEEEEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Applies the specified template metafunction to this specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code>. </p>
+<p>Applies <code class="docutils literal notranslate"><span class="pre">TMetaFunction</span></code> to this specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> and returns the calculated value as a (potentially different) <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization.</p>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md50">
+<h2>Requirements<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md50" title="Link to this heading">#</a></h2>
+<p id="structhyperion_1_1mpl_1_1Value_1autotoc_md50"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TMetaFunction</span></code> must be a <code class="docutils literal notranslate"><span class="pre">ValueMetaFunction</span></code>:<ul>
+<li><p>It must be a template taking a single value parameter,</p></li>
+<li><p>It must have a <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">constexpr</span></code> member variable, <code class="docutils literal notranslate"><span class="pre">value</span></code>, or a using alias type, <code class="docutils literal notranslate"><span class="pre">type</span></code></p></li>
+</ul>
+</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TMetaFunction&lt;value&gt;</span></code> must be a <code class="docutils literal notranslate"><span class="pre">MetaType</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">typename</span> <span class="pre">TMetaFunction&lt;value&gt;::type</span></code> must be a <code class="docutils literal notranslate"><span class="pre">MetaValue</span></code></p></li>
+</ul>
+</p>
+</section>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md51">
+<h2>Example<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md51" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate" id="structhyperion_1_1mpl_1_1Value_1autotoc_md51"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">auto</span><span class="w"> </span><span class="n">TValue</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">add_one</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Value</span><span class="o">&lt;</span><span class="n">TValue</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">two</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="n">_value</span><span class="p">).</span><span class="n">apply</span><span class="o">&lt;</span><span class="n">add_one</span><span class="o">&gt;</span><span class="p">();</span><span class="w"> </span><span class="c1">// `two` is `Value&lt;2, usize&gt;`</span>
+</pre></div>
+</div>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TMetaFunction</strong> – The template metafunction to apply to this <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The result of applying <code class="docutils literal notranslate"><span class="pre">TMetaFunction</span></code>, as a <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa14MetaFunctionOfI9TFunction5ValueEaa8MetaTypeI13meta_result_tI9TFunction5ValueEEnt8MetaTypeIN13meta_result_tI9TFunction5ValueE4typeEEE4TypeIN13meta_result_tI9TFunction5ValueE4typeEEEERR9TFunction">
+<span id="_CPPv3I0EN8hyperion3mpl5Value5applyERR9TFunction"></span><span id="_CPPv2I0EN8hyperion3mpl5Value5applyERR9TFunction"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TFunction</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structhyperion_1_1mpl_1_1Value_1a773799be0070818c19e34fdb29ba1548"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">apply</span></span></span><span class="sig-paren">(</span><span class="p"><span class="pre">[[</span></span><span class="pre">maybe_unused</span><span class="p"><span class="pre">]]</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa14MetaFunctionOfI9TFunction5ValueEaa8MetaTypeI13meta_result_tI9TFunction5ValueEEnt8MetaTypeIN13meta_result_tI9TFunction5ValueE4typeEEE4TypeIN13meta_result_tI9TFunction5ValueE4typeEEEERR9TFunction" title="hyperion::mpl::Value::apply::TFunction"><span class="n"><span class="pre">TFunction</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">func</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><span class="w"> </span><span class="o"><span class="pre">-&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">enable_if_t</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">MetaFunctionOf</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa14MetaFunctionOfI9TFunction5ValueEaa8MetaTypeI13meta_result_tI9TFunction5ValueEEnt8MetaTypeIN13meta_result_tI9TFunction5ValueE4typeEEE4TypeIN13meta_result_tI9TFunction5ValueE4typeEEEERR9TFunction" title="hyperion::mpl::Value::apply::TFunction"><span class="n"><span class="pre">TFunction</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_Da0EN8hyperion3mpl5ValueE" title="hyperion::mpl::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="o"><span class="pre">&amp;&amp;</span></span><span class="w"> </span><span class="n"><span class="pre">MetaType</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="metatypes.html#_CPPv4I00E13meta_result_t" title="meta_result_t"><span class="n"><span class="pre">meta_result_t</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa14MetaFunctionOfI9TFunction5ValueEaa8MetaTypeI13meta_result_tI9TFunction5ValueEEnt8MetaTypeIN13meta_result_tI9TFunction5ValueE4typeEEE4TypeIN13meta_result_tI9TFunction5ValueE4typeEEEERR9TFunction" title="hyperion::mpl::Value::apply::TFunction"><span class="n"><span class="pre">TFunction</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_Da0EN8hyperion3mpl5ValueE" title="hyperion::mpl::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="o"><span class="pre">&amp;&amp;</span></span><span class="w"> </span><span class="o"><span class="pre">!</span></span><span class="n"><span class="pre">MetaType</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><a class="reference internal" href="metatypes.html#_CPPv4I00E13meta_result_t" title="meta_result_t"><span class="n"><span class="pre">meta_result_t</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa14MetaFunctionOfI9TFunction5ValueEaa8MetaTypeI13meta_result_tI9TFunction5ValueEEnt8MetaTypeIN13meta_result_tI9TFunction5ValueE4typeEEE4TypeIN13meta_result_tI9TFunction5ValueE4typeEEEERR9TFunction" title="hyperion::mpl::Value::apply::TFunction"><span class="n"><span class="pre">TFunction</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_Da0EN8hyperion3mpl5ValueE" title="hyperion::mpl::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><a class="reference internal" href="metatypes.html#_CPPv4I00E13meta_result_t" title="meta_result_t"><span class="n"><span class="pre">meta_result_t</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa14MetaFunctionOfI9TFunction5ValueEaa8MetaTypeI13meta_result_tI9TFunction5ValueEEnt8MetaTypeIN13meta_result_tI9TFunction5ValueE4typeEEE4TypeIN13meta_result_tI9TFunction5ValueE4typeEEEERR9TFunction" title="hyperion::mpl::Value::apply::TFunction"><span class="n"><span class="pre">TFunction</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_Da0EN8hyperion3mpl5ValueE" title="hyperion::mpl::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa14MetaFunctionOfI9TFunction5ValueEaa8MetaTypeI13meta_result_tI9TFunction5ValueEEnt8MetaTypeIN13meta_result_tI9TFunction5ValueE4typeEEE4TypeIN13meta_result_tI9TFunction5ValueE4typeEEEERR9TFunction" title="Link to this definition">#</a><br /></dt>
+<dd><p>Applies the given metafunction to this specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code>. </p>
+<p>Applies <code class="docutils literal notranslate"><span class="pre">func</span></code> to this specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> and returns the calculated result as a <code class="docutils literal notranslate"><span class="pre">Type</span></code> specialization.</p>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md52">
+<h2>Requirements<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md52" title="Link to this heading">#</a></h2>
+<p id="structhyperion_1_1mpl_1_1Value_1autotoc_md52"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TFunction</span></code> must be a <code class="docutils literal notranslate"><span class="pre">MetaFunctionOf&lt;</span><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a><span class="pre">&gt;</span></code> type<ul>
+<li><p>It must be a callable with an overload taking a single <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> parameter</p></li>
+<li><p>The selected overload of <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> must return either a <code class="docutils literal notranslate"><span class="pre">MetaType</span></code> or a <code class="docutils literal notranslate"><span class="pre">MetaValue</span></code></p></li>
+</ul>
+</p></li>
+<li><p>The result of invoking <code class="docutils literal notranslate"><span class="pre">func</span></code> with a <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> must be a <code class="docutils literal notranslate"><span class="pre">MetaType</span></code></p></li>
+<li><p>The type member alias <code class="docutils literal notranslate"><span class="pre">type</span></code> of the invoke result of <code class="docutils literal notranslate"><span class="pre">func</span></code> must not be a <code class="docutils literal notranslate"><span class="pre">MetaType</span></code></p></li>
+</ul>
+</p>
+</section>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md53">
+<h2>Example<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md53" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate" id="structhyperion_1_1mpl_1_1Value_1autotoc_md53"><div class="highlight"><pre><span></span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">add_one</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="k">const</span><span class="w"> </span><span class="n">MetaValue</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
+<span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Type</span><span class="o">&lt;</span><span class="n">Value</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_cvref_t</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;&gt;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span>
+<span class="p">};</span>
+
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">two</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="n">_value</span><span class="p">).</span><span class="n">apply</span><span class="p">(</span><span class="n">add_one</span><span class="p">).</span><span class="n">inner</span><span class="p">();</span><span class="w"> </span><span class="c1">// `two` is `Value&lt;2, usize&gt;`</span>
+</pre></div>
+</div>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TFunction</strong> – The type of the metafunction to apply </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>func</strong> – The metafunction to apply </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The result of applying <code class="docutils literal notranslate"><span class="pre">func</span></code> to this <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization, as a <code class="docutils literal notranslate"><span class="pre">Type</span></code> specialization </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="structhyperion_1_1mpl_1_1Value_1a6681899fbb6fdf59480f57ae88af01c4"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TFunction&gt;</span> <span class="pre">inline</span> <span class="pre">requires</span> <span class="pre">MetaFunctionOf&lt;</span> <span class="pre">TFunction,</span> <span class="pre">Value</span> <span class="pre">&gt;</span> <span class="pre">&amp;&amp;constexpr</span> <span class="pre">MetaValue&lt;</span> <span class="pre">meta_result_t&lt;</span> <span class="pre">TFunction,</span> <span class="pre">Value</span> <span class="pre">&gt;</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">apply</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">TFunction</span> <span class="pre">&amp;&amp;func)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">meta_result_t&lt;</span> <span class="pre">TFunction,</span> <span class="pre">Value</span> <span class="pre">&gt;::value</span> <span class="pre">&gt;</span></span></dt>
+<dd><p>Applies the given metafunction to this specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code>. </p>
+<p>Applies <code class="docutils literal notranslate"><span class="pre">func</span></code> to this specialization of <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> and returns the calculated result as a (potentially different) <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization.</p>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md54">
+<h2>Requirements<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md54" title="Link to this heading">#</a></h2>
+<p id="structhyperion_1_1mpl_1_1Value_1autotoc_md54"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TFunction</span></code> must be a <code class="docutils literal notranslate"><span class="pre">MetaFunctionOf&lt;</span><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a><span class="pre">&gt;</span></code> type<ul>
+<li><p>It must be a callable with an overload taking a single <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> parameter</p></li>
+<li><p>The selected overload of <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> must return either a <code class="docutils literal notranslate"><span class="pre">MetaType</span></code> or a <code class="docutils literal notranslate"><span class="pre">MetaValue</span></code></p></li>
+</ul>
+</p></li>
+<li><p>The result of invoking <code class="docutils literal notranslate"><span class="pre">func</span></code> with a <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> must be a <code class="docutils literal notranslate"><span class="pre">MetaValue</span></code></p></li>
+</ul>
+</p>
+</section>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md55">
+<h2>Example<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md55" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate" id="structhyperion_1_1mpl_1_1Value_1autotoc_md55"><div class="highlight"><pre><span></span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">add_one</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="k">const</span><span class="w"> </span><span class="n">MetaValue</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
+<span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Value</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_cvref_t</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span>
+<span class="p">};</span>
+
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">two</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="n">_value</span><span class="p">).</span><span class="n">apply</span><span class="p">(</span><span class="n">add_one</span><span class="p">);</span><span class="w"> </span><span class="c1">// `two` is `Value&lt;2, usize&gt;`</span>
+</pre></div>
+</div>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TFunction</strong> – The type of the metafunction to apply </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>func</strong> – The metafunction to apply </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The result of applying <code class="docutils literal notranslate"><span class="pre">func</span></code> to this <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization, as a <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="structhyperion_1_1mpl_1_1Value_1abae3a147c172fbb2fd20b532c7549503"></span><span class="sig-name descname"><span class="pre">template&lt;template&lt;</span> <span class="pre">auto</span> <span class="pre">&gt;</span> <span class="pre">typename</span> <span class="pre">TPredicate&gt;</span> <span class="pre">inline</span> <span class="pre">requires</span> <span class="pre">ValueMetaFunction&lt;</span> <span class="pre">TPredicate</span> <span class="pre">&gt;</span> <span class="pre">&amp;&amp;MetaValue&lt;</span> <span class="pre">TPredicate&lt;</span> <span class="pre">value</span> <span class="pre">&gt;</span> <span class="pre">&gt;</span> <span class="pre">&amp;&amp;constexpr</span> <span class="pre">std::same_as&lt;</span> <span class="pre">std::remove_const_t&lt;</span> <span class="pre">decltype(TPredicate&lt;</span> <span class="pre">value</span> <span class="pre">&gt;::value)&gt;,</span> <span class="pre">bool</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">satisfies</span> <span class="pre">()</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TPredicate&lt;</span> <span class="pre">value</span> <span class="pre">&gt;::value</span> <span class="pre">&gt;</span></span></dt>
+<dd><p>Checks to see if this <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization satisfies the given metafunction predicate, <code class="docutils literal notranslate"><span class="pre">TPredicate</span></code></p>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md56">
+<h2>Requirements<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md56" title="Link to this heading">#</a></h2>
+<p id="structhyperion_1_1mpl_1_1Value_1autotoc_md56"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TPredicate</span></code> must be a <code class="docutils literal notranslate"><span class="pre">ValueMetaFunction</span></code><ul>
+<li><p>It must be a template taking a single value parameter,</p></li>
+<li><p>It must have a <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">constexpr</span></code> member variable, <code class="docutils literal notranslate"><span class="pre">value</span></code>, or a using alias type, <code class="docutils literal notranslate"><span class="pre">type</span></code></p></li>
+</ul>
+</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TPredicate&lt;value&gt;</span></code> must be a <code class="docutils literal notranslate"><span class="pre">MetaValue</span></code></p></li>
+<li><p>The type of the value of <code class="docutils literal notranslate"><span class="pre">TPredicate</span></code>, <code class="docutils literal notranslate"><span class="pre">TPredicate&lt;value&gt;::value</span></code>, must be (possibly cv-ref qualified) <code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p></li>
+</ul>
+</p>
+</section>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md57">
+<h2>Example<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md57" title="Link to this heading">#</a></h2>
+<p id="structhyperion_1_1mpl_1_1Value_1autotoc_md57"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">auto</span><span class="w"> </span><span class="n">TValue</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">is_two</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TValue</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">constexpr</span><span class="w"> </span><span class="n">not_two</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="n">_value</span><span class="p">).</span><span class="n">satisfies</span><span class="o">&lt;</span><span class="n">is_two</span><span class="o">&gt;</span><span class="p">();</span><span class="w"> </span><span class="c1">// `not_two` is `Value&lt;false, bool&gt;`</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">was_two</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="n">_value</span><span class="p">).</span><span class="n">satisfies</span><span class="o">&lt;</span><span class="n">is_two</span><span class="o">&gt;</span><span class="p">();</span><span class="w"> </span><span class="c1">// `was_two` is</span>
+<span class="w">                                                        </span><span class="c1">// `Value&lt;true, bool&gt;`</span>
+</pre></div>
+</div>
+ </p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TPredicate</strong> – The metafunction predicate to check with </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The result of checking this <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization against <code class="docutils literal notranslate"><span class="pre">TPredicate</span></code>, as a <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="structhyperion_1_1mpl_1_1Value_1acb188219249889db940ccc05d509f847"></span><span class="sig-name descname"><span class="pre">template&lt;template&lt;</span> <span class="pre">typename</span> <span class="pre">&gt;</span> <span class="pre">typename</span> <span class="pre">TPredicate&gt;</span> <span class="pre">inline</span> <span class="pre">requires</span> <span class="pre">TypeMetaFunction&lt;</span> <span class="pre">TPredicate</span> <span class="pre">&gt;</span> <span class="pre">&amp;&amp;MetaValue&lt;</span> <span class="pre">TPredicate&lt;</span> <span class="pre">Value</span> <span class="pre">&gt;</span> <span class="pre">&gt;</span> <span class="pre">&amp;&amp;constexpr</span> <span class="pre">std::same_as&lt;</span> <span class="pre">std::remove_const_t&lt;</span> <span class="pre">decltype(TPredicate&lt;</span> <span class="pre">Value</span> <span class="pre">&gt;::value)&gt;,</span> <span class="pre">bool</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">satisfies</span> <span class="pre">()</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">Value&lt;</span> <span class="pre">TPredicate&lt;</span> <span class="pre">Value</span> <span class="pre">&gt;::value</span> <span class="pre">&gt;</span></span></dt>
+<dd><p>Checks to see if this <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization satisfies the given metafunction predicate, <code class="docutils literal notranslate"><span class="pre">TPredicate</span></code></p>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md58">
+<h2>Requirements<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md58" title="Link to this heading">#</a></h2>
+<p id="structhyperion_1_1mpl_1_1Value_1autotoc_md58"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TPredicate</span></code> must be a <code class="docutils literal notranslate"><span class="pre">TypeMetaFunction</span></code><ul>
+<li><p>It must be a template taking a single type parameter,</p></li>
+<li><p>It must have a <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">constexpr</span></code> member variable, <code class="docutils literal notranslate"><span class="pre">value</span></code>, or a using alias type, <code class="docutils literal notranslate"><span class="pre">type</span></code></p></li>
+</ul>
+</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TPredicate&lt;</span><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a><span class="pre">&gt;</span></code> must be a <code class="docutils literal notranslate"><span class="pre">MetaValue</span></code></p></li>
+<li><p>The type of the value of <code class="docutils literal notranslate"><span class="pre">TPredicate</span></code>, <code class="docutils literal notranslate"><span class="pre">TPredicate&lt;</span><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a><span class="pre">&gt;::value</span></code>, must be (possibly cv-ref qualified) <code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p></li>
+</ul>
+</p>
+</section>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md59">
+<h2>Example<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md59" title="Link to this heading">#</a></h2>
+<p id="structhyperion_1_1mpl_1_1Value_1autotoc_md59"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="n">MetaValue</span><span class="w"> </span><span class="n">TValue</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">is_two</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TValue</span><span class="o">::</span><span class="n">value</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">constexpr</span><span class="w"> </span><span class="n">not_two</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="n">_value</span><span class="p">).</span><span class="n">satisfies</span><span class="o">&lt;</span><span class="n">is_two</span><span class="o">&gt;</span><span class="p">();</span><span class="w"> </span><span class="c1">// `not_two` is `Value&lt;false, bool&gt;`</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">was_two</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="n">_value</span><span class="p">).</span><span class="n">satisfies</span><span class="o">&lt;</span><span class="n">is_two</span><span class="o">&gt;</span><span class="p">();</span><span class="w"> </span><span class="c1">// `was_two` is</span>
+<span class="w">                                                        </span><span class="c1">// `Value&lt;true, bool&gt;`</span>
+</pre></div>
+</div>
+ </p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TPredicate</strong> – The metafunction predicate to check with </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The result of checking this <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization against <code class="docutils literal notranslate"><span class="pre">TPredicate</span></code>, as a <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="structhyperion_1_1mpl_1_1Value_1a643348b63baeae9ca55958701713abbd"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TPredicate&gt;</span> <span class="pre">inline</span> <span class="pre">requires</span> <span class="pre">MetaFunctionOf&lt;</span> <span class="pre">TPredicate,</span> <span class="pre">Value</span> <span class="pre">&gt;</span> <span class="pre">&amp;&amp;MetaValue&lt;</span> <span class="pre">meta_result_t&lt;</span> <span class="pre">TPredicate,</span> <span class="pre">Value</span> <span class="pre">&gt;</span> <span class="pre">&gt;</span> <span class="pre">&amp;&amp;constexpr</span> <span class="pre">std::same_as&lt;</span> <span class="pre">std::remove_cvref_t&lt;</span> <span class="pre">decltype(meta_result_t&lt;</span> <span class="pre">TPredicate,</span> <span class="pre">Value</span> <span class="pre">&gt;::value)&gt;,</span> <span class="pre">bool</span> <span class="pre">&gt;</span> <span class="pre">auto</span> <span class="pre">satisfies</span> <span class="pre">([[maybe_unused]]</span> <span class="pre">TPredicate</span> <span class="pre">&amp;&amp;predicate)</span> <span class="pre">noexcept</span> <span class="pre">-&gt;</span> <span class="pre">meta_result_t&lt;</span> <span class="pre">TPredicate,</span> <span class="pre">Value</span> <span class="pre">&gt;</span></span></dt>
+<dd><p>Checks to see if this <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization satisfies the given metafunction predicate, <code class="docutils literal notranslate"><span class="pre">predicate</span></code></p>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md60">
+<h2>Requirements<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md60" title="Link to this heading">#</a></h2>
+<p id="structhyperion_1_1mpl_1_1Value_1autotoc_md60"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TPredicate</span></code> must be a <code class="docutils literal notranslate"><span class="pre">MetaFunctionOf&lt;</span><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a><span class="pre">&gt;</span></code> tyep<ul>
+<li><p>It must be a callable with an overload taking a single <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> parameter</p></li>
+<li><p>The selected overload of <code class="docutils literal notranslate"><span class="pre">TPredicate</span></code> must return either a <code class="docutils literal notranslate"><span class="pre">MetaType</span></code> or a <code class="docutils literal notranslate"><span class="pre">MetaValue</span></code></p></li>
+</ul>
+</p></li>
+<li><p>The result of invoking <code class="docutils literal notranslate"><span class="pre">predicate</span></code> with <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> must be a <code class="docutils literal notranslate"><span class="pre">MetaValue</span></code></p></li>
+<li><p>The type of the value of the invoke result of <code class="docutils literal notranslate"><span class="pre">predicate</span></code> must be (possibly cv-ref qualified) <code class="docutils literal notranslate"><span class="pre">bool</span></code></p></li>
+</ul>
+</p>
+</section>
+<section id="structhyperion_1_1mpl_1_1Value_1autotoc_md61">
+<h2>Example<a class="headerlink" href="#structhyperion_1_1mpl_1_1Value_1autotoc_md61" title="Link to this heading">#</a></h2>
+<p id="structhyperion_1_1mpl_1_1Value_1autotoc_md61"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">is_two</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="k">const</span><span class="w"> </span><span class="n">MetaValue</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
+<span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Value</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_cvref_t</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span>
+<span class="p">};</span>
+
+<span class="k">constexpr</span><span class="w"> </span><span class="n">not_two</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="n">_value</span><span class="p">).</span><span class="n">satisfies</span><span class="p">(</span><span class="n">is_two</span><span class="p">);</span><span class="w"> </span><span class="c1">// `not_two` is `Value&lt;false, bool&gt;`</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">was_two</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="n">_value</span><span class="p">).</span><span class="n">satisfies</span><span class="p">(</span><span class="n">is_two</span><span class="p">);</span><span class="w"> </span><span class="c1">// `was_two` is</span>
+<span class="w">                                                        </span><span class="c1">// `Value&lt;true, bool&gt;`</span>
+</pre></div>
+</div>
+ </p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TPredicate</strong> – The metafunction predicate to check with </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The result of checking this <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization against <code class="docutils literal notranslate"><span class="pre">TPredicate</span></code>, as a <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1Value"><span class="std std-ref"><span class="pre">Value</span></span></a></code> specialization </p>
 </dd>
 </dl>
 </dd></dl>
@@ -1138,12 +1569,12 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="genindex.html"
+       href="metatypes.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Index</p>
+        <p class="prev-next-title">Metaprogramming Type Categories (Concept Definitions)</p>
       </div>
     </a>
     <a class="right-next"
@@ -1181,6 +1612,11 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK8hyperion3mpl5Valuecv5TTypeEv"><code class="docutils literal notranslate"><span class="pre">Value::operator</span> <span class="pre">TType()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4IQStENK8hyperion3mpl5ValuecvbEv"><code class="docutils literal notranslate"><span class="pre">Value::operator</span> <span class="pre">bool()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK8hyperion3mpl5Value8value_ofEv"><code class="docutils literal notranslate"><span class="pre">Value::value_of()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4II0E0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa16TypeMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5ValueEEnt9MetaValueIN13TMetaFunctionI5ValueE4typeEEE4TypeIN13TMetaFunctionI5ValueE4typeEEEEv"><code class="docutils literal notranslate"><span class="pre">Value::apply()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4II0E0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa16TypeMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5ValueEE9MetaValueIN13TMetaFunctionI5ValueE4typeEEE5ValueIN13TMetaFunctionI5ValueE4type5valueEEEEv"><code class="docutils literal notranslate"><span class="pre">Value::apply()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4II_DaE0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa17ValueMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5valueEEnt9MetaValueIN13TMetaFunctionI5valueE4typeEEE4TypeIN13TMetaFunctionI5valueE4typeEEEEv"><code class="docutils literal notranslate"><span class="pre">Value::apply()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4II_DaE0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa17ValueMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5valueEE9MetaValueIN13TMetaFunctionI5valueE4typeEEE5ValueIN13TMetaFunctionI5valueE4type5valueEEEEv"><code class="docutils literal notranslate"><span class="pre">Value::apply()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa14MetaFunctionOfI9TFunction5ValueEaa8MetaTypeI13meta_result_tI9TFunction5ValueEEnt8MetaTypeIN13meta_result_tI9TFunction5ValueE4typeEEE4TypeIN13meta_result_tI9TFunction5ValueE4typeEEEERR9TFunction"><code class="docutils literal notranslate"><span class="pre">Value::apply()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N8hyperion3mpl5Value5valueE"><code class="docutils literal notranslate"><span class="pre">Value::value</span></code></a></li>
 </ul>
 </li>

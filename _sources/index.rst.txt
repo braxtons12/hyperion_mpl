@@ -85,6 +85,11 @@ For an overview of each module, see the links in the left sidebar or below.
     genindex
 
 .. toctree::
+    :caption: Metaprogramming Type Categories (Concept Definitions)
+    
+    metatypes
+
+.. toctree::
     :caption: Metaprogramming Value Type
     
     value
