@@ -105,16 +105,16 @@ namespace hyperion::mpl {
             return value;
         }
 
-        /// @brief Returns the `value` of this `Value` specialization
+        /// @brief Returns the `value` of this `Value` specialization.
         /// @return `value`
         [[nodiscard]] constexpr auto value_of() const -> TType {
             return value;
         }
 
-        /// @brief Applies the specified template metafunction to this specialization of `Value`
+        /// @brief Applies the specified template metafunction to this specialization of `Value`.
         ///
         /// Applies `TMetaFunction` to this specialization of `Value` and returns the calculated
-        /// value as a (potentially different) `Value` specialization
+        /// value as a (potentially different) `Value` specialization.
         ///
         /// # Requirements
         /// - `TMetaFunction` must be a `TypeMetaFunction`:
@@ -131,36 +131,189 @@ namespace hyperion::mpl {
             return {};
         }
 
+        /// @brief Applies the specified template metafunction to this specialization of `Value`.
+        ///
+        /// Applies `TMetaFunction` to this specialization of `Value` and returns the calculated
+        /// result as a `Type` specialization.
+        ///
+        /// # Requirements
+        /// - `TMetaFunction` must be a `TypeMetaFunction`:
+        ///     - It must be a template taking a single type parameter,
+        ///     - It must have a `static constexpr` member variable, `value`, or a using alias type,
+        ///     `type`
+        /// - `TMetaFunction<Value>` must be a `MetaType`
+        /// - `typename TMetaFunction<Value>::type` must not be a `MetaValue`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// template<auto TValue>
+        /// struct add_one {
+        ///     using type = Type<Value<TValue + 1>>;
+        /// };
+        ///
+        /// constexpr auto two = (1_value).apply<add_one>().inner(); // `two` is `Value<2, usize>`
+        /// @endcode
+        ///
+        /// @tparam TMetaFunction The template metafunction to apply to this `Value`
+        /// @return The result of applying `TMetaFunction`, as a `Type` specialization
         template<template<typename> typename TMetaFunction>
         [[nodiscard]] constexpr auto apply() noexcept
             -> std::enable_if_t<TypeMetaFunction<TMetaFunction> && MetaType<TMetaFunction<Value>>
                                     && !MetaValue<typename TMetaFunction<Value>::type>,
                                 Type<typename TMetaFunction<Value>::type>>;
 
+        /// @brief Applies the specified template metafunction to this specialization of `Value`.
+        ///
+        /// Applies `TMetaFunction` to this specialization of `Value` and returns the calculated
+        /// value as a (potentially different) `Value` specialization.
+        ///
+        /// # Requirements
+        /// - `TMetaFunction` must be a `TypeMetaFunction`:
+        ///     - It must be a template taking a single type parameter,
+        ///     - It must have a `static constexpr` member variable, `value`, or a using alias type,
+        ///     `type`
+        /// - `TMetaFunction<Value>` must be a `MetaType`
+        /// - `typename TMetaFunction<Value>::type` must be a `MetaValue`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// template<auto TValue>
+        /// struct add_one {
+        ///     using type = Value<TValue + 1>;
+        /// };
+        ///
+        /// constexpr auto two = (1_value).apply<add_one>(); // `two` is `Value<2, usize>`
+        /// @endcode
+        ///
+        /// @tparam TMetaFunction The template metafunction to apply to this `Value`
+        /// @return The result of applying `TMetaFunction`, as a `Value` specialization
         template<template<typename> typename TMetaFunction>
         [[nodiscard]] constexpr auto apply() noexcept
             -> std::enable_if_t<TypeMetaFunction<TMetaFunction> && MetaType<TMetaFunction<Value>>
                                     && MetaValue<typename TMetaFunction<Value>::type>,
                                 Value<TMetaFunction<Value>::type::value>>;
 
+        /// @brief Applies the specified template metafunction to this specialization of `Value`.
+        ///
+        /// Applies `TMetaFunction` to this specialization of `Value` and returns the calculated
+        /// value as a (potentially different) `Value` specialization.
+        ///
+        /// # Requirements
+        /// - `TMetaFunction` must be a `ValueMetaFunction`:
+        ///     - It must be a template taking a single value parameter,
+        ///     - It must have a `static constexpr` member variable, `value`, or a using alias type,
+        ///     `type`
+        /// - `TMetaFunction<value>` must be a `MetaValue`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// template<auto TValue>
+        /// struct add_one {
+        ///     static inline constexpr auto value = TValue + 1>;
+        /// };
+        ///
+        /// constexpr auto two = (1_value).apply<add_one>(); // `two` is `Value<2, usize>`
+        /// @endcode
+        ///
+        /// @tparam TMetaFunction The template metafunction to apply to this `Value`
+        /// @return The result of applying `TMetaFunction`, as a `Value` specialization
         template<template<auto> typename TMetaFunction>
             requires ValueMetaFunction<TMetaFunction> && MetaValue<TMetaFunction<value>>
         [[nodiscard]] constexpr auto apply() noexcept -> Value<TMetaFunction<value>::value> {
             return {};
         }
 
+        /// @brief Applies the specified template metafunction to this specialization of `Value`.
+        ///
+        /// Applies `TMetaFunction` to this specialization of `Value` and returns the calculated
+        /// result as a `Type` specialization.
+        ///
+        /// # Requirements
+        /// - `TMetaFunction` must be a `ValueMetaFunction`:
+        ///     - It must be a template taking a single value parameter,
+        ///     - It must have a `static constexpr` member variable, `value`, or a using alias type,
+        ///     `type`
+        /// - `TMetaFunction<value>` must be a `MetaType`
+        /// - `typename TMetaFunction<value>::type` must not be a `MetaValue`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// template<auto TValue>
+        /// struct add_one {
+        ///     using type = Type<Value<TValue + 1>>;
+        /// };
+        ///
+        /// constexpr auto two = (1_value).apply<add_one>().inner(); // `two` is `Value<2, usize>`
+        /// @endcode
+        ///
+        /// @tparam TMetaFunction The template metafunction to apply to this `Value`
+        /// @return The result of applying `TMetaFunction`, as a `Type` specialization
         template<template<auto> typename TMetaFunction>
         [[nodiscard]] constexpr auto apply() noexcept
             -> std::enable_if_t<ValueMetaFunction<TMetaFunction> && MetaType<TMetaFunction<value>>
                                     && !MetaValue<typename TMetaFunction<value>::type>,
                                 Type<typename TMetaFunction<value>::type>>;
 
+        /// @brief Applies the specified template metafunction to this specialization of `Value`.
+        ///
+        /// Applies `TMetaFunction` to this specialization of `Value` and returns the calculated
+        /// value as a (potentially different) `Value` specialization.
+        ///
+        /// # Requirements
+        /// - `TMetaFunction` must be a `ValueMetaFunction`:
+        ///     - It must be a template taking a single value parameter,
+        ///     - It must have a `static constexpr` member variable, `value`, or a using alias type,
+        ///     `type`
+        /// - `TMetaFunction<value>` must be a `MetaType`
+        /// - `typename TMetaFunction<value>::type` must be a `MetaValue`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// template<auto TValue>
+        /// struct add_one {
+        ///     using type = Value<TValue + 1>;
+        /// };
+        ///
+        /// constexpr auto two = (1_value).apply<add_one>(); // `two` is `Value<2, usize>`
+        /// @endcode
+        ///
+        /// @tparam TMetaFunction The template metafunction to apply to this `Value`
+        /// @return The result of applying `TMetaFunction`, as a `Value` specialization
         template<template<auto> typename TMetaFunction>
         [[nodiscard]] constexpr auto apply() noexcept
             -> std::enable_if_t<ValueMetaFunction<TMetaFunction> && MetaType<TMetaFunction<value>>
                                     && MetaValue<typename TMetaFunction<value>::type>,
                                 Value<TMetaFunction<value>::type::value>>;
 
+        /// @brief Applies the given metafunction to this specialization of `Value`.
+        ///
+        /// Applies `func` to this specialization of `Value` and returns the calculated result as a
+        /// `Type` specialization.
+        ///
+        /// # Requirements
+        /// - `TFunction` must be a `MetaFunctionOf<Value>` type
+        ///     - It must be a callable with an overload taking a single `Value` parameter
+        ///     - The selected overload of `TFunction` must return either a `MetaType` or a
+        ///     `MetaValue`
+        /// - The result of invoking `func` with a `Value` must be a `MetaType`
+        /// - The type member alias `type` of the invoke result of `func` must not be a `MetaType`
+        ///
+        /// # Example
+        ///
+        /// @code {.cpp}
+        /// constexpr auto add_one = [](const MetaValue auto& value)
+        ///     -> Type<Value<std::remove_cvref_t<decltype(value)>::value + 1>>
+        /// {
+        ///     return {};
+        /// };
+        ///
+        /// constexpr auto two = (1_value).apply(add_one).inner(); // `two` is `Value<2, usize>`
+        /// @endcode
+        ///
+        /// @tparam TFunction The type of the metafunction to apply
+        /// @param func The metafunction to apply
+        /// @return The result of applying `func` to this `Value` specialization, as a `Type`
+        /// specialization
         template<typename TFunction>
         [[nodiscard]] constexpr auto
         apply([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
@@ -170,6 +323,34 @@ namespace hyperion::mpl {
                                     && !MetaType<typename meta_result_t<TFunction, Value>::type>,
                                 Type<typename meta_result_t<TFunction, Value>::type>>;
 
+        /// @brief Applies the given metafunction to this specialization of `Value`.
+        ///
+        /// Applies `func` to this specialization of `Value` and returns the calculated result as a
+        /// (potentially different) `Value` specialization.
+        ///
+        /// # Requirements
+        /// - `TFunction` must be a `MetaFunctionOf<Value>` type
+        ///     - It must be a callable with an overload taking a single `Value` parameter
+        ///     - The selected overload of `TFunction` must return either a `MetaType` or a
+        ///     `MetaValue`
+        /// - The result of invoking `func` with a `Value` must be a `MetaValue`
+        ///
+        /// # Example
+        ///
+        /// @code {.cpp}
+        /// constexpr auto add_one = [](const MetaValue auto& value)
+        ///     -> Value<std::remove_cvref_t<decltype(value)>::value + 1>
+        /// {
+        ///     return {};
+        /// };
+        ///
+        /// constexpr auto two = (1_value).apply(add_one); // `two` is `Value<2, usize>`
+        /// @endcode
+        ///
+        /// @tparam TFunction The type of the metafunction to apply
+        /// @param func The metafunction to apply
+        /// @return The result of applying `func` to this `Value` specialization, as a `Value`
+        /// specialization
         template<typename TFunction>
             requires MetaFunctionOf<TFunction, Value> && MetaValue<meta_result_t<TFunction, Value>>
         [[nodiscard]] constexpr auto
@@ -178,6 +359,32 @@ namespace hyperion::mpl {
             return {};
         }
 
+        /// @brief Checks to see if this `Value` specialization satisfies the given metafunction
+        /// predicate, `TPredicate`
+        ///
+        /// # Requirements
+        /// - `TPredicate` must be a `ValueMetaFunction`
+        ///     - It must be a template taking a single value parameter,
+        ///     - It must have a `static constexpr` member variable, `value`, or a using alias type,
+        ///     `type`
+        /// - `TPredicate<value>` must be a `MetaValue`
+        /// - The type of the value of `TPredicate`, `TPredicate<value>::value`, must be
+        /// (possibly cv-ref qualified) `bool`)
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// template<auto TValue>
+        /// struct is_two {
+        ///     static inline constexpr auto value = TValue == 2;
+        /// };
+        ///
+        /// constexpr not_two = (1_value).satisfies<is_two>(); // `not_two` is `Value<false, bool>`
+        /// constexpr auto was_two = (2_value).satisfies<is_two>(); // `was_two` is
+        ///                                                         // `Value<true, bool>`
+        /// @endcode
+        /// @tparam TPredicate The metafunction predicate to check with
+        /// @return The result of checking this `Value` specialization against `TPredicate`, as a
+        /// `Value` specialization
         template<template<auto> typename TPredicate>
             requires ValueMetaFunction<TPredicate> && MetaValue<TPredicate<value>>
                      && std::same_as<std::remove_const_t<decltype(TPredicate<value>::value)>, bool>
@@ -185,6 +392,32 @@ namespace hyperion::mpl {
             return {};
         }
 
+        /// @brief Checks to see if this `Value` specialization satisfies the given metafunction
+        /// predicate, `TPredicate`
+        ///
+        /// # Requirements
+        /// - `TPredicate` must be a `TypeMetaFunction`
+        ///     - It must be a template taking a single type parameter,
+        ///     - It must have a `static constexpr` member variable, `value`, or a using alias type,
+        ///     `type`
+        /// - `TPredicate<Value>` must be a `MetaValue`
+        /// - The type of the value of `TPredicate`, `TPredicate<Value>::value`, must be
+        /// (possibly cv-ref qualified) `bool`)
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// template<MetaValue TValue>
+        /// struct is_two {
+        ///     static inline constexpr auto value = TValue::value == 2;
+        /// };
+        ///
+        /// constexpr not_two = (1_value).satisfies<is_two>(); // `not_two` is `Value<false, bool>`
+        /// constexpr auto was_two = (2_value).satisfies<is_two>(); // `was_two` is
+        ///                                                         // `Value<true, bool>`
+        /// @endcode
+        /// @tparam TPredicate The metafunction predicate to check with
+        /// @return The result of checking this `Value` specialization against `TPredicate`, as a
+        /// `Value` specialization
         template<template<typename> typename TPredicate>
             requires TypeMetaFunction<TPredicate> && MetaValue<TPredicate<Value>>
                      && std::same_as<std::remove_const_t<decltype(TPredicate<Value>::value)>, bool>
@@ -192,6 +425,33 @@ namespace hyperion::mpl {
             return {};
         }
 
+        /// @brief Checks to see if this `Value` specialization satisfies the given metafunction
+        /// predicate, `predicate`
+        ///
+        /// # Requirements
+        /// - `TPredicate` must be a `MetaFunctionOf<Value>` tyep
+        ///     - It must be a callable with an overload taking a single `Value` parameter
+        ///     - The selected overload of `TPredicate` must return either a `MetaType` or a
+        ///     `MetaValue`
+        /// - The result of invoking `predicate` with `Value` must be a `MetaValue`
+        /// - The type of the value of the invoke result of `predicate` must be
+        /// (possibly cv-ref qualified) `bool`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto is_two = [](const MetaValue auto& value)
+        ///     -> Value<std::remove_cvref_t<decltype(value)>::value == 2>
+        /// {
+        ///     return {};
+        /// };
+        ///
+        /// constexpr not_two = (1_value).satisfies(is_two); // `not_two` is `Value<false, bool>`
+        /// constexpr auto was_two = (2_value).satisfies(is_two); // `was_two` is
+        ///                                                         // `Value<true, bool>`
+        /// @endcode
+        /// @tparam TPredicate The metafunction predicate to check with
+        /// @return The result of checking this `Value` specialization against `TPredicate`, as a
+        /// `Value` specialization
         template<typename TPredicate>
             requires MetaFunctionOf<TPredicate, Value>
                      && MetaValue<meta_result_t<TPredicate, Value>>
