@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming value type
 /// @version 0.1
-/// @date 2024-01-31
+/// @date 2024-02-03
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -82,14 +82,23 @@ namespace hyperion::mpl {
     /// @headerfile hyperion/mpl/value.h
     template<auto TValue, typename TType = std::remove_cvref_t<decltype(TValue)>>
     struct Value {
-        /// @brief The value of this metaprogramming value
+        /// @brief The value of this metaprogramming value.
         static inline constexpr auto value = static_cast<TType>(TValue);
 
-        /// @brief Conversion operator to the `value`
+        /// @brief Conversion operator to the `value`.
+        /// @return The `value` of this specialization of `Value`
         [[nodiscard]] constexpr operator TType() const noexcept { // NOLINT
             return value;
         }
 
+        /// @brief Conversion operator to `bool`.
+        /// Converts the `value` of this specialization of `Value` to `bool`.
+        ///
+        /// # Requirements
+        /// - `TType` must be convertible to `bool`
+        /// - `TType` must not be `bool`
+        ///
+        /// @return the `value` of this specialization of `Value`, converted to `bool`
         [[nodiscard]] explicit constexpr operator bool() const noexcept
             requires std::convertible_to<TType, bool> && (!std::same_as<TType, bool>)
         {
@@ -102,6 +111,20 @@ namespace hyperion::mpl {
             return value;
         }
 
+        /// @brief Applies the specified template metafunction to this specialization of `Value`
+        ///
+        /// Applies `TMetaFunction` to this specialization of `Value` and returns the calculated
+        /// value as a (potentially different) `Value` specialization
+        ///
+        /// # Requirements
+        /// - `TMetaFunction` must be a `TypeMetaFunction`:
+        ///     - It must be a template taking a single type parameter,
+        ///     - It must have a `static constexpr` member variable, `value`, or a using alias type,
+        ///     `type`
+        /// - `TMetaFunction<Value>` must be a `MetaValue`
+        ///
+        /// @tparam TMetaFunction The template metafunction to apply to this `Value`
+        /// @return The result of applying `TMetaFunction`, as a `Value` specialization
         template<template<typename> typename TMetaFunction>
             requires TypeMetaFunction<TMetaFunction> && MetaValue<TMetaFunction<Value>>
         [[nodiscard]] constexpr auto apply() noexcept -> Value<TMetaFunction<Value>::value> {
@@ -110,23 +133,49 @@ namespace hyperion::mpl {
 
         template<template<typename> typename TMetaFunction>
         [[nodiscard]] constexpr auto apply() noexcept
-            -> std::enable_if_t<TypeMetaFunction<TMetaFunction> && MetaType<TMetaFunction<Value>>,
+            -> std::enable_if_t<TypeMetaFunction<TMetaFunction> && MetaType<TMetaFunction<Value>>
+                                    && !MetaValue<typename TMetaFunction<Value>::type>,
                                 Type<typename TMetaFunction<Value>::type>>;
 
-        template<typename TFunction>
-            requires MetaFunctionOf<TFunction, Value<value, TType>>
-                     && MetaType<meta_result_t<TFunction, Value<value, TType>>>
-        [[nodiscard]] constexpr auto
-        apply(TFunction&& func) noexcept -> meta_result_t<TFunction, Value<value, TType>> {
-            return std::forward<TFunction>(func)(Value<value, TType>{});
+        template<template<typename> typename TMetaFunction>
+        [[nodiscard]] constexpr auto apply() noexcept
+            -> std::enable_if_t<TypeMetaFunction<TMetaFunction> && MetaType<TMetaFunction<Value>>
+                                    && MetaValue<typename TMetaFunction<Value>::type>,
+                                Value<TMetaFunction<Value>::type::value>>;
+
+        template<template<auto> typename TMetaFunction>
+            requires ValueMetaFunction<TMetaFunction> && MetaValue<TMetaFunction<value>>
+        [[nodiscard]] constexpr auto apply() noexcept -> Value<TMetaFunction<value>::value> {
+            return {};
         }
 
+        template<template<auto> typename TMetaFunction>
+        [[nodiscard]] constexpr auto apply() noexcept
+            -> std::enable_if_t<ValueMetaFunction<TMetaFunction> && MetaType<TMetaFunction<value>>
+                                    && !MetaValue<typename TMetaFunction<value>::type>,
+                                Type<typename TMetaFunction<value>::type>>;
+
+        template<template<auto> typename TMetaFunction>
+        [[nodiscard]] constexpr auto apply() noexcept
+            -> std::enable_if_t<ValueMetaFunction<TMetaFunction> && MetaType<TMetaFunction<value>>
+                                    && MetaValue<typename TMetaFunction<value>::type>,
+                                Value<TMetaFunction<value>::type::value>>;
+
         template<typename TFunction>
-            requires MetaFunctionOf<TFunction, Value<value, TType>>
-                     && MetaValue<meta_result_t<TFunction, Value<value, TType>>>
         [[nodiscard]] constexpr auto
-        apply(TFunction&& func) noexcept -> meta_result_t<TFunction, Value<value, TType>> {
-            return std::forward<TFunction>(func)(Value<value, TType>{});
+        apply([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
+            noexcept
+            -> std::enable_if_t<MetaFunctionOf<TFunction, Value>
+                                    && MetaType<meta_result_t<TFunction, Value>>
+                                    && !MetaType<typename meta_result_t<TFunction, Value>::type>,
+                                Type<typename meta_result_t<TFunction, Value>::type>>;
+
+        template<typename TFunction>
+            requires MetaFunctionOf<TFunction, Value> && MetaValue<meta_result_t<TFunction, Value>>
+        [[nodiscard]] constexpr auto
+        apply([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
+            noexcept -> Value<meta_result_t<TFunction, Value>::value> {
+            return {};
         }
 
         template<template<auto> typename TPredicate>
@@ -137,25 +186,21 @@ namespace hyperion::mpl {
         }
 
         template<template<typename> typename TPredicate>
-            requires TypeMetaFunction<TPredicate> && MetaValue<TPredicate<Value<value, TType>>>
-                     && std::same_as<
-                         std::remove_const_t<decltype(TPredicate<Value<value, TType>>::value)>,
-                         bool>
-        [[nodiscard]] constexpr auto
-        satisfies() noexcept -> Value<TPredicate<Value<value, TType>>::value> {
+            requires TypeMetaFunction<TPredicate> && MetaValue<TPredicate<Value>>
+                     && std::same_as<std::remove_const_t<decltype(TPredicate<Value>::value)>, bool>
+        [[nodiscard]] constexpr auto satisfies() noexcept -> Value<TPredicate<Value>::value> {
             return {};
         }
 
         template<typename TPredicate>
-            requires MetaFunctionOf<TPredicate, Value<value, TType>>
-                     && MetaValue<meta_result_t<TPredicate, Value<value, TType>>>
+            requires MetaFunctionOf<TPredicate, Value>
+                     && MetaValue<meta_result_t<TPredicate, Value>>
                      && std::same_as<
-                         std::remove_cvref_t<
-                             decltype(meta_result_t<TPredicate, Value<value, TType>>::value)>,
+                         std::remove_cvref_t<decltype(meta_result_t<TPredicate, Value>::value)>,
                          bool>
         [[nodiscard]] constexpr auto
         satisfies([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
-            noexcept -> meta_result_t<TPredicate, Value<value, TType>> {
+            noexcept -> meta_result_t<TPredicate, Value> {
             return {};
         }
     };
@@ -221,8 +266,6 @@ namespace hyperion::mpl {
     /// @ingroup value
     /// @headerfile hyperion/mpl/value.h
     template<MetaValue TType>
-        requires(
-            !std::same_as<TType, Value<TType::value, std::remove_cvref_t<decltype(TType::value)>>>)
     [[nodiscard]] constexpr auto as_value([[maybe_unused]] const TType& value) noexcept
         -> Value<TType::value, std::remove_cvref_t<decltype(TType::value)>> {
         return {};
@@ -690,6 +733,61 @@ namespace hyperion::mpl {
 
 #endif // HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
 
+} // namespace hyperion::mpl
+
+// NOLINTNEXTLINE(misc-header-include-cycle)
+#include <hyperion/mpl/type.h>
+
+namespace hyperion::mpl {
+
+    template<auto TValue, typename TType>
+    template<template<typename> typename TMetaFunction>
+    [[nodiscard]] constexpr auto Value<TValue, TType>::apply() noexcept
+        -> std::enable_if_t<TypeMetaFunction<TMetaFunction> && MetaType<TMetaFunction<Value>>
+                                && !MetaValue<typename TMetaFunction<Value>::type>,
+                            Type<typename TMetaFunction<Value>::type>> {
+        return {};
+    }
+
+    template<auto TValue, typename TType>
+    template<template<typename> typename TMetaFunction>
+    [[nodiscard]] constexpr auto Value<TValue, TType>::apply() noexcept
+        -> std::enable_if_t<TypeMetaFunction<TMetaFunction> && MetaType<TMetaFunction<Value>>
+                                && MetaValue<typename TMetaFunction<Value>::type>,
+                            Value<TMetaFunction<Value>::type::value>> {
+        return {};
+    }
+
+    template<auto TValue, typename TType>
+    template<template<auto> typename TMetaFunction>
+    [[nodiscard]] constexpr auto Value<TValue, TType>::apply() noexcept
+        -> std::enable_if_t<ValueMetaFunction<TMetaFunction> && MetaType<TMetaFunction<value>>
+                                && !MetaValue<typename TMetaFunction<value>::type>,
+                            Type<typename TMetaFunction<value>::type>> {
+        return {};
+    }
+
+    template<auto TValue, typename TType>
+    template<template<auto> typename TMetaFunction>
+    [[nodiscard]] constexpr auto Value<TValue, TType>::apply() noexcept
+        -> std::enable_if_t<ValueMetaFunction<TMetaFunction> && MetaType<TMetaFunction<value>>
+                                && MetaValue<typename TMetaFunction<value>::type>,
+                            Value<TMetaFunction<value>::type::value>> {
+        return {};
+    }
+
+    template<auto TValue, typename TType>
+    template<typename TFunction>
+    [[nodiscard]] constexpr auto
+    Value<TValue, TType>::apply([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
+        noexcept
+        -> std::enable_if_t<MetaFunctionOf<TFunction, Value>
+                                && MetaType<meta_result_t<TFunction, Value>>
+                                && !MetaType<typename meta_result_t<TFunction, Value>::type>,
+                            Type<typename meta_result_t<TFunction, Value>::type>> {
+        return {};
+    }
+
     namespace _test::value {
 
         static_assert(value_of(Value<3>{}) == 3, "hyperion::mpl::value_of test case 1 (failing)");
@@ -824,21 +922,96 @@ namespace hyperion::mpl {
 #endif
 
         template<MetaValue TValue>
-        struct add_one {
+        struct add_one_meta {
             static inline constexpr auto value = TValue::value + 1;
         };
 
         template<MetaValue TValue>
-        struct times_two {
+        struct times_two_meta {
             static inline constexpr auto value = TValue::value * 2;
         };
 
-        static_assert((1_value).apply<add_one>() == 2,
-                      "hyperion::mpl::Value::apply<MetaFunction<MetaValue>> test case 1 (failing)");
-        static_assert((2_value).apply<times_two>() == 4_value,
-                      "hyperion::mpl::Value::apply<MetaFunction<MetaValue>> test case 3 (failing)");
-        static_assert((2_value).apply<times_two>().apply<add_one>().apply<times_two>() == 10_value,
-                      "hyperion::mpl::Value::apply<MetaFunction<MetaValue>> test case 3 (failing)");
+        template<MetaValue TValue>
+        struct add_one_meta_typed {
+            using type = Value<TValue::value + 1>;
+        };
+
+        template<MetaValue TValue>
+        struct times_two_meta_typed {
+            using type = Value<TValue::value * 2>;
+        };
+
+        template<auto TValue>
+        struct add_one_value {
+            static inline constexpr auto value = TValue + 1;
+        };
+
+        template<auto TValue>
+        struct times_two_value {
+            static inline constexpr auto value = TValue * 2;
+        };
+
+        template<auto TValue>
+        struct add_one_value_typed {
+            using type = Value<TValue + 1>;
+        };
+
+        template<auto TValue>
+        struct times_two_value_typed {
+            using type = Value<TValue * 2>;
+        };
+
+        static_assert((1_value).apply<add_one_meta>() == 2,
+                      "hyperion::mpl::Value::apply<MetaFunction<MetaValue>> "
+                      "(MetaValue<MetaFunction<MetaValue>>) test case 1 (failing)");
+        static_assert((2_value).apply<times_two_meta>() == 4_value,
+                      "hyperion::mpl::Value::apply<MetaFunction<MetaValue>> "
+                      "(MetaValue<MetaFunction<MetaValue>>) test case 2 (failing)");
+        static_assert(
+            (2_value).apply<times_two_meta>().apply<add_one_meta>().apply<times_two_meta>()
+                == 10_value,
+            "hyperion::mpl::Value::apply<MetaFunction<MetaValue>> "
+            "(MetaValue<MetaFunction<MetaValue>>) test case 3 (failing)");
+
+        static_assert((1_value).apply<add_one_meta_typed>() == 2,
+                      "hyperion::mpl::Value::apply<MetaFunction<MetaValue>> "
+                      "(MetaType<MetaFunction<MetaValue>>) test case 1 (failing)");
+        static_assert((2_value).apply<times_two_meta_typed>() == 4_value,
+                      "hyperion::mpl::Value::apply<MetaFunction<MetaValue>> "
+                      "(MetaType<MetaFunction<MetaValue>>) test case 2 (failing)");
+        static_assert((2_value)
+                              .apply<times_two_meta_typed>()
+                              .apply<add_one_meta_typed>()
+                              .apply<times_two_meta_typed>()
+                          == 10_value,
+                      "hyperion::mpl::Value::apply<MetaFunction<MetaValue>> "
+                      "(MetaType<MetaFunction<MetaValue>>) test case 3 (failing)");
+
+        static_assert((1_value).apply<add_one_value>() == 2,
+                      "hyperion::mpl::Value::apply<MetaFunction<value>> "
+                      "(MetaValue<MetaFunction<value>>) test case 1 (failing)");
+        static_assert((2_value).apply<times_two_value>() == 4_value,
+                      "hyperion::mpl::Value::apply<MetaFunction<value>> "
+                      "(MetaValue<MetaFunction<value>>) test case 2 (failing)");
+        static_assert(
+            (2_value).apply<times_two_value>().apply<add_one_value>().apply<times_two_value>()
+                == 10_value,
+            "hyperion::mpl::Value::apply<MetaFunction<value>> "
+            "(MetaValue<MetaFunction<value>>) test case 3 (failing)");
+
+        static_assert((1_value).apply<add_one_value_typed>() == 2,
+                      "hyperion::mpl::Value::apply<MetaFunction<value>> "
+                      "(MetaType<MetaFunction<value>>) test case 1 (failing)");
+        static_assert((2_value).apply<times_two_value_typed>() == 4_value,
+                      "hyperion::mpl::Value::apply<MetaFunction<value>> "
+                      "(MetaType<MetaFunction<value>>) test case 2 (failing)");
+        static_assert((2_value)
+                              .apply<times_two_value_typed>()
+                              .apply<add_one_value_typed>()
+                              .apply<times_two_value_typed>()
+                          == 10_value,
+                      "hyperion::mpl::Value::apply<MetaFunction<value>> "
+                      "(MetaType<MetaFunction<value>>) test case 3 (failing)");
 
         constexpr auto add1 = [](const MetaValue auto& value)
             -> Value<std::remove_cvref_t<decltype(value)>::value + 1> {
@@ -893,20 +1066,6 @@ namespace hyperion::mpl {
                       "(failing)");
 
     } // namespace _test::value
-} // namespace hyperion::mpl
-
-// NOLINTNEXTLINE(misc-header-include-cycle)
-#include <hyperion/mpl/type.h>
-namespace hyperion::mpl {
-
-    template<auto TValue, typename TType>
-    template<template<typename> typename TMetaFunction>
-    [[nodiscard]] constexpr auto Value<TValue, TType>::apply() noexcept
-        -> std::enable_if_t<TypeMetaFunction<TMetaFunction> && MetaType<TMetaFunction<Value>>,
-                            Type<typename TMetaFunction<Value>::type>> {
-        return {};
-    }
-
 } // namespace hyperion::mpl
 
 HYPERION_IGNORE_DOCUMENTATION_WARNING_STOP;
