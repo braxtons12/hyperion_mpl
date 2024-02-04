@@ -272,28 +272,92 @@ namespace hyperion::mpl {
         struct is_value_to_value<TTemplate> : std::true_type { };
     } // namespace detail
 
+    /// @brief A `TypeMetaFunction` is a template metafunction that accepts a single type parameter
+    /// and contains either a `static constexpr` member variable, `value`, or a member using alias
+    /// type, `type`
+    ///
+    /// @tparam TTemplate The template to check
+    /// @ingroup metatypes
+    /// @headerfile hyperion/mpl/metatypes.h
     template<template<typename> typename TTemplate>
     concept TypeMetaFunction
         = detail::is_type_to_type<TTemplate>::value || detail::is_type_to_value<TTemplate>::value;
 
+    /// @brief A `TypeMetaFunction` is a template metafunction that accepts a single value parameter
+    /// and contains either a `static constexpr` member variable, `value`, or a member using alias
+    /// type, `type`
+    ///
+    /// @tparam TTemplate The template to check
+    /// @ingroup metatypes
+    /// @headerfile hyperion/mpl/metatypes.h
     template<template<auto> typename TTemplate>
     concept ValueMetaFunction
         = detail::is_value_to_type<TTemplate>::value || detail::is_value_to_value<TTemplate>::value;
 
+    /// @brief A `MetaFunctionOf` is a callable metafunction that accepts a single value parameter
+    /// of the specified type, `TType` and returns either a `MetaType` or a `MetaValue`
+    ///
+    /// @tparam TFunction The callable to check
+    /// @tparam TType The metaprogramming type to check that `TFunction` is invocable with
+    /// @ingroup metatypes
+    /// @headerfile hyperion/mpl/metatypes.h
     template<typename TFunction, typename TType>
     concept MetaFunctionOf
         = std::is_invocable_v<TFunction, TType> && (MetaType<TType> || MetaValue<TType>);
 
+    /// @brief A `MetaFunction` is a callable metafunction that accepts a single value parameter
+    /// of either `MetaType` or `MetaValue` metaprogramming type category and returns either a
+    /// `MetaType` or a `MetaValue`
+    ///
+    /// @tparam TFunction The callable to check
+    /// @ingroup metatypes
+    /// @headerfile hyperion/mpl/metatypes.h
     template<typename TFunction>
     concept MetaFunction = MetaFunctionOf<TFunction, detail::Type<bool>>
                            || MetaFunctionOf<TFunction, detail::Value<true>>;
 
+    /// @brief `meta_result` is a type trait representing the invoke result of a callable
+    /// metafunction, `TFunction`, with a metaprogramming type, `TType`
+    ///
+    /// If `TFunction` is a `MetaFunctionOf<TType>`, contains the member using alias type, `type`,
+    /// that is the resulting type of invoking a `TFunction` with a `TType`.
+    /// If `TFunction` is not a `MetaFunctionOf<TType>`, the program is ill-formed.
+    ///
+    /// # Requirements
+    /// - `TFunction` must be a `MetaFunctionOf<TType>`
+    ///     - It must be a callable invocable with `TType`
+    ///     - The result of invoking `TFunction` with `TType` must be either a `MetaType` or a
+    ///     `MetaValue`
+    ///
+    /// @tparam TFunction The callable metafunction to get the invoke result of
+    /// @tparam TType The metaprogramming type to invoke `TFunction` with
+    /// @ingroup metatypes
+    /// @headerfile hyperion/mpl/metatypes.h
     template<typename TFunction, typename TType>
         requires MetaFunctionOf<TFunction, TType>
     struct meta_result {
         using type = std::invoke_result_t<TFunction, TType>;
     };
 
+    /// @brief Shorthand alias to the member using alias type, `type`, of the type trait
+    /// `meta_result`.
+    /// Represents the invoke result of a callable metafunction, `TFunction`, with a metaprogramming
+    /// type, `TType`
+    ///
+    /// If `TFunction` is a `MetaFunctionOf<TType>`, using aliases to the resulting type of invoking
+    /// a `TFunction` with a `TType`.
+    /// If `TFunction` is not a `MetaFunctionOf<TType>`, the program is ill-formed.
+    ///
+    /// # Requirements
+    /// - `TFunction` must be a `MetaFunctionOf<TType>`
+    ///     - It must be a callable invocable with `TType`
+    ///     - The result of invoking `TFunction` with `TType` must be either a `MetaType` or a
+    ///     `MetaValue`
+    ///
+    /// @tparam TFunction The callable metafunction to get the invoke result of
+    /// @tparam TType The metaprogramming type to invoke `TFunction` with
+    /// @ingroup metatypes
+    /// @headerfile hyperion/mpl/metatypes.h
     template<typename TFunction, typename TType>
     using meta_result_t = typename meta_result<TFunction, TType>::type;
 
