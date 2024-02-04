@@ -523,6 +523,12 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="metatypes.html#_CPPv4I0EN8hyperion3mpl13is_meta_valueE"><code class="docutils literal notranslate"><span class="pre">is_meta_value</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="metatypes.html#_CPPv4I0EN8hyperion3mpl12is_meta_typeE"><code class="docutils literal notranslate"><span class="pre">is_meta_type</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="metatypes.html#_CPPv4I00EN8hyperion3mpl11meta_resultE"><code class="docutils literal notranslate"><span class="pre">meta_result</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="metatypes.html#_CPPv4I0EN8hyperion3mpl9MetaValueE"><code class="docutils literal notranslate"><span class="pre">MetaValue</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="metatypes.html#_CPPv4I0EN8hyperion3mpl8MetaTypeE"><code class="docutils literal notranslate"><span class="pre">MetaType</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="metatypes.html#_CPPv4II_DaE0EN8hyperion3mpl17ValueMetaFunctionE"><code class="docutils literal notranslate"><span class="pre">ValueMetaFunction</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="metatypes.html#_CPPv4II0E0EN8hyperion3mpl16TypeMetaFunctionE"><code class="docutils literal notranslate"><span class="pre">TypeMetaFunction</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="metatypes.html#_CPPv4I00EN8hyperion3mpl14MetaFunctionOfE"><code class="docutils literal notranslate"><span class="pre">MetaFunctionOf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="metatypes.html#_CPPv4I0EN8hyperion3mpl12MetaFunctionE"><code class="docutils literal notranslate"><span class="pre">MetaFunction</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -533,17 +539,38 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="value.html">hyperion::mpl::Value</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_DpcEli6_valueDav"><code class="docutils literal notranslate"><span class="pre">operator&quot;&quot;_value()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_Da0E8value_ofDT6TValueERK5ValueI6TValue5TTypeE"><code class="docutils literal notranslate"><span class="pre">value_of()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_9MetaValueEIQntNSt7same_asI5TType5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEEEEE8value_ofDTN5TType5valueEERK5TType"><code class="docutils literal notranslate"><span class="pre">value_of()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_9MetaValueE8value_ofDTN5TType5valueEERK5TType"><code class="docutils literal notranslate"><span class="pre">value_of()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_9MetaValueE8as_value5ValueIN5TType5valueENSt14remove_cvref_tIDTN5TType5valueEEEEERK5TType"><code class="docutils literal notranslate"><span class="pre">as_value()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_Da0Epl5ValueI6TValueERK5ValueI6TValue5TTypeE"><code class="docutils literal notranslate"><span class="pre">operator+()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_Da0Emi5ValueIXng6TValueEERK5ValueI6TValue5TTypeE"><code class="docutils literal notranslate"><span class="pre">operator-()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_Da_Da00Epl5ValueIXpl4TLhs4TRhsEERK5ValueI4TLhs8TTypeLhsERK5ValueI4TRhs8TTypeRhsE"><code class="docutils literal notranslate"><span class="pre">operator+()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_Da_Da00Emi5ValueIXmi4TLhs4TRhsEERK5ValueI4TLhs8TTypeLhsERK5ValueI4TRhs8TTypeRhsE"><code class="docutils literal notranslate"><span class="pre">operator-()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_Da_Da00Eml5ValueIXml4TLhs4TRhsEERK5ValueI4TLhs8TTypeLhsERK5ValueI4TRhs8TTypeRhsE"><code class="docutils literal notranslate"><span class="pre">operator*()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_Da_Da00Edv5ValueIXdv4TLhs4TRhsEERK5ValueI4TLhs8TTypeLhsERK5ValueI4TRhs8TTypeRhsE"><code class="docutils literal notranslate"><span class="pre">operator/()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_Da_Da00Eaa5ValueIXaa4TLhs4TRhsEERK5ValueI4TLhs8TTypeLhsERK5ValueI4TRhs8TTypeRhsE"><code class="docutils literal notranslate"><span class="pre">operator&amp;&amp;()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_Da_Da00Eoo5ValueIXoo4TLhs4TRhsEERK5ValueI4TLhs8TTypeLhsERK5ValueI4TRhs8TTypeRhsE"><code class="docutils literal notranslate"><span class="pre">operator||()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_Da0Ent5ValueIXnt6TValueE5TTypeERK5ValueI6TValue5TTypeE"><code class="docutils literal notranslate"><span class="pre">operator!()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_Da_Da00Ean5ValueIXan4TLhs4TRhsEERK5ValueI4TLhs8TTypeLhsERK5ValueI4TRhs8TTypeRhsE"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_Da_Da00Eor5ValueIXor4TLhs4TRhsEERK5ValueI4TLhs8TTypeLhsERK5ValueI4TRhs8TTypeRhsE"><code class="docutils literal notranslate"><span class="pre">operator|()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_Da0Eco5ValueID05TTypeERK5ValueI6TValue5TTypeE"><code class="docutils literal notranslate"><span class="pre">operator~()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_Da_Da00Eeq5ValueIXeq4TLhs4TRhsEERK5ValueI4TLhs8TTypeLhsERK5ValueI4TRhs8TTypeRhsE"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_Da_Da00Ene5ValueIXne4TLhs4TRhsEERK5ValueI4TLhs8TTypeLhsERK5ValueI4TRhs8TTypeRhsE"><code class="docutils literal notranslate"><span class="pre">operator!=()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_Da_Da00Ess5ValueIXss4TLhs4TRhsEERK5ValueI4TLhs8TTypeLhsERK5ValueI4TRhs8TTypeRhsE"><code class="docutils literal notranslate"><span class="pre">operator&lt;=&gt;()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="value.html#_CPPv4I_Da0EN8hyperion3mpl5ValueE"><code class="docutils literal notranslate"><span class="pre">Value</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="value.html#_CPPv4NK8hyperion3mpl5Valuecv5TTypeEv"><code class="docutils literal notranslate"><span class="pre">Value::operator</span> <span class="pre">TType()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="value.html#_CPPv4IQStENK8hyperion3mpl5ValuecvbEv"><code class="docutils literal notranslate"><span class="pre">Value::operator</span> <span class="pre">bool()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="value.html#_CPPv4NK8hyperion3mpl5ValuecvbEv"><code class="docutils literal notranslate"><span class="pre">Value::operator</span> <span class="pre">bool()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="value.html#_CPPv4NK8hyperion3mpl5Value8value_ofEv"><code class="docutils literal notranslate"><span class="pre">Value::value_of()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="value.html#_CPPv4II0E0EN8hyperion3mpl5Value5applyE5ValueIN13TMetaFunctionI5ValueE5valueEEv"><code class="docutils literal notranslate"><span class="pre">Value::apply()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="value.html#_CPPv4II0E0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa16TypeMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5ValueEEnt9MetaValueIN13TMetaFunctionI5ValueE4typeEEE4TypeIN13TMetaFunctionI5ValueE4typeEEEEv"><code class="docutils literal notranslate"><span class="pre">Value::apply()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="value.html#_CPPv4II0E0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa16TypeMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5ValueEE9MetaValueIN13TMetaFunctionI5ValueE4typeEEE5ValueIN13TMetaFunctionI5ValueE4type5valueEEEEv"><code class="docutils literal notranslate"><span class="pre">Value::apply()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="value.html#_CPPv4II_DaE0EN8hyperion3mpl5Value5applyE5ValueIN13TMetaFunctionI5valueE5valueEEv"><code class="docutils literal notranslate"><span class="pre">Value::apply()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="value.html#_CPPv4II_DaE0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa17ValueMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5valueEEnt9MetaValueIN13TMetaFunctionI5valueE4typeEEE4TypeIN13TMetaFunctionI5valueE4typeEEEEv"><code class="docutils literal notranslate"><span class="pre">Value::apply()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="value.html#_CPPv4II_DaE0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa17ValueMetaFunctionI13TMetaFunctionEaa8MetaTypeI13TMetaFunctionI5valueEE9MetaValueIN13TMetaFunctionI5valueE4typeEEE5ValueIN13TMetaFunctionI5valueE4type5valueEEEEv"><code class="docutils literal notranslate"><span class="pre">Value::apply()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="value.html#_CPPv4I0EN8hyperion3mpl5Value5applyENSt11enable_if_tIXaa14MetaFunctionOfI9TFunction5ValueEaa8MetaTypeI13meta_result_tI9TFunction5ValueEEnt8MetaTypeIN13meta_result_tI9TFunction5ValueE4typeEEE4TypeIN13meta_result_tI9TFunction5ValueE4typeEEEERR9TFunction"><code class="docutils literal notranslate"><span class="pre">Value::apply()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="value.html#_CPPv4I0EN8hyperion3mpl5Value5applyE5ValueIN13meta_result_tI9TFunction5ValueE5valueEERR9TFunction"><code class="docutils literal notranslate"><span class="pre">Value::apply()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="value.html#_CPPv4II_DaE0EN8hyperion3mpl5Value9satisfiesE5ValueIN10TPredicateI5valueE5valueEEv"><code class="docutils literal notranslate"><span class="pre">Value::satisfies()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="value.html#_CPPv4II0E0EN8hyperion3mpl5Value9satisfiesE5ValueIN10TPredicateI5ValueE5valueEEv"><code class="docutils literal notranslate"><span class="pre">Value::satisfies()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="value.html#_CPPv4I0EN8hyperion3mpl5Value9satisfiesE13meta_result_tI10TPredicate5ValueERR10TPredicate"><code class="docutils literal notranslate"><span class="pre">Value::satisfies()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="value.html#_CPPv4N8hyperion3mpl5Value5valueE"><code class="docutils literal notranslate"><span class="pre">Value::value</span></code></a></li>
 </ul>
 </li>
@@ -634,9 +661,38 @@ document.write(`
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Concept Definitions</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="concepts.html">hyperion::mpl::concepts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="concepts/comparable.html">Comparability Concepts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="concepts/operator_able.html">Operatorability Concepts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="concepts/std_supplemental.html">Standard Supplemental Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts/comparable.html">Comparability Concepts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="concepts/comparable.html#_CPPv4I00EN8hyperion3mpl8concepts18EqualityComparableE"><code class="docutils literal notranslate"><span class="pre">EqualityComparable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/comparable.html#_CPPv4I00EN8hyperion3mpl8concepts20InequalityComparableE"><code class="docutils literal notranslate"><span class="pre">InequalityComparable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/comparable.html#_CPPv4I00EN8hyperion3mpl8concepts18LessThanComparableE"><code class="docutils literal notranslate"><span class="pre">LessThanComparable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/comparable.html#_CPPv4I00EN8hyperion3mpl8concepts25LessThanOrEqualComparableE"><code class="docutils literal notranslate"><span class="pre">LessThanOrEqualComparable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/comparable.html#_CPPv4I00EN8hyperion3mpl8concepts21GreaterThanComparableE"><code class="docutils literal notranslate"><span class="pre">GreaterThanComparable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/comparable.html#_CPPv4I00EN8hyperion3mpl8concepts28GreaterThanOrEqualComparableE"><code class="docutils literal notranslate"><span class="pre">GreaterThanOrEqualComparable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/comparable.html#_CPPv4I00EN8hyperion3mpl8concepts18ThreeWayComparableE"><code class="docutils literal notranslate"><span class="pre">ThreeWayComparable</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="concepts/operator_able.html">Operatorability Concepts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="concepts/operator_able.html#_CPPv4I0EN8hyperion3mpl8concepts13UnaryPlusableE"><code class="docutils literal notranslate"><span class="pre">UnaryPlusable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/operator_able.html#_CPPv4I0EN8hyperion3mpl8concepts14UnaryMinusableE"><code class="docutils literal notranslate"><span class="pre">UnaryMinusable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/operator_able.html#_CPPv4I0EN8hyperion3mpl8concepts11AddressableE"><code class="docutils literal notranslate"><span class="pre">Addressable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/operator_able.html#_CPPv4I0EN8hyperion3mpl8concepts14DereferencibleE"><code class="docutils literal notranslate"><span class="pre">Dereferencible</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/operator_able.html#_CPPv4I0EN8hyperion3mpl8concepts9ArrowableE"><code class="docutils literal notranslate"><span class="pre">Arrowable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/operator_able.html#_CPPv4I00EN8hyperion3mpl8concepts7AddableE"><code class="docutils literal notranslate"><span class="pre">Addable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/operator_able.html#_CPPv4I00EN8hyperion3mpl8concepts12SubtractableE"><code class="docutils literal notranslate"><span class="pre">Subtractable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/operator_able.html#_CPPv4I00EN8hyperion3mpl8concepts12MultipliableE"><code class="docutils literal notranslate"><span class="pre">Multipliable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/operator_able.html#_CPPv4I00EN8hyperion3mpl8concepts9DividibleE"><code class="docutils literal notranslate"><span class="pre">Dividible</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/operator_able.html#_CPPv4I0EN8hyperion3mpl8concepts13BinaryNotableE"><code class="docutils literal notranslate"><span class="pre">BinaryNotable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/operator_able.html#_CPPv4I00EN8hyperion3mpl8concepts13BinaryAndableE"><code class="docutils literal notranslate"><span class="pre">BinaryAndable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/operator_able.html#_CPPv4I00EN8hyperion3mpl8concepts12BinaryOrableE"><code class="docutils literal notranslate"><span class="pre">BinaryOrable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/operator_able.html#_CPPv4I0EN8hyperion3mpl8concepts14BooleanNotableE"><code class="docutils literal notranslate"><span class="pre">BooleanNotable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/operator_able.html#_CPPv4I00EN8hyperion3mpl8concepts14BooleanAndableE"><code class="docutils literal notranslate"><span class="pre">BooleanAndable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/operator_able.html#_CPPv4I00EN8hyperion3mpl8concepts13BooleanOrableE"><code class="docutils literal notranslate"><span class="pre">BooleanOrable</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="concepts/std_supplemental.html">Standard Supplemental Concepts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="concepts/std_supplemental.html#_CPPv4I0EN8hyperion3mpl8concepts16TriviallyMovableE"><code class="docutils literal notranslate"><span class="pre">TriviallyMovable</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

@@ -243,6 +243,10 @@ document.write(`
   
 
   
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
 </div>
 
     </header>
@@ -488,81 +492,64 @@ document.write(`
 </pre></div>
 </div>
 </section>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-variables">Variables</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__comparability__concepts_1ga06c811429f542e08b9495ea9ff92b82a"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">EqualityComparable</span>&#160; <span class="pre">=</span> <span class="pre">requires(const</span> <span class="pre">TLhs&amp;</span> <span class="pre">lhs,</span> <span class="pre">const</span> <span class="pre">TRhs&amp;</span> <span class="pre">rhs)</span> <span class="pre">{lhs</span> <span class="pre">==</span> <span class="pre">rhs;rhs</span> <span class="pre">==</span> <span class="pre">lhs;}</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is equality comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__comparability__concepts_1ga958c18d8cafc39bc1095d7ffb3aa2593"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">InequalityComparable</span>&#160; <span class="pre">=</span> <span class="pre">requires(const</span> <span class="pre">TLhs&amp;</span> <span class="pre">lhs,</span> <span class="pre">const</span> <span class="pre">TRhs&amp;</span> <span class="pre">rhs)</span> <span class="pre">{lhs</span> <span class="pre">!=</span> <span class="pre">rhs;rhs</span> <span class="pre">!=</span> <span class="pre">lhs;}</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is inequality comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl8concepts18EqualityComparableE">
+<span id="_CPPv3I00EN8hyperion3mpl8concepts18EqualityComparableE"></span><span id="_CPPv2I00EN8hyperion3mpl8concepts18EqualityComparableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1EqualityComparable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EqualityComparable</span></span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl8concepts18EqualityComparableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/comparable.h&gt;</em></div>
+<p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is equality comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__comparability__concepts_1ga872d4103cdb78b58df4d8575058f1a47"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">LessThanComparable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">requires(const</span> <span class="pre">TLhs&amp;</span> <span class="pre">lhs,</span> <span class="pre">const</span> <span class="pre">TRhs&amp;</span> <span class="pre">rhs)</span> <span class="pre">{</span> <span class="pre">lhs</span> <span class="pre">&lt;</span> <span class="pre">rhs;</span> <span class="pre">}</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is less-than comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl8concepts20InequalityComparableE">
+<span id="_CPPv3I00EN8hyperion3mpl8concepts20InequalityComparableE"></span><span id="_CPPv2I00EN8hyperion3mpl8concepts20InequalityComparableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1InequalityComparable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InequalityComparable</span></span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl8concepts20InequalityComparableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/comparable.h&gt;</em></div>
+<p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is inequality comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__comparability__concepts_1ga4ae2631fbd477f6b3251ca5310f96adb"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">LessThanOrEqualComparable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">requires(const</span> <span class="pre">TLhs&amp;</span> <span class="pre">lhs,</span> <span class="pre">const</span> <span class="pre">TRhs&amp;</span> <span class="pre">rhs)</span> <span class="pre">{</span> <span class="pre">lhs</span> <span class="pre">&lt;=</span> <span class="pre">rhs;</span> <span class="pre">}</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is less-than-or-equal comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl8concepts18LessThanComparableE">
+<span id="_CPPv3I00EN8hyperion3mpl8concepts18LessThanComparableE"></span><span id="_CPPv2I00EN8hyperion3mpl8concepts18LessThanComparableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1LessThanComparable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LessThanComparable</span></span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl8concepts18LessThanComparableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/comparable.h&gt;</em></div>
+<p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is less-than comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__comparability__concepts_1ga622c5f6ce21565962f14c832e931aba2"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">GreaterThanComparable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">requires(const</span> <span class="pre">TLhs&amp;</span> <span class="pre">lhs,</span> <span class="pre">const</span> <span class="pre">TRhs&amp;</span> <span class="pre">rhs)</span> <span class="pre">{</span> <span class="pre">lhs</span> <span class="pre">&gt;</span> <span class="pre">rhs;</span> <span class="pre">}</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is greater-than comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl8concepts25LessThanOrEqualComparableE">
+<span id="_CPPv3I00EN8hyperion3mpl8concepts25LessThanOrEqualComparableE"></span><span id="_CPPv2I00EN8hyperion3mpl8concepts25LessThanOrEqualComparableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1LessThanOrEqualComparable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LessThanOrEqualComparable</span></span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl8concepts25LessThanOrEqualComparableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/comparable.h&gt;</em></div>
+<p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is less-than-or-equal comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__comparability__concepts_1ga902adfa85207b65e22ad2dc5e8c9e92f"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">GreaterThanOrEqualComparable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">requires(const</span> <span class="pre">TLhs&amp;</span> <span class="pre">lhs,</span> <span class="pre">const</span> <span class="pre">TRhs&amp;</span> <span class="pre">rhs)</span> <span class="pre">{</span> <span class="pre">lhs</span> <span class="pre">&gt;=</span> <span class="pre">rhs;</span> <span class="pre">}</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is greater-than-or-equal comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl8concepts21GreaterThanComparableE">
+<span id="_CPPv3I00EN8hyperion3mpl8concepts21GreaterThanComparableE"></span><span id="_CPPv2I00EN8hyperion3mpl8concepts21GreaterThanComparableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1GreaterThanComparable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GreaterThanComparable</span></span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl8concepts21GreaterThanComparableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/comparable.h&gt;</em></div>
+<p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is greater-than comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__comparability__concepts_1ga275b341cb1b7b3a54c93c03abea8bee7"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs&gt;</span> <span class="pre">concept</span> <span class="pre">ThreeWayComparable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">std::three_way_comparable_with&lt;TLhs,</span> <span class="pre">TRhs&gt;</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is three-way comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl8concepts28GreaterThanOrEqualComparableE">
+<span id="_CPPv3I00EN8hyperion3mpl8concepts28GreaterThanOrEqualComparableE"></span><span id="_CPPv2I00EN8hyperion3mpl8concepts28GreaterThanOrEqualComparableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1GreaterThanOrEqualComparable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GreaterThanOrEqualComparable</span></span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl8concepts28GreaterThanOrEqualComparableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/comparable.h&gt;</em></div>
+<p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is greater-than-or-equal comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
 </dd></dl>
 
-</div>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl8concepts18ThreeWayComparableE">
+<span id="_CPPv3I00EN8hyperion3mpl8concepts18ThreeWayComparableE"></span><span id="_CPPv2I00EN8hyperion3mpl8concepts18ThreeWayComparableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1ThreeWayComparable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ThreeWayComparable</span></span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl8concepts18ThreeWayComparableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/comparable.h&gt;</em></div>
+<p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is three-way comparable with a <code class="docutils literal notranslate"><span class="pre">TRhs</span></code></p>
 </dd></dl>
 
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::EqualityComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::InequalityComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::LessThanComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::LessThanOrEqualComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::GreaterThanComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::GreaterThanOrEqualComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::ThreeWayComparable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
 </section>
 
 
@@ -600,7 +587,28 @@ document.write(`
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"></div>
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl8concepts18EqualityComparableE"><code class="docutils literal notranslate"><span class="pre">EqualityComparable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl8concepts20InequalityComparableE"><code class="docutils literal notranslate"><span class="pre">InequalityComparable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl8concepts18LessThanComparableE"><code class="docutils literal notranslate"><span class="pre">LessThanComparable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl8concepts25LessThanOrEqualComparableE"><code class="docutils literal notranslate"><span class="pre">LessThanOrEqualComparable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl8concepts21GreaterThanComparableE"><code class="docutils literal notranslate"><span class="pre">GreaterThanComparable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl8concepts28GreaterThanOrEqualComparableE"><code class="docutils literal notranslate"><span class="pre">GreaterThanOrEqualComparable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl8concepts18ThreeWayComparableE"><code class="docutils literal notranslate"><span class="pre">ThreeWayComparable</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

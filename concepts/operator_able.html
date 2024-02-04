@@ -243,6 +243,10 @@ document.write(`
   
 
   
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
 </div>
 
     </header>
@@ -488,165 +492,132 @@ document.write(`
 </pre></div>
 </div>
 </section>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-variables">Variables</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__operatorability__concepts_1gad7f07db6465fee848bcee3dd5a6e7424"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs&gt;</span> <span class="pre">concept</span> <span class="pre">UnaryPlusable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">requires(TLhs</span> <span class="pre">lhs)</span> <span class="pre">{</span> <span class="pre">+lhs;</span> <span class="pre">}</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> supports the unary plus operator (unary <code class="docutils literal notranslate"><span class="pre">operator+</span></code>) </p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__operatorability__concepts_1gaac1917cf83fd5b82e7151d64886eb002"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs&gt;</span> <span class="pre">concept</span> <span class="pre">UnaryMinusable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">requires(TLhs</span> <span class="pre">lhs)</span> <span class="pre">{</span> <span class="pre">-lhs;</span> <span class="pre">}</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> supports the unary minus operator (unary <code class="docutils literal notranslate"><span class="pre">operator-</span></code>) </p>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN8hyperion3mpl8concepts13UnaryPlusableE">
+<span id="_CPPv3I0EN8hyperion3mpl8concepts13UnaryPlusableE"></span><span id="_CPPv2I0EN8hyperion3mpl8concepts13UnaryPlusableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1UnaryPlusable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UnaryPlusable</span></span></span><a class="headerlink" href="#_CPPv4I0EN8hyperion3mpl8concepts13UnaryPlusableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/operator_able.h&gt;</em></div>
+<p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> supports the unary plus operator (unary <code class="docutils literal notranslate"><span class="pre">operator+</span></code>) </p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__operatorability__concepts_1ga96440ca09f34842a457ddbc61ca0a9a2"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs&gt;</span> <span class="pre">concept</span> <span class="pre">BinaryNotable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">requires(TLhs</span> <span class="pre">lhs)</span> <span class="pre">{</span> <span class="pre">~lhs;</span> <span class="pre">}</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> supports the binary not operator (<code class="docutils literal notranslate"><span class="pre">operator~</span></code>) </p>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN8hyperion3mpl8concepts14UnaryMinusableE">
+<span id="_CPPv3I0EN8hyperion3mpl8concepts14UnaryMinusableE"></span><span id="_CPPv2I0EN8hyperion3mpl8concepts14UnaryMinusableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1UnaryMinusable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UnaryMinusable</span></span></span><a class="headerlink" href="#_CPPv4I0EN8hyperion3mpl8concepts14UnaryMinusableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/operator_able.h&gt;</em></div>
+<p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> supports the unary minus operator (unary <code class="docutils literal notranslate"><span class="pre">operator-</span></code>) </p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__operatorability__concepts_1gab94ef17c105ddf5695626f6035cb098a"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs&gt;</span> <span class="pre">concept</span> <span class="pre">BooleanNotable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">requires(TLhs</span> <span class="pre">lhs)</span> <span class="pre">{</span> <span class="pre">!lhs;</span> <span class="pre">}</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> supports the boolean not operator (<code class="docutils literal notranslate"><span class="pre">operator!</span></code>) </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__operatorability__concepts_1ga8bb74f84dd6e37a6a2fdd44ee3c375d8"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs&gt;</span> <span class="pre">concept</span> <span class="pre">Addressable</span>&#160;&#160; <span class="pre">=</span> <span class="pre">requires(TLhs</span> <span class="pre">lhs)</span> <span class="pre">{</span> <span class="pre">&amp;lhs;</span> <span class="pre">}</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is addressable (i.e., it supports unary <code class="docutils literal notranslate"><span class="pre">operator&amp;</span></code>) </p>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN8hyperion3mpl8concepts11AddressableE">
+<span id="_CPPv3I0EN8hyperion3mpl8concepts11AddressableE"></span><span id="_CPPv2I0EN8hyperion3mpl8concepts11AddressableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1Addressable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Addressable</span></span></span><a class="headerlink" href="#_CPPv4I0EN8hyperion3mpl8concepts11AddressableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/operator_able.h&gt;</em></div>
+<p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is addressable (i.e., it supports unary <code class="docutils literal notranslate"><span class="pre">operator&amp;</span></code>) </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This <em></em> be <code class="docutils literal notranslate"><span class="pre">true</span></code> for <em></em> types. It is rarely (read: never) not an error to overload the address-of operator </p>
 </div>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__operatorability__concepts_1ga1a68c675c7f18d084693f3b98cffe08c"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs&gt;</span> <span class="pre">concept</span> <span class="pre">Dereferencible</span>&#160;&#160; <span class="pre">=</span> <span class="pre">std::is_pointer_v&lt;TLhs&gt;</span> <span class="pre">||</span> <span class="pre">requires(TLhs</span> <span class="pre">lhs)</span> <span class="pre">{</span> <span class="pre">*lhs;</span> <span class="pre">}</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is dereferencible (i.e., it supports unary <code class="docutils literal notranslate"><span class="pre">operator*</span></code>) </p>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN8hyperion3mpl8concepts14DereferencibleE">
+<span id="_CPPv3I0EN8hyperion3mpl8concepts14DereferencibleE"></span><span id="_CPPv2I0EN8hyperion3mpl8concepts14DereferencibleE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1Dereferencible"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Dereferencible</span></span></span><a class="headerlink" href="#_CPPv4I0EN8hyperion3mpl8concepts14DereferencibleE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/operator_able.h&gt;</em></div>
+<p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> is dereferencible (i.e., it supports unary <code class="docutils literal notranslate"><span class="pre">operator*</span></code>) </p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__operatorability__concepts_1ga03a6a50cf7bb65b2694472ccb5c0ea8f"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs&gt;</span> <span class="pre">concept</span> <span class="pre">Arrowable</span>&#160; <span class="pre">=</span> <span class="pre">(std::is_class_v&lt;std::remove_pointer_t&lt;TLhs&gt;&gt;||</span> <span class="pre">std::is_union_v&lt;std::remove_pointer_t&lt;TLhs&gt;&gt;)&amp;&amp;</span> <span class="pre">(std::is_pointer_v&lt;TLhs&gt;||</span> <span class="pre">requires(TLhs</span> <span class="pre">lhs)</span> <span class="pre">{lhs.operator-&gt;();})</span></span></dt>
-<dd><p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> supports the pointer-to-memeber operator (i.e., it supports unary <code class="docutils literal notranslate"><span class="pre">operator-&gt;</span></code>) </p>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN8hyperion3mpl8concepts9ArrowableE">
+<span id="_CPPv3I0EN8hyperion3mpl8concepts9ArrowableE"></span><span id="_CPPv2I0EN8hyperion3mpl8concepts9ArrowableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1Arrowable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Arrowable</span></span></span><a class="headerlink" href="#_CPPv4I0EN8hyperion3mpl8concepts9ArrowableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/operator_able.h&gt;</em></div>
+<p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> supports the pointer-to-memeber operator (i.e., it supports unary <code class="docutils literal notranslate"><span class="pre">operator-&gt;</span></code>) </p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__operatorability__concepts_1ga042f8f5f6e424d8d559bce79e2cf87e0"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs</span> <span class="pre">=</span> <span class="pre">TLhs&gt;</span> <span class="pre">concept</span> <span class="pre">Addable</span>&#160; <span class="pre">=</span> <span class="pre">requires(TLhs</span> <span class="pre">lhs,</span> <span class="pre">TRhs</span> <span class="pre">rhs)</span> <span class="pre">{lhs</span> <span class="pre">+</span> <span class="pre">rhs;rhs</span> <span class="pre">+</span> <span class="pre">lhs;}</span></span></dt>
-<dd><p>Concept definition requiring that <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> are addable (they support binary <code class="docutils literal notranslate"><span class="pre">operator+</span></code>) </p>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl8concepts7AddableE">
+<span id="_CPPv3I00EN8hyperion3mpl8concepts7AddableE"></span><span id="_CPPv2I00EN8hyperion3mpl8concepts7AddableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1Addable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl8concepts7AddableE" title="hyperion::mpl::concepts::Addable::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Addable</span></span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl8concepts7AddableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/operator_able.h&gt;</em></div>
+<p>Concept definition requiring that <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> are addable (they support binary <code class="docutils literal notranslate"><span class="pre">operator+</span></code>) </p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__operatorability__concepts_1ga55fbecf72a459e13fba37d6c50a97d05"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs</span> <span class="pre">=</span> <span class="pre">TLhs&gt;</span> <span class="pre">concept</span> <span class="pre">Subtractable</span>&#160; <span class="pre">=</span> <span class="pre">requires(TLhs</span> <span class="pre">lhs,</span> <span class="pre">TRhs</span> <span class="pre">rhs)</span> <span class="pre">{lhs</span> <span class="pre">-</span> <span class="pre">rhs;rhs</span> <span class="pre">-</span> <span class="pre">lhs;}</span></span></dt>
-<dd><p>Concept definition requiring that <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> are subtractable (they support binary <code class="docutils literal notranslate"><span class="pre">operator-</span></code>) </p>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl8concepts12SubtractableE">
+<span id="_CPPv3I00EN8hyperion3mpl8concepts12SubtractableE"></span><span id="_CPPv2I00EN8hyperion3mpl8concepts12SubtractableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1Subtractable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl8concepts12SubtractableE" title="hyperion::mpl::concepts::Subtractable::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Subtractable</span></span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl8concepts12SubtractableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/operator_able.h&gt;</em></div>
+<p>Concept definition requiring that <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> are subtractable (they support binary <code class="docutils literal notranslate"><span class="pre">operator-</span></code>) </p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__operatorability__concepts_1ga088d1fff56d28ab4de59d993a798875b"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs</span> <span class="pre">=</span> <span class="pre">TLhs&gt;</span> <span class="pre">concept</span> <span class="pre">Multipliable</span>&#160; <span class="pre">=</span> <span class="pre">requires(TLhs</span> <span class="pre">lhs,</span> <span class="pre">TRhs</span> <span class="pre">rhs)</span> <span class="pre">{lhs*</span> <span class="pre">rhs;rhs*</span> <span class="pre">lhs;}</span></span></dt>
-<dd><p>Concept definition requiring that <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> are multipliable (they support binary <code class="docutils literal notranslate"><span class="pre">operator*</span></code>) </p>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl8concepts12MultipliableE">
+<span id="_CPPv3I00EN8hyperion3mpl8concepts12MultipliableE"></span><span id="_CPPv2I00EN8hyperion3mpl8concepts12MultipliableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1Multipliable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl8concepts12MultipliableE" title="hyperion::mpl::concepts::Multipliable::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Multipliable</span></span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl8concepts12MultipliableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/operator_able.h&gt;</em></div>
+<p>Concept definition requiring that <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> are multipliable (they support binary <code class="docutils literal notranslate"><span class="pre">operator*</span></code>) </p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__operatorability__concepts_1ga84575a2c3b979b73e1220ee2202afeac"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs</span> <span class="pre">=</span> <span class="pre">TLhs&gt;</span> <span class="pre">concept</span> <span class="pre">Dividible</span>&#160; <span class="pre">=</span> <span class="pre">requires(TLhs</span> <span class="pre">lhs,</span> <span class="pre">TRhs</span> <span class="pre">rhs)</span> <span class="pre">{lhs</span> <span class="pre">/</span> <span class="pre">rhs;rhs</span> <span class="pre">/</span> <span class="pre">lhs;}</span></span></dt>
-<dd><p>Concept definition requiring that <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> are dividible (they support binary <code class="docutils literal notranslate"><span class="pre">operator/</span></code>) </p>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl8concepts9DividibleE">
+<span id="_CPPv3I00EN8hyperion3mpl8concepts9DividibleE"></span><span id="_CPPv2I00EN8hyperion3mpl8concepts9DividibleE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1Dividible"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl8concepts9DividibleE" title="hyperion::mpl::concepts::Dividible::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Dividible</span></span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl8concepts9DividibleE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/operator_able.h&gt;</em></div>
+<p>Concept definition requiring that <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> are dividible (they support binary <code class="docutils literal notranslate"><span class="pre">operator/</span></code>) </p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__operatorability__concepts_1ga864df2087c592bb65a24e86ccc2910d1"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs</span> <span class="pre">=</span> <span class="pre">TLhs&gt;</span> <span class="pre">concept</span> <span class="pre">BinaryAndable</span>&#160; <span class="pre">=</span> <span class="pre">requires(TLhs</span> <span class="pre">lhs,</span> <span class="pre">TRhs</span> <span class="pre">rhs)</span> <span class="pre">{lhs</span> <span class="pre">&amp;</span> <span class="pre">rhs;rhs</span> <span class="pre">&amp;</span> <span class="pre">lhs;}</span></span></dt>
-<dd><p>Concept definition requiring that <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> are binary andable (they support binary <code class="docutils literal notranslate"><span class="pre">operator&amp;</span></code>) </p>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN8hyperion3mpl8concepts13BinaryNotableE">
+<span id="_CPPv3I0EN8hyperion3mpl8concepts13BinaryNotableE"></span><span id="_CPPv2I0EN8hyperion3mpl8concepts13BinaryNotableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1BinaryNotable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BinaryNotable</span></span></span><a class="headerlink" href="#_CPPv4I0EN8hyperion3mpl8concepts13BinaryNotableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/operator_able.h&gt;</em></div>
+<p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> supports the binary not operator (<code class="docutils literal notranslate"><span class="pre">operator~</span></code>) </p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__operatorability__concepts_1gae8bf31e42140ffe765148c752555ff36"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs</span> <span class="pre">=</span> <span class="pre">TLhs&gt;</span> <span class="pre">concept</span> <span class="pre">BinaryOrable</span>&#160; <span class="pre">=</span> <span class="pre">requires(TLhs</span> <span class="pre">lhs,</span> <span class="pre">TRhs</span> <span class="pre">rhs)</span> <span class="pre">{lhs</span> <span class="pre">|</span> <span class="pre">rhs;rhs</span> <span class="pre">|</span> <span class="pre">lhs;}</span></span></dt>
-<dd><p>Concept definition requiring that <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> are binary orable (they support binary <code class="docutils literal notranslate"><span class="pre">operator|</span></code>) </p>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl8concepts13BinaryAndableE">
+<span id="_CPPv3I00EN8hyperion3mpl8concepts13BinaryAndableE"></span><span id="_CPPv2I00EN8hyperion3mpl8concepts13BinaryAndableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1BinaryAndable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl8concepts13BinaryAndableE" title="hyperion::mpl::concepts::BinaryAndable::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BinaryAndable</span></span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl8concepts13BinaryAndableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/operator_able.h&gt;</em></div>
+<p>Concept definition requiring that <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> are binary andable (they support binary <code class="docutils literal notranslate"><span class="pre">operator&amp;</span></code>) </p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__operatorability__concepts_1ga77456b181ad3ac9ed2914cdb25e03f20"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs</span> <span class="pre">=</span> <span class="pre">TLhs&gt;</span> <span class="pre">concept</span> <span class="pre">BooleanAndable</span>&#160; <span class="pre">=</span> <span class="pre">requires(TLhs</span> <span class="pre">lhs,</span> <span class="pre">TRhs</span> <span class="pre">rhs)</span> <span class="pre">{lhs&amp;&amp;</span> <span class="pre">rhs;rhs&amp;&amp;</span> <span class="pre">lhs;}</span></span></dt>
-<dd><p>Concept definition requiring that <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> are boolean andable (they support binary <code class="docutils literal notranslate"><span class="pre">operator&amp;&amp;</span></code>) </p>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl8concepts12BinaryOrableE">
+<span id="_CPPv3I00EN8hyperion3mpl8concepts12BinaryOrableE"></span><span id="_CPPv2I00EN8hyperion3mpl8concepts12BinaryOrableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1BinaryOrable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl8concepts12BinaryOrableE" title="hyperion::mpl::concepts::BinaryOrable::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BinaryOrable</span></span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl8concepts12BinaryOrableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/operator_able.h&gt;</em></div>
+<p>Concept definition requiring that <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> are binary orable (they support binary <code class="docutils literal notranslate"><span class="pre">operator|</span></code>) </p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="group__operatorability__concepts_1ga16916efe6bf64687f210ede1b7400803"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">TLhs,</span> <span class="pre">typename</span> <span class="pre">TRhs</span> <span class="pre">=</span> <span class="pre">TLhs&gt;</span> <span class="pre">concept</span> <span class="pre">BooleanOrable</span>&#160; <span class="pre">=</span> <span class="pre">requires(TLhs</span> <span class="pre">lhs,</span> <span class="pre">TRhs</span> <span class="pre">rhs)</span> <span class="pre">{lhs</span> <span class="pre">||</span> <span class="pre">rhs;rhs</span> <span class="pre">||</span> <span class="pre">lhs;}</span></span></dt>
-<dd><p>Concept definition requiring that <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> are boolean orable (they support binary <code class="docutils literal notranslate"><span class="pre">operator||</span></code>) </p>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN8hyperion3mpl8concepts14BooleanNotableE">
+<span id="_CPPv3I0EN8hyperion3mpl8concepts14BooleanNotableE"></span><span id="_CPPv2I0EN8hyperion3mpl8concepts14BooleanNotableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1BooleanNotable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BooleanNotable</span></span></span><a class="headerlink" href="#_CPPv4I0EN8hyperion3mpl8concepts14BooleanNotableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/operator_able.h&gt;</em></div>
+<p>Concept definition requiring that a <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> supports the boolean not operator (<code class="docutils literal notranslate"><span class="pre">operator!</span></code>) </p>
 </dd></dl>
 
-</div>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl8concepts14BooleanAndableE">
+<span id="_CPPv3I00EN8hyperion3mpl8concepts14BooleanAndableE"></span><span id="_CPPv2I00EN8hyperion3mpl8concepts14BooleanAndableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1BooleanAndable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl8concepts14BooleanAndableE" title="hyperion::mpl::concepts::BooleanAndable::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BooleanAndable</span></span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl8concepts14BooleanAndableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/operator_able.h&gt;</em></div>
+<p>Concept definition requiring that <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> are boolean andable (they support binary <code class="docutils literal notranslate"><span class="pre">operator&amp;&amp;</span></code>) </p>
 </dd></dl>
 
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::UnaryPlusable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::UnaryMinusable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::Addressable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::Dereferencible” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::Arrowable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::Addable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::Subtractable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::Multipliable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::Dividible” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::BinaryNotable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::BinaryAndable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::BinaryOrable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::BooleanNotable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::BooleanAndable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::BooleanOrable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN8hyperion3mpl8concepts13BooleanOrableE">
+<span id="_CPPv3I00EN8hyperion3mpl8concepts13BooleanOrableE"></span><span id="_CPPv2I00EN8hyperion3mpl8concepts13BooleanOrableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1BooleanOrable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TLhs</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TRhs</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN8hyperion3mpl8concepts13BooleanOrableE" title="hyperion::mpl::concepts::BooleanOrable::TLhs"><span class="n"><span class="pre">TLhs</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BooleanOrable</span></span></span><a class="headerlink" href="#_CPPv4I00EN8hyperion3mpl8concepts13BooleanOrableE" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hyperion/mpl/concepts/operator_able.h&gt;</em></div>
+<p>Concept definition requiring that <code class="docutils literal notranslate"><span class="pre">TLhs</span></code> and <code class="docutils literal notranslate"><span class="pre">TRhs</span></code> are boolean orable (they support binary <code class="docutils literal notranslate"><span class="pre">operator||</span></code>) </p>
+</dd></dl>
+
 </section>
 
 
@@ -684,7 +655,36 @@ document.write(`
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"></div>
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN8hyperion3mpl8concepts13UnaryPlusableE"><code class="docutils literal notranslate"><span class="pre">UnaryPlusable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN8hyperion3mpl8concepts14UnaryMinusableE"><code class="docutils literal notranslate"><span class="pre">UnaryMinusable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN8hyperion3mpl8concepts11AddressableE"><code class="docutils literal notranslate"><span class="pre">Addressable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN8hyperion3mpl8concepts14DereferencibleE"><code class="docutils literal notranslate"><span class="pre">Dereferencible</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN8hyperion3mpl8concepts9ArrowableE"><code class="docutils literal notranslate"><span class="pre">Arrowable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl8concepts7AddableE"><code class="docutils literal notranslate"><span class="pre">Addable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl8concepts12SubtractableE"><code class="docutils literal notranslate"><span class="pre">Subtractable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl8concepts12MultipliableE"><code class="docutils literal notranslate"><span class="pre">Multipliable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl8concepts9DividibleE"><code class="docutils literal notranslate"><span class="pre">Dividible</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN8hyperion3mpl8concepts13BinaryNotableE"><code class="docutils literal notranslate"><span class="pre">BinaryNotable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl8concepts13BinaryAndableE"><code class="docutils literal notranslate"><span class="pre">BinaryAndable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl8concepts12BinaryOrableE"><code class="docutils literal notranslate"><span class="pre">BinaryOrable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN8hyperion3mpl8concepts14BooleanNotableE"><code class="docutils literal notranslate"><span class="pre">BooleanNotable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl8concepts14BooleanAndableE"><code class="docutils literal notranslate"><span class="pre">BooleanAndable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN8hyperion3mpl8concepts13BooleanOrableE"><code class="docutils literal notranslate"><span class="pre">BooleanOrable</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

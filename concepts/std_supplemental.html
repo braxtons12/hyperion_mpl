@@ -242,6 +242,10 @@ document.write(`
   
 
   
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
 </div>
 
     </header>
@@ -497,10 +501,27 @@ document.write(`
 </section>
 </dd></dl>
 
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenconcept: Cannot find concept “hyperion::mpl::concepts::TriviallyMovable” in doxygen xml output for project “hyperion::mpl” from directory: _build/xml</p>
-</div>
+<dl class="cpp concept">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN8hyperion3mpl8concepts16TriviallyMovableE">
+<span id="_CPPv3I0EN8hyperion3mpl8concepts16TriviallyMovableE"></span><span id="_CPPv2I0EN8hyperion3mpl8concepts16TriviallyMovableE"></span><span class="target" id="concepthyperion_1_1mpl_1_1concepts_1_1TriviallyMovable"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TriviallyMovable</span></span></span><a class="headerlink" href="#_CPPv4I0EN8hyperion3mpl8concepts16TriviallyMovableE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Concept defining what a trivially movable type is. A type that is trivially movable is both trivially move constructible and trivially move assignable. </p>
+<p>For a type to be trivially move constructible, the type must be move constructible, and its move constructor must either <em>not</em> be user provided in any way, or explicitly defaulted by declaring it as <code class="docutils literal notranslate"><span class="pre">=</span> <span class="pre">default</span></code>. Similarly, for a type to be trivially move assignable, the type must be move assignable, and its move assignment operator must either <em>not</em> be user provided in any way, or explicitly defaulted by declaring it as <code class="docutils literal notranslate"><span class="pre">=</span> <span class="pre">default</span></code>.</p>
+<section id="concepthyperion_1_1mpl_1_1concepts_1_1TriviallyMovable_1autotoc_md9">
+<h2>Requirements<a class="headerlink" href="#concepthyperion_1_1mpl_1_1concepts_1_1TriviallyMovable_1autotoc_md9" title="Link to this heading">#</a></h2>
+<p id="concepthyperion_1_1mpl_1_1concepts_1_1TriviallyMovable_1autotoc_md9"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must be trivially move constructible</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must be trivially move assignable</p></li>
+</ul>
+</p>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">tparam TType<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The type to check </p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
@@ -529,7 +550,22 @@ document.write(`
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"></div>
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN8hyperion3mpl8concepts16TriviallyMovableE"><code class="docutils literal notranslate"><span class="pre">TriviallyMovable</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
