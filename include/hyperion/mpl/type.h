@@ -94,7 +94,8 @@ namespace hyperion::mpl {
             return {};
         }
 
-        /// @brief Returns the inner `MetaType` or `MetaValue` `type` of `this` `Type`
+        /// @brief Returns the inner ``MetaValue` `type` of `this` `Type`,
+        /// if `this` `Type` represents a `MetaValue`
         ///
         /// # Requirements
         /// - `type` is trivially default constructible
@@ -107,7 +108,7 @@ namespace hyperion::mpl {
         /// static_assert(one_typed.inner() == 1_value);
         /// @endcode
         ///
-        /// @return The inner `MetaType` or `MetaValue` of `this` `Type`
+        /// @return The inner `MetaValue` of `this` `Type`
         template<typename TDelay = type>
             requires std::same_as<TDelay, type> && std::is_trivially_default_constructible_v<TDelay>
                      && MetaValue<TDelay>
@@ -878,38 +879,216 @@ namespace hyperion::mpl {
             }
         }
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is convertible
+        /// to the type `rhs` represents, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct not_convertible {};
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto double_t = decltype_<double>();
+        /// constexpr auto not_convertible_t = decltype_<not_convertible>();
+        ///
+        /// static_assert(int_t.is_convertible_to(double_t));
+        /// static_assert(double_t.is_convertible_to(int_t));
+        /// static_assert(not int_t.is_convertible_to(not_convertible_t));
+        /// static_assert(not not_convertible_t.is_convertible_to(int_t));
+        /// @endcode
+        ///
+        /// @tparam TRhs The type that `rhs` represents
+        /// @param rhs The instance of the `Type` specialization representing the type to check that
+        /// `type` is convertible to
+        /// @return whether the type `this` represents is convertible to the type `rhs` represents,
+        /// as a `Value` specialization
         template<typename TRhs>
         [[nodiscard]] constexpr auto
         is_convertible_to([[maybe_unused]] const Type<TRhs>& rhs) const noexcept
             -> Value<std::convertible_to<type, TRhs>, bool>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is derived from
+        /// the type `rhs` represents, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct base {};
+        /// struct derived : base {};
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto base_t = decltype_<base>();
+        /// constexpr auto derived_t = decltype_<base>();
+        ///
+        /// static_assert(derived_t.is_derived_from(base_t));
+        /// static_assert(not base_t.is_derived_from(base_t));
+        /// static_assert(not int_t.is_derived_from(int_t));
+        /// static_assert(not int_t.is_derived_from(base_t));
+        /// @endcode
+        ///
+        /// @note The application of this differs from `std::is_base_of` or `std::derived_from`,
+        /// in that this is `false` when called against the same type. That is,
+        /// `decltype_<base>().is_derived_from(decltype_<base>()) == false`.
+        ///
+        /// @tparam TRhs The type that `rhs` represents
+        /// @param rhs The instance of the `Type` specialization representing the type to check that
+        /// `type` is derived from
+        /// @return whether the type `this` represents is derived from the type `rhs` represents,
+        /// as a `Value` specialization
         template<typename TRhs>
         [[nodiscard]] constexpr auto
         is_derived_from([[maybe_unused]] const Type<TRhs>& rhs) const noexcept
             -> Value<std::derived_from<type, TRhs> && !std::same_as<type, TRhs>, bool>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is a base class
+        /// of the type `rhs` represents, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct base {};
+        /// struct derived : base {};
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto base_t = decltype_<base>();
+        /// constexpr auto derived_t = decltype_<base>();
+        ///
+        /// static_assert(base_t.is_base_of(derived_t));
+        /// static_assert(not base_t.is_base_of(base_t));
+        /// static_assert(not int_t.is_base_of(int_t));
+        /// static_assert(not int_t.is_base_of(base_t));
+        /// @endcode
+        ///
+        /// @note The application of this differs from `std::is_base_of` or `std::derived_from`,
+        /// in that this is `false` when called against the same type. That is,
+        /// `decltype_<base>().is_base_of(decltype_<base>()) == false`.
+        ///
+        /// @tparam TRhs The type that `rhs` represents
+        /// @param rhs The instance of the `Type` specialization representing the type to check that
+        /// `type` is a base of
+        /// @return whether the type `this` represents is a base of the type `rhs` represents,
+        /// as a `Value` specialization
         template<typename TRhs>
         [[nodiscard]] constexpr auto
         is_base_of([[maybe_unused]] const Type<TRhs>& rhs) const noexcept
             -> Value<std::derived_from<TRhs, type> && !std::same_as<type, TRhs>, bool>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is constructible
+        /// from arguments of types `TTypes...`, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// template<typename... TTypes>
+        /// struct list {};
+        /// struct tag {};
+        /// struct constructible {
+        ///     constructible(int, double, tag);
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto constructible_t = decltype_<constructible>();
+        ///
+        /// static_assert(constructible.is_constructible_from(list<int, double, tag>{}));
+        /// static_assert(not constructible.is_constructible_from(list<double>{}));
+        /// static_assert(not int_t.is_constructible_from(constructible));
+        /// @endcode
+        ///
+        /// @tparam TList The type-list type template representing the argument types to check with
+        /// @tparam TTypes The list of argument types to check with
+        /// @param list The type-list representing the argument types to check with
+        /// @return whether the type `this` represents is constructible from arguments of types
+        /// `TTypes...`, as a `Value` specialization
         template<template<typename...> typename TList, typename... TTypes>
         [[nodiscard]] constexpr auto
         is_constructible_from([[maybe_unused]] const TList<TTypes...>& list) const noexcept
             -> std::enable_if_t<!MetaType<TList<TTypes...>>,
                                 Value<std::is_constructible_v<type, TTypes...>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is constructible
+        /// from arguments of types `TTypes...`, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// template<typename... TTypes>
+        /// struct list {};
+        /// struct tag {};
+        /// struct constructible {
+        ///     constructible(int, double, tag);
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto constructible_t = decltype_<constructible>();
+        ///
+        /// static_assert(constructible.is_constructible_from(decltype_<int>(),
+        ///                                                   decltype_<double>(),
+        ///                                                   decltype_<tag>()));
+        /// static_assert(not constructible.is_constructible_from(decltype_<double>{}));
+        /// static_assert(not int_t.is_constructible_from(constructible));
+        /// @endcode
+        ///
+        /// @tparam TTypes The list of argument types to check with
+        /// @param list The `Type`s representing the argument types to check with
+        /// @return whether the type `this` represents is constructible from arguments of types
+        /// `TTypes...`, as a `Value` specialization
         template<typename... TTypes>
         [[nodiscard]] constexpr auto
         is_constructible_from([[maybe_unused]] const Type<TTypes>&... list) const noexcept
             -> Value<std::is_constructible_v<type, TTypes...>, bool>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
+        /// constructible from arguments of types `TTypes...`, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// template<typename... TTypes>
+        /// struct list {};
+        /// struct tag {};
+        /// struct constructible {
+        ///     constructible(int, double, tag);
+        ///     constructible(int, tag, tag) noexcept;
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto constructible_t = decltype_<constructible>();
+        ///
+        /// static_assert(constructible.is_noexcept_constructible_from(list<int, tag, tag>{}));
+        /// static_assert(not constructible
+        ///                     .is_noexcept_constructible_from(list<int, double, tag>{}));
+        /// static_assert(not constructible.is_noexcept_constructible_from(list<double>{}));
+        /// static_assert(not int_t.is_noexcept_constructible_from(constructible));
+        /// @endcode
+        ///
+        /// @tparam TList The type-list type template representing the argument types to check with
+        /// @tparam TTypes The list of argument types to check with
+        /// @param list The type-list representing the argument types to check with
+        /// @return whether the type `this` represents is `noexcept` constructible from arguments of
+        /// types `TTypes...`, as a `Value` specialization
         template<template<typename...> typename TList, typename... TTypes>
         [[nodiscard]] constexpr auto
         is_noexcept_constructible_from([[maybe_unused]] const TList<TTypes...>& list) const noexcept
             -> std::enable_if_t<!MetaType<TList<TTypes...>>,
                                 Value<std::is_nothrow_constructible_v<type, TTypes...>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
+        /// constructible from arguments of types `TTypes...`, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// template<typename... TTypes>
+        /// struct list {};
+        /// struct tag {};
+        /// struct constructible {
+        ///     constructible(int, double, tag);
+        ///     constructible(int, tag, tag) noexcept;
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto constructible_t = decltype_<constructible>();
+        ///
+        /// static_assert(constructible.is_noexcept_constructible_from(decltype_<int>(),
+        ///                                                            decltype_<tag>(),
+        ///                                                            decltype_<tag>()));
+        /// static_assert(not constructible.is_noexcept_constructible_from(decltype_<int>(),
+        ///                                                                decltype_<double>(),
+        ///                                                                decltype_<tag>()));
+        /// static_assert(not constructible.is_noexcept_constructible_from(decltype_<double>{}));
+        /// static_assert(not int_t.is_noexcept_constructible_from(constructible));
+        /// @endcode
+        ///
+        /// @tparam TTypes The list of argument types to check with
+        /// @param list The `Type`s representing the argument types to check with
+        /// @return whether the type `this` represents is `noexcept` constructible from arguments of
+        /// types `TTypes...`, as a `Value` specialization
         template<typename... TTypes>
         [[nodiscard]] constexpr auto
         is_noexcept_constructible_from([[maybe_unused]] const Type<TTypes>&... list) const noexcept
