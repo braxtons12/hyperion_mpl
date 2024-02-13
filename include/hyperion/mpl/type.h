@@ -86,11 +86,6 @@ namespace hyperion::mpl {
         /// @brief The type that this `Type` is a metaprogramming wrapper for
         using type = TType;
 
-#if HYPERION_PLATFORM_COMPILER_IS_CLANG
-        _Pragma("GCC diagnostic push");
-        _Pragma("GCC diagnostic ignored \"-Wdeprecated-volatile\"");
-#endif // HYPERION_PLATFORM_COMPILER_IS_CLANG
-
         /// @brief Returns another instance of this `specialization` of `Type`
         /// @return another instance of this `Type` specialization
         template<typename TDelay = type>
@@ -120,10 +115,6 @@ namespace hyperion::mpl {
         {
             return {};
         }
-
-#if HYPERION_PLATFORM_COMPILER_IS_CLANG
-        _Pragma("GCC diagnostic pop");
-#endif // HYPERION_PLATFORM_COMPILER_IS_CLANG
 
         /// @brief Returns whether the `type` of this `Type` is also a metaprogramming type
         /// (i.e. a `MetaValue`), in which case you may call `this->inner()` to obtain that an
