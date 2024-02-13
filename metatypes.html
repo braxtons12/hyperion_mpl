@@ -172,6 +172,13 @@ document.write(`
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="type.html">
+                        hyperion::mpl::Type
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="type_traits.html">
                         hyperion::mpl::type_traits
                       </a>
@@ -299,6 +306,13 @@ document.write(`
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="type.html">
+                        hyperion::mpl::Type
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="type_traits.html">
                         hyperion::mpl::type_traits
                       </a>
@@ -386,6 +400,13 @@ document.write(`
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="value.html">
                         hyperion::mpl::Value
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="type.html">
+                        hyperion::mpl::Type
                       </a>
                     </li>
                 
@@ -611,7 +632,7 @@ document.write(`
 <span id="_CPPv3I0EN8hyperion3mpl13is_meta_valueE"></span><span id="_CPPv2I0EN8hyperion3mpl13is_meta_valueE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structhyperion_1_1mpl_1_1is__meta__value"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_meta_value</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">bool_constant</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN8hyperion3mpl9MetaValueE" title="hyperion::mpl::MetaValue"><span class="n"><span class="pre">MetaValue</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN8hyperion3mpl13is_meta_valueE" title="hyperion::mpl::is_meta_value::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I0EN8hyperion3mpl13is_meta_valueE" title="Link to this definition">#</a><br /></dt>
 <dd><div class="docutils container">
 <em>#include &lt;hyperion/mpl/metatypes.h&gt;</em></div>
-<p>Type trait to determine whether type <code class="docutils literal notranslate"><span class="pre">TType</span></code> is a metaprogramming value type. </p>
+<p><a class="reference internal" href="type.html#structhyperion_1_1mpl_1_1Type"><span class="std std-ref">Type</span></a> trait to determine whether type <code class="docutils literal notranslate"><span class="pre">TType</span></code> is a metaprogramming value type. </p>
 <p>A metaprogramming value type is any type that has a <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">constexpr</span></code> member variable named <code class="docutils literal notranslate"><span class="pre">value</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
@@ -625,7 +646,7 @@ document.write(`
 <span id="_CPPv3I0EN8hyperion3mpl12is_meta_typeE"></span><span id="_CPPv2I0EN8hyperion3mpl12is_meta_typeE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structhyperion_1_1mpl_1_1is__meta__type"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_meta_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">bool_constant</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN8hyperion3mpl8MetaTypeE" title="hyperion::mpl::MetaType"><span class="n"><span class="pre">MetaType</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN8hyperion3mpl12is_meta_typeE" title="hyperion::mpl::is_meta_type::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I0EN8hyperion3mpl12is_meta_typeE" title="Link to this definition">#</a><br /></dt>
 <dd><div class="docutils container">
 <em>#include &lt;hyperion/mpl/metatypes.h&gt;</em></div>
-<p>Type trait to determine whether type <code class="docutils literal notranslate"><span class="pre">TType</span></code> is a metaprogramming type wrapper type. </p>
+<p><a class="reference internal" href="type.html#structhyperion_1_1mpl_1_1Type"><span class="std std-ref">Type</span></a> trait to determine whether type <code class="docutils literal notranslate"><span class="pre">TType</span></code> is a metaprogramming type wrapper type. </p>
 <p>A metaprogramming type wrapper type is any type that represents another type, via a member using alias type <code class="docutils literal notranslate"><span class="pre">type</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">bool;</span></code>).</p>
 <section id="structhyperion_1_1mpl_1_1is__meta__type_1autotoc_md13">
 <h2>Requirements<a class="headerlink" href="#structhyperion_1_1mpl_1_1is__meta__type_1autotoc_md13" title="Link to this heading">#</a></h2>

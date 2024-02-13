@@ -171,6 +171,13 @@ document.write(`
                     </li>
                 
 
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../type.html">
+                        hyperion::mpl::Type
+                      </a>
+                    </li>
+                
+
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="../type_traits.html">
                         hyperion::mpl::type_traits
@@ -298,6 +305,13 @@ document.write(`
                     </li>
                 
 
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../type.html">
+                        hyperion::mpl::Type
+                      </a>
+                    </li>
+                
+
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="../type_traits.html">
                         hyperion::mpl::type_traits
@@ -386,6 +400,13 @@ document.write(`
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../value.html">
                         hyperion::mpl::Value
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../type.html">
+                        hyperion::mpl::Type
                       </a>
                     </li>
                 
@@ -480,9 +501,9 @@ document.write(`
 <dt class="sig sig-object cpp">
 <span class="target" id="group__std__supplemental__traits"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">std_supplemental_traits</span></span></dt>
 <dd><p>Assortment of type traits to supplement those provided by the standard. These are generally either similar to existing traits, but implemented more or less stringently to account for use-cases in which the standard implementations are incompatible, or completely novel traits, filling in gaps in the API surface that the standard doesn’t cover.</p>
-<section id="group__std__supplemental__traits_1autotoc_md21">
-<h2>Example:<a class="headerlink" href="#group__std__supplemental__traits_1autotoc_md21" title="Link to this heading">#</a></h2>
-<div class="highlight-cpp notranslate" id="group__std__supplemental__traits_1autotoc_md21"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/mpl/type_traits/std_supplemental.h&gt;</span>
+<section id="group__std__supplemental__traits_1autotoc_md50">
+<h2>Example:<a class="headerlink" href="#group__std__supplemental__traits_1autotoc_md50" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate" id="group__std__supplemental__traits_1autotoc_md50"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/mpl/type_traits/std_supplemental.h&gt;</span>
 
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">hyperion</span><span class="o">::</span><span class="nn">mpl</span><span class="o">::</span><span class="nn">type_traits</span><span class="p">;</span>
 <span class="k">struct</span><span class="w"> </span><span class="nc">trivially_move_but_not_copyable</span><span class="w"> </span><span class="p">{</span>
@@ -518,7 +539,7 @@ document.write(`
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN8hyperion3mpl11type_traits20is_trivially_movableE">
 <span id="_CPPv3I0EN8hyperion3mpl11type_traits20is_trivially_movableE"></span><span id="_CPPv2I0EN8hyperion3mpl11type_traits20is_trivially_movableE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structhyperion_1_1mpl_1_1type__traits_1_1is__trivially__movable"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_trivially_movable</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">bool_constant</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">is_trivially_move_constructible_v</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN8hyperion3mpl11type_traits20is_trivially_movableE" title="hyperion::mpl::type_traits::is_trivially_movable::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="o"><span class="pre">&amp;&amp;</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">is_trivially_move_assignable_v</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN8hyperion3mpl11type_traits20is_trivially_movableE" title="hyperion::mpl::type_traits::is_trivially_movable::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I0EN8hyperion3mpl11type_traits20is_trivially_movableE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Type trait requiring that the type <code class="docutils literal notranslate"><span class="pre">TType</span></code> is trivially movable. A type that is trivially movable is both trivially move constructible and trivially move assignable. </p>
+<dd><p><a class="reference internal" href="../type.html#structhyperion_1_1mpl_1_1Type"><span class="std std-ref">Type</span></a> trait requiring that the type <code class="docutils literal notranslate"><span class="pre">TType</span></code> is trivially movable. A type that is trivially movable is both trivially move constructible and trivially move assignable. </p>
 <p>For a type to be trivially move constructible, the type must be move constructible, and its move constructor must either <em>not</em> be user provided in any way, or explicitly defaulted by declaring it as <code class="docutils literal notranslate"><span class="pre">=</span> <span class="pre">default</span></code>. Similarly, for a type to be trivially move assignable, the type must be move assignable, and its move assignment operator must either <em>not</em> be user provided in any way, or explicitly defaulted by declaring it as <code class="docutils literal notranslate"><span class="pre">=</span> <span class="pre">default</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Template Parameters<span class="colon">:</span></dt>

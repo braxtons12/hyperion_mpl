@@ -171,6 +171,13 @@ document.write(`
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="type.html">
+                        hyperion::mpl::Type
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="type_traits.html">
                         hyperion::mpl::type_traits
                       </a>
@@ -296,6 +303,13 @@ document.write(`
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="type.html">
+                        hyperion::mpl::Type
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="type_traits.html">
                         hyperion::mpl::type_traits
                       </a>
@@ -388,6 +402,13 @@ document.write(`
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="type.html">
+                        hyperion::mpl::Type
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="type_traits.html">
                         hyperion::mpl::type_traits
                       </a>
@@ -471,20 +492,20 @@ document.write(`
 <span class="linenos">34</span><span class="w">              </span><span class="p">.</span><span class="n">apply</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">add_rvalue_reference</span><span class="o">&gt;</span><span class="p">()</span>
 <span class="linenos">35</span><span class="w">              </span><span class="o">==</span><span class="w"> </span><span class="n">decltype_</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&amp;&amp;&gt;</span><span class="p">());</span>
 <span class="linenos">36</span>
-<span class="linenos">37</span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">add_const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="k">const</span><span class="w"> </span><span class="n">MetaType</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">type</span><span class="p">)</span>
-<span class="linenos">38</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">add_const</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">std</span><span class="o">::</span><span class="n">remove_cvref_t</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">type</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">type</span><span class="o">&gt;</span>
+<span class="linenos">37</span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">add_const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="n">MetaType</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">type</span><span class="p">)</span>
+<span class="linenos">38</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">add_const</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">decltype</span><span class="p">(</span><span class="n">type</span><span class="p">)</span><span class="o">::</span><span class="n">type</span><span class="o">&gt;</span>
 <span class="linenos">39</span><span class="p">{</span>
 <span class="linenos">40</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span>
 <span class="linenos">41</span><span class="p">};</span>
 <span class="linenos">42</span>
-<span class="linenos">43</span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">add_lvalue_reference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="k">const</span><span class="w"> </span><span class="n">MetaType</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">type</span><span class="p">)</span>
-<span class="linenos">44</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">add_lvalue_reference</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">std</span><span class="o">::</span><span class="n">remove_cvref_t</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">type</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">type</span><span class="o">&gt;</span>
+<span class="linenos">43</span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">add_lvalue_reference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="n">MetaType</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">type</span><span class="p">)</span>
+<span class="linenos">44</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">add_lvalue_reference</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">decltype</span><span class="p">(</span><span class="n">type</span><span class="p">)</span><span class="o">::</span><span class="n">type</span><span class="o">&gt;</span>
 <span class="linenos">45</span><span class="p">{</span>
 <span class="linenos">46</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span>
 <span class="linenos">47</span><span class="p">};</span>
 <span class="linenos">48</span>
-<span class="linenos">49</span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">remove_reference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="k">const</span><span class="w"> </span><span class="n">MetaType</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">type</span><span class="p">)</span>
-<span class="linenos">50</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">std</span><span class="o">::</span><span class="n">remove_cvref_t</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">type</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">type</span><span class="o">&gt;</span>
+<span class="linenos">49</span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">remove_reference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="n">MetaType</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">type</span><span class="p">)</span>
+<span class="linenos">50</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">decltype</span><span class="p">(</span><span class="n">type</span><span class="p">)</span><span class="o">::</span><span class="n">type</span><span class="o">&gt;</span>
 <span class="linenos">51</span><span class="p">{</span>
 <span class="linenos">52</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span>
 <span class="linenos">53</span><span class="p">};</span>
@@ -572,6 +593,34 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="value.html#_CPPv4II0E0EN8hyperion3mpl5Value9satisfiesE5ValueIN10TPredicateI5ValueE5valueEEv"><code class="docutils literal notranslate"><span class="pre">Value::satisfies()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="value.html#_CPPv4I0EN8hyperion3mpl5Value9satisfiesE13meta_result_tI10TPredicate5ValueERR10TPredicate"><code class="docutils literal notranslate"><span class="pre">Value::satisfies()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="value.html#_CPPv4N8hyperion3mpl5Value5valueE"><code class="docutils literal notranslate"><span class="pre">Value::value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Metaprogramming Type Manipulation Type</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="type.html">hyperion::mpl::Type</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="type.html#_CPPv4I0EN8hyperion3mpl4TypeE"><code class="docutils literal notranslate"><span class="pre">Type</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="type.html#_CPPv4N8hyperion3mpl4Type4typeE"><code class="docutils literal notranslate"><span class="pre">Type::type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type.html#_CPPv4I0EN8hyperion3mpl4Type4selfE4TypeI6TDelayEv"><code class="docutils literal notranslate"><span class="pre">Type::self()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type.html#_CPPv4II0E0EN8hyperion3mpl4Type5applyEDav"><code class="docutils literal notranslate"><span class="pre">Type::apply()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type.html#_CPPv4I0EN8hyperion3mpl4Type5applyE4TypeIN13meta_result_tI9TFunction4TypeI4typeEE4typeEERR9TFunction"><code class="docutils literal notranslate"><span class="pre">Type::apply()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type.html#_CPPv4I0EN8hyperion3mpl4Type5applyENSt11enable_if_tIXaa14MetaFunctionOfI9TFunction4TypeI4typeEE9MetaValueI13meta_result_tI9TFunction4TypeI4typeEEEE5ValueIN13meta_result_tI9TFunction4TypeI4typeEE5valueENSt14remove_cvref_tIDTN13meta_result_tI9TFunction4TypeI4typeEE5valueEEEEEEERR9TFunction"><code class="docutils literal notranslate"><span class="pre">Type::apply()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type.html#_CPPv4I0EN8hyperion3mpl4Type5applyEDaRR9TFunction"><code class="docutils literal notranslate"><span class="pre">Type::apply()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type.html#_CPPv4II0E0EN8hyperion3mpl4Type9satisfiesENSt11enable_if_tIXaa16TypeMetaFunctionI10TPredicateEaa9MetaValueI10TPredicateI4typeEENSt7same_asINSt14remove_const_tIDTN10TPredicateI4typeE5valueEEEEbEEE5ValueIN10TPredicateI4typeE5valueEbEEEv"><code class="docutils literal notranslate"><span class="pre">Type::satisfies()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type.html#_CPPv4I0EN8hyperion3mpl4Type9satisfiesE13meta_result_tI10TPredicate4TypeI4typeEERR10TPredicate"><code class="docutils literal notranslate"><span class="pre">Type::satisfies()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type.html#_CPPv4I0EN8hyperion3mpl4Type9satisfiesENSt11enable_if_tIXaa14MetaFunctionOfI10TPredicate4TypeI4typeEEaa8MetaTypeI13meta_result_tI10TPredicate4TypeI4typeEEEaa9MetaValueIN13meta_result_tI10TPredicate4TypeI4typeEE4typeEENSt7same_asINSt14remove_cvref_tIDTN13meta_result_tI10TPredicate4TypeI4typeEE4type5valueEEEEbEEE5ValueIN13meta_result_tI10TPredicate4TypeI4typeEE4type5valueEbEEERR10TPredicate"><code class="docutils literal notranslate"><span class="pre">Type::satisfies()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type.html#_CPPv4I0EN8hyperion3mpl4Type9satisfiesEDaRR10TPredicate"><code class="docutils literal notranslate"><span class="pre">Type::satisfies()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type.html#_CPPv4I0EN8hyperion3mpl4Type9satisfiesENSt11enable_if_tIXaa14MetaFunctionOfI10TPredicate4typeEaa8MetaTypeI13meta_result_tI10TPredicate4typeEEaa9MetaValueIN13meta_result_tI10TPredicate4typeE4typeEEaaNSt7same_asINSt14remove_cvref_tIDTN13meta_result_tI10TPredicate4typeE4type5valueEEEEbEE9MetaValueI4typeEE5ValueIN13meta_result_tI10TPredicate4typeE4type5valueEbEEERR10TPredicate"><code class="docutils literal notranslate"><span class="pre">Type::satisfies()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type.html#_CPPv4I0EN8hyperion3mpl4Type2isE5ValueINSt7same_asI4type4TRhsEEbERK4TypeI4TRhsE"><code class="docutils literal notranslate"><span class="pre">Type::is()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type.html#_CPPv4I0EN8hyperion3mpl4Type19is_qualification_ofEDaRK4TypeI4TRhsE"><code class="docutils literal notranslate"><span class="pre">Type::is_qualification_of()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type.html#_CPPv4I0EN8hyperion3mpl4Type8is_constENSt11enable_if_tINSt7same_asI6TDelay4typeEE5ValueINSt10is_const_vINSt18remove_reference_tI6TDelayEEEEbEEEv"><code class="docutils literal notranslate"><span class="pre">Type::is_const()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type.html#_CPPv4I0EN8hyperion3mpl4Type19is_lvalue_referenceENSt11enable_if_tINSt7same_asI6TDelay4typeEE5ValueINSt21is_lvalue_reference_vI6TDelayEEbEEEv"><code class="docutils literal notranslate"><span class="pre">Type::is_lvalue_reference()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type.html#_CPPv4I0EN8hyperion3mpl4Type19is_rvalue_referenceENSt11enable_if_tINSt7same_asI6TDelay4typeEE5ValueINSt21is_rvalue_reference_vI6TDelayEEbEEEv"><code class="docutils literal notranslate"><span class="pre">Type::is_rvalue_reference()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type.html#_CPPv4I0EN8hyperion3mpl4Type11is_volatileENSt11enable_if_tINSt7same_asI6TDelay4typeEE5ValueINSt13is_volatile_vINSt18remove_reference_tI6TDelayEEEEbEEEv"><code class="docutils literal notranslate"><span class="pre">Type::is_volatile()</span></code></a></li>
 </ul>
 </li>
 </ul>
