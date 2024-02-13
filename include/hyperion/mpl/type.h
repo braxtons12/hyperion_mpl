@@ -97,8 +97,8 @@ namespace hyperion::mpl {
         /// @brief Returns the inner `MetaType` or `MetaValue` `type` of `this` `Type`
         ///
         /// # Requirements
-        /// - `type` is default constructible
-        /// - `type` is a `MetaType` or a `MetaValue`
+        /// - `type` is trivially default constructible
+        /// - `type` is a `MetaValue`
         ///
         /// # Example
         /// @code {.cpp}
@@ -109,10 +109,9 @@ namespace hyperion::mpl {
         ///
         /// @return The inner `MetaType` or `MetaValue` of `this` `Type`
         template<typename TDelay = type>
-            requires std::same_as<TDelay, type>
-        [[nodiscard]] constexpr auto inner() const noexcept -> TDelay
-            requires std::is_default_constructible_v<TDelay> && MetaValue<TDelay>
-        {
+            requires std::same_as<TDelay, type> && std::is_trivially_default_constructible_v<TDelay>
+                     && MetaValue<TDelay>
+        [[nodiscard]] constexpr auto inner() const noexcept -> TDelay {
             return {};
         }
 
@@ -752,6 +751,24 @@ namespace hyperion::mpl {
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_volatile_v<std::remove_reference_t<TDelay>>, bool>>;
 
+        /// @brief Returns a `Type` specialization representing the `const`-qualified version of
+        /// the type `this` specialization represents.
+        ///
+        /// The application of `const` _does not_ follow the same application as other mechanisms,
+        /// like `std::add_const`, and instead follows the "intuitive" expectation that `const`
+        /// would be applied through references. That is, whereas `std::add_const<int&>` would yield
+        /// `int&`, `decltype_<int&>().as_const()` will yield `Type<const int&>`.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto const_int_t = int_t.as_const();
+        ///
+        /// static_assert(const_int_t.is_const());
+        /// static_assert(const_int_t.is(decltype_<const int>()));
+        /// @endcode
+        ///
+        /// @return the `Type` specialization representing `const type`
         template<typename TDelay = type>
             requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto as_const() const noexcept {
@@ -767,6 +784,24 @@ namespace hyperion::mpl {
             }
         }
 
+        /// @brief Returns a `Type` specialization representing the lvalue reference-qualified
+        /// version of the type `this` specialization represents.
+        ///
+        /// The application of lvalue reference follows the same application as other mechanisms,
+        /// like `std::add_lvalue_reference`,  That is, where `std::add_lvalue_reference<int&&>`
+        /// would yield `int&`, `decltype_<int&&>().as_lvalue_reference()` will also yield
+        /// `Type<int&>`.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto intref_t = int_t.as_lvalue_reference();
+        ///
+        /// static_assert(intref_t.is_lvalue_reference());
+        /// static_assert(intref_t.is(decltype_<int&>()));
+        /// @endcode
+        ///
+        /// @return the `Type` specialization representing `type&`
         template<typename TDelay = type>
             requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto as_lvalue_reference() const noexcept {
@@ -779,6 +814,24 @@ namespace hyperion::mpl {
             }
         }
 
+        /// @brief Returns a `Type` specialization representing the rvalue reference-qualified
+        /// version of the type `this` specialization represents.
+        ///
+        /// The application of rvalue reference _does not_ follow the same application as other
+        /// mechanisms, like `std::add_rvalue_reference`,  That is, where
+        /// `std::add_rvalue_reference<int&>` would yield `int&`,
+        /// `decltype_<int&>().as_rvalue_reference()` will yield `Type<int&&>`.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto intrefref_t = int_t.as_rvalue_reference();
+        ///
+        /// static_assert(intref_t.is_rvalue_reference());
+        /// static_assert(intrefref_t.is(decltype_<int&&>()));
+        /// @endcode
+        ///
+        /// @return the `Type` specialization representing `type&&`
         template<typename TDelay = type>
             requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto as_rvalue_reference() const noexcept {
@@ -791,6 +844,25 @@ namespace hyperion::mpl {
             }
         }
 
+        /// @brief Returns a `Type` specialization representing the `volatile`-qualified version of
+        /// the type `this` specialization represents.
+        ///
+        /// The application of `volatile` _does not_ follow the same application as other
+        /// mechanisms, like `std::add_volatile`, and instead follows the "intuitive" expectation
+        /// that `volatile` would be applied through references. That is, whereas
+        /// `std::add_volatile<int&>` would yield `int&`,
+        /// `decltype_<int&>().as_volatile()` will yield `Type<volatile int&>`.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto volatile_int_t = int_t.as_volatile();
+        ///
+        /// static_assert(volatile_int_t.is_volatile());
+        /// static_assert(volatile_int_t.is(decltype_<volatile int>()));
+        /// @endcode
+        ///
+        /// @return the `Type` specialization representing `volatile type`
         template<typename TDelay = type>
             requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto as_volatile() const noexcept {
@@ -1044,7 +1116,6 @@ namespace hyperion::mpl {
     decltype_() noexcept -> std::conditional_t<MetaType<TType>, TType, Type<TType>> {
         return {};
     }
-
 
     template<typename TLhs, typename TRhs>
     [[nodiscard]] constexpr auto
