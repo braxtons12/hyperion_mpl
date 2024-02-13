@@ -301,8 +301,8 @@ namespace hyperion::mpl {
         /// # Example
         ///
         /// @code {.cpp}
-        /// constexpr auto add_one = [](const MetaValue auto& value)
-        ///     -> Type<Value<std::remove_cvref_t<decltype(value)>::value + 1>>
+        /// constexpr auto add_one = [](MetaValue auto value)
+        ///     -> Type<Value<decltype(value)::value + 1>>
         /// {
         ///     return {};
         /// };
@@ -338,8 +338,8 @@ namespace hyperion::mpl {
         /// # Example
         ///
         /// @code {.cpp}
-        /// constexpr auto add_one = [](const MetaValue auto& value)
-        ///     -> Value<std::remove_cvref_t<decltype(value)>::value + 1>
+        /// constexpr auto add_one = [](MetaValue auto value)
+        ///     -> Value<decltype(value)::value + 1>
         /// {
         ///     return {};
         /// };
@@ -378,7 +378,8 @@ namespace hyperion::mpl {
         ///     static inline constexpr auto value = TValue == 2;
         /// };
         ///
-        /// constexpr not_two = (1_value).satisfies<is_two>(); // `not_two` is `Value<false, bool>`
+        /// constexpr auto not_two = (1_value).satisfies<is_two>(); // `not_two` is
+        ///                                                         // `Value<false, bool>`
         /// constexpr auto was_two = (2_value).satisfies<is_two>(); // `was_two` is
         ///                                                         // `Value<true, bool>`
         /// @endcode
@@ -411,7 +412,8 @@ namespace hyperion::mpl {
         ///     static inline constexpr auto value = TValue::value == 2;
         /// };
         ///
-        /// constexpr not_two = (1_value).satisfies<is_two>(); // `not_two` is `Value<false, bool>`
+        /// constexpr auto not_two = (1_value).satisfies<is_two>(); // `not_two` is
+        ///                                                         // `Value<false, bool>`
         /// constexpr auto was_two = (2_value).satisfies<is_two>(); // `was_two` is
         ///                                                         // `Value<true, bool>`
         /// @endcode
@@ -429,7 +431,7 @@ namespace hyperion::mpl {
         /// predicate, `predicate`
         ///
         /// # Requirements
-        /// - `TPredicate` must be a `MetaFunctionOf<Value>` tyep
+        /// - `TPredicate` must be a `MetaFunctionOf<Value>` type
         ///     - It must be a callable with an overload taking a single `Value` parameter
         ///     - The selected overload of `TPredicate` must return either a `MetaType` or a
         ///     `MetaValue`
@@ -439,15 +441,16 @@ namespace hyperion::mpl {
         ///
         /// # Example
         /// @code {.cpp}
-        /// constexpr auto is_two = [](const MetaValue auto& value)
-        ///     -> Value<std::remove_cvref_t<decltype(value)>::value == 2>
+        /// constexpr auto is_two = [](MetaValue auto value)
+        ///     -> Value<decltype(value)::value == 2>
         /// {
         ///     return {};
         /// };
         ///
-        /// constexpr not_two = (1_value).satisfies(is_two); // `not_two` is `Value<false, bool>`
+        /// constexpr auto not_two = (1_value).satisfies(is_two); // `not_two` is
+        ///                                                       // `Value<false, bool>`
         /// constexpr auto was_two = (2_value).satisfies(is_two); // `was_two` is
-        ///                                                         // `Value<true, bool>`
+        ///                                                       // `Value<true, bool>`
         /// @endcode
         /// @tparam TPredicate The metafunction predicate to check with
         /// @return The result of checking this `Value` specialization against `TPredicate`, as a
@@ -1273,13 +1276,11 @@ namespace hyperion::mpl {
                       "hyperion::mpl::Value::apply<MetaFunction<value>> "
                       "(MetaType<MetaFunction<value>>) test case 3 (failing)");
 
-        constexpr auto add1 = [](const MetaValue auto& value)
-            -> Value<std::remove_cvref_t<decltype(value)>::value + 1> {
+        constexpr auto add1 = [](MetaValue auto value) -> Value<decltype(value)::value + 1> {
             return {};
         };
 
-        constexpr auto times2 = [](const MetaValue auto& value)
-            -> Value<std::remove_cvref_t<decltype(value)>::value * 2> {
+        constexpr auto times2 = [](MetaValue auto value) -> Value<decltype(value)::value * 2> {
             return {};
         };
 
@@ -1299,8 +1300,8 @@ namespace hyperion::mpl {
         template<MetaValue TValue>
         struct is_const_meta : public std::bool_constant<bool(TValue::value)> { };
 
-        constexpr auto is_const = [](const MetaValue auto& value) noexcept
-            -> Value<std::remove_cvref_t<decltype(value)>::value, bool> {
+        constexpr auto is_const
+            = [](MetaValue auto value) noexcept -> Value<decltype(value)::value, bool> {
             return {};
         };
 

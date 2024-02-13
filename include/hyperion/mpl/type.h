@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Metaprogramming type wrapper for use as metafunction parameter and return type
 /// @version 0.1
-/// @date 2024-02-03
+/// @date 2024-02-13
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -30,6 +30,7 @@
 
 #include <hyperion/mpl/metatypes.h>
 #include <hyperion/platform/def.h>
+#include <hyperion/platform/types.h>
 
 //
 
@@ -38,7 +39,7 @@
 
 /// @ingroup mpl
 /// @{
-/// @defgroup type Metaprogramming Type Wrapper
+/// @defgroup type Metaprogramming Type Manipulation Type
 /// Hyperion provides `mpl::Type` as a metaprogramming type for storing, communicating,
 /// working with, and operating on types.
 ///
@@ -49,19 +50,39 @@
 /// using namespace hyperion::mpl;
 ///
 /// constexpr auto type1 = Type<int>{};
-/// constexpr auto type2 = Value<double>{};
+/// constexpr auto type2 = Type<double>{};
 ///
 /// static_assert(not type1.is(type2));
 /// @endcode
-/// @headerfile hyperion/mpl/type_traits.h
+/// @headerfile hyperion/mpl/type.h
 /// @}
 
 namespace hyperion::mpl {
     template<auto TValue, typename TType>
     struct Value;
 
+    /// @brief `Type` is a metaprogramming type wrapper used for storing, communicating,
+    /// operating on, and otherwis working with types.
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// #include <hyperion/mpl/type.h>
+    ///
+    /// using namespace hyperion::mpl;
+    ///
+    /// // alternatively, use `decltype_<int>()`
+    /// constexpr auto type1 = Type<int>{};
+    /// constexpr auto type2 = Type<double>{};
+    ///
+    /// static_assert(not type1.is(type2));
+    /// @endcode
+    ///
+    /// @tparam TType The type to metaprogram against
+    /// @ingroup type
+    /// @headerfile hyperion/mpl/type.h
     template<typename TType>
     struct Type {
+        /// @brief The type that this `Type` is a metaprogramming wrapper for
         using type = TType;
 
 #if HYPERION_PLATFORM_COMPILER_IS_CLANG
@@ -69,16 +90,28 @@ namespace hyperion::mpl {
         _Pragma("GCC diagnostic ignored \"-Wdeprecated-volatile\"");
 #endif // HYPERION_PLATFORM_COMPILER_IS_CLANG
 
+        /// @brief Returns another instance of this `specialization` of `Type`
+        /// @return another instance of this `Type` specialization
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
+        [[nodiscard]] constexpr auto self() noexcept -> Type<TDelay> {
+            return {};
+        }
+
         /// @brief Returns the inner `MetaType` or `MetaValue` `type` of `this` `Type`
         ///
         /// # Requirements
         /// - `type` is default constructible
         /// - `type` is a `MetaType` or a `MetaValue`
         ///
-        /// @return The inner `MetaType` or `MetaValue` of `this` `Type`
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto one_typed = delctype_(1_value);
         ///
-        /// @ingroup type
-        /// @headerfile hyperion/mpl/type.h
+        /// static_assert(one_typed.inner() == 1_value);
+        /// @endcode
+        ///
+        /// @return The inner `MetaType` or `MetaValue` of `this` `Type`
         template<typename TDelay = type>
             requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto inner() noexcept -> TDelay
@@ -91,22 +124,78 @@ namespace hyperion::mpl {
         _Pragma("GCC diagnostic pop");
 #endif // HYPERION_PLATFORM_COMPILER_IS_CLANG
 
-        /// @brief Returns whether the `type` of this `Type` is also a `MetaType` or `MetaValue`
-        /// (in which case, you may call `this->inner()` to obtain that `MetaType` or `MetaValue`).
-        /// @return Whether the `type` of this `Type` is also a `MetaType` or `MetaValue`
-        /// @ingroup type
-        /// @headerfile hyperion/mpl/type.h
+        /// @brief Returns whether the `type` of this `Type` is also a metaprogramming type
+        /// (i.e. a `MetaValue`), in which case you may call `this->inner()` to obtain that an
+        /// instance of that type.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto has_inner = decltype_(1_value);
+        /// constexpr auto no_inner = decltype_<int>();
+        ///
+        /// static_assert(has_inner.has_inner());
+        /// static_assert(not no_inner.has_inner());
+        /// @endcode
+        ///
+        /// @return Whether the `type` of this `Type` is also a metaprogramming type
         template<typename TDelay = type>
             requires std::same_as<TDelay, type>
         [[nodiscard]] constexpr auto has_inner() noexcept -> bool {
             return MetaValue<TDelay>;
         }
 
+        /// @brief Applies the specified template metafunction to this specialization of `Type`.
+        ///
+        /// Applies `TMetaFunction` to this specialization of `Type` and returns the calculated
+        /// value as a `Value` specialization.
+        ///
+        /// # Requirements
+        /// - `TMetaFunction` must be a `TypeMetaFunction`:
+        ///     - It must be a template taking a single type parameter,
+        ///     - It must have a `static constexpr` member variable, `value`, or a using alias type,
+        ///     `type`
+        /// - `TMetaFunction<type>` must be a `MetaValue`
+        ///
+        /// @code {.cpp}
+        /// template<typename TType>
+        /// struct is_const {
+        ///     using type = Value<std::is_const<std::remove_reference_t<TType>>, bool>;
+        /// };
+        ///
+        /// // Type<Value<true, bool>>
+        /// constexpr auto is_const = decltype_<const int>().apply<is_const>();
+        ///
+        /// static_assert(is_const.inner());
+        /// @endcode
+        ///
+        /// @tparam TMetaFunction The template metafunction to apply to this `Type`
+        /// @return The result of applying `TMetaFunction`, as a `Value` specialization
         template<template<typename> typename TMetaFunction>
         [[nodiscard]] constexpr auto apply() noexcept -> std::enable_if_t<
             TypeMetaFunction<TMetaFunction> && MetaValue<TMetaFunction<type>>,
             Value<TMetaFunction<type>::value, decltype(TMetaFunction<type>::value)>>;
 
+        /// @brief Applies the specified template metafunction to this specialization of `Type`.
+        ///
+        /// Applies `TMetaFunction` to this specialization of `Type` and returns the calculated
+        /// result as a (potentially different) `Type` specialization.
+        ///
+        /// # Requirements
+        /// - `TMetaFunction` must be a `TypeMetaFunction`:
+        ///     - It must be a template taking a single type parameter,
+        ///     - It must have a `static constexpr` member variable, `value`, or a using alias type,
+        ///     `type`
+        /// - `TMetaFunction<type>` must be a `MetaType`
+        /// - `typename TMetaFunction<type>::type` must not be a `MetaValue` or a `MetaType`
+        ///
+        /// @code {.cpp}
+        /// constexpr auto const_int = decltype_<int>().apply<std::add_const>(); // Type<const int>
+        ///
+        /// static_assert(const_int == decltype_<const int>());
+        /// @endcode
+        ///
+        /// @tparam TMetaFunction The template metafunction to apply to this `Type`
+        /// @return The result of applying `TMetaFunction`, as a `Type` specialization
         template<template<typename> typename TMetaFunction>
             requires TypeMetaFunction<TMetaFunction> && MetaType<TMetaFunction<type>>
                      && (!MetaValue<typename TMetaFunction<type>::type>)
@@ -117,6 +206,32 @@ namespace hyperion::mpl {
             return {};
         }
 
+        /// @brief Applies the specified template metafunction to this specialization of `Type`.
+        ///
+        /// Applies `TMetaFunction` to this specialization of `Type` and returns the calculated
+        /// result as a `Value` or (potentially different) `Type` specialization.
+        ///
+        /// # Requirements
+        /// - `TMetaFunction` must be a `TypeMetaFunction`:
+        ///     - It must be a template taking a single type parameter,
+        ///     - It must have a `static constexpr` member variable, `value`, or a using alias type,
+        ///     `type`
+        /// - `TMetaFunction<type>` must be a `MetaType`
+        /// - `typename TMetaFunction<type>::type` must be a `MetaValue` or a `MetaType`
+        ///
+        /// @code {.cpp}
+        /// template<typename TType>
+        /// struct add_const {
+        ///     using type = decltype(decltype_<TType>().add_const());
+        /// };
+        ///
+        /// constexpr auto const_int = decltype_<int>().apply<std::add_const>(); // Type<const int>
+        ///
+        /// static_assert(const_int == decltype_<const int>());
+        /// @endcode
+        ///
+        /// @tparam TMetaFunction The template metafunction to apply to this `Type`
+        /// @return The result of applying `TMetaFunction`, as a `Value` or `Type` specialization
         template<template<typename> typename TMetaFunction>
             requires TypeMetaFunction<TMetaFunction> && MetaType<TMetaFunction<type>>
                      && (MetaValue<typename TMetaFunction<type>::type>
@@ -133,6 +248,37 @@ namespace hyperion::mpl {
             }
         }
 
+        /// @brief Applies the given metafunction to this specialization of `Type`.
+        ///
+        /// Applies `func` to this specialization of `Type` and returns the calculated result as a
+        /// `Type` specialization.
+        ///
+        /// # Requirements
+        /// - `TFunction` must be a `MetaFunctionOf<Type>` type
+        ///     - It must be a callable with an overload taking a single `Type` parameter
+        ///     - The selected overload of `TFunction` must return either a `MetaType` or a
+        ///     `MetaValue`
+        /// - The result of invoking `func` with a `Type` must be a `MetaType`
+        /// - The type member alias `type` of the invoke result of `func` must not be a `MetaType`
+        ///
+        /// # Example
+        ///
+        /// @code {.cpp}
+        /// constexpr auto add_const = [](MetaType auto value)
+        ///     -> decltype(decltype_(value).add_const())
+        /// {
+        ///     return {};
+        /// };
+        ///
+        /// constexpr auto const_int = decltype_<int>().apply(add_const); // Type<const int>
+        ///
+        /// static_assert(const_int == decltype_<const int>());
+        /// @endcode
+        ///
+        /// @tparam TFunction The type of the metafunction to apply
+        /// @param func The metafunction to apply
+        /// @return The result of applying `func` to this `Type` specialization, as a `Type`
+        /// specialization
         template<typename TFunction>
             requires MetaFunctionOf<TFunction, Type<type>>
                      && MetaType<meta_result_t<TFunction, Type<type>>>
@@ -144,6 +290,36 @@ namespace hyperion::mpl {
             return {};
         }
 
+        /// @brief Applies the given metafunction to this specialization of `Type`.
+        ///
+        /// Applies `func` to this specialization of `Type` and returns the calculated result as a
+        /// `Value` specialization.
+        ///
+        /// # Requirements
+        /// - `TFunction` must be a `MetaFunctionOf<Type>` type
+        ///     - It must be a callable with an overload taking a single `Type` parameter
+        ///     - The selected overload of `TFunction` must return either a `MetaType` or a
+        ///     `MetaValue`
+        /// - The result of invoking `func` with a `Type` must be a `MetaValue`
+        ///
+        /// # Example
+        ///
+        /// @code {.cpp}
+        /// constexpr auto get_size = [](MetaType auto value)
+        ///     -> decltype(decltype_(value).sizeof_())
+        /// {
+        ///     return {};
+        /// };
+        ///
+        /// constexpr auto sizeof_int = decltype_<int>().apply(get_size); // Value<4, usize>
+        ///
+        /// static_assert(sizeof_int == 4_usize);
+        /// @endcode
+        ///
+        /// @tparam TFunction The type of the metafunction to apply
+        /// @param func The metafunction to apply
+        /// @return The result of applying `func` to this `Type` specialization, as a `Value`
+        /// specialization
         template<typename TFunction>
         [[nodiscard]] constexpr auto
         apply([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
@@ -153,42 +329,154 @@ namespace hyperion::mpl {
                 Value<meta_result_t<TFunction, Type<type>>::value,
                       std::remove_cvref_t<decltype(meta_result_t<TFunction, Type<type>>::value)>>>;
 
+        /// @brief Applies the given metafunction to the `type` of this specialization of `Type`.
+        ///
+        /// Given that `type` is a `MetaValue`, applies `func` to the `MetaValue` `type` of this
+        /// specialization of `Type`, as if by `type{}.apply(std::forward<TFunction>(func))`.
+        ///
+        /// # Requirements
+        /// - `TFunction` must be a `MetaFunctionOf<type>` type
+        ///     - It must be a callable with an overload taking a single `Type` parameter
+        ///     - The selected overload of `TFunction` must return either a `MetaType` or a
+        ///     `MetaValue`
+        /// - The result of invoking `func` with a `Type` must be a `MetaType`
+        /// - `typename meta_result_t<TFunction, type>::type` must _not_ be a `MetaType`
+        /// - `type` must be a `MetaValue`
+        ///
+        /// # Example
+        ///
+        /// @code {.cpp}
+        /// constexpr auto is_two = [](MetaValue auto value)
+        ///     -> Type<Value<decltype(value)::value == 2, bool>>
+        /// {
+        ///     return {};
+        /// };
+        ///
+        /// constexpr auto is_two = decltype_(2_value).apply(is_two); // Value<true, bool>
+        ///
+        /// static_assert(is_two);
+        /// @endcode
+        ///
+        /// @tparam TFunction The type of the metafunction to apply
+        /// @param func The metafunction to apply
+        /// @return The result of applying `func` to this `Type` specialization
         template<typename TFunction>
             requires MetaFunctionOf<TFunction, type> && MetaType<meta_result_t<TFunction, type>>
-                     && MetaValue<typename meta_result_t<TFunction, type>::type> && MetaValue<type>
-        [[nodiscard]] constexpr auto
-        apply([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
-            noexcept {
-            return type{}.apply(TFunction{});
-        }
-
-        template<typename TFunction>
-            requires MetaFunctionOf<TFunction, type> && MetaType<meta_result_t<TFunction, type>>
-                     && (!MetaValue<typename meta_result_t<TFunction, type>::type>)
                      && (!MetaType<typename meta_result_t<TFunction, type>::type>)
                      && MetaValue<type>
         [[nodiscard]] constexpr auto apply(
-            [[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
-                                               // NOLINTNEXTLINE(modernize-type-traits)
-            noexcept {
+            [[maybe_unused]] TFunction&& func) noexcept { // NOLINT(*-missing-std-forward)
             return type{}.apply(TFunction{});
         }
 
+        /// @brief Applies the given metafunction to the `type` of this specialization of `Type`.
+        ///
+        /// Given that `type` is a `MetaValue`, applies `func` to the `MetaValue` `type` of this
+        /// specialization of `Type`, as if by `type{}.apply(std::forward<TFunction>(func))`.
+        ///
+        /// # Requirements
+        /// - `TFunction` must be a `MetaFunctionOf<type>` type
+        ///     - It must be a callable with an overload taking a single `Type` parameter
+        ///     - The selected overload of `TFunction` must return either a `MetaType` or a
+        ///     `MetaValue`
+        /// - The result of invoking `func` with a `Type` must be a `MetaValue`
+        /// - `type` must be a `MetaValue`
+        ///
+        /// # Example
+        ///
+        /// @code {.cpp}
+        /// constexpr auto is_two = [](MetaValue auto value)
+        ///     -> Value<decltype(value)::value == 2, bool>
+        /// {
+        ///     return {};
+        /// };
+        ///
+        /// constexpr auto is_two = decltype_(2_value).apply(is_two); // Value<true, bool>
+        ///
+        /// static_assert(is_two);
+        /// @endcode
+        ///
+        /// @tparam TFunction The type of the metafunction to apply
+        /// @param func The metafunction to apply
+        /// @return The result of applying `func` to this `Type` specialization
         template<typename TFunction>
             requires MetaFunctionOf<TFunction, type> && MetaValue<meta_result_t<TFunction, type>>
                      && MetaValue<type>
         [[nodiscard]] constexpr auto
-        apply([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
-            noexcept {
+        apply([[maybe_unused]] TFunction&& func) noexcept { // NOLINT(*-missing-std-forward)
             return type{}.apply(TFunction{});
         }
 
+        /// @brief Checks to see if this `Type` specialization satisfies the given template
+        /// metafunction predicate, `TPredicate`
+        ///
+        /// # Requirements
+        /// - `TPredicate` must be a `TypeMetaFunction`
+        ///     - It must be a template taking a single value parameter,
+        ///     - It must have a `static constexpr` member variable, `value`, or a using alias type,
+        ///     `type`
+        /// - `TPredicate<type>` must be a `MetaValue`
+        /// - The type of the value of `TPredicate`, `TPredicate<type>::value`, must be
+        /// (possibly cv-ref qualified) `bool`)
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// template<typename TType>
+        /// struct is_const {
+        ///     static inline constexpr auto value
+        ///         = std::is_const_v<std::remove_reference_t<TType>> == 2;
+        /// };
+        ///
+        /// // `not_const` is `Value<false, bool>`
+        /// constexpr auto not_const = decltype_<int>().satisfies<is_const>();
+        /// // `was_const` is `Value<true, bool>`
+        /// constexpr auto was_const = decltype_<const int>().satisfies<is_const>();
+        ///
+        /// static_assert(was_const);
+        /// static_assert(not not_const);
+        /// @endcode
+        ///
+        /// @tparam TPredicate The metafunction predicate to check with
+        /// @return The result of checking this `Type` specialization against `TPredicate`, as a
+        /// `Value` specialization
         template<template<typename> typename TPredicate>
         [[nodiscard]] constexpr auto satisfies() noexcept -> std::enable_if_t<
-            MetaValue<TPredicate<type>>
+            TypeMetaFunction<TPredicate> && MetaValue<TPredicate<type>>
                 && std::same_as<std::remove_const_t<decltype(TPredicate<type>::value)>, bool>,
             Value<TPredicate<type>::value, bool>>;
 
+        /// @brief Checks to see if this `Type` specialization satisfies the given metafunction
+        /// predicate.
+        ///
+        /// # Requirements
+        /// - `TPredicate` must be a `MetaFunctionOf<Type<type>>` type
+        ///     - It must be a callable with an overload taking a single `Type` parameter
+        ///     - The selected overload of `TPredicate` must return either a `MetaType` or a
+        ///     `MetaValue`
+        /// - The result of invoking `predicate` with `Type` must be a `MetaValue`
+        /// - The type of the value of the invoke result of `predicate` must be
+        /// (possibly cv-ref qualified) `bool`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto is_const = [](MetaType auto type)
+        ///     -> decltype(decltype(type){}.is_const())
+        /// {
+        ///     return {};
+        /// };
+        ///
+        /// // `not_two` is `Value<false, bool>`
+        /// constexpr auto not_const = decltype_<int>().satisfies(is_const);
+        /// // `was_two` is `Value<true, bool>`
+        /// constexpr auto was_const = decltype_<const int>().satisfies(is_const);
+        ///
+        /// static_assert(was_const);
+        /// static_assert(not not_const);
+        /// @endcode
+        ///
+        /// @tparam TPredicate The type of the metafunction predicate to check with
+        /// @param predicate The metafunction predicate to check with
+        /// `Value` specialization
         template<typename TPredicate>
             requires MetaFunctionOf<TPredicate, Type<type>>
                      && MetaValue<meta_result_t<TPredicate, Type<type>>>
@@ -201,6 +489,43 @@ namespace hyperion::mpl {
             return {};
         }
 
+        /// @brief Checks to see if this `Type` specialization satisfies the given metafunction
+        /// predicate.
+        ///
+        /// # Requirements
+        /// - `TPredicate` must be a `MetaFunctionOf<Type<type>>` type
+        ///     - It must be a callable with an overload taking a single `Type` parameter
+        ///     - The selected overload of `TPredicate` must return either a `MetaType` or a
+        ///     `MetaValue`
+        /// - The result of invoking `predicate` with `Type` must be a `MetaType`
+        /// - The `type` of the invoke result of `predicate`, ie,
+        /// `typename meta_result_t<TPredicate, Type<type>>::type` must be a `MetaValue`
+        /// - The type of the value of the `MetaValue` `type` of the invoke result of `predicate`
+        /// must be (possibly cv-ref qualified) `bool`. That is,
+        /// `decltype(typename meta_result_t<TPredicate, Type<type>>::type::value)` must be
+        /// (possibly cv-ref qualified) `bool`.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto is_const = [](MetaType auto type)
+        ///     -> Type<decltype(decltype(type){}.is_const())>
+        /// {
+        ///     return {};
+        /// };
+        ///
+        /// // `not_const` is `Value<false, bool>`
+        /// constexpr auto not_const = decltype_<int>().satisfies(is_const);
+        /// // `was_const` is `Value<true, bool>`
+        /// constexpr auto was_const = decltype_<const int>().satisfies(is_const);
+        ///
+        /// static_assert(was_const);
+        /// static_assert(not not_const);
+        /// @endcode
+        ///
+        /// @tparam TPredicate The type of the metafunction predicate to check with
+        /// @param predicate The metafunction predicate to check with
+        /// @return The result of checking this `Type` specialization against `TPredicate`, as a
+        /// `Value` specialization
         template<typename TPredicate>
         [[nodiscard]] constexpr auto
         satisfies([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
@@ -214,6 +539,43 @@ namespace hyperion::mpl {
                         bool>,
                 Value<meta_result_t<TPredicate, Type<type>>::type::value, bool>>;
 
+        /// @brief Checks to see if this `Type` specialization satisfies the given metafunction
+        /// predicate.
+        ///
+        /// Given that `type` is a `MetaValue`, checks that `predicate` is satisfied by the
+        /// `MetaValue` `type` of this specialization of `Type`, as if by
+        /// `type{}.satisfies(std::forward<TPredicate>(predicate))`.
+        ///
+        /// # Requirements
+        /// - `type` must be a `MetaValue`
+        /// - `TPredicate` must be a `MetaFunctionOf<type>` type
+        ///     - It must be a callable with an overload taking a single `Type` parameter
+        ///     - The selected overload of `TFunction` must return either a `MetaType` or a
+        ///     `MetaValue`
+        /// - The result of invoking `predicate` with a `type` must be a `MetaValue`
+        /// - The type of the value of the invoke result of `predicate` must be
+        /// (possibly cv-ref qualified) `bool`.
+        ///
+        /// # Example
+        ///
+        /// @code {.cpp}
+        /// constexpr auto is_two = [](MetaValue auto value)
+        ///     -> Value<decltype(value)::value == 2, bool>
+        /// {
+        ///     return {};
+        /// };
+        ///
+        /// constexpr auto is_two = decltype_(2_value).satisfies(is_two); // Value<true, bool>
+        /// constexpr auto not_two = decltype_(1_value).satisfies(is_two); // Value<false, bool>
+        ///
+        /// static_assert(is_two);
+        /// static_assert(not not_two);
+        /// @endcode
+        ///
+        /// @tparam TPredicate The type of the metafunction predicate to check with
+        /// @param predicate The metafunction predicate to check with
+        /// @return The result of checking this `Type` specialization against `predicate`, as a
+        /// `Value` specialization
         template<typename TPredicate>
             requires MetaFunctionOf<TPredicate, type> && MetaValue<meta_result_t<TPredicate, type>>
                      && std::same_as<
@@ -222,10 +584,46 @@ namespace hyperion::mpl {
                      && MetaValue<type>
         [[nodiscard]] constexpr auto
         satisfies([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-forward)
-            noexcept -> meta_result_t<TPredicate, type> {
-            return {};
+            noexcept  {
+            return type{}.satisfies(TPredicate{});
         }
 
+        /// @brief Checks to see if this `Type` specialization satisfies the given metafunction
+        /// predicate.
+        ///
+        /// # Requirements
+        /// - `type` must be a `MetaValue`
+        /// - `TPredicate` must be a `MetaFunctionOf<type>` type
+        ///     - It must be a callable with an overload taking a single `type` parameter
+        ///     - The selected overload of `TPredicate` must return either a `MetaType` or a
+        ///     `MetaValue`
+        /// - The result of invoking `predicate` with `type` must be a `MetaType`
+        /// - The `type` of the invoke result of `predicate`, ie,
+        /// `typename meta_result_t<TPredicate, type>::type` must be a `MetaValue`
+        /// - The type of the value of the `MetaValue` `type` of the invoke result of `predicate`
+        /// must be (possibly cv-ref qualified) `bool`. That is,
+        /// `decltype(typename meta_result_t<TPredicate, type>::type::value)` must be
+        /// (possibly cv-ref qualified) `bool`.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto is_two = [](MetaValue auto value)
+        ///     -> Type<Value<decltype(value)::value == 2, bool>>
+        /// {
+        ///     return {};
+        /// };
+        ///
+        /// constexpr auto is_two = decltype_(2_value).satisfies(is_two); // Value<true, bool>
+        /// constexpr auto not_two = decltype_(1_value).satisfies(is_two); // Value<false, bool>
+        ///
+        /// static_assert(is_two);
+        /// static_assert(not not_two);
+        /// @endcode
+        ///
+        /// @tparam TPredicate The type of the metafunction predicate to check with
+        /// @param predicate The metafunction predicate to check with
+        /// @return The result of checking this `Type` specialization against `TPredicate`, as a
+        /// `Value` specialization
         template<typename TPredicate>
         [[nodiscard]] constexpr auto
         satisfies([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-forward)
@@ -238,31 +636,125 @@ namespace hyperion::mpl {
                     && MetaValue<type>,
                 Value<meta_result_t<TPredicate, type>::type::value, bool>>;
 
+        /// @brief Returns whether `this` `Type` specialization is the same as the given one.
+        ///
+        /// Checks if `this` is an instance of the same `Type` specialization as `rhs`, that is,
+        /// whether `std::same_as<type, TRhs>`, and returns the result as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto int_t = decltype_<int>();
+        ///
+        /// constexpr auto is_int = int_t.is(decltype_<int>());
+        /// constexpr auto is_const_int = int_t.is(decltype_<const int>());
+        ///
+        /// static_assert(is_int);
+        /// static_assert(not is_const_int);
+        /// @endcode
+        ///
+        /// @tparam TRhs The `type` of the `Type` specialization of `rhs`
+        /// @param rhs The `Type` specialization to compare to
+        /// @return Whether `this` and `rhs` are the same `Type` specialization
         template<typename TRhs>
         [[nodiscard]] constexpr auto is([[maybe_unused]] const Type<TRhs>& rhs) noexcept
             -> Value<std::same_as<type, TRhs>, bool>;
 
+        /// @brief Returns whether the `type` of `this` `Type` specialization is the same as,
+        /// or a cv-ref qualification of, the `type` of the given one.
+        ///
+        /// Checks if the `type` of `this` `Type` specialization is the (possibly cv-ref
+        /// qualification of the) `type` of the `rhs` specialization, that is, whether
+        /// `std::same_as<std::remove_cvref_t<type>, TRhs>`, and returns the result as a `Value`
+        /// specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto int_t = decltype_<const int&>();
+        ///
+        /// constexpr auto is_int = int_t.is_qualification_of(decltype_<int>());
+        /// constexpr auto is_const_int = int_t.is_qualification_of(decltype_<const int>());
+        /// constexpr auto is_constref_int = int_t.is_qualification_of(decltype_<const int&>());
+        /// constexpr auto is_double = int_t.is_qualification_of(decltype_<double>());
+        ///
+        /// static_assert(is_int);
+        /// static_assert(is_const_int);
+        /// static_assert(is_constref_int);
+        /// static_assert(not is_double);
+        /// @endcode
+        ///
+        /// @tparam TRhs The `type` of the `Type` specialization of `rhs`
+        /// @param rhs The `Type` specialization to compare to
+        /// @return Whether the `type` of `this` is the (possibly cv-ref qualification of the)
+        /// `type` of `rhs`
         template<typename TRhs>
         [[nodiscard]] constexpr auto
         is_qualification_of([[maybe_unused]] const Type<TRhs>& rhs) noexcept {
             return Type<TRhs>{}.is(Type<std::remove_cvref_t<type>>{});
         }
 
+        /// @brief Returns whether the `type` of `this` `Type` specialization is `const`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto const_int_t = decltype_<const int>();
+        ///
+        /// static_assert(not int_t.is_const());
+        /// static_assert(const_int_t.is_const());
+        /// @endcode
+        ///
+        /// @return Whether the `type` of `this` is `const`
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_const() noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_const_v<std::remove_reference_t<TDelay>>, bool>>;
 
+        /// @brief Returns whether the `type` of `this` `Type` specialization is an lvalue reference
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto intref_t = decltype_<int&>();
+        ///
+        /// static_assert(not int_t.is_lvalue_reference());
+        /// static_assert(intref_t.is_lvalue_reference());
+        /// @endcode
+        ///
+        /// @return Whether the `type` of `this` is an lvalue reference
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_lvalue_reference() noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_lvalue_reference_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the `type` of `this` `Type` specialization is an rvalue reference
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto intrefref_t = decltype_<int&&>();
+        ///
+        /// static_assert(not int_t.is_rvalue_reference());
+        /// static_assert(intrefref_t.is_rvalue_reference());
+        /// @endcode
+        ///
+        /// @return Whether the `type` of `this` is an rvalue reference
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_rvalue_reference() noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_rvalue_reference_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the `type` of `this` `Type` specialization is `volatile`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto volatile_int_t = decltype_<volatile int>();
+        ///
+        /// static_assert(not int_t.is_volatile());
+        /// static_assert(volatile_int_t.is_volatile());
+        /// @endcode
+        ///
+        /// @return Whether the `type` of `this` is `volatile`
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_volatile() noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
@@ -483,6 +975,10 @@ namespace hyperion::mpl {
                                             std::add_lvalue_reference_t<type>>,
                          TRhs>,
                      bool>;
+
+        template<typename TDelay = type>
+        [[nodiscard]] constexpr auto sizeof_() noexcept
+            -> std::enable_if_t<std::same_as<TDelay, type>, Value<sizeof(TDelay), usize>>;
     };
 
     template<typename TType>
@@ -552,7 +1048,7 @@ namespace hyperion::mpl {
     template<typename TType>
     template<template<typename> typename TPredicate>
     [[nodiscard]] constexpr auto Type<TType>::satisfies() noexcept -> std::enable_if_t<
-        MetaValue<TPredicate<type>>
+        TypeMetaFunction<TPredicate> && MetaValue<TPredicate<type>>
             && std::same_as<std::remove_const_t<decltype(TPredicate<type>::value)>, bool>,
         Value<TPredicate<type>::value, bool>> {
         return {};
@@ -870,6 +1366,13 @@ namespace hyperion::mpl {
         return {};
     }
 
+    template<typename TType>
+    template<typename TDelay>
+    [[nodiscard]] constexpr auto Type<TType>::sizeof_() noexcept
+        -> std::enable_if_t<std::same_as<TDelay, type>, Value<sizeof(TDelay), usize>> {
+        return {};
+    }
+
     namespace _test::type {
         constexpr int test_val = 1;
 
@@ -911,23 +1414,23 @@ namespace hyperion::mpl {
         static_assert(!decltype_<double>().satisfies<std::is_integral>(),
                       "hyperion::mpl::Type::satisfies<TypeMetaFunction> test case 2 (failing)");
 
-        constexpr auto is_const_type_type = [](const MetaType auto& type) noexcept
-            -> Type<Value<(std::remove_cvref_t<decltype(type)>{}).is_const(), bool>> {
+        constexpr auto is_const_type_type =
+            [](MetaType auto type) noexcept -> Type<Value<(decltype(type){}).is_const(), bool>> {
             return {};
         };
 
-        constexpr auto is_const_type_value = [](const MetaType auto& type) noexcept
-            -> Value<(std::remove_cvref_t<decltype(type)>{}).is_const(), bool> {
+        constexpr auto is_const_type_value =
+            [](MetaType auto type) noexcept -> Value<(decltype(type){}).is_const(), bool> {
             return {};
         };
 
-        constexpr auto is_true_value_type = [](const MetaValue auto& value) noexcept
-            -> Type<Value<std::remove_cvref_t<decltype(value)>::value, bool>> {
+        constexpr auto is_true_value_type
+            = [](MetaValue auto value) noexcept -> Type<Value<decltype(value)::value, bool>> {
             return {};
         };
 
-        constexpr auto is_true_value_value = [](const MetaValue auto& value) noexcept
-            -> Value<std::remove_cvref_t<decltype(value)>::value, bool> {
+        constexpr auto is_true_value_value
+            = [](MetaValue auto value) noexcept -> Value<decltype(value)::value, bool> {
             return {};
         };
 
@@ -991,13 +1494,11 @@ namespace hyperion::mpl {
                           == 10_value,
                       "hyperion::mpl::Type::apply<MetaFunction<MetaValue>> test case 3 (failing)");
 
-        constexpr auto add1 = [](const MetaValue auto& value)
-            -> Value<std::remove_cvref_t<decltype(value)>::value + 1> {
+        constexpr auto add1 = [](MetaValue auto value) -> Value<decltype(value)::value + 1> {
             return {};
         };
 
-        constexpr auto times2 = [](const MetaValue auto& value)
-            -> Value<std::remove_cvref_t<decltype(value)>::value * 2> {
+        constexpr auto times2 = [](MetaValue auto value) -> Value<decltype(value)::value * 2> {
             return {};
         };
 
@@ -1011,16 +1512,16 @@ namespace hyperion::mpl {
                       "hyperion::mpl::Type::apply(MetaFunction(MetaValue)) -> MetaValue test case "
                       "3 (failing)");
 
-        constexpr auto add1_semi_typely = [](const MetaType auto& type)
-            -> Value<std::remove_cvref_t<decltype(type)>::type::value + 1>
-            requires MetaValue<typename std::remove_cvref_t<decltype(type)>::type>
+        constexpr auto add1_semi_typely
+            = [](MetaType auto type) -> Value<std::remove_cvref_t<decltype(type)>::type::value + 1>
+            requires MetaValue<typename decltype(type)::type>
         {
             return {};
         };
 
-        constexpr auto times2_semi_typely = [](const MetaType auto& type)
-            -> Value<std::remove_cvref_t<decltype(type)>::type::value * 2>
-            requires MetaValue<typename std::remove_cvref_t<decltype(type)>::type>
+        constexpr auto times2_semi_typely
+            = [](MetaType auto type) -> Value<std::remove_cvref_t<decltype(type)>::type::value * 2>
+            requires MetaValue<typename decltype(type)::type>
         {
             return {};
         };
@@ -1036,16 +1537,16 @@ namespace hyperion::mpl {
                       "hyperion::mpl::Type::apply(MetaFunction(Type)) -> MetaValue test case "
                       "3 (failing)");
 
-        constexpr auto add1_fully_typely = [](const MetaType auto& type)
-            -> Type<Value<std::remove_cvref_t<decltype(type)>::type::value + 1>>
-            requires MetaValue<typename std::remove_cvref_t<decltype(type)>::type>
+        constexpr auto add1_fully_typely
+            = [](MetaType auto type) -> Type<Value<decltype(type)::type::value + 1>>
+            requires MetaValue<typename decltype(type)::type>
         {
             return {};
         };
 
-        constexpr auto times2_fully_typely = [](const MetaType auto& type)
-            -> Type<Value<std::remove_cvref_t<decltype(type)>::type::value * 2>>
-            requires MetaValue<typename std::remove_cvref_t<decltype(type)>::type>
+        constexpr auto times2_fully_typely
+            = [](MetaType auto type) -> Type<Value<decltype(type)::type::value * 2>>
+            requires MetaValue<typename decltype(type)::type>
         {
             return {};
         };
@@ -1076,18 +1577,18 @@ namespace hyperion::mpl {
                           == decltype_<int&&>(),
                       "hyperion::mpl::Type::apply<MetaFunction<type>> test case 3 (failing)");
 
-        constexpr auto add_const = [](const MetaType auto& type)
-            -> std::add_const<typename std::remove_cvref_t<decltype(type)>::type> {
+        constexpr auto add_const
+            = [](MetaType auto type) -> std::add_const<typename decltype(type)::type> {
             return {};
         };
 
-        constexpr auto add_lvalue_reference = [](const MetaType auto& type)
-            -> std::add_lvalue_reference<typename std::remove_cvref_t<decltype(type)>::type> {
+        constexpr auto add_lvalue_reference
+            = [](MetaType auto type) -> std::add_lvalue_reference<typename decltype(type)::type> {
             return {};
         };
 
-        constexpr auto remove_reference = [](const MetaType auto& type)
-            -> std::remove_reference<typename std::remove_cvref_t<decltype(type)>::type> {
+        constexpr auto remove_reference
+            = [](MetaType auto type) -> std::remove_reference<typename decltype(type)::type> {
             return {};
         };
 
@@ -1119,19 +1620,18 @@ namespace hyperion::mpl {
                 == decltype_<const int&>(),
             "hyperion::mpl::Type::apply(MetaFunction(type)) -> Type<type> test case 3 (failing)");
 
-        constexpr auto add_const_typed = [](const MetaType auto& type)
-            -> Type<std::add_const_t<typename std::remove_cvref_t<decltype(type)>::type>> {
+        constexpr auto add_const_typed
+            = [](MetaType auto type) -> Type<std::add_const_t<typename decltype(type)::type>> {
             return {};
         };
 
-        constexpr auto add_lvalue_reference_typed = [](const MetaType auto& type)
-            -> Type<
-                std::add_lvalue_reference_t<typename std::remove_cvref_t<decltype(type)>::type>> {
+        constexpr auto add_lvalue_reference_typed = [](MetaType auto type)
+            -> Type<std::add_lvalue_reference_t<typename decltype(type)::type>> {
             return {};
         };
 
-        constexpr auto remove_reference_typed = [](const MetaType auto& type)
-            -> Type<std::remove_reference_t<typename std::remove_cvref_t<decltype(type)>::type>> {
+        constexpr auto remove_reference_typed =
+            [](MetaType auto type) -> Type<std::remove_reference_t<typename decltype(type)::type>> {
             return {};
         };
 
@@ -1751,6 +2251,12 @@ namespace hyperion::mpl {
         static_assert(!decltype_<not_swappable>().is_noexcept_swappable_with(),
                       "hyperion::mpl::Type::is_noexcept_swappable_with test case 3 (failing)");
 
+        static_assert(decltype_<int>().sizeof_() == 4_usize,
+                      "hyperion::mpl::Type::sizeof_ test case 1 (failing)");
+        static_assert(decltype_<double>().sizeof_() == 8_usize,
+                      "hyperion::mpl::Type::sizeof_ test case 2 (failing)");
+        static_assert(decltype_<char>().sizeof_() == 1_usize,
+                      "hyperion::mpl::Type::sizeof_ test case 3 (failing)");
     } // namespace _test::type
 } // namespace hyperion::mpl
 

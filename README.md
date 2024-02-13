@@ -55,20 +55,20 @@ static_assert(decltype_(val3)
               .apply<std::add_rvalue_reference>()
               == decltype_<int&&>());
 
-constexpr auto add_const = [](const MetaType auto& type)
-    -> std::add_const<typename std::remove_cvref_t<decltype(type)>::type>
+constexpr auto add_const = [](MetaType auto type)
+    -> std::add_const<typename decltype(type)::type>
 {
     return {};
 };
 
-constexpr auto add_lvalue_reference = [](const MetaType auto& type)
-    -> std::add_lvalue_reference<typename std::remove_cvref_t<decltype(type)>::type>
+constexpr auto add_lvalue_reference = [](MetaType auto type)
+    -> std::add_lvalue_reference<typename decltype(type)::type>
 {
     return {};
 };
 
-constexpr auto remove_reference = [](const MetaType auto& type)
-    -> std::remove_reference<typename std::remove_cvref_t<decltype(type)>::type>
+constexpr auto remove_reference = [](MetaType auto type)
+    -> std::remove_reference<typename decltype(type)::type>
 {
     return {};
 };
@@ -89,6 +89,9 @@ When contributing code, please follow the general style expectations of Hyperion
 - Use trailing returns types,
 - Use assign-init (e.g. `auto var = value;`) instead of direct-init (e.g. `auto var{value}`),
 - By default, prefer simplicity and correctness over performance
+- We try to target Clang/LLVM 15, which doesn't yet support usage of concepts in function
+definitions occurring after the declaration (for example, defining a function template outside of
+the class it was declared in). In these cases, revert to using `enable_if` instead.
 
 ### License
 
