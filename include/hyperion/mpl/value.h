@@ -127,7 +127,7 @@ namespace hyperion::mpl {
         /// @return The result of applying `TMetaFunction`, as a `Value` specialization
         template<template<typename> typename TMetaFunction>
             requires TypeMetaFunction<TMetaFunction> && MetaValue<TMetaFunction<Value>>
-        [[nodiscard]] constexpr auto apply() noexcept -> Value<TMetaFunction<Value>::value> {
+        [[nodiscard]] constexpr auto apply() const noexcept -> Value<TMetaFunction<Value>::value> {
             return {};
         }
 
@@ -157,7 +157,7 @@ namespace hyperion::mpl {
         /// @tparam TMetaFunction The template metafunction to apply to this `Value`
         /// @return The result of applying `TMetaFunction`, as a `Type` specialization
         template<template<typename> typename TMetaFunction>
-        [[nodiscard]] constexpr auto apply() noexcept
+        [[nodiscard]] constexpr auto apply() const noexcept
             -> std::enable_if_t<TypeMetaFunction<TMetaFunction> && MetaType<TMetaFunction<Value>>
                                     && !MetaValue<typename TMetaFunction<Value>::type>,
                                 Type<typename TMetaFunction<Value>::type>>;
@@ -188,7 +188,7 @@ namespace hyperion::mpl {
         /// @tparam TMetaFunction The template metafunction to apply to this `Value`
         /// @return The result of applying `TMetaFunction`, as a `Value` specialization
         template<template<typename> typename TMetaFunction>
-        [[nodiscard]] constexpr auto apply() noexcept
+        [[nodiscard]] constexpr auto apply() const noexcept
             -> std::enable_if_t<TypeMetaFunction<TMetaFunction> && MetaType<TMetaFunction<Value>>
                                     && MetaValue<typename TMetaFunction<Value>::type>,
                                 Value<TMetaFunction<Value>::type::value>>;
@@ -219,7 +219,7 @@ namespace hyperion::mpl {
         /// @return The result of applying `TMetaFunction`, as a `Value` specialization
         template<template<auto> typename TMetaFunction>
             requires ValueMetaFunction<TMetaFunction> && MetaValue<TMetaFunction<value>>
-        [[nodiscard]] constexpr auto apply() noexcept -> Value<TMetaFunction<value>::value> {
+        [[nodiscard]] constexpr auto apply() const noexcept -> Value<TMetaFunction<value>::value> {
             return {};
         }
 
@@ -249,7 +249,7 @@ namespace hyperion::mpl {
         /// @tparam TMetaFunction The template metafunction to apply to this `Value`
         /// @return The result of applying `TMetaFunction`, as a `Type` specialization
         template<template<auto> typename TMetaFunction>
-        [[nodiscard]] constexpr auto apply() noexcept
+        [[nodiscard]] constexpr auto apply() const noexcept
             -> std::enable_if_t<ValueMetaFunction<TMetaFunction> && MetaType<TMetaFunction<value>>
                                     && !MetaValue<typename TMetaFunction<value>::type>,
                                 Type<typename TMetaFunction<value>::type>>;
@@ -280,7 +280,7 @@ namespace hyperion::mpl {
         /// @tparam TMetaFunction The template metafunction to apply to this `Value`
         /// @return The result of applying `TMetaFunction`, as a `Value` specialization
         template<template<auto> typename TMetaFunction>
-        [[nodiscard]] constexpr auto apply() noexcept
+        [[nodiscard]] constexpr auto apply() const noexcept
             -> std::enable_if_t<ValueMetaFunction<TMetaFunction> && MetaType<TMetaFunction<value>>
                                     && MetaValue<typename TMetaFunction<value>::type>,
                                 Value<TMetaFunction<value>::type::value>>;
@@ -317,7 +317,7 @@ namespace hyperion::mpl {
         template<typename TFunction>
         [[nodiscard]] constexpr auto
         apply([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
-            noexcept
+            const noexcept
             -> std::enable_if_t<MetaFunctionOf<TFunction, Value>
                                     && MetaType<meta_result_t<TFunction, Value>>
                                     && !MetaType<typename meta_result_t<TFunction, Value>::type>,
@@ -355,7 +355,7 @@ namespace hyperion::mpl {
             requires MetaFunctionOf<TFunction, Value> && MetaValue<meta_result_t<TFunction, Value>>
         [[nodiscard]] constexpr auto
         apply([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
-            noexcept -> Value<meta_result_t<TFunction, Value>::value> {
+            const noexcept -> Value<meta_result_t<TFunction, Value>::value> {
             return {};
         }
 
@@ -389,7 +389,7 @@ namespace hyperion::mpl {
         template<template<auto> typename TPredicate>
             requires ValueMetaFunction<TPredicate> && MetaValue<TPredicate<value>>
                      && std::same_as<std::remove_const_t<decltype(TPredicate<value>::value)>, bool>
-        [[nodiscard]] constexpr auto satisfies() noexcept -> Value<TPredicate<value>::value> {
+        [[nodiscard]] constexpr auto satisfies() const noexcept -> Value<TPredicate<value>::value> {
             return {};
         }
 
@@ -423,7 +423,7 @@ namespace hyperion::mpl {
         template<template<typename> typename TPredicate>
             requires TypeMetaFunction<TPredicate> && MetaValue<TPredicate<Value>>
                      && std::same_as<std::remove_const_t<decltype(TPredicate<Value>::value)>, bool>
-        [[nodiscard]] constexpr auto satisfies() noexcept -> Value<TPredicate<Value>::value> {
+        [[nodiscard]] constexpr auto satisfies() const noexcept -> Value<TPredicate<Value>::value> {
             return {};
         }
 
@@ -463,7 +463,7 @@ namespace hyperion::mpl {
                          bool>
         [[nodiscard]] constexpr auto
         satisfies([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
-            noexcept -> meta_result_t<TPredicate, Value> {
+            const noexcept -> meta_result_t<TPredicate, Value> {
             return {};
         }
     };
@@ -1005,7 +1005,7 @@ namespace hyperion::mpl {
 
     template<auto TValue, typename TType>
     template<template<typename> typename TMetaFunction>
-    [[nodiscard]] constexpr auto Value<TValue, TType>::apply() noexcept
+    [[nodiscard]] constexpr auto Value<TValue, TType>::apply() const noexcept
         -> std::enable_if_t<TypeMetaFunction<TMetaFunction> && MetaType<TMetaFunction<Value>>
                                 && !MetaValue<typename TMetaFunction<Value>::type>,
                             Type<typename TMetaFunction<Value>::type>> {
@@ -1014,7 +1014,7 @@ namespace hyperion::mpl {
 
     template<auto TValue, typename TType>
     template<template<typename> typename TMetaFunction>
-    [[nodiscard]] constexpr auto Value<TValue, TType>::apply() noexcept
+    [[nodiscard]] constexpr auto Value<TValue, TType>::apply() const noexcept
         -> std::enable_if_t<TypeMetaFunction<TMetaFunction> && MetaType<TMetaFunction<Value>>
                                 && MetaValue<typename TMetaFunction<Value>::type>,
                             Value<TMetaFunction<Value>::type::value>> {
@@ -1023,7 +1023,7 @@ namespace hyperion::mpl {
 
     template<auto TValue, typename TType>
     template<template<auto> typename TMetaFunction>
-    [[nodiscard]] constexpr auto Value<TValue, TType>::apply() noexcept
+    [[nodiscard]] constexpr auto Value<TValue, TType>::apply() const noexcept
         -> std::enable_if_t<ValueMetaFunction<TMetaFunction> && MetaType<TMetaFunction<value>>
                                 && !MetaValue<typename TMetaFunction<value>::type>,
                             Type<typename TMetaFunction<value>::type>> {
@@ -1032,7 +1032,7 @@ namespace hyperion::mpl {
 
     template<auto TValue, typename TType>
     template<template<auto> typename TMetaFunction>
-    [[nodiscard]] constexpr auto Value<TValue, TType>::apply() noexcept
+    [[nodiscard]] constexpr auto Value<TValue, TType>::apply() const noexcept
         -> std::enable_if_t<ValueMetaFunction<TMetaFunction> && MetaType<TMetaFunction<value>>
                                 && MetaValue<typename TMetaFunction<value>::type>,
                             Value<TMetaFunction<value>::type::value>> {
@@ -1043,7 +1043,7 @@ namespace hyperion::mpl {
     template<typename TFunction>
     [[nodiscard]] constexpr auto
     Value<TValue, TType>::apply([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
-        noexcept
+        const noexcept
         -> std::enable_if_t<MetaFunctionOf<TFunction, Value>
                                 && MetaType<meta_result_t<TFunction, Value>>
                                 && !MetaType<typename meta_result_t<TFunction, Value>::type>,
