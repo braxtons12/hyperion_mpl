@@ -1370,31 +1370,183 @@ namespace hyperion::mpl {
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_trivially_move_constructible_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is copy
+        /// assignable, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct assignable {
+        ///     auto operator=(const assignable&) -> assignable&;
+        /// }
+        /// struct not_assignable {
+        ///     auto operator=(const not_assignable&) -> not_assignable& = delete;
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto assignable_t = decltype_<assignable>();
+        /// constexpr auto not_assignable_t = decltype_<not_assignable>();
+        ///
+        /// static_assert(assignable_t.is_copy_assignable());
+        /// static_assert(int_t.is_copy_assignable());
+        /// static_assert(not not_assignable_.is_copy_assignable());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is copy assignable, as a `Value`
+        /// specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_copy_assignable() const noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_copy_assignable_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
+        /// copy assignable, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct assignable {
+        ///     auto operator=(const assignable&) -> assignable&;
+        /// }
+        /// struct noexcept_assignable {
+        ///     auto operator=(const noexcept_assignable&) noexcept -> noexcept_assignable&;
+        /// }
+        /// struct not_assignable {
+        ///     auto operator=(const not_assignable&) -> not_assignable& = delete;
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto assignable_t = decltype_<assignable>();
+        /// constexpr auto noexcept_assignable_t = decltype_<noexcept_assignable>();
+        /// constexpr auto not_assignable_t = decltype_<not_assignable>();
+        ///
+        /// static_assert(int_t.is_noexcept_copy_assignable());
+        /// static_assert(noexcept_assignable_t.is_noexcept_copy_assignable());
+        /// static_assert(not assignable_t.is_noexcept_copy_assignable());
+        /// static_assert(not not_assignable_.is_noexcept_copy_assignable());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is `noexcept` copy assignable, as a
+        /// `Value` specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_noexcept_copy_assignable() const noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_nothrow_copy_assignable_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is trivially
+        /// copy assignable, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct assignable {
+        ///     auto operator=(const assignable&) -> assignable&;
+        /// }
+        /// struct trivially_assignable {
+        ///     auto operator=(const trivially_assignable&) -> trivially_assignable& = default;
+        /// }
+        /// struct not_assignable {
+        ///     auto operator=(const not_assignable&) -> not_assignable& = delete;
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto assignable_t = decltype_<assignable>();
+        /// constexpr auto trivially_assignable_t = decltype_<trivially_assignable>();
+        /// constexpr auto not_assignable_t = decltype_<not_assignable>();
+        ///
+        /// static_assert(int_t.is_trivially_copy_assignable());
+        /// static_assert(trivially_assignable_t.is_trivially_copy_assignable());
+        /// static_assert(not assignable_t.is_trivially_copy_assignable());
+        /// static_assert(not not_assignable_.is_trivially_copy_assignable());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is trivially copy assignable, as a
+        /// `Value` specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_trivially_copy_assignable() const noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_trivially_copy_assignable_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is move
+        /// assignable, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct assignable {
+        ///     auto operator=(assignable&&) -> assignable&;
+        /// }
+        /// struct not_assignable {
+        ///     auto operator=(not_assignable&&) -> not_assignable& = delete;
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto assignable_t = decltype_<assignable>();
+        /// constexpr auto not_assignable_t = decltype_<not_assignable>();
+        ///
+        /// static_assert(assignable_t.is_move_assignable());
+        /// static_assert(int_t.is_move_assignable());
+        /// static_assert(not not_assignable_.is_move_assignable());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is move assignable, as a `Value`
+        /// specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_move_assignable() const noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_move_assignable_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
+        /// move assignable, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct assignable {
+        ///     auto operator=(assignable&&) -> assignable&;
+        /// }
+        /// struct noexcept_assignable {
+        ///     auto operator=(noexcept_assignable&&) noexcept -> noexcept_assignable&;
+        /// }
+        /// struct not_assignable {
+        ///     auto operator=(not_assignable&&) -> not_assignable& = delete;
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto assignable_t = decltype_<assignable>();
+        /// constexpr auto noexcept_assignable_t = decltype_<noexcept_assignable>();
+        /// constexpr auto not_assignable_t = decltype_<not_assignable>();
+        ///
+        /// static_assert(int_t.is_noexcept_move_assignable());
+        /// static_assert(noexcept_assignable_t.is_noexcept_move_assignable());
+        /// static_assert(not assignable_t.is_noexcept_move_assignable());
+        /// static_assert(not not_assignable_.is_noexcept_move_assignable());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is `noexcept` move assignable, as a
+        /// `Value` specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_noexcept_move_assignable() const noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_nothrow_move_assignable_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is trivially
+        /// move assignable, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct assignable {
+        ///     auto operator=(assignable&&) -> assignable&;
+        /// }
+        /// struct trivially_assignable {
+        ///     auto operator=(trivially_assignable&&) -> trivially_assignable& = default;
+        /// }
+        /// struct not_assignable {
+        ///     auto operator=(not_assignable&&) -> not_assignable& = delete;
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto assignable_t = decltype_<assignable>();
+        /// constexpr auto trivially_assignable_t = decltype_<trivially_assignable>();
+        /// constexpr auto not_assignable_t = decltype_<not_assignable>();
+        ///
+        /// static_assert(int_t.is_trivially_move_assignable());
+        /// static_assert(trivially_assignable_t.is_trivially_move_assignable());
+        /// static_assert(not assignable_t.is_trivially_move_assignable());
+        /// static_assert(not not_assignable_.is_trivially_move_assignable());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is trivially move assignable, as a
+        /// `Value` specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_trivially_move_assignable() const noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
