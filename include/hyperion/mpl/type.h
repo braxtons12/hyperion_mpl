@@ -1100,7 +1100,7 @@ namespace hyperion::mpl {
         /// # Example
         /// @code {.cpp}
         /// struct constructible {
-        ///     constructible() {}
+        ///     constructible();
         /// }
         /// struct not_constructible {
         ///     not_constructible() = delete;
@@ -1127,10 +1127,10 @@ namespace hyperion::mpl {
         /// # Example
         /// @code {.cpp}
         /// struct constructible {
-        ///     constructible() {}
+        ///     constructible();
         /// }
         /// struct noexcept_constructible {
-        ///     noexcept_constructible() noexcept {}
+        ///     noexcept_constructible() noexcept;
         /// }
         /// struct not_constructible {
         ///     not_constructible() = delete;
@@ -1160,7 +1160,7 @@ namespace hyperion::mpl {
         /// # Example
         /// @code {.cpp}
         /// struct constructible {
-        ///     constructible() {}
+        ///     constructible();
         /// }
         /// struct trivially_constructible {
         ///     trivially_constructible() = default;
@@ -1187,32 +1187,184 @@ namespace hyperion::mpl {
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_trivially_default_constructible_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is copy
+        /// constructible, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct constructible {
+        ///     constructible(const constructible&);
+        /// }
+        /// struct not_constructible {
+        ///     not_constructible(const not_constructible&) = delete;
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto constructible_t = decltype_<constructible>();
+        /// constexpr auto not_constructible_t = decltype_<not_constructible>();
+        ///
+        /// static_assert(constructible_t.is_copy_constructible());
+        /// static_assert(int_t.is_copy_constructible());
+        /// static_assert(not not_constructible_.is_copy_constructible());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is copy constructible, as a `Value`
+        /// specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_copy_constructible() const noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_copy_constructible_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
+        /// copy constructible, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct constructible {
+        ///     constructible(const constructible&);
+        /// }
+        /// struct noexcept_constructible {
+        ///     noexcept_constructible(const noexcept_constructible&) noexcept;
+        /// }
+        /// struct not_constructible {
+        ///     not_constructible(const not_constructible&) = delete;
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto constructible_t = decltype_<constructible>();
+        /// constexpr auto noexcept_constructible_t = decltype_<noexcept_constructible>();
+        /// constexpr auto not_constructible_t = decltype_<not_constructible>();
+        ///
+        /// static_assert(int_t.is_noexcept_copy_constructible());
+        /// static_assert(noexcept_constructible_t.is_noexcept_copy_constructible());
+        /// static_assert(not constructible_t.is_noexcept_copy_constructible());
+        /// static_assert(not not_constructible_.is_noexcept_copy_constructible());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is `noexcept` copy constructible, as a
+        /// `Value` specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_noexcept_copy_constructible() const noexcept
 
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_nothrow_copy_constructible_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is trivially
+        /// copy constructible, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct constructible {
+        ///     constructible(const constructible&);
+        /// }
+        /// struct trivially_constructible {
+        ///     trivially_constructible(const trivially_constructible&) = default;
+        /// }
+        /// struct not_constructible {
+        ///     not_constructible(const not_constructible&) = delete;
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto constructible_t = decltype_<constructible>();
+        /// constexpr auto trivially_constructible_t = decltype_<trivially_constructible>();
+        /// constexpr auto not_constructible_t = decltype_<not_constructible>();
+        ///
+        /// static_assert(int_t.is_trivially_copy_constructible());
+        /// static_assert(trivially_constructible_t.is_trivially_copy_constructible());
+        /// static_assert(not constructible_t.is_trivially_copy_constructible());
+        /// static_assert(not not_constructible_.is_trivially_copy_constructible());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is trivially copy constructible, as a
+        /// `Value` specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_trivially_copy_constructible() const noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_trivially_copy_constructible_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is move
+        /// constructible, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct constructible {
+        ///     constructible(constructible&&);
+        /// }
+        /// struct not_constructible {
+        ///     not_constructible(not_constructible&&) = delete;
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto constructible_t = decltype_<constructible>();
+        /// constexpr auto not_constructible_t = decltype_<not_constructible>();
+        ///
+        /// static_assert(constructible_t.is_move_constructible());
+        /// static_assert(int_t.is_move_constructible());
+        /// static_assert(not not_constructible_.is_move_constructible());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is move constructible, as a `Value`
+        /// specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_move_constructible() const noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_move_constructible_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
+        /// move constructible, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct constructible {
+        ///     constructible(constructible&&);
+        /// }
+        /// struct noexcept_constructible {
+        ///     noexcept_constructible(noexcept_constructible&&) noexcept;
+        /// }
+        /// struct not_constructible {
+        ///     not_constructible(not_constructible&&) = delete;
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto constructible_t = decltype_<constructible>();
+        /// constexpr auto noexcept_constructible_t = decltype_<noexcept_constructible>();
+        /// constexpr auto not_constructible_t = decltype_<not_constructible>();
+        ///
+        /// static_assert(int_t.is_noexcept_move_constructible());
+        /// static_assert(noexcept_constructible_t.is_noexcept_move_constructible());
+        /// static_assert(not constructible_t.is_noexcept_move_constructible());
+        /// static_assert(not not_constructible_.is_noexcept_move_constructible());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is `noexcept` move constructible, as a
+        /// `Value` specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_noexcept_move_constructible() const noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_nothrow_move_constructible_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is trivially
+        /// move constructible, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct constructible {
+        ///     constructible(constructible&&);
+        /// }
+        /// struct trivially_constructible {
+        ///     trivially_constructible(trivially_constructible&&) = default;
+        /// }
+        /// struct not_constructible {
+        ///     not_constructible(not_constructible&&) = delete;
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto constructible_t = decltype_<constructible>();
+        /// constexpr auto trivially_constructible_t = decltype_<trivially_constructible>();
+        /// constexpr auto not_constructible_t = decltype_<not_constructible>();
+        ///
+        /// static_assert(int_t.is_trivially_move_constructible());
+        /// static_assert(trivially_constructible_t.is_trivially_move_constructible());
+        /// static_assert(not constructible_t.is_trivially_move_constructible());
+        /// static_assert(not not_constructible_.is_trivially_move_constructible());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is trivially move constructible, as a
+        /// `Value` specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_trivially_move_constructible() const noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
