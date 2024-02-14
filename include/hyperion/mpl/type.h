@@ -1570,7 +1570,7 @@ namespace hyperion::mpl {
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_trivially_move_assignable_v<TDelay>, bool>>;
 
-        /// @brief Returns whether the type `this` `Type` specialization represents is 
+        /// @brief Returns whether the type `this` `Type` specialization represents is
         /// destructible, as a `Value` specialization.
         ///
         /// # Example
@@ -1663,30 +1663,148 @@ namespace hyperion::mpl {
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_trivially_destructible_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is swappable,
+        /// as a `Value` specialization.
+        ///
+        /// If `type` is swappable, i.e., given `lhs` and `rhs` that are both `type&`,
+        /// `std::swap(lhs, rhs)` is well-formed, returns `Value<true>`. Otherwise, returns
+        /// `Value<false>`.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct not_swappable {
+        ///     friend void swap(not_swappable&, not_swappable&) = delete;
+        /// };
+        /// struct swappable {
+        ///     friend void swap(swappable&, swappable&);
+        /// };
+        ///
+        /// static constexpr auto swappable_t = decltype_<swappable>();
+        /// static constexpr auto not_swappable_t = decltype_<not_swappable>();
+        ///
+        /// static_assert(swappable_t.is_swappable());
+        /// static_assert(not not_swappable_t.is_swappable());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is swappable, as a `Value` specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto
         is_swappable() const noexcept -> std::enable_if_t<std::same_as<TDelay, type>,
                                                           Value<std::is_swappable_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
+        /// swappable, as a `Value` specialization.
+        ///
+        /// If `type` is `noexcept` swappable, i.e., given `lhs` and `rhs` that are both `type&`,
+        /// `std::swap(lhs, rhs)` is both well-formed and `noexcept`, returns `Value<true>`.
+        /// Otherwise, returns `Value<false>`.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct not_swappable {
+        ///     friend void swap(not_swappable&, not_swappable&) = delete;
+        /// };
+        /// struct swappable {
+        ///     friend void swap(swappable&, swappable&);
+        /// };
+        /// struct noexcept_swappable {
+        ///     friend void swap(noexcept_swappable&, noexcept_swappable&) noexcept;
+        /// };
+        ///
+        /// static constexpr auto swappable_t = decltype_<swappable>();
+        /// static constexpr auto noexcept_swappable_t = decltype_<noexcept_swappable>();
+        /// static constexpr auto not_swappable_t = decltype_<not_swappable>();
+        ///
+        /// static_assert(noexcept_swappable_t.is_noexcept_swappable());
+        /// static_assert(not swappable_t.is_noexcept_swappable());
+        /// static_assert(not not_swappable_t.is_noexcept_swappable());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is swappable, as a `Value` specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_noexcept_swappable() const noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_nothrow_swappable_v<TDelay>, bool>>;
 
-        template<typename TRhs = std::conditional_t<std::is_reference_v<type>,
-                                                    type,
-                                                    std::add_lvalue_reference_t<type>>>
+        /// @brief Returns whether the type `this` `Type` specialization represents is swappable
+        /// with the type `rhs` represents, as a `Value` specialization.
+        ///
+        /// If the type `this` represents is swappable with the type `rhs` represents,
+        /// i.e., given `val1` and `val2` that are `type&` and `TRhs&`, respectively,
+        /// `std::swap(lhs, rhs)` is well-formed, returns `Value<true>`.
+        /// Otherwise, returns `Value<false>`.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct not_swappable {
+        ///     friend void swap(not_swappable&, int&) = delete;
+        /// };
+        /// struct swappable {
+        ///     friend void swap(swappable&, int&);
+        ///     friend void swap(int&, swappable&);
+        /// };
+        ///
+        /// static constexpr auto swappable_t = decltype_<swappable>();
+        /// static constexpr auto not_swappable_t = decltype_<not_swappable>();
+        ///
+        /// static_assert(swappable_t.is_swappable_with(decltype_<int>()));
+        /// static_assert(not not_swappable_t.is_swappable_with(decltype_<int>()));
+        /// @endcode
+        ///
+        /// @tparam TRhs The type to check that `type` is swappable with
+        /// @param rhs The `Type` specialization representing the type to check that `type` is
+        /// swappable with
+        /// @return whether the type `this` represents is swappable with the type `rhs` represents,
+        /// as a `Value` specialization
+        template<typename TRhs = type>
         [[nodiscard]] constexpr auto
         is_swappable_with([[maybe_unused]] const Type<TRhs>& rhs = Type<TRhs>{}) const noexcept
-            -> Value<std::is_swappable_with_v<std::conditional_t<std::is_reference_v<type>,
-                                                                 type,
-                                                                 std::add_lvalue_reference_t<type>>,
-                                              TRhs>,
-                     bool>;
+            -> Value<
+                std::is_swappable_with_v<std::conditional_t<std::is_reference_v<type>,
+                                                            type,
+                                                            std::add_lvalue_reference_t<type>>,
+                                         std::conditional_t<std::is_reference_v<TRhs>,
+                                                            TRhs,
+                                                            std::add_lvalue_reference_t<TRhs>>>,
+                bool>;
 
-        template<typename TRhs = std::conditional_t<std::is_reference_v<type>,
-                                                    type,
-                                                    std::add_lvalue_reference_t<type>>>
+        /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
+        /// swappable with the type `rhs` represents, as a `Value` specialization.
+        ///
+        /// If the type `this` represents is `noexcept` swappable with the type `rhs` represents,
+        /// i.e., given `val1` and `val2` that are `type&` and `TRhs&`, respectively,
+        /// `std::swap(lhs, rhs)` is both well-formed and `noexcept`, returns `Value<true>`.
+        /// Otherwise, returns `Value<false>`.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct not_swappable {
+        ///     friend void swap(not_swappable&, int&) = delete;
+        /// };
+        /// struct swappable {
+        ///     friend void swap(swappable&, int&);
+        ///     friend void swap(int&, swappable&);
+        /// };
+        /// struct noexcept_swappable {
+        ///     friend void swap(swappable&, int&) noexcept;
+        ///     friend void swap(int&, swappable&) noexcept;
+        /// };
+        ///
+        /// static constexpr auto swappable_t = decltype_<swappable>();
+        /// static constexpr auto noexcept_swappable_t = decltype_<swappable>();
+        /// static constexpr auto not_swappable_t = decltype_<not_swappable>();
+        ///
+        /// static_assert(noexcept_swappable_t.is_noexcept_swappable_with(decltype_<int>()));
+        /// static_assert(not swappable_t.is_noexcept_swappable_with(decltype_<int>()));
+        /// static_assert(not not_swappable_t.is_noexcept_swappable_with(decltype_<int>()));
+        /// @endcode
+        ///
+        /// @tparam TRhs The type to check that `type` is `noexcept` swappable with
+        /// @param rhs The `Type` specialization representing the type to check that `type` is
+        /// `noexcept` swappable with
+        /// @return whether the type `this` represents is `noexcept` swappable with the type `rhs`
+        /// represents, as a `Value` specialization
+        template<typename TRhs = type>
         [[nodiscard]] constexpr auto
         is_noexcept_swappable_with([[maybe_unused]] const Type<TRhs>& rhs
                                    = Type<TRhs>{}) const noexcept
@@ -1694,7 +1812,9 @@ namespace hyperion::mpl {
                          std::conditional_t<std::is_reference_v<type>,
                                             type,
                                             std::add_lvalue_reference_t<type>>,
-                         TRhs>,
+                         std::conditional_t<std::is_reference_v<TRhs>,
+                                            TRhs,
+                                            std::add_lvalue_reference_t<TRhs>>>,
                      bool>;
 
         template<typename TDelay = type>
@@ -2116,8 +2236,10 @@ namespace hyperion::mpl {
     Type<TType>::is_swappable_with([[maybe_unused]] const Type<TRhs>& rhs) const noexcept -> Value<
         std::is_swappable_with_v<
             std::conditional_t<std::is_reference_v<type>, type, std::add_lvalue_reference_t<type>>,
-            TRhs>,
-        bool> {
+            std::conditional_t<std::is_reference_v<TRhs>, TRhs, std::add_lvalue_reference_t<TRhs>>>,
+        bool>
+
+    {
         return {};
     }
 
@@ -2129,8 +2251,12 @@ namespace hyperion::mpl {
             std::is_nothrow_swappable_with_v<std::conditional_t<std::is_reference_v<type>,
                                                                 type,
                                                                 std::add_lvalue_reference_t<type>>,
-                                             TRhs>,
-            bool> {
+                                             std::conditional_t<std::is_reference_v<TRhs>,
+                                                                TRhs,
+                                                                std::add_lvalue_reference_t<TRhs>>>,
+            bool>
+
+    {
         return {};
     }
 
@@ -2995,10 +3121,12 @@ namespace hyperion::mpl {
 
         struct swappable_with {
             friend void swap(swappable_with& lhs, int& rhs) noexcept(false);
+            friend void swap(int& lhs, swappable_with& rhs) noexcept(false);
         };
 
         struct noexcept_swappable_with {
             friend void swap(noexcept_swappable_with& lhs, int& rhs) noexcept;
+            friend void swap(int& lhs, noexcept_swappable_with& rhs) noexcept;
         };
 
         static_assert(decltype_<int>().is_swappable_with(),
@@ -3009,6 +3137,14 @@ namespace hyperion::mpl {
                       "hyperion::mpl::Type::is_swappable_with test case 3 (failing)");
         static_assert(!decltype_<not_swappable>().is_swappable_with(),
                       "hyperion::mpl::Type::is_swappable_with test case 4 (failing)");
+        static_assert(decltype_<int>().is_swappable_with(decltype_<int>()),
+                      "hyperion::mpl::Type::is_swappable_with test case 5 (failing)");
+        static_assert(decltype_<swappable_with>().is_swappable_with(decltype_<int>()),
+                      "hyperion::mpl::Type::is_swappable_with test case 6 (failing)");
+        static_assert(decltype_<noexcept_swappable_with>().is_swappable_with(decltype_<int>()),
+                      "hyperion::mpl::Type::is_swappable_with test case 7 (failing)");
+        static_assert(!decltype_<not_swappable>().is_swappable_with(decltype_<int>()),
+                      "hyperion::mpl::Type::is_swappable_with test case 8 (failing)");
 
         static_assert(decltype_<int>().is_noexcept_swappable_with(),
                       "hyperion::mpl::Type::is_noexcept_swappable_with test case 1 (failing)");
@@ -3017,7 +3153,16 @@ namespace hyperion::mpl {
         static_assert(!decltype_<swappable>().is_noexcept_swappable_with(),
                       "hyperion::mpl::Type::is_noexcept_swappable_with test case 3 (failing)");
         static_assert(!decltype_<not_swappable>().is_noexcept_swappable_with(),
-                      "hyperion::mpl::Type::is_noexcept_swappable_with test case 3 (failing)");
+                      "hyperion::mpl::Type::is_noexcept_swappable_with test case 4 (failing)");
+        static_assert(decltype_<int>().is_noexcept_swappable_with(decltype_<int>()),
+                      "hyperion::mpl::Type::is_noexcept_swappable_with test case 5 (failing)");
+        static_assert(
+            decltype_<noexcept_swappable_with>().is_noexcept_swappable_with(decltype_<int>()),
+            "hyperion::mpl::Type::is_noexcept_swappable_with test case 6 (failing)");
+        static_assert(!decltype_<swappable_with>().is_noexcept_swappable_with(decltype_<int>()),
+                      "hyperion::mpl::Type::is_noexcept_swappable_with test case 7 (failing)");
+        static_assert(!decltype_<not_swappable>().is_noexcept_swappable_with(decltype_<int>()),
+                      "hyperion::mpl::Type::is_noexcept_swappable_with test case 8 (failing)");
 
         static_assert(decltype_<int>().sizeof_() == 4_usize,
                       "hyperion::mpl::Type::sizeof_ test case 1 (failing)");
