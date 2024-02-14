@@ -981,8 +981,8 @@ namespace hyperion::mpl {
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto constructible_t = decltype_<constructible>();
         ///
-        /// static_assert(constructible.is_constructible_from(list<int, double, tag>{}));
-        /// static_assert(not constructible.is_constructible_from(list<double>{}));
+        /// static_assert(constructible_t.is_constructible_from(list<int, double, tag>{}));
+        /// static_assert(not constructible_t.is_constructible_from(list<double>{}));
         /// static_assert(not int_t.is_constructible_from(constructible));
         /// @endcode
         ///
@@ -1011,10 +1011,10 @@ namespace hyperion::mpl {
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto constructible_t = decltype_<constructible>();
         ///
-        /// static_assert(constructible.is_constructible_from(decltype_<int>(),
-        ///                                                   decltype_<double>(),
-        ///                                                   decltype_<tag>()));
-        /// static_assert(not constructible.is_constructible_from(decltype_<double>{}));
+        /// static_assert(constructible_t.is_constructible_from(decltype_<int>(),
+        ///                                                     decltype_<double>(),
+        ///                                                     decltype_<tag>()));
+        /// static_assert(not constructible_t.is_constructible_from(decltype_<double>{}));
         /// static_assert(not int_t.is_constructible_from(constructible));
         /// @endcode
         ///
@@ -1042,10 +1042,10 @@ namespace hyperion::mpl {
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto constructible_t = decltype_<constructible>();
         ///
-        /// static_assert(constructible.is_noexcept_constructible_from(list<int, tag, tag>{}));
-        /// static_assert(not constructible
+        /// static_assert(constructible_t.is_noexcept_constructible_from(list<int, tag, tag>{}));
+        /// static_assert(not constructible_t
         ///                     .is_noexcept_constructible_from(list<int, double, tag>{}));
-        /// static_assert(not constructible.is_noexcept_constructible_from(list<double>{}));
+        /// static_assert(not constructible_t.is_noexcept_constructible_from(list<double>{}));
         /// static_assert(not int_t.is_noexcept_constructible_from(constructible));
         /// @endcode
         ///
@@ -1075,13 +1075,13 @@ namespace hyperion::mpl {
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto constructible_t = decltype_<constructible>();
         ///
-        /// static_assert(constructible.is_noexcept_constructible_from(decltype_<int>(),
-        ///                                                            decltype_<tag>(),
-        ///                                                            decltype_<tag>()));
-        /// static_assert(not constructible.is_noexcept_constructible_from(decltype_<int>(),
-        ///                                                                decltype_<double>(),
-        ///                                                                decltype_<tag>()));
-        /// static_assert(not constructible.is_noexcept_constructible_from(decltype_<double>{}));
+        /// static_assert(constructible_t.is_noexcept_constructible_from(decltype_<int>(),
+        ///                                                              decltype_<tag>(),
+        ///                                                              decltype_<tag>()));
+        /// static_assert(not constructible_t.is_noexcept_constructible_from(decltype_<int>(),
+        ///                                                                  decltype_<double>(),
+        ///                                                                  decltype_<tag>()));
+        /// static_assert(not constructible_t.is_noexcept_constructible_from(decltype_<double>{}));
         /// static_assert(not int_t.is_noexcept_constructible_from(constructible));
         /// @endcode
         ///
@@ -1094,17 +1094,93 @@ namespace hyperion::mpl {
         is_noexcept_constructible_from([[maybe_unused]] const Type<TTypes>&... list) const noexcept
             -> Value<std::is_nothrow_constructible_v<type, TTypes...>, bool>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is default
+        /// constructible, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct constructible {
+        ///     constructible() {}
+        /// }
+        /// struct not_constructible {
+        ///     not_constructible() = delete;
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto constructible_t = decltype_<constructible>();
+        /// constexpr auto not_constructible_t = decltype_<not_constructible>();
+        ///
+        /// static_assert(constructible_t.is_default_constructible());
+        /// static_assert(int_t.is_default_constructible());
+        /// static_assert(not not_constructible_.is_default_constructible());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is default constructible, as a `Value`
+        /// specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_default_constructible() const noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_default_constructible_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
+        /// default constructible, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct constructible {
+        ///     constructible() {}
+        /// }
+        /// struct noexcept_constructible {
+        ///     noexcept_constructible() noexcept {}
+        /// }
+        /// struct not_constructible {
+        ///     not_constructible() = delete;
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto constructible_t = decltype_<constructible>();
+        /// constexpr auto noexcept_constructible_t = decltype_<noexcept_constructible>();
+        /// constexpr auto not_constructible_t = decltype_<not_constructible>();
+        ///
+        /// static_assert(int_t.is_noexcept_default_constructible());
+        /// static_assert(noexcept_constructible_t.is_noexcept_default_constructible());
+        /// static_assert(not constructible_t.is_noexcept_default_constructible());
+        /// static_assert(not not_constructible_.is_noexcept_default_constructible());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is `noexcept` default constructible, as a
+        /// `Value` specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_noexcept_default_constructible() const noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
 
                                 Value<std::is_nothrow_default_constructible_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is trivially
+        /// default constructible, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct constructible {
+        ///     constructible() {}
+        /// }
+        /// struct trivially_constructible {
+        ///     trivially_constructible() = default;
+        /// }
+        /// struct not_constructible {
+        ///     not_constructible() = delete;
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto constructible_t = decltype_<constructible>();
+        /// constexpr auto trivially_constructible_t = decltype_<trivially_constructible>();
+        /// constexpr auto not_constructible_t = decltype_<not_constructible>();
+        ///
+        /// static_assert(int_t.is_trivially_default_constructible());
+        /// static_assert(trivially_constructible_t.is_trivially_default_constructible());
+        /// static_assert(not constructible_t.is_trivially_default_constructible());
+        /// static_assert(not not_constructible_.is_trivially_default_constructible());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is trivially default constructible, as a
+        /// `Value` specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_trivially_default_constructible() const noexcept
 
