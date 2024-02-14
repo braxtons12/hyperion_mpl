@@ -3,7 +3,7 @@
 /// @brief Concept and type trait definitions for what consitutes various categories of
 /// metaprogramming types
 /// @version 0.1
-/// @date 2024-02-03
+/// @date 2024-02-13
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -204,6 +204,87 @@ namespace hyperion::mpl {
     template<typename TType>
     static inline constexpr auto is_meta_type_v = is_meta_type<TType>::value;
 
+    // TODO(braxtons12): move Pair to its own header
+    template<typename TFirst, typename TSecond>
+    struct Pair {
+        using first = TFirst;
+        using second = TSecond;
+
+        template<typename TFunction>
+            requires std::is_invocable_v<TFunction, Pair>
+        [[nodiscard]] constexpr auto
+        apply([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
+            const noexcept -> std::invoke_result_t<TFunction, Pair> {
+            return {};
+        }
+    };
+
+    template<typename TLHSFirst, typename TLHSSecond, typename TRHSFirst, typename TRHSSecond>
+    [[nodiscard]] constexpr auto
+    operator==([[maybe_unused]] const Pair<TLHSFirst, TLHSSecond>& lhs,
+               [[maybe_unused]] const Pair<TRHSFirst, TRHSSecond>& rhs) noexcept -> bool {
+        constexpr auto is_equal = []<typename TLhs, typename TRhs>() {
+            if constexpr((MetaType<TLhs> && MetaType<TRhs>) || (MetaValue<TLhs> && MetaValue<TRhs>))
+            {
+                return TLhs{} == TRhs{};
+            }
+            else {
+                return false;
+            }
+        };
+
+        return is_equal.template operator()<TLHSFirst, TRHSFirst>()
+               && is_equal.template operator()<TLHSSecond, TRHSSecond>();
+    }
+
+    template<typename TFirst, typename TSecond>
+        requires(!std::is_reference_v<TFirst>) && (!std::is_reference_v<TSecond>)
+    [[nodiscard]] constexpr auto make_pair(
+        [[maybe_unused]] TFirst&& first,   // NOLINT(*-missing-std-forward)
+        [[maybe_unused]] TSecond&& second) // NOLINT(*-missing-std-forward)
+        noexcept -> Pair<TFirst, TSecond> {
+        return {};
+    }
+
+    template<typename TFirst, typename TSecond>
+        requires std::is_reference_v<TFirst> && (!std::is_reference_v<TSecond>)
+    [[nodiscard]] constexpr auto make_pair(
+        [[maybe_unused]] TFirst&& first,   // NOLINT(*-missing-std-forward)
+        [[maybe_unused]] TSecond&& second) // NOLINT(*-missing-std-forward)
+        noexcept -> Pair<TFirst, TSecond> {
+        return {};
+    }
+
+    template<typename TFirst, typename TSecond>
+        requires(!std::is_reference_v<TFirst>) && std::is_reference_v<TSecond>
+    [[nodiscard]] constexpr auto
+    make_pair([[maybe_unused]] TFirst&& first,   // NOLINT(*-missing-std-forward)
+              [[maybe_unused]] TSecond&& second) // NOLINT(*-missing-std-forward)
+        noexcept -> Pair<TFirst, TSecond> {
+        return {};
+    }
+
+    template<typename TFirst, typename TSecond>
+        requires std::is_reference_v<TFirst> && std::is_reference_v<TSecond>
+    [[nodiscard]] constexpr auto
+    make_pair([[maybe_unused]] TFirst&& first,   // NOLINT(*-missing-std-forward)
+              [[maybe_unused]] TSecond&& second) // NOLINT(*-missing-std-forward)
+        noexcept -> Pair<TFirst, TSecond> {
+        return {};
+    }
+
+    template<typename TType>
+    struct is_meta_pair : std::false_type { };
+
+    template<typename TFirst, typename TSecond>
+    struct is_meta_pair<Pair<TFirst, TSecond>> : std::true_type { };
+
+    template<typename TType>
+    static inline constexpr auto is_meta_pair_v = is_meta_pair<TType>::value;
+
+    template<typename TType>
+    concept MetaPair = is_meta_pair_v<TType>;
+
     namespace detail {
 
         template<typename TType>
@@ -302,19 +383,21 @@ namespace hyperion::mpl {
     /// @ingroup metatypes
     /// @headerfile hyperion/mpl/metatypes.h
     template<typename TFunction, typename TType>
-    concept MetaFunctionOf
-        = std::is_invocable_v<TFunction, TType> && (MetaType<TType> || MetaValue<TType>);
+    concept MetaFunctionOf = std::is_invocable_v<TFunction, TType>
+                             && (MetaType<TType> || MetaValue<TType> || MetaPair<TType>);
 
     /// @brief A `MetaFunction` is a callable metafunction that accepts a single value parameter
-    /// of either `MetaType` or `MetaValue` metaprogramming type category and returns either a
+    /// of `MetaType`, `MetaValue`, or `MetaPair` metaprogramming type category and returns either a
     /// `MetaType` or a `MetaValue`
     ///
     /// @tparam TFunction The callable to check
     /// @ingroup metatypes
     /// @headerfile hyperion/mpl/metatypes.h
     template<typename TFunction>
-    concept MetaFunction = MetaFunctionOf<TFunction, detail::Type<bool>>
-                           || MetaFunctionOf<TFunction, detail::Value<true>>;
+    concept MetaFunction
+        = MetaFunctionOf<TFunction, detail::Type<bool>>
+          || MetaFunctionOf<TFunction, detail::Value<true>>
+          || MetaFunctionOf<TFunction, Pair<detail::Type<bool>, detail::Type<bool>>>;
 
     /// @brief `meta_result` is a type trait representing the invoke result of a callable
     /// metafunction, `TFunction`, with a metaprogramming type, `TType`
