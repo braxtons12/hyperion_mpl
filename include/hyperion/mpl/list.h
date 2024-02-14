@@ -190,7 +190,7 @@ namespace hyperion::mpl {
         }
 
         template<usize TIndex>
-            requires(TIndex < List{}.size())
+            requires(TIndex < sizeof...(TTypes))
         [[nodiscard]] constexpr auto at() const noexcept ->
             typename detail::at<TIndex, 0_usize, List<as_meta<TTypes>...>>::type {
             return {};
@@ -198,13 +198,13 @@ namespace hyperion::mpl {
 
         [[nodiscard]] constexpr auto at(MetaValue auto value) const noexcept ->
             typename detail::at<decltype(value)::value, 0_usize, List<as_meta<TTypes>...>>::type
-            requires(decltype(value)::value < List{}.size())
+            requires(decltype(value)::value < sizeof...(TTypes))
         {
             return {};
         }
 
         template<typename... TRHTypes>
-            requires(sizeof...(TRHTypes) == List{}.size())
+            requires(sizeof...(TRHTypes) == sizeof...(TTypes))
         [[nodiscard]] constexpr auto zip([[maybe_unused]] List<TRHTypes...> rhs) const noexcept {
             return std::invoke(
                 []<usize... TIndices>(std::index_sequence<TIndices...>) {
