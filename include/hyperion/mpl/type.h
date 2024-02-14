@@ -1817,6 +1817,9 @@ namespace hyperion::mpl {
                                             std::add_lvalue_reference_t<TRhs>>>,
                      bool>;
 
+        /// @brief Returns the `sizeof` the type `this` `Type` specialization represents,
+        /// as a `Value` specialization.
+        /// @return the `sizeof` the type `this` represents, as a `Value` specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto sizeof_() const noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>, Value<sizeof(TDelay), usize>>;
