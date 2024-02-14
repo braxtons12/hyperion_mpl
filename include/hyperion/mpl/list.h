@@ -210,8 +210,9 @@ namespace hyperion::mpl {
                 []<usize... TIndices>(std::index_sequence<TIndices...>) {
                     constexpr auto _list = decltype(rhs){};
 
-                    return mpl::List<as_raw<
-                        decltype(make_pair(at<TIndices>(), _list.template at<TIndices>()))>...>{};
+                    return mpl::List<
+                        as_raw<decltype(make_pair(List{}.template at<TIndices>(),
+                                                  _list.template at<TIndices>()))>...>{};
                 },
                 std::index_sequence_for<TTypes...>{});
         }
