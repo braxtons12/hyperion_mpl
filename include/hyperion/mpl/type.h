@@ -977,7 +977,8 @@ namespace hyperion::mpl {
         /// struct tag {};
         /// struct constructible {
         ///     constructible(int, double, tag);
-        /// }
+        /// };
+        ///
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto constructible_t = decltype_<constructible>();
         ///
@@ -1007,7 +1008,8 @@ namespace hyperion::mpl {
         /// struct tag {};
         /// struct constructible {
         ///     constructible(int, double, tag);
-        /// }
+        /// };
+        ///
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto constructible_t = decltype_<constructible>();
         ///
@@ -1038,7 +1040,8 @@ namespace hyperion::mpl {
         /// struct constructible {
         ///     constructible(int, double, tag);
         ///     constructible(int, tag, tag) noexcept;
-        /// }
+        /// };
+        ///
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto constructible_t = decltype_<constructible>();
         ///
@@ -1071,7 +1074,7 @@ namespace hyperion::mpl {
         /// struct constructible {
         ///     constructible(int, double, tag);
         ///     constructible(int, tag, tag) noexcept;
-        /// }
+        /// };
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto constructible_t = decltype_<constructible>();
         ///
@@ -1101,10 +1104,11 @@ namespace hyperion::mpl {
         /// @code {.cpp}
         /// struct constructible {
         ///     constructible();
-        /// }
+        /// };
         /// struct not_constructible {
         ///     not_constructible() = delete;
-        /// }
+        /// };
+        ///
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto constructible_t = decltype_<constructible>();
         /// constexpr auto not_constructible_t = decltype_<not_constructible>();
@@ -1128,13 +1132,14 @@ namespace hyperion::mpl {
         /// @code {.cpp}
         /// struct constructible {
         ///     constructible();
-        /// }
+        /// };
         /// struct noexcept_constructible {
         ///     noexcept_constructible() noexcept;
-        /// }
+        /// };
         /// struct not_constructible {
         ///     not_constructible() = delete;
-        /// }
+        /// };
+        ///
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto constructible_t = decltype_<constructible>();
         /// constexpr auto noexcept_constructible_t = decltype_<noexcept_constructible>();
@@ -1161,13 +1166,14 @@ namespace hyperion::mpl {
         /// @code {.cpp}
         /// struct constructible {
         ///     constructible();
-        /// }
+        /// };
         /// struct trivially_constructible {
         ///     trivially_constructible() = default;
-        /// }
+        /// };
         /// struct not_constructible {
         ///     not_constructible() = delete;
-        /// }
+        /// };
+        ///
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto constructible_t = decltype_<constructible>();
         /// constexpr auto trivially_constructible_t = decltype_<trivially_constructible>();
@@ -1194,10 +1200,11 @@ namespace hyperion::mpl {
         /// @code {.cpp}
         /// struct constructible {
         ///     constructible(const constructible&);
-        /// }
+        /// };
         /// struct not_constructible {
         ///     not_constructible(const not_constructible&) = delete;
-        /// }
+        /// };
+        ///
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto constructible_t = decltype_<constructible>();
         /// constexpr auto not_constructible_t = decltype_<not_constructible>();
@@ -1221,13 +1228,14 @@ namespace hyperion::mpl {
         /// @code {.cpp}
         /// struct constructible {
         ///     constructible(const constructible&);
-        /// }
+        /// };
         /// struct noexcept_constructible {
         ///     noexcept_constructible(const noexcept_constructible&) noexcept;
-        /// }
+        /// };
         /// struct not_constructible {
         ///     not_constructible(const not_constructible&) = delete;
-        /// }
+        /// };
+        ///
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto constructible_t = decltype_<constructible>();
         /// constexpr auto noexcept_constructible_t = decltype_<noexcept_constructible>();
@@ -1254,13 +1262,14 @@ namespace hyperion::mpl {
         /// @code {.cpp}
         /// struct constructible {
         ///     constructible(const constructible&);
-        /// }
+        /// };
         /// struct trivially_constructible {
         ///     trivially_constructible(const trivially_constructible&) = default;
-        /// }
+        /// };
         /// struct not_constructible {
         ///     not_constructible(const not_constructible&) = delete;
-        /// }
+        /// };
+        ///
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto constructible_t = decltype_<constructible>();
         /// constexpr auto trivially_constructible_t = decltype_<trivially_constructible>();
@@ -1286,10 +1295,11 @@ namespace hyperion::mpl {
         /// @code {.cpp}
         /// struct constructible {
         ///     constructible(constructible&&);
-        /// }
+        /// };
         /// struct not_constructible {
         ///     not_constructible(not_constructible&&) = delete;
-        /// }
+        /// };
+        ///
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto constructible_t = decltype_<constructible>();
         /// constexpr auto not_constructible_t = decltype_<not_constructible>();
@@ -1313,13 +1323,14 @@ namespace hyperion::mpl {
         /// @code {.cpp}
         /// struct constructible {
         ///     constructible(constructible&&);
-        /// }
+        /// };
         /// struct noexcept_constructible {
         ///     noexcept_constructible(noexcept_constructible&&) noexcept;
-        /// }
+        /// };
         /// struct not_constructible {
         ///     not_constructible(not_constructible&&) = delete;
-        /// }
+        /// };
+        ///
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto constructible_t = decltype_<constructible>();
         /// constexpr auto noexcept_constructible_t = decltype_<noexcept_constructible>();
@@ -1345,13 +1356,14 @@ namespace hyperion::mpl {
         /// @code {.cpp}
         /// struct constructible {
         ///     constructible(constructible&&);
-        /// }
+        /// };
         /// struct trivially_constructible {
         ///     trivially_constructible(trivially_constructible&&) = default;
-        /// }
+        /// };
         /// struct not_constructible {
         ///     not_constructible(not_constructible&&) = delete;
-        /// }
+        /// };
+        ///
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto constructible_t = decltype_<constructible>();
         /// constexpr auto trivially_constructible_t = decltype_<trivially_constructible>();
@@ -1377,10 +1389,11 @@ namespace hyperion::mpl {
         /// @code {.cpp}
         /// struct assignable {
         ///     auto operator=(const assignable&) -> assignable&;
-        /// }
+        /// };
         /// struct not_assignable {
         ///     auto operator=(const not_assignable&) -> not_assignable& = delete;
-        /// }
+        /// };
+        ///
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto assignable_t = decltype_<assignable>();
         /// constexpr auto not_assignable_t = decltype_<not_assignable>();
@@ -1404,13 +1417,14 @@ namespace hyperion::mpl {
         /// @code {.cpp}
         /// struct assignable {
         ///     auto operator=(const assignable&) -> assignable&;
-        /// }
+        /// };
         /// struct noexcept_assignable {
         ///     auto operator=(const noexcept_assignable&) noexcept -> noexcept_assignable&;
-        /// }
+        /// };
         /// struct not_assignable {
         ///     auto operator=(const not_assignable&) -> not_assignable& = delete;
-        /// }
+        /// };
+        ///
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto assignable_t = decltype_<assignable>();
         /// constexpr auto noexcept_assignable_t = decltype_<noexcept_assignable>();
@@ -1436,13 +1450,14 @@ namespace hyperion::mpl {
         /// @code {.cpp}
         /// struct assignable {
         ///     auto operator=(const assignable&) -> assignable&;
-        /// }
+        /// };
         /// struct trivially_assignable {
         ///     auto operator=(const trivially_assignable&) -> trivially_assignable& = default;
-        /// }
+        /// };
         /// struct not_assignable {
         ///     auto operator=(const not_assignable&) -> not_assignable& = delete;
-        /// }
+        /// };
+        ///
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto assignable_t = decltype_<assignable>();
         /// constexpr auto trivially_assignable_t = decltype_<trivially_assignable>();
@@ -1468,10 +1483,11 @@ namespace hyperion::mpl {
         /// @code {.cpp}
         /// struct assignable {
         ///     auto operator=(assignable&&) -> assignable&;
-        /// }
+        /// };
         /// struct not_assignable {
         ///     auto operator=(not_assignable&&) -> not_assignable& = delete;
-        /// }
+        /// };
+        ///
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto assignable_t = decltype_<assignable>();
         /// constexpr auto not_assignable_t = decltype_<not_assignable>();
@@ -1495,13 +1511,14 @@ namespace hyperion::mpl {
         /// @code {.cpp}
         /// struct assignable {
         ///     auto operator=(assignable&&) -> assignable&;
-        /// }
+        /// };
         /// struct noexcept_assignable {
         ///     auto operator=(noexcept_assignable&&) noexcept -> noexcept_assignable&;
-        /// }
+        /// };
         /// struct not_assignable {
         ///     auto operator=(not_assignable&&) -> not_assignable& = delete;
-        /// }
+        /// };
+        ///
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto assignable_t = decltype_<assignable>();
         /// constexpr auto noexcept_assignable_t = decltype_<noexcept_assignable>();
@@ -1527,13 +1544,14 @@ namespace hyperion::mpl {
         /// @code {.cpp}
         /// struct assignable {
         ///     auto operator=(assignable&&) -> assignable&;
-        /// }
+        /// };
         /// struct trivially_assignable {
         ///     auto operator=(trivially_assignable&&) -> trivially_assignable& = default;
-        /// }
+        /// };
         /// struct not_assignable {
         ///     auto operator=(not_assignable&&) -> not_assignable& = delete;
-        /// }
+        /// };
+        ///
         /// constexpr auto int_t = decltype_<int>();
         /// constexpr auto assignable_t = decltype_<assignable>();
         /// constexpr auto trivially_assignable_t = decltype_<trivially_assignable>();
@@ -1552,16 +1570,94 @@ namespace hyperion::mpl {
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_trivially_move_assignable_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is 
+        /// destructible, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct destructible {
+        ///     ~destructible();
+        /// };
+        /// struct not_destructible {
+        ///     ~not_destructible() = delete;
+        /// };
+        ///
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto destructible_t = decltype_<destructible>();
+        /// constexpr auto not_destructible_t = decltype_<not_destructible>();
+        ///
+        /// static_assert(destructible_t.is_destructible());
+        /// static_assert(int_t.is_destructible());
+        /// static_assert(not not_destructible_.is_destructible());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is destructible, as a `Value`
+        /// specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_destructible() const noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_destructible_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
+        /// destructible, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct destructible {
+        ///     ~destructible();
+        /// };
+        /// struct noexcept_destructible {
+        ///     ~noexcept_destructible() noexcept;
+        /// };
+        /// struct not_destructible {
+        ///     ~not_destructible() = delete;
+        /// };
+        ///
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto destructible_t = decltype_<destructible>();
+        /// constexpr auto noexcept_destructible_t = decltype_<noexcept_destructible>();
+        /// constexpr auto not_destructible_t = decltype_<not_destructible>();
+        ///
+        /// static_assert(int_t.is_noexcept_destructible());
+        /// static_assert(noexcept_destructible_t.is_noexcept_destructible());
+        /// static_assert(not destructible_t.is_noexcept_destructible());
+        /// static_assert(not not_destructible_.is_noexcept_destructible());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is `noexcept` destructible, as a
+        /// `Value` specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_noexcept_destructible() const noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
                                 Value<std::is_nothrow_destructible_v<TDelay>, bool>>;
 
+        /// @brief Returns whether the type `this` `Type` specialization represents is trivially
+        /// destructible, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct destructible {
+        ///     ~destructible();
+        /// }
+        /// struct trivially_destructible {
+        ///     ~trivially_destructible() = default;
+        /// }
+        /// struct not_destructible {
+        ///     ~not_destructible() = delete;
+        /// }
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto destructible_t = decltype_<destructible>();
+        /// constexpr auto trivially_destructible_t = decltype_<trivially_destructible>();
+        /// constexpr auto not_destructible_t = decltype_<not_destructible>();
+        ///
+        /// static_assert(int_t.is_trivially_destructible());
+        /// static_assert(trivially_destructible_t.is_trivially_destructible());
+        /// static_assert(not destructible_t.is_trivially_destructible());
+        /// static_assert(not not_destructible_.is_trivially_destructible());
+        /// @endcode
+        ///
+        /// @return whether the type `this` represents is trivially destructible, as a
+        /// `Value` specialization
         template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_trivially_destructible() const noexcept
             -> std::enable_if_t<std::same_as<TDelay, type>,
