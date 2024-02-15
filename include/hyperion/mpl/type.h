@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Metaprogramming type wrapper for use as metafunction parameter and return type
 /// @version 0.1
-/// @date 2024-02-13
+/// @date 2024-02-15
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -139,14 +139,13 @@ namespace hyperion::mpl {
         /// @brief Applies the specified template metafunction to this specialization of `Type`.
         ///
         /// Applies `TMetaFunction` to this specialization of `Type` and returns the calculated
-        /// value as a `Value` specialization.
+        /// metaprogramming type.
         ///
         /// # Requirements
         /// - `TMetaFunction` must be a `TypeMetaFunction`:
         ///     - It must be a template taking a single type parameter,
         ///     - It must have a `static constexpr` member variable, `value`, or a using alias type,
         ///     `type`
-        /// - `TMetaFunction<type>` must be a `MetaValue`
         ///
         /// @code {.cpp}
         /// template<typename TType>
@@ -161,146 +160,71 @@ namespace hyperion::mpl {
         /// @endcode
         ///
         /// @tparam TMetaFunction The template metafunction to apply to this `Type`
-        /// @return The result of applying `TMetaFunction`, as a `Value` specialization
+        /// @return The result of applying `TMetaFunction`
         template<template<typename> typename TMetaFunction>
-        [[nodiscard]] constexpr auto apply() const noexcept -> std::enable_if_t<
-            TypeMetaFunction<TMetaFunction> && MetaValue<TMetaFunction<type>>,
-            Value<TMetaFunction<type>::value, decltype(TMetaFunction<type>::value)>>;
-
-        /// @brief Applies the specified template metafunction to this specialization of `Type`.
-        ///
-        /// Applies `TMetaFunction` to this specialization of `Type` and returns the calculated
-        /// result as a (potentially different) `Type` specialization.
-        ///
-        /// # Requirements
-        /// - `TMetaFunction` must be a `TypeMetaFunction`:
-        ///     - It must be a template taking a single type parameter,
-        ///     - It must have a `static constexpr` member variable, `value`, or a using alias type,
-        ///     `type`
-        /// - `TMetaFunction<type>` must be a `MetaType`
-        /// - `typename TMetaFunction<type>::type` must not be a `MetaValue` or a `MetaType`
-        ///
-        /// @code {.cpp}
-        /// constexpr auto const_int = decltype_<int>().apply<std::add_const>(); // Type<const int>
-        ///
-        /// static_assert(const_int == decltype_<const int>());
-        /// @endcode
-        ///
-        /// @tparam TMetaFunction The template metafunction to apply to this `Type`
-        /// @return The result of applying `TMetaFunction`, as a `Type` specialization
-        template<template<typename> typename TMetaFunction>
-            requires TypeMetaFunction<TMetaFunction> && MetaType<TMetaFunction<type>>
-                     && (!MetaValue<typename TMetaFunction<type>::type>)
-                     && (!MetaType<typename TMetaFunction<type>::type>)
-        [[nodiscard]] constexpr auto apply()
-            // NOLINTNEXTLINE(modernize-type-traits)
-            const noexcept -> Type<typename TMetaFunction<type>::type> {
+            requires TypeMetaFunction<TMetaFunction>
+        [[nodiscard]] constexpr auto
+        apply() const noexcept -> detail::convert_to_meta_t<TMetaFunction<type>> {
             return {};
         }
 
         /// @brief Applies the specified template metafunction to this specialization of `Type`.
         ///
         /// Applies `TMetaFunction` to this specialization of `Type` and returns the calculated
-        /// result as a `Value` or (potentially different) `Type` specialization.
+        /// metaprogramming type.
         ///
         /// # Requirements
         /// - `TMetaFunction` must be a `TypeMetaFunction`:
         ///     - It must be a template taking a single type parameter,
         ///     - It must have a `static constexpr` member variable, `value`, or a using alias type,
         ///     `type`
-        /// - `TMetaFunction<type>` must be a `MetaType`
-        /// - `typename TMetaFunction<type>::type` must be a `MetaValue` or a `MetaType`
         ///
         /// @code {.cpp}
         /// template<typename TType>
-        /// struct add_const {
-        ///     using type = decltype(decltype_<TType>().add_const());
+        /// struct is_const {
+        ///     using type = Value<std::is_const<std::remove_reference_t<TType>>, bool>;
         /// };
         ///
-        /// constexpr auto const_int = decltype_<int>().apply<std::add_const>(); // Type<const int>
+        /// // Type<Value<true, bool>>
+        /// constexpr auto is_const = decltype_<const int>().apply<is_const>();
         ///
-        /// static_assert(const_int == decltype_<const int>());
+        /// static_assert(is_const.inner());
         /// @endcode
         ///
         /// @tparam TMetaFunction The template metafunction to apply to this `Type`
-        /// @return The result of applying `TMetaFunction`, as a `Value` or `Type` specialization
-        template<template<typename> typename TMetaFunction>
-            requires TypeMetaFunction<TMetaFunction> && MetaType<TMetaFunction<type>>
-                     && (MetaValue<typename TMetaFunction<type>::type>
-                         || MetaType<typename TMetaFunction<type>::type>)
-        [[nodiscard]] constexpr auto apply()
-            // NOLINTNEXTLINE(modernize-type-traits)
-            const noexcept {
-            if constexpr(MetaValue<typename TMetaFunction<type>::type>) {
-                return Value<TMetaFunction<type>::type::value,
-                             std::remove_cvref_t<decltype(TMetaFunction<type>::type::value)>>{};
-            }
-            else {
-                return Type<typename TMetaFunction<type>::type::type>{};
-            }
+        /// @return The result of applying `TMetaFunction`
+        template<template<auto> typename TMetaFunction, typename TDelay = type>
+            requires ValueMetaFunction<TMetaFunction> && std::same_as<TDelay, type>
+                     && MetaValue<TDelay>
+        [[nodiscard]] constexpr auto
+        apply() const noexcept -> detail::convert_to_meta_t<TMetaFunction<TDelay::value>> {
+            return {};
         }
 
         /// @brief Applies the given metafunction to this specialization of `Type`.
         ///
         /// Applies `func` to this specialization of `Type` and returns the calculated result as a
-        /// `Type` specialization.
+        /// metaprogramming type.
         ///
         /// # Requirements
         /// - `TFunction` must be a `MetaFunctionOf<Type>` type
         ///     - It must be a callable with an overload taking a single `Type` parameter
         ///     - The selected overload of `TFunction` must return either a `MetaType` or a
         ///     `MetaValue`
-        /// - The result of invoking `func` with a `Type` must be a `MetaType`
-        /// - The type member alias `type` of the invoke result of `func` must not be a `MetaType`
         ///
         /// # Example
         ///
         /// @code {.cpp}
-        /// constexpr auto add_const = [](MetaType auto value)
-        ///     -> decltype(decltype_(value).add_const())
-        /// {
-        ///     return {};
+        /// constexpr auto add_const = [](MetaType auto type) {
+        ///     return type.as_const();
         /// };
         ///
         /// constexpr auto const_int = decltype_<int>().apply(add_const); // Type<const int>
         ///
         /// static_assert(const_int == decltype_<const int>());
-        /// @endcode
         ///
-        /// @tparam TFunction The type of the metafunction to apply
-        /// @param func The metafunction to apply
-        /// @return The result of applying `func` to this `Type` specialization, as a `Type`
-        /// specialization
-        template<typename TFunction>
-            requires MetaFunctionOf<TFunction, Type<type>>
-                     && MetaType<meta_result_t<TFunction, Type<type>>>
-                     && (!MetaType<typename meta_result_t<TFunction, Type<type>>::type>)
-        [[nodiscard]] constexpr auto apply(
-            [[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
-                                               // NOLINTNEXTLINE(modernize-type-traits)
-            const noexcept -> Type<typename meta_result_t<TFunction, Type<type>>::type> {
-            return {};
-        }
-
-        /// @brief Applies the given metafunction to this specialization of `Type`.
-        ///
-        /// Applies `func` to this specialization of `Type` and returns the calculated result as a
-        /// `Value` specialization.
-        ///
-        /// # Requirements
-        /// - `TFunction` must be a `MetaFunctionOf<Type>` type
-        ///     - It must be a callable with an overload taking a single `Type` parameter
-        ///     - The selected overload of `TFunction` must return either a `MetaType` or a
-        ///     `MetaValue`
-        /// - The result of invoking `func` with a `Type` must be a `MetaValue`
-        ///
-        /// # Example
-        ///
-        /// @code {.cpp}
-        /// constexpr auto get_size = [](MetaType auto value)
-        ///     -> decltype(decltype_(value).sizeof_())
-        /// {
-        ///     return {};
+        /// constexpr auto get_size = [](MetaType auto value) {
+        ///     return value.sizeof_();
         /// };
         ///
         /// constexpr auto sizeof_int = decltype_<int>().apply(get_size); // Value<4, usize>
@@ -310,16 +234,16 @@ namespace hyperion::mpl {
         ///
         /// @tparam TFunction The type of the metafunction to apply
         /// @param func The metafunction to apply
-        /// @return The result of applying `func` to this `Type` specialization, as a `Value`
+        /// @return The result of applying `func` to this `Type` specialization, as a `Type`
         /// specialization
         template<typename TFunction>
+            requires MetaFunctionOf<TFunction, Type<type>>
         [[nodiscard]] constexpr auto
         apply([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
-            const noexcept -> std::enable_if_t<
-                MetaFunctionOf<TFunction, Type<type>>
-                    && MetaValue<meta_result_t<TFunction, Type<type>>>,
-                Value<meta_result_t<TFunction, Type<type>>::value,
-                      std::remove_cvref_t<decltype(meta_result_t<TFunction, Type<type>>::value)>>>;
+                                                 // NOLINTNEXTLINE(modernize-type-traits)
+            const noexcept -> detail::convert_to_meta_t<meta_result_t<TFunction, Type<type>>> {
+            return {};
+        }
 
         /// @brief Applies the given metafunction to the `type` of this specialization of `Type`.
         ///
@@ -339,61 +263,32 @@ namespace hyperion::mpl {
         ///
         /// @code {.cpp}
         /// constexpr auto is_two = [](MetaValue auto value)
-        ///     -> Type<Value<decltype(value)::value == 2, bool>>
-        /// {
-        ///     return {};
-        /// };
-        ///
-        /// constexpr auto is_two = decltype_(2_value).apply(is_two); // Value<true, bool>
-        ///
-        /// static_assert(is_two);
-        /// @endcode
-        ///
-        /// @tparam TFunction The type of the metafunction to apply
-        /// @param func The metafunction to apply
-        /// @return The result of applying `func` to this `Type` specialization
-        template<typename TFunction>
-            requires MetaFunctionOf<TFunction, type> && MetaType<meta_result_t<TFunction, type>>
-                     && (!MetaType<typename meta_result_t<TFunction, type>::type>)
-                     && MetaValue<type>
-        [[nodiscard]] constexpr auto apply(
-            [[maybe_unused]] TFunction&& func) const noexcept { // NOLINT(*-missing-std-forward)
-            return type{}.apply(TFunction{});
-        }
-
-        /// @brief Applies the given metafunction to the `type` of this specialization of `Type`.
-        ///
-        /// Given that `type` is a `MetaValue`, applies `func` to the `MetaValue` `type` of this
-        /// specialization of `Type`, as if by `type{}.apply(std::forward<TFunction>(func))`.
-        ///
-        /// # Requirements
-        /// - `TFunction` must be a `MetaFunctionOf<type>` type
-        ///     - It must be a callable with an overload taking a single `Type` parameter
-        ///     - The selected overload of `TFunction` must return either a `MetaType` or a
-        ///     `MetaValue`
-        /// - The result of invoking `func` with a `Type` must be a `MetaValue`
-        /// - `type` must be a `MetaValue`
-        ///
-        /// # Example
-        ///
-        /// @code {.cpp}
-        /// constexpr auto is_two = [](MetaValue auto value)
         ///     -> Value<decltype(value)::value == 2, bool>
         /// {
         ///     return {};
         /// };
         ///
-        /// constexpr auto is_two = decltype_(2_value).apply(is_two); // Value<true, bool>
+        /// constexpr auto was_two = decltype_(2_value).apply(is_two); // Value<true, bool>
         ///
-        /// static_assert(is_two);
+        /// static_assert(was_two);
+        ///
+        /// constexpr auto is_two_typed = [](MetaValue auto value)
+        ///     -> Type<Value<decltype(value)::value == 2, bool>>
+        /// {
+        ///     return {};
+        /// };
+        ///
+        /// // Value<true, bool>
+        /// constexpr auto was_two_typed = decltype_(2_value).apply(is_two_typed);
+        ///
+        /// static_assert(was_two_typed);
         /// @endcode
         ///
         /// @tparam TFunction The type of the metafunction to apply
         /// @param func The metafunction to apply
         /// @return The result of applying `func` to this `Type` specialization
         template<typename TFunction>
-            requires MetaFunctionOf<TFunction, type> && MetaValue<meta_result_t<TFunction, type>>
-                     && MetaValue<type>
+            requires MetaFunctionOf<TFunction, type> && MetaValue<type>
         [[nodiscard]] constexpr auto
         apply([[maybe_unused]] TFunction&& func) const noexcept { // NOLINT(*-missing-std-forward)
             return type{}.apply(TFunction{});
@@ -1916,26 +1811,6 @@ namespace hyperion::mpl {
 namespace hyperion::mpl {
 
     template<typename TType>
-    template<template<typename> typename TMetaFunction>
-    [[nodiscard]] constexpr auto Type<TType>::apply() const noexcept -> std::enable_if_t<
-        TypeMetaFunction<TMetaFunction> && MetaValue<TMetaFunction<type>>,
-        Value<TMetaFunction<type>::value, decltype(TMetaFunction<type>::value)>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TFunction>
-    [[nodiscard]] constexpr auto
-    Type<TType>::apply([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
-        const noexcept -> std::enable_if_t<
-            MetaFunctionOf<TFunction, Type<type>>
-                && MetaValue<meta_result_t<TFunction, Type<type>>>,
-            Value<meta_result_t<TFunction, Type<type>>::value,
-                  std::remove_cvref_t<decltype(meta_result_t<TFunction, Type<type>>::value)>>> {
-        return as_value(meta_result_t<TFunction, Type<type>>{});
-    }
-
-    template<typename TType>
     template<template<typename> typename TPredicate>
     [[nodiscard]] constexpr auto Type<TType>::satisfies() const noexcept -> std::enable_if_t<
         TypeMetaFunction<TPredicate> && MetaValue<TPredicate<type>>
@@ -2311,14 +2186,12 @@ namespace hyperion::mpl {
         static_assert(!decltype_<double>().satisfies<std::is_integral>(),
                       "hyperion::mpl::Type::satisfies<TypeMetaFunction> test case 2 (failing)");
 
-        constexpr auto is_const_type_type =
-            [](MetaType auto type) noexcept -> Type<Value<(decltype(type){}).is_const(), bool>> {
-            return {};
+        constexpr auto is_const_type_type = [](MetaType auto type) noexcept {
+            return decltype_(type.is_const());
         };
 
-        constexpr auto is_const_type_value =
-            [](MetaType auto type) noexcept -> Value<(decltype(type){}).is_const(), bool> {
-            return {};
+        constexpr auto is_const_type_value = [](MetaType auto type) noexcept {
+            return type.is_const();
         };
 
         constexpr auto is_true_value_type
@@ -2391,12 +2264,12 @@ namespace hyperion::mpl {
                           == 10_value,
                       "hyperion::mpl::Type::apply<MetaFunction<MetaValue>> test case 3 (failing)");
 
-        constexpr auto add1 = [](MetaValue auto value) -> Value<decltype(value)::value + 1> {
-            return {};
+        constexpr auto add1 = [](MetaValue auto value) {
+            return value + 1_value;
         };
 
-        constexpr auto times2 = [](MetaValue auto value) -> Value<decltype(value)::value * 2> {
-            return {};
+        constexpr auto times2 = [](MetaValue auto value) {
+            return value * 2_value;
         };
 
         static_assert(decltype_(1_value).apply(add1) == 2,
@@ -2409,18 +2282,16 @@ namespace hyperion::mpl {
                       "hyperion::mpl::Type::apply(MetaFunction(MetaValue)) -> MetaValue test case "
                       "3 (failing)");
 
-        constexpr auto add1_semi_typely
-            = [](MetaType auto type) -> Value<std::remove_cvref_t<decltype(type)>::type::value + 1>
+        constexpr auto add1_semi_typely = [](MetaType auto type)
             requires MetaValue<typename decltype(type)::type>
         {
-            return {};
+            return type.inner() + 1_value;
         };
 
-        constexpr auto times2_semi_typely
-            = [](MetaType auto type) -> Value<std::remove_cvref_t<decltype(type)>::type::value * 2>
+        constexpr auto times2_semi_typely = [](MetaType auto type)
             requires MetaValue<typename decltype(type)::type>
         {
-            return {};
+            return type.inner() * 2_value;
         };
 
         static_assert(decltype_(1_value).apply(add1_semi_typely) == 2,
@@ -2434,18 +2305,16 @@ namespace hyperion::mpl {
                       "hyperion::mpl::Type::apply(MetaFunction(Type)) -> MetaValue test case "
                       "3 (failing)");
 
-        constexpr auto add1_fully_typely
-            = [](MetaType auto type) -> Type<Value<decltype(type)::type::value + 1>>
+        constexpr auto add1_fully_typely = [](MetaType auto type)
             requires MetaValue<typename decltype(type)::type>
         {
-            return {};
+            return decltype_(type.inner() + 1_value);
         };
 
-        constexpr auto times2_fully_typely
-            = [](MetaType auto type) -> Type<Value<decltype(type)::type::value * 2>>
+        constexpr auto times2_fully_typely = [](MetaType auto type)
             requires MetaValue<typename decltype(type)::type>
         {
-            return {};
+            return decltype_(type.inner() * 2_value);
         };
 
         static_assert(decltype_(1_value).apply(add1_fully_typely).inner() == 2,
@@ -2517,14 +2386,12 @@ namespace hyperion::mpl {
                 == decltype_<const int&>(),
             "hyperion::mpl::Type::apply(MetaFunction(type)) -> Type<type> test case 3 (failing)");
 
-        constexpr auto add_const_typed
-            = [](MetaType auto type) -> Type<std::add_const_t<typename decltype(type)::type>> {
-            return {};
+        constexpr auto add_const_typed = [](MetaType auto type) {
+            return type.as_const();
         };
 
-        constexpr auto add_lvalue_reference_typed = [](MetaType auto type)
-            -> Type<std::add_lvalue_reference_t<typename decltype(type)::type>> {
-            return {};
+        constexpr auto add_lvalue_reference_typed = [](MetaType auto type) {
+            return type.as_lvalue_reference();
         };
 
         constexpr auto remove_reference_typed =
