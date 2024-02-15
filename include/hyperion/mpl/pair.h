@@ -81,11 +81,40 @@ namespace hyperion::mpl {
             return {};
         }
 
+        template<template<typename> typename TMetaFunction>
+            requires requires { typename TMetaFunction<Pair>; }
+                     && (MetaType<TMetaFunction<Pair>> || MetaValue<TMetaFunction<Pair>>
+                         || MetaPair<TMetaFunction<Pair>>)
+        [[nodiscard]] constexpr auto apply() const noexcept
+            -> detail::convert_to_meta_t<TMetaFunction<Pair>> {
+            return {};
+        }
+
+        template<template<typename> typename TMetaFunction>
+            requires(!requires { typename TMetaFunction<Pair>; }) && requires {
+                first{}.template apply<TMetaFunction>();
+                second{}.template apply<TMetaFunction>();
+            }
+        [[nodiscard]] constexpr auto apply() const noexcept {
+            return make_pair(first{}.template apply<TMetaFunction>(),
+                             second{}.template apply<TMetaFunction>());
+        }
+
         template<typename TFunction>
             requires MetaFunctionOf<TFunction, Pair>
         [[nodiscard]] constexpr auto
         apply([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
             const noexcept -> meta_result_t<TFunction, Pair> {
+            return {};
+        }
+
+        template<typename TFunction>
+            requires MetaFunctionOf<TFunction, first> && MetaFunctionOf<TFunction, second>
+                     && (!MetaFunctionOf<TFunction, Pair>)
+        [[nodiscard]] constexpr auto apply(
+            [[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
+            const noexcept
+            -> Pair<meta_result_t<TFunction, first>, meta_result_t<TFunction, second>> {
             return {};
         }
     };
@@ -94,21 +123,20 @@ namespace hyperion::mpl {
     [[nodiscard]] constexpr auto
     operator==([[maybe_unused]] const Pair<TLHSFirst, TLHSSecond>& lhs,
                [[maybe_unused]] const Pair<TRHSFirst, TRHSSecond>& rhs) noexcept -> bool {
-        constexpr auto is_equal = []<typename TLhs, typename TRhs>() {
-            if constexpr((MetaType<TLhs> && MetaType<TRhs>) || (MetaValue<TLhs> && MetaValue<TRhs>)
-                         || (MetaPair<TLhs> && MetaPair<TRhs>))
+        constexpr auto is_equal = [](auto left, auto right) {
+            if constexpr((MetaType<decltype(left)> && MetaType<decltype(right)>)
+                         || (MetaValue<decltype(left)> && MetaValue<decltype(right)>)
+                         || (MetaPair<decltype(left)> && MetaPair<decltype(right)>))
             {
-                return TLhs{} == TRhs{};
+                return left == right;
             }
             else {
-                return std::same_as<TLhs, TRhs>;
+                return false;
             }
         };
 
-        return is_equal.template operator()<detail::convert_to_meta_t<TLHSFirst>,
-                                            detail::convert_to_meta_t<TRHSFirst>>()
-               && is_equal.template operator()<detail::convert_to_meta_t<TLHSSecond>,
-                                               detail::convert_to_meta_t<TRHSSecond>>();
+        return is_equal(lhs.make_first(), rhs.make_first())
+               && is_equal(lhs.make_second(), rhs.make_second());
     }
 
     template<typename TFirst, typename TSecond>
@@ -116,7 +144,7 @@ namespace hyperion::mpl {
     [[nodiscard]] constexpr auto make_pair(
         [[maybe_unused]] TFirst&& first,   // NOLINT(*-missing-std-forward)
         [[maybe_unused]] TSecond&& second) // NOLINT(*-missing-std-forward)
-        noexcept -> Pair<TFirst, TSecond> {
+        noexcept -> Pair<detail::convert_to_raw_t<TFirst>, detail::convert_to_raw_t<TSecond>> {
         return {};
     }
 
@@ -125,7 +153,7 @@ namespace hyperion::mpl {
     [[nodiscard]] constexpr auto make_pair(
         [[maybe_unused]] TFirst&& first,   // NOLINT(*-missing-std-forward)
         [[maybe_unused]] TSecond&& second) // NOLINT(*-missing-std-forward)
-        noexcept -> Pair<TFirst, TSecond> {
+        noexcept -> Pair<TFirst, detail::convert_to_raw_t<TSecond>> {
         return {};
     }
 
@@ -134,7 +162,7 @@ namespace hyperion::mpl {
     [[nodiscard]] constexpr auto
     make_pair([[maybe_unused]] TFirst&& first,   // NOLINT(*-missing-std-forward)
               [[maybe_unused]] TSecond&& second) // NOLINT(*-missing-std-forward)
-        noexcept -> Pair<TFirst, TSecond> {
+        noexcept -> Pair<detail::convert_to_raw_t<TFirst>, TSecond> {
         return {};
     }
 
@@ -151,19 +179,79 @@ namespace hyperion::mpl {
 #include <hyperion/mpl/type.h>
 #include <hyperion/mpl/value.h>
 
-namespace hyperion::mpl {
+namespace hyperion::mpl::_test::pair {
 
-    namespace _test::pair {
-        constexpr auto add_const = [](MetaPair auto pair) noexcept {
-            return make_pair(pair.make_first().as_const(), pair.make_second().as_const());
-        };
+    constexpr auto add_const = [](MetaPair auto pair) noexcept {
+        return make_pair(pair.make_first().as_const(), pair.make_second().as_const());
+    };
 
-        constexpr auto pair = Pair<int, double>{};
-        constexpr auto constified = pair.apply(add_const);
+    constexpr auto add_const_inner = [](MetaType auto type) noexcept {
+        return type.as_const();
+    };
 
-        static_assert(constified == Pair<const int, const double>{});
-    } // namespace _test::pair
+    constexpr auto add_one_or_const = [](auto val) noexcept
+        requires(!MetaPair<decltype(val)>)
+    {
+        if constexpr(MetaType<decltype(val)>) {
+            return val.as_const();
+        }
+        else {
+            return val + 1_value;
+        }
+    };
 
-} // namespace hyperion::mpl
+    static_assert(Pair<int, double>{}.apply(add_const) == Pair<const int, const double>{},
+                  "hyperion::mpl::Pair::apply test case 1 (failing)");
+    static_assert(Pair<int, double>{}.apply(add_const_inner) == Pair<const int, const double>{},
+                  "hyperion::mpl::Pair::apply test case 2 (failing)");
+    static_assert(Pair<int, Value<1>>{}.apply(add_one_or_const) == Pair<const int, Value<2>>{},
+                  "hyperion::mpl::Pair::apply test case 3 (failing)");
+
+    template<typename TPair>
+    struct add_const_t {
+        using first = decltype(typename TPair::first{}.as_const());
+        using second = decltype(typename TPair::second{}.as_const());
+    };
+
+    template<typename TPair>
+    struct add_one_or_const_t {
+        using first = decltype(add_one_or_const(typename TPair::first{}));
+        using second = decltype(add_one_or_const(typename TPair::second{}));
+    };
+
+    template<typename TType>
+        requires(!MetaPair<TType>)
+    struct add_const_inner_t {
+        using type = decltype(decltype_<TType>().as_const());
+    };
+
+    template<typename TType>
+        requires(!MetaPair<TType>)
+    struct add_one_or_const_inner_t {
+        using type = std::conditional_t<MetaValue<TType>,
+                                        decltype(TType{} + 1_value),
+                                        decltype(decltype_<TType>().as_const())>;
+    };
+
+    static_assert(Pair<int, double>{}.apply<add_const_t>() == Pair<const int, const double>{},
+                  "hyperion::mpl::Pair::apply<> test case 1 (failing)");
+    static_assert(Pair<int, Value<1>>{}.apply<add_one_or_const_t>() == Pair<const int, Value<2>>{},
+                  "hyperion::mpl::Pair::apply<> test case 2 (failing)");
+    static_assert(Pair<int, double>{}.apply<add_const_inner_t>() == Pair<const int, const double>{},
+                  "hyperion::mpl::Pair::apply<> test case 3 (failing)");
+    static_assert(Pair<int, Value<1>>{}.apply<add_one_or_const_inner_t>()
+                      == Pair<const int, Value<2>>{},
+                  "hyperion::mpl::Pair::apply<> test case 4 (failing)");
+
+    static_assert(Pair<int, double>{} == Pair<int, double>{},
+                  "hyperion::mpl::Pair operator== test case 1 (failing)");
+    static_assert(Pair<double, int>{} == Pair<double, int>{},
+                  "hyperion::mpl::Pair operator== test case 2 (failing)");
+    static_assert(Pair<int, double>{} != Pair<double, int>{},
+                  "hyperion::mpl::Pair operator== test case 3 (failing)");
+    static_assert(Pair<double, int>{} != Pair<int, double>{},
+                  "hyperion::mpl::Pair operator== test case 4 (failing)");
+
+} // namespace hyperion::mpl::_test::pair
 
 #endif // HYPERION_MPL_PAIR_H

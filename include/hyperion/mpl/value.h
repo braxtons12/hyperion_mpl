@@ -72,22 +72,6 @@ namespace hyperion::mpl {
     template<auto TValue, typename TType>
     struct Value;
 
-    namespace detail {
-        template<typename TType>
-        struct unwrap_inner {
-            using type = TType;
-        };
-
-        template<typename TType>
-            requires MetaType<TType> && MetaValue<typename TType::type>
-        struct unwrap_inner<TType> {
-            using type = Value<TType::type::value, decltype(TType::type::value)>;
-        };
-
-        template<typename TType>
-        using unwrap_inner_t = typename unwrap_inner<TType>::type;
-    } // namespace detail
-
     /// @brief `Value` is Hyperion's preferred metaprogramming value type.
     ///
     /// `Value` represents a compile time value, storing that value in its

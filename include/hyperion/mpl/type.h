@@ -170,25 +170,26 @@ namespace hyperion::mpl {
 
         /// @brief Applies the specified template metafunction to this specialization of `Type`.
         ///
-        /// Applies `TMetaFunction` to this specialization of `Type` and returns the calculated
-        /// metaprogramming type.
+        /// Applies `TMetaFunction` to the `Value` specialization this `Type` specialization
+        /// represents, and returns the calculated metaprogramming type.
         ///
         /// # Requirements
-        /// - `TMetaFunction` must be a `TypeMetaFunction`:
-        ///     - It must be a template taking a single type parameter,
+        /// - `TMetaFunction` must be a `ValueMetaFunction`:
+        ///     - It must be a template taking a single value parameter,
         ///     - It must have a `static constexpr` member variable, `value`, or a using alias type,
         ///     `type`
+        /// - `type` must be a `MetaValue`
         ///
         /// @code {.cpp}
-        /// template<typename TType>
-        /// struct is_const {
-        ///     using type = Value<std::is_const<std::remove_reference_t<TType>>, bool>;
+        /// template<auto TValue>
+        /// struct is_two {
+        ///     using type = Value<TValue == 2, bool>;
         /// };
         ///
-        /// // Type<Value<true, bool>>
-        /// constexpr auto is_const = decltype_<const int>().apply<is_const>();
+        /// // `was_two` is `Type<Value<true, bool>>>`
+        /// constexpr auto was_two = decltype_(2_value).apply<is_two>();
         ///
-        /// static_assert(is_const.inner());
+        /// static_assert(was_two.inner());
         /// @endcode
         ///
         /// @tparam TMetaFunction The template metafunction to apply to this `Type`

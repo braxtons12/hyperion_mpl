@@ -240,7 +240,13 @@ namespace hyperion::mpl {
         template<typename TType>
             requires MetaType<TType>
         struct convert_to_meta<TType> {
-            using type = mpl::Type<typename TType::type>;
+            using type = Type<typename TType::type>;
+        };
+
+        template<typename TType>
+            requires MetaType<TType> && MetaType<typename TType::type>
+        struct convert_to_meta<TType> {
+            using type = Type<typename TType::type::type>;
         };
 
         template<typename TType>
@@ -279,6 +285,20 @@ namespace hyperion::mpl {
 
         template<typename TType>
         using convert_to_raw_t = typename convert_to_raw<TType>::type;
+
+        template<typename TType>
+        struct unwrap_inner {
+            using type = TType;
+        };
+
+        template<typename TType>
+            requires MetaType<TType> && MetaValue<typename TType::type>
+        struct unwrap_inner<TType> {
+            using type = Value<TType::type::value, decltype(TType::type::value)>;
+        };
+
+        template<typename TType>
+        using unwrap_inner_t = typename unwrap_inner<TType>::type;
 
         template<template<typename> typename TTemplate>
         struct is_instantiatable_with_type : std::false_type {
