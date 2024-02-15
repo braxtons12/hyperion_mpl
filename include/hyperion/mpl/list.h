@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming facilities for working with a list of types or values
 /// @version 0.1
-/// @date 2024-02-13
+/// @date 2024-02-15
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -29,6 +29,7 @@
 #define HYPERION_MPL_LIST_H
 
 #include <hyperion/mpl/metatypes.h>
+#include <hyperion/mpl/pair.h>
 #include <hyperion/mpl/type.h>
 #include <hyperion/mpl/value.h>
 #include <hyperion/platform/def.h>
@@ -71,54 +72,6 @@ namespace hyperion::mpl {
     struct List;
 
     namespace detail {
-        template<typename TType>
-        struct convert_to_meta {
-            using type = mpl::Type<TType>;
-        };
-
-        template<typename TType>
-            requires MetaValue<TType>
-        struct convert_to_meta<TType> {
-            using type = mpl::Value<TType::value>;
-        };
-
-        template<typename TType>
-            requires MetaType<TType>
-        struct convert_to_meta<TType> {
-            using type = mpl::Type<typename TType::type>;
-        };
-
-        template<typename TType>
-            requires MetaPair<TType>
-        struct convert_to_meta<TType> {
-            using type = Pair<typename convert_to_meta<typename TType::first>::type,
-                              typename convert_to_meta<typename TType::second>::type>;
-        };
-
-        template<typename TType>
-        struct convert_to_raw {
-            using type = TType;
-        };
-
-        template<typename TType>
-            requires MetaValue<TType>
-        struct convert_to_raw<TType> {
-            using type = mpl::Value<TType::value>;
-        };
-
-        template<typename TType>
-            requires MetaType<TType>
-        struct convert_to_raw<TType> {
-            using type = typename TType::type;
-        };
-
-        template<typename TType>
-            requires MetaPair<TType>
-        struct convert_to_raw<TType> {
-            using type = Pair<typename convert_to_raw<typename TType::first>::type,
-                              typename convert_to_raw<typename TType::second>::type>;
-        };
-
         struct any_tag { };
 
         static inline constexpr auto any_value = 0;
@@ -196,9 +149,9 @@ namespace hyperion::mpl {
             return {};
         }
 
-        [[nodiscard]] constexpr auto at(MetaValue auto value) const noexcept ->
-            typename detail::at<decltype(value)::value, 0_usize, List<as_meta<TTypes>...>>::type
-            requires(decltype(value)::value < sizeof...(TTypes))
+        [[nodiscard]] constexpr auto at(MetaValue auto index) const noexcept ->
+            typename detail::at<decltype(index)::value, 0_usize, List<as_meta<TTypes>...>>::type
+            requires(decltype(index)::value < sizeof...(TTypes))
         {
             return {};
         }

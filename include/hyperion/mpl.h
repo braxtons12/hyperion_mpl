@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Catch-all header for the Hyperion meta-programming library
 /// @version 0.1
-/// @date 2024-01-27
+/// @date 2024-02-15
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -40,6 +40,7 @@
 #include <hyperion/mpl/concepts.h>
 #include <hyperion/mpl/index.h>
 #include <hyperion/mpl/list.h>
+#include <hyperion/mpl/pair.h>
 #include <hyperion/mpl/type.h>
 #include <hyperion/mpl/type_traits.h>
 #include <hyperion/mpl/value.h>

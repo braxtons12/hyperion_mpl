@@ -93,10 +93,16 @@ For an overview of each module, see the links in the left sidebar or below.
     :caption: Metaprogramming Value Type
     
     value
+
 .. toctree::
     :caption: Metaprogramming Type Manipulation Type
     
     type
+
+.. toctree::
+    :caption: Metaprogramming Pair Type
+    
+    pair
 
 .. toctree::
     :caption: Type Traits

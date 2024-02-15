@@ -3,7 +3,7 @@
 /// @brief Concept and type trait definitions for what consitutes various categories of
 /// metaprogramming types
 /// @version 0.1
-/// @date 2024-02-13
+/// @date 2024-02-15
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -204,98 +204,81 @@ namespace hyperion::mpl {
     template<typename TType>
     static inline constexpr auto is_meta_type_v = is_meta_type<TType>::value;
 
-    // TODO(braxtons12): move Pair to its own header
-    template<typename TFirst, typename TSecond>
-    struct Pair {
-        using first = TFirst;
-        using second = TSecond;
-
-        template<typename TFunction>
-            requires std::is_invocable_v<TFunction, Pair>
-        [[nodiscard]] constexpr auto
-        apply([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
-            const noexcept -> std::invoke_result_t<TFunction, Pair> {
-            return {};
-        }
+    template<typename TType>
+    concept MetaPair = requires {
+        typename TType::first;
+        typename TType::second;
     };
 
-    template<typename TLHSFirst, typename TLHSSecond, typename TRHSFirst, typename TRHSSecond>
-    [[nodiscard]] constexpr auto
-    operator==([[maybe_unused]] const Pair<TLHSFirst, TLHSSecond>& lhs,
-               [[maybe_unused]] const Pair<TRHSFirst, TRHSSecond>& rhs) noexcept -> bool {
-        constexpr auto is_equal = []<typename TLhs, typename TRhs>() {
-            if constexpr((MetaType<TLhs> && MetaType<TRhs>) || (MetaValue<TLhs> && MetaValue<TRhs>))
-            {
-                return TLhs{} == TRhs{};
-            }
-            else {
-                return false;
-            }
-        };
-
-        return is_equal.template operator()<TLHSFirst, TRHSFirst>()
-               && is_equal.template operator()<TLHSSecond, TRHSSecond>();
-    }
-
-    template<typename TFirst, typename TSecond>
-        requires(!std::is_reference_v<TFirst>) && (!std::is_reference_v<TSecond>)
-    [[nodiscard]] constexpr auto make_pair(
-        [[maybe_unused]] TFirst&& first,   // NOLINT(*-missing-std-forward)
-        [[maybe_unused]] TSecond&& second) // NOLINT(*-missing-std-forward)
-        noexcept -> Pair<TFirst, TSecond> {
-        return {};
-    }
-
-    template<typename TFirst, typename TSecond>
-        requires std::is_reference_v<TFirst> && (!std::is_reference_v<TSecond>)
-    [[nodiscard]] constexpr auto make_pair(
-        [[maybe_unused]] TFirst&& first,   // NOLINT(*-missing-std-forward)
-        [[maybe_unused]] TSecond&& second) // NOLINT(*-missing-std-forward)
-        noexcept -> Pair<TFirst, TSecond> {
-        return {};
-    }
-
-    template<typename TFirst, typename TSecond>
-        requires(!std::is_reference_v<TFirst>) && std::is_reference_v<TSecond>
-    [[nodiscard]] constexpr auto
-    make_pair([[maybe_unused]] TFirst&& first,   // NOLINT(*-missing-std-forward)
-              [[maybe_unused]] TSecond&& second) // NOLINT(*-missing-std-forward)
-        noexcept -> Pair<TFirst, TSecond> {
-        return {};
-    }
-
-    template<typename TFirst, typename TSecond>
-        requires std::is_reference_v<TFirst> && std::is_reference_v<TSecond>
-    [[nodiscard]] constexpr auto
-    make_pair([[maybe_unused]] TFirst&& first,   // NOLINT(*-missing-std-forward)
-              [[maybe_unused]] TSecond&& second) // NOLINT(*-missing-std-forward)
-        noexcept -> Pair<TFirst, TSecond> {
-        return {};
-    }
-
     template<typename TType>
-    struct is_meta_pair : std::false_type { };
-
-    template<typename TFirst, typename TSecond>
-    struct is_meta_pair<Pair<TFirst, TSecond>> : std::true_type { };
+    struct is_meta_pair : std::bool_constant<MetaPair<TType>> { };
 
     template<typename TType>
     static inline constexpr auto is_meta_pair_v = is_meta_pair<TType>::value;
 
     template<typename TType>
-    concept MetaPair = is_meta_pair_v<TType>;
+    struct Type;
+
+    template<auto TValue, typename TType>
+    struct Value;
+
+    template<typename TFirst, typename TSecond>
+    struct Pair;
 
     namespace detail {
+        template<typename TType>
+        struct convert_to_meta {
+            using type = mpl::Type<TType>;
+        };
 
         template<typename TType>
-        struct Type {
+            requires MetaValue<TType>
+        struct convert_to_meta<TType> {
+            using type = mpl::Value<TType::value, std::remove_cvref_t<decltype(TType::value)>>;
+        };
+
+        template<typename TType>
+            requires MetaType<TType>
+        struct convert_to_meta<TType> {
+            using type = mpl::Type<typename TType::type>;
+        };
+
+        template<typename TType>
+            requires MetaPair<TType>
+        struct convert_to_meta<TType> {
+            using type = mpl::Pair<typename convert_to_meta<typename TType::first>::type,
+                                   typename convert_to_meta<typename TType::second>::type>;
+        };
+
+        template<typename TType>
+        using convert_to_meta_t = typename convert_to_meta<TType>::type;
+
+        template<typename TType>
+        struct convert_to_raw {
             using type = TType;
         };
 
-        template<auto TValue, typename TType = decltype(TValue)>
-        struct Value {
-            static inline constexpr auto value = TValue;
+        template<typename TType>
+            requires MetaValue<TType>
+        struct convert_to_raw<TType> {
+            using type = mpl::Value<TType::value, std::remove_cvref_t<decltype(TType::value)>>;
         };
+
+        template<typename TType>
+            requires MetaType<TType>
+        struct convert_to_raw<TType> {
+            using type = typename TType::type;
+        };
+
+        template<typename TType>
+            requires MetaPair<TType>
+        struct convert_to_raw<TType> {
+            using type = mpl::Pair<typename convert_to_raw<typename TType::first>::type,
+                                   typename convert_to_raw<typename TType::second>::type>;
+        };
+
+        template<typename TType>
+        using convert_to_raw_t = typename convert_to_raw<TType>::type;
 
         template<template<typename> typename TTemplate>
         struct is_instantiatable_with_type : std::false_type {
@@ -309,10 +292,10 @@ namespace hyperion::mpl {
         };
 
         template<template<typename> typename TTemplate>
-            requires requires { typename TTemplate<Value<true>>; }
+            requires requires { typename TTemplate<Value<true, bool>>; }
                      && (!requires { typename TTemplate<int>; })
         struct is_instantiatable_with_type<TTemplate> : std::true_type {
-            using type = Value<true>;
+            using type = Value<true, bool>;
         };
 
         template<template<auto> typename TTemplate>
@@ -375,6 +358,8 @@ namespace hyperion::mpl {
     concept ValueMetaFunction
         = detail::is_value_to_type<TTemplate>::value || detail::is_value_to_value<TTemplate>::value;
 
+    // clang-format off
+
     /// @brief A `MetaFunctionOf` is a callable metafunction that accepts a single value parameter
     /// of the specified type, `TType` and returns either a `MetaType` or a `MetaValue`
     ///
@@ -384,7 +369,12 @@ namespace hyperion::mpl {
     /// @headerfile hyperion/mpl/metatypes.h
     template<typename TFunction, typename TType>
     concept MetaFunctionOf = std::is_invocable_v<TFunction, TType>
-                             && (MetaType<TType> || MetaValue<TType> || MetaPair<TType>);
+                             && (MetaType<TType> || MetaValue<TType> || MetaPair<TType>)
+                             && (MetaType<std::invoke_result_t<TFunction, TType>>
+                                 || MetaValue<std::invoke_result_t<TFunction, TType>>
+                                 || MetaPair<std::invoke_result_t<TFunction, TType>>);
+
+    // clang-format on
 
     /// @brief A `MetaFunction` is a callable metafunction that accepts a single value parameter
     /// of `MetaType`, `MetaValue`, or `MetaPair` metaprogramming type category and returns either a
@@ -395,9 +385,8 @@ namespace hyperion::mpl {
     /// @headerfile hyperion/mpl/metatypes.h
     template<typename TFunction>
     concept MetaFunction
-        = MetaFunctionOf<TFunction, detail::Type<bool>>
-          || MetaFunctionOf<TFunction, detail::Value<true>>
-          || MetaFunctionOf<TFunction, Pair<detail::Type<bool>, detail::Type<bool>>>;
+        = MetaFunctionOf<TFunction, Type<bool>> || MetaFunctionOf<TFunction, Value<true, bool>>
+          || MetaFunctionOf<TFunction, Pair<Type<bool>, Type<bool>>>;
 
     /// @brief `meta_result` is a type trait representing the invoke result of a callable
     /// metafunction, `TFunction`, with a metaprogramming type, `TType`
@@ -444,111 +433,111 @@ namespace hyperion::mpl {
     template<typename TFunction, typename TType>
     using meta_result_t = typename meta_result<TFunction, TType>::type;
 
-    namespace _test::metatypes {
-        struct not_meta { };
-
-        struct metatype {
-            using type = void;
-        };
-
-        struct metavalue {
-            static inline constexpr auto value = 42;
-        };
-
-        template<typename TType>
-        struct metatype_typefunction {
-            using type = std::add_const_t<TType>;
-        };
-
-        template<typename TType>
-        struct metatype_valuefunction {
-            static inline constexpr auto value = std::is_const_v<TType>;
-        };
-
-        template<auto TValue>
-        struct metavalue_typefunction {
-            using type = std::conditional_t<TValue, int, void>;
-        };
-
-        template<auto TValue>
-        struct metavalue_valuefunction {
-            static inline constexpr auto value = TValue * 2;
-        };
-
-        constexpr auto type_to_type
-            = []([[maybe_unused]] const MetaType auto& type) -> detail::Type<bool> {
-            return {};
-        };
-        constexpr auto type_to_value
-            = []([[maybe_unused]] const MetaType auto& type) -> detail::Value<true> {
-            return {};
-        };
-        constexpr auto value_to_type
-            = []([[maybe_unused]] const MetaValue auto& type) -> detail::Type<bool> {
-            return {};
-        };
-        constexpr auto value_to_value
-            = []([[maybe_unused]] const MetaValue auto& type) -> detail::Value<true> {
-            return {};
-        };
-
-        static_assert(MetaType<metatype>, "hyperion::mpl::MetaType test case 1 (failing)");
-        static_assert(not MetaType<not_meta>, "hyperion::mpl::MetaType test case 2 (failing)");
-        static_assert(MetaType<std::add_lvalue_reference<int>>,
-                      "hyperion::mpl::MetaType test case 1 (failing)");
-        static_assert(!MetaType<int>, "hyperion::mpl::MetaType test case 2 (failing)");
-        static_assert(!MetaType<detail::Value<1>>, "hyperion::mpl::MetaType test case 3 (failing)");
-
-        struct not_value_type {
-            int value;
-        };
-
-        static_assert(MetaValue<metavalue>, "hyperion::mpl::MetaValue test case 1 (failing)");
-        static_assert(not MetaValue<not_meta>, "hyperion::mpl::MetaValue test case 2 (failing)");
-        static_assert(MetaValue<detail::Value<true>>,
-                      "hyperion::mpl::MetaValue not satisfied by hyperion::mpl::Value "
-                      "(implementation failing)");
-        static_assert(MetaValue<std::bool_constant<true>>,
-                      "hyperion::mpl::MetaValue not satisfied by std::bool_constant "
-                      "(implementation failing)");
-        static_assert(!MetaValue<not_value_type>,
-                      "hyperion::mpl::MetaValue not satisfied by _test::not_value_type "
-                      "(implementation failing)");
-
-        static_assert(TypeMetaFunction<metatype_typefunction>,
-                      "hyperion::mpl::TypeMetaFunction test case 1 (failing)");
-        static_assert(TypeMetaFunction<metatype_valuefunction>,
-                      "hyperion::mpl::TypeMetaFunction test case 2 (failing)");
-
-        static_assert(ValueMetaFunction<metavalue_typefunction>,
-                      "hyperion::mpl::ValueMetaFunction test case 1 (failing)");
-        static_assert(ValueMetaFunction<metavalue_valuefunction>,
-                      "hyperion::mpl::ValueMetaFunction test case 2 (failing)");
-
-        static_assert(MetaFunction<decltype(type_to_type)>,
-                      "hyperion::mpl::MetaFunction test case 1 (failing)");
-        static_assert(MetaFunction<decltype(type_to_value)>,
-                      "hyperion::mpl::MetaFunction test case 2 (failing)");
-        static_assert(MetaFunction<decltype(value_to_type)>,
-                      "hyperion::mpl::MetaFunction test case 3 (failing)");
-        static_assert(MetaFunction<decltype(value_to_value)>,
-                      "hyperion::mpl::MetaFunction test case 4 (failing)");
-
-        static_assert(std::is_same_v<meta_result_t<decltype(type_to_type), detail::Type<bool>>,
-                                     detail::Type<bool>>,
-                      "hyperion::mpl::meta_result test case 1 (failing)");
-        static_assert(std::is_same_v<meta_result_t<decltype(type_to_value), detail::Type<bool>>,
-                                     detail::Value<true>>,
-                      "hyperion::mpl::meta_result test case 2 (failing)");
-        static_assert(std::is_same_v<meta_result_t<decltype(value_to_type), detail::Value<true>>,
-                                     detail::Type<bool>>,
-                      "hyperion::mpl::met_result test case 3 (failing)");
-        static_assert(std::is_same_v<meta_result_t<decltype(value_to_value), detail::Value<true>>,
-                                     detail::Value<true>>,
-                      "hyperion::mpl::met_result test case 4 (failing)");
-
-    } // namespace _test::metatypes
 } // namespace hyperion::mpl
+
+// NOLINTNEXTLINE(misc-header-include-cycle)
+#include <hyperion/mpl/pair.h>
+// NOLINTNEXTLINE(misc-header-include-cycle)
+#include <hyperion/mpl/type.h>
+// NOLINTNEXTLINE(misc-header-include-cycle)
+#include <hyperion/mpl/value.h>
+
+namespace hyperion::mpl::_test::metatypes {
+    struct not_meta { };
+
+    struct metatype {
+        using type = void;
+    };
+
+    struct metavalue {
+        static inline constexpr auto value = 42;
+    };
+
+    template<typename TType>
+    struct metatype_typefunction {
+        using type = std::add_const_t<TType>;
+    };
+
+    template<typename TType>
+    struct metatype_valuefunction {
+        static inline constexpr auto value = std::is_const_v<TType>;
+    };
+
+    template<auto TValue>
+    struct metavalue_typefunction {
+        using type = std::conditional_t<TValue, int, void>;
+    };
+
+    template<auto TValue>
+    struct metavalue_valuefunction {
+        static inline constexpr auto value = TValue * 2;
+    };
+
+    constexpr auto type_to_type = []([[maybe_unused]] const MetaType auto& type) -> Type<bool> {
+        return {};
+    };
+    constexpr auto type_to_value = []([[maybe_unused]] const MetaType auto& type) -> Value<true> {
+        return {};
+    };
+    constexpr auto value_to_type = []([[maybe_unused]] const MetaValue auto& type) -> Type<bool> {
+        return {};
+    };
+    constexpr auto value_to_value = []([[maybe_unused]] const MetaValue auto& type) -> Value<true> {
+        return {};
+    };
+
+    static_assert(MetaType<metatype>, "hyperion::mpl::MetaType test case 1 (failing)");
+    static_assert(not MetaType<not_meta>, "hyperion::mpl::MetaType test case 2 (failing)");
+    static_assert(MetaType<std::add_lvalue_reference<int>>,
+                  "hyperion::mpl::MetaType test case 1 (failing)");
+    static_assert(!MetaType<int>, "hyperion::mpl::MetaType test case 2 (failing)");
+    static_assert(!MetaType<Value<1>>, "hyperion::mpl::MetaType test case 3 (failing)");
+
+    struct not_value_type {
+        int value;
+    };
+
+    static_assert(MetaValue<metavalue>, "hyperion::mpl::MetaValue test case 1 (failing)");
+    static_assert(not MetaValue<not_meta>, "hyperion::mpl::MetaValue test case 2 (failing)");
+    static_assert(MetaValue<Value<true>>,
+                  "hyperion::mpl::MetaValue not satisfied by hyperion::mpl::Value "
+                  "(implementation failing)");
+    static_assert(MetaValue<std::bool_constant<true>>,
+                  "hyperion::mpl::MetaValue not satisfied by std::bool_constant "
+                  "(implementation failing)");
+    static_assert(!MetaValue<not_value_type>,
+                  "hyperion::mpl::MetaValue not satisfied by _test::not_value_type "
+                  "(implementation failing)");
+
+    static_assert(TypeMetaFunction<metatype_typefunction>,
+                  "hyperion::mpl::TypeMetaFunction test case 1 (failing)");
+    static_assert(TypeMetaFunction<metatype_valuefunction>,
+                  "hyperion::mpl::TypeMetaFunction test case 2 (failing)");
+
+    static_assert(ValueMetaFunction<metavalue_typefunction>,
+                  "hyperion::mpl::ValueMetaFunction test case 1 (failing)");
+    static_assert(ValueMetaFunction<metavalue_valuefunction>,
+                  "hyperion::mpl::ValueMetaFunction test case 2 (failing)");
+
+    static_assert(MetaFunction<decltype(type_to_type)>,
+                  "hyperion::mpl::MetaFunction test case 1 (failing)");
+    static_assert(MetaFunction<decltype(type_to_value)>,
+                  "hyperion::mpl::MetaFunction test case 2 (failing)");
+    static_assert(MetaFunction<decltype(value_to_type)>,
+                  "hyperion::mpl::MetaFunction test case 3 (failing)");
+    static_assert(MetaFunction<decltype(value_to_value)>,
+                  "hyperion::mpl::MetaFunction test case 4 (failing)");
+
+    static_assert(std::is_same_v<meta_result_t<decltype(type_to_type), Type<bool>>, Type<bool>>,
+                  "hyperion::mpl::meta_result test case 1 (failing)");
+    static_assert(std::is_same_v<meta_result_t<decltype(type_to_value), Type<bool>>, Value<true>>,
+                  "hyperion::mpl::meta_result test case 2 (failing)");
+    static_assert(std::is_same_v<meta_result_t<decltype(value_to_type), Value<true>>, Type<bool>>,
+                  "hyperion::mpl::met_result test case 3 (failing)");
+    static_assert(std::is_same_v<meta_result_t<decltype(value_to_value), Value<true>>, Value<true>>,
+                  "hyperion::mpl::met_result test case 4 (failing)");
+
+} // namespace hyperion::mpl::_test::metatypes
 
 HYPERION_IGNORE_DOCUMENTATION_WARNING_STOP;
 
