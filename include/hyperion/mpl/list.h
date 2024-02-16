@@ -168,9 +168,8 @@ namespace hyperion::mpl {
             return {};
         }
 
-        [[nodiscard]] constexpr auto push_front(MetaType auto type) const noexcept
-            -> List<typename decltype(type)::type, TTypes...> {
-            return {};
+        [[nodiscard]] constexpr auto push_front(MetaType auto type) const noexcept {
+            return List<typename decltype(type)::type, TTypes...>{};
         }
 
         template<typename... TOthers>
@@ -180,9 +179,8 @@ namespace hyperion::mpl {
             return {};
         }
 
-        [[nodiscard]] constexpr auto push_back(MetaType auto type) const noexcept
-            -> List<TTypes..., typename decltype(type)::type> {
-            return {};
+        [[nodiscard]] constexpr auto push_back(MetaType auto type) const noexcept {
+            return List<TTypes..., typename decltype(type)::type>{};
         }
 
         template<typename... TOthers>
