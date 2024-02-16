@@ -35,7 +35,7 @@
 #include <type_traits>
 
 #ifndef HYPERION_MPL_TYPE_H
-#define HYPERION_MPL_TYPE_H
+    #define HYPERION_MPL_TYPE_H
 
 /// @ingroup mpl
 /// @{
@@ -1742,10 +1742,13 @@ namespace hyperion::mpl {
         requires std::is_reference_v<TType>
     [[nodiscard]] constexpr auto
     decltype_([[maybe_unused]] TType&& type) // NOLINT(*-missing-std-forward)
-        noexcept -> std::conditional_t<MetaType<std::remove_cvref_t<TType>>,
-                                       std::remove_cvref_t<TType>,
-                                       Type<decltype(type)>> {
-        return {};
+        noexcept {
+        if constexpr(MetaType<std::remove_cvref_t<TType>>) {
+            return Type<typename std::remove_cvref_t<TType>::type>{};
+        }
+        else {
+            return Type<decltype(type)>{};
+        }
     }
 
     /// @brief Returns an `mpl::Type` representing the type of the given argument
@@ -1768,8 +1771,13 @@ namespace hyperion::mpl {
         requires(!std::is_reference_v<TType>)
     [[nodiscard]] constexpr auto
     decltype_([[maybe_unused]] TType&& type) // NOLINT(*-missing-std-forward)
-        noexcept -> std::conditional_t<MetaType<TType>, TType, Type<TType>> {
-        return {};
+        noexcept {
+        if constexpr(MetaType<TType>) {
+            return Type<typename TType::type>{};
+        }
+        else {
+            return Type<TType>{};
+        }
     }
 
     /// @brief Returns an `mpl::Type` representing the type `TType`
@@ -1786,9 +1794,13 @@ namespace hyperion::mpl {
     /// @tparam TType The type to represent as an `mpl::Type`
     /// @return an `mpl::Type` representing the type `TType`
     template<typename TType>
-    [[nodiscard]] constexpr auto
-    decltype_() noexcept -> std::conditional_t<MetaType<TType>, TType, Type<TType>> {
-        return {};
+    [[nodiscard]] constexpr auto decltype_() noexcept {
+        if constexpr(MetaType<TType>) {
+            return Type<typename TType::type>{};
+        }
+        else {
+            return Type<TType>{};
+        }
     }
 
     template<typename TLhs, typename TRhs>
@@ -1806,8 +1818,8 @@ namespace hyperion::mpl {
     }
 } // namespace hyperion::mpl
 
-// NOLINTNEXTLINE(misc-header-include-cycle)
-#include <hyperion/mpl/value.h>
+    // NOLINTNEXTLINE(misc-header-include-cycle)
+    #include <hyperion/mpl/value.h>
 
 namespace hyperion::mpl {
 
