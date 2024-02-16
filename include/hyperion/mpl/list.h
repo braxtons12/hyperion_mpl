@@ -233,7 +233,7 @@ namespace hyperion::mpl {
                   return (TResults{} && ...);
               };
 
-        return check_all(lhs.zip(rhs).for_each(is_same));
+        return check_all(List<TLHTypes...>{}.zip(List<TRHTypes...>{}).for_each(is_same));
     }
 } // namespace hyperion::mpl
 
