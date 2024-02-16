@@ -276,13 +276,15 @@ namespace hyperion::mpl::_test::list {
     static_assert(List<int, double>{}.back() == decltype_<double>(),
                   "hyperion::mpl::List::back test (failing)");
 
-    static_assert(List<int, double>{}.push_front(decltype_<float>()) == List<float, int, double>{},
+    constexpr auto pushed_front = List<int, double>{}.push_front(decltype_<float>());
+    static_assert(pushed_front == List<float, int, double>{},
                   "hyperion::mpl::List::push_front test case 1 (failing)");
     static_assert(List<int, double>{}.push_front(List<float, usize>{})
                       == List<float, usize, int, double>{},
                   "hyperion::mpl::List::push_front test case 2 (failing)");
 
-    static_assert(List<int, double>{}.push_back(decltype_<float>()) == List<int, double, float>{},
+    constexpr auto pushed_back = List<int, double>{}.push_back(decltype_<float>());
+    static_assert(pushed_back == List<int, double, float>{},
                   "hyperion::mpl::List::push_back test case 1 (failing)");
     static_assert(List<int, double>{}.push_back(List<float, usize>{})
                       == List<int, double, float, usize>{},
