@@ -195,22 +195,6 @@ namespace hyperion::mpl {
             }
         }
     };
-} // namespace hyperion::mpl
-
-template<std::size_t TIndex, typename TFirst, typename TSecond>
-// NOLINTNEXTLINE(cert-dcl58-cpp)
-struct std::tuple_element<TIndex, hyperion::mpl::Pair<TFirst, TSecond>> {
-    using type = std::conditional_t<TIndex == 0,
-                                    typename hyperion::mpl::Pair<TFirst, TSecond>::first,
-                                    typename hyperion::mpl::Pair<TFirst, TSecond>::second>;
-};
-
-template<typename TFirst, typename TSecond>
-// NOLINTNEXTLINE(cert-dcl58-cpp)
-struct std::tuple_size<hyperion::mpl::Pair<TFirst, TSecond>>
-    : std::integral_constant<std::size_t, 2> { };
-
-namespace hyperion::mpl {
 
     template<typename TLHSFirst, typename TLHSSecond, typename TRHSFirst, typename TRHSSecond>
     [[nodiscard]] constexpr auto
@@ -268,6 +252,19 @@ namespace hyperion::mpl {
         return {};
     }
 } // namespace hyperion::mpl
+
+template<std::size_t TIndex, typename TFirst, typename TSecond>
+// NOLINTNEXTLINE(cert-dcl58-cpp)
+struct std::tuple_element<TIndex, hyperion::mpl::Pair<TFirst, TSecond>> {
+    using type = std::conditional_t<TIndex == 0,
+                                    typename hyperion::mpl::Pair<TFirst, TSecond>::first,
+                                    typename hyperion::mpl::Pair<TFirst, TSecond>::second>;
+};
+
+template<typename TFirst, typename TSecond>
+// NOLINTNEXTLINE(cert-dcl58-cpp)
+struct std::tuple_size<hyperion::mpl::Pair<TFirst, TSecond>>
+    : std::integral_constant<std::size_t, 2> { };
 
 #include <hyperion/mpl/list.h>
 #include <hyperion/mpl/type.h>
