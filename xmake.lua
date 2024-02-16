@@ -49,6 +49,9 @@ local hyperion_mpl_headers = {
     "$(projectdir)/include/hyperion/mpl/concepts.h",
     "$(projectdir)/include/hyperion/mpl/index.h",
     "$(projectdir)/include/hyperion/mpl/list.h",
+    "$(projectdir)/include/hyperion/mpl/metatypes.h",
+    "$(projectdir)/include/hyperion/mpl/pair.h",
+    "$(projectdir)/include/hyperion/mpl/type.h",
     "$(projectdir)/include/hyperion/mpl/type_traits.h",
     "$(projectdir)/include/hyperion/mpl/value.h",
 }

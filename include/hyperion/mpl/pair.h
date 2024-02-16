@@ -25,9 +25,6 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
 
-#ifndef HYPERION_MPL_PAIR_H
-#define HYPERION_MPL_PAIR_H
-
 #include <hyperion/mpl/metatypes.h>
 #include <hyperion/platform/def.h>
 #include <hyperion/platform/types.h>
@@ -37,6 +34,9 @@
 #include <concepts>
 #include <cstddef>
 #include <type_traits>
+
+#ifndef HYPERION_MPL_PAIR_H
+    #define HYPERION_MPL_PAIR_H
 
 /// @ingroup mpl
 /// @{
@@ -251,6 +251,7 @@ namespace hyperion::mpl {
         noexcept -> Pair<TFirst, TSecond> {
         return {};
     }
+
 } // namespace hyperion::mpl
 
 template<std::size_t TIndex, typename TFirst, typename TSecond>
@@ -266,9 +267,9 @@ template<typename TFirst, typename TSecond>
 struct std::tuple_size<hyperion::mpl::Pair<TFirst, TSecond>>
     : std::integral_constant<std::size_t, 2> { };
 
-#include <hyperion/mpl/list.h>
-#include <hyperion/mpl/type.h>
-#include <hyperion/mpl/value.h>
+    #include <hyperion/mpl/list.h>
+    #include <hyperion/mpl/type.h>
+    #include <hyperion/mpl/value.h>
 
 namespace hyperion::mpl::_test::pair {
 

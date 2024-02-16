@@ -25,9 +25,6 @@
 /// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 /// IN THE SOFTWARE.
 
-#ifndef HYPERION_MPL_VALUE_H
-#define HYPERION_MPL_VALUE_H
-
 #include <hyperion/mpl/concepts/comparable.h>
 #include <hyperion/mpl/concepts/operator_able.h>
 #include <hyperion/mpl/metatypes.h>
@@ -40,6 +37,9 @@
 
 #include <concepts>
 #include <type_traits>
+
+#ifndef HYPERION_MPL_VALUE_H
+    #define HYPERION_MPL_VALUE_H
 
 HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
 
@@ -743,7 +743,7 @@ namespace hyperion::mpl {
         return {};
     }
 
-#if HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
+    #if HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
 
     /// @brief Three-way comparison operator between two `mpl::Value`s
     ///
@@ -771,7 +771,7 @@ namespace hyperion::mpl {
         return {};
     }
 
-#else
+    #else
 
     /// @brief Less-than comparison operator between two `mpl::Value`s
     ///
@@ -875,12 +875,12 @@ namespace hyperion::mpl {
         return {};
     }
 
-#endif // HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
+    #endif // HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
 
 } // namespace hyperion::mpl
 
-// NOLINTNEXTLINE(misc-header-include-cycle)
-#include <hyperion/mpl/type.h>
+    // NOLINTNEXTLINE(misc-header-include-cycle)
+    #include <hyperion/mpl/type.h>
 
 namespace hyperion::mpl {
     namespace _test::value {
@@ -1007,14 +1007,14 @@ namespace hyperion::mpl {
         static_assert(!(Value<0>{} >= Value<1>{}),
                       "hyperion::mpl::operator>=(Value, Value) test case 3 failing");
 
-#if HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
+    #if HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
         static_assert((Value<1>{} <=> Value<1>{}) == std::strong_ordering::equal,
                       "hyperion::mpl::operator<=>(Value, Value) test case 1 failing");
         static_assert(Value<2>{} <=> Value<1>{} == std::strong_ordering::greater,
                       "hyperion::mpl::operator<=>(Value, Value) test case 2 failing");
         static_assert(Value<0>{} <=> Value<1>{} == std::strong_ordering::less,
                       "hyperion::mpl::operator<=>(Value, Value) test case 3 failing");
-#endif
+    #endif
 
         template<MetaValue TValue>
         struct add_one_meta {

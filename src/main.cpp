@@ -2,6 +2,7 @@
 #include <hyperion/mpl/concepts.h>
 #include <hyperion/mpl/index.h>
 #include <hyperion/mpl/list.h>
+#include <hyperion/mpl/pair.h>
 #include <hyperion/mpl/type.h>
 #include <hyperion/mpl/type_traits.h>
 #include <hyperion/mpl/value.h>

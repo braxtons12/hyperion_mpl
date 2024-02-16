@@ -25,11 +25,7 @@
 /// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 /// IN THE SOFTWARE.
 
-#ifndef HYPERION_MPL_LIST_H
-#define HYPERION_MPL_LIST_H
-
 #include <hyperion/mpl/metatypes.h>
-#include <hyperion/mpl/pair.h>
 #include <hyperion/mpl/type.h>
 #include <hyperion/mpl/value.h>
 #include <hyperion/platform/def.h>
@@ -40,6 +36,9 @@
 #include <concepts>
 #include <functional>
 #include <type_traits>
+
+#ifndef HYPERION_MPL_LIST_H
+    #define HYPERION_MPL_LIST_H
 
 /// @ingroup mpl
 /// @{
@@ -71,6 +70,9 @@ namespace hyperion::mpl {
     template<typename... TTypes>
     struct List;
 
+    template<typename TFirst, typename TSecond>
+    struct Pair;
+
     namespace detail {
         struct any_tag { };
 
@@ -86,14 +88,14 @@ namespace hyperion::mpl {
                  typename THead,
                  typename... TTails>
         struct at<TIndex, TCurrent, TList<THead, TTails...>> {
-#if HYPERION_COMPILER_HAS_TYPE_PACK_ELEMENT
+    #if HYPERION_COMPILER_HAS_TYPE_PACK_ELEMENT
             using type = __type_pack_element<TIndex, THead, TTails...>;
-#else
+    #else
             using type = std::conditional_t<
                 TIndex == TCurrent,
                 THead,
                 typename at<TIndex, TCurrent + 1_usize, TList<TTails...>>::type>;
-#endif
+    #endif
         };
 
         template<usize TIndex, usize TCurrent, template<typename...> typename TList>
@@ -199,39 +201,41 @@ namespace hyperion::mpl {
 
         return check_all(lhs.zip(rhs).for_each(is_same));
     }
-
-    namespace _test::list {
-
-        static constexpr auto add_const = [](MetaType auto type) {
-            return type.as_const();
-        };
-
-        static_assert(std::same_as<decltype(List<int, double>{}.for_each(add_const)),
-                                   List<const int, const double>>,
-                      "hyperion::mpl::List::for_each test case 1 (failing)");
-
-        static_assert(std::same_as<decltype(List<int, double>{}.apply(add_const)),
-                                   List<const int, const double>>,
-                      "hyperion::mpl::List::apply test case 1 (failing)");
-
-        static_assert(List<int, double>{}.at<0>() == decltype_<int>(),
-                      "hyperion::mpl::List::at test case 1 (failing)");
-        static_assert(List<int, double>{}.at<1>() == decltype_<double>(),
-                      "hyperion::mpl::List::at test case 2 (failing)");
-
-        static_assert(std::same_as<decltype(List<int, double>{}.zip(List<double, int>{})),
-                                   List<Pair<int, double>, Pair<double, int>>>,
-                      "hyperion::mpl::List::zip test case 1 (failing)");
-
-        static_assert(List<int, double>{} == List<int, double>{},
-                      "hyperion::mpl::List operator== test case 1 (failing)");
-        static_assert(List<int, double>{}.for_each(add_const) == List<const int, const double>{},
-                      "hyperion::mpl::List operator== test case 2 (failing)");
-        static_assert(List<int, double>{}.zip(List<double, int>{})
-                          == List<Pair<int, double>, Pair<double, int>>{},
-                      "hyperion::mpl::List operator== test case 3 (failing)");
-
-    } // namespace _test::list
 } // namespace hyperion::mpl
+
+    #include <hyperion/mpl/pair.h>
+
+namespace hyperion::mpl::_test::list {
+
+    static constexpr auto add_const = [](MetaType auto type) {
+        return type.as_const();
+    };
+
+    static_assert(std::same_as<decltype(List<int, double>{}.for_each(add_const)),
+                               List<const int, const double>>,
+                  "hyperion::mpl::List::for_each test case 1 (failing)");
+
+    static_assert(
+        std::same_as<decltype(List<int, double>{}.apply(add_const)), List<const int, const double>>,
+        "hyperion::mpl::List::apply test case 1 (failing)");
+
+    static_assert(List<int, double>{}.at<0>() == decltype_<int>(),
+                  "hyperion::mpl::List::at test case 1 (failing)");
+    static_assert(List<int, double>{}.at<1>() == decltype_<double>(),
+                  "hyperion::mpl::List::at test case 2 (failing)");
+
+    static_assert(std::same_as<decltype(List<int, double>{}.zip(List<double, int>{})),
+                               List<Pair<int, double>, Pair<double, int>>>,
+                  "hyperion::mpl::List::zip test case 1 (failing)");
+
+    static_assert(List<int, double>{} == List<int, double>{},
+                  "hyperion::mpl::List operator== test case 1 (failing)");
+    static_assert(List<int, double>{}.for_each(add_const) == List<const int, const double>{},
+                  "hyperion::mpl::List operator== test case 2 (failing)");
+    static_assert(List<int, double>{}.zip(List<double, int>{})
+                      == List<Pair<int, double>, Pair<double, int>>{},
+                  "hyperion::mpl::List operator== test case 3 (failing)");
+
+} // namespace hyperion::mpl::_test::list
 
 #endif // HYPERION_MPL_LIST_H

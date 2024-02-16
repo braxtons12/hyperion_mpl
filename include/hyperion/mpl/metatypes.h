@@ -456,6 +456,8 @@ namespace hyperion::mpl {
 } // namespace hyperion::mpl
 
 // NOLINTNEXTLINE(misc-header-include-cycle)
+#include <hyperion/mpl/list.h>
+// NOLINTNEXTLINE(misc-header-include-cycle)
 #include <hyperion/mpl/pair.h>
 // NOLINTNEXTLINE(misc-header-include-cycle)
 #include <hyperion/mpl/type.h>

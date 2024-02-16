@@ -25,9 +25,6 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
 
-#ifndef HYPERION_MPL_TYPE_H
-#define HYPERION_MPL_TYPE_H
-
 #include <hyperion/mpl/metatypes.h>
 #include <hyperion/platform/def.h>
 #include <hyperion/platform/types.h>
@@ -36,6 +33,9 @@
 
 #include <concepts>
 #include <type_traits>
+
+#ifndef HYPERION_MPL_TYPE_H
+#define HYPERION_MPL_TYPE_H
 
 /// @ingroup mpl
 /// @{
