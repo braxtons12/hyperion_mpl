@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Metaprogramming type wrapper for use as metafunction parameter and return type
 /// @version 0.1
-/// @date 2024-02-15
+/// @date 2024-02-16
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -147,6 +147,7 @@ namespace hyperion::mpl {
         ///     - It must have a `static constexpr` member variable, `value`, or a using alias type,
         ///     `type`
         ///
+        /// # Example
         /// @code {.cpp}
         /// template<typename TType>
         /// struct is_const {
@@ -180,6 +181,7 @@ namespace hyperion::mpl {
         ///     `type`
         /// - `type` must be a `MetaValue`
         ///
+        /// # Example
         /// @code {.cpp}
         /// template<auto TValue>
         /// struct is_two {
