@@ -158,6 +158,40 @@ namespace hyperion::mpl {
             return {};
         }
 
+        [[nodiscard]] constexpr auto front() const noexcept ->
+            typename detail::at<0_usize, 0_usize, List<as_meta<TTypes>...>>::type {
+            return {};
+        }
+
+        [[nodiscard]] constexpr auto back() const noexcept -> typename detail::
+            at<sizeof...(TTypes) - 1_usize, 0_usize, List<as_meta<TTypes>...>>::type {
+            return {};
+        }
+
+        [[nodiscard]] constexpr auto push_front(MetaType auto type) const noexcept
+            -> List<typename decltype(type)::type, TTypes...> {
+            return {};
+        }
+
+        template<typename... TOthers>
+        [[nodiscard]] constexpr auto
+        push_front([[maybe_unused]] List<TOthers...> list) const noexcept
+            -> List<TOthers..., TTypes...> {
+            return {};
+        }
+
+        [[nodiscard]] constexpr auto push_back(MetaType auto type) const noexcept
+            -> List<TTypes..., typename decltype(type)::type> {
+            return {};
+        }
+
+        template<typename... TOthers>
+        [[nodiscard]] constexpr auto
+        push_back([[maybe_unused]] List<TOthers...> list) const noexcept
+            -> List<TTypes..., TOthers...> {
+            return {};
+        }
+
         template<typename... TRHTypes>
             requires(sizeof...(TRHTypes) == sizeof...(TTypes))
         [[nodiscard]] constexpr auto zip([[maybe_unused]] List<TRHTypes...> rhs) const noexcept {
@@ -235,6 +269,24 @@ namespace hyperion::mpl::_test::list {
     static_assert(List<int, double>{}.zip(List<double, int>{})
                       == List<Pair<int, double>, Pair<double, int>>{},
                   "hyperion::mpl::List operator== test case 3 (failing)");
+
+    static_assert(List<int, double>{}.front() == decltype_<int>(),
+                  "hyperion::mpl::List::front test (failing)");
+
+    static_assert(List<int, double>{}.back() == decltype_<double>(),
+                  "hyperion::mpl::List::back test (failing)");
+
+    static_assert(List<int, double>{}.push_front(decltype_<float>()) == List<float, int, double>{},
+                  "hyperion::mpl::List::push_front test case 1 (failing)");
+    static_assert(List<int, double>{}.push_front(List<float, usize>{})
+                      == List<float, usize, int, double>{},
+                  "hyperion::mpl::List::push_front test case 2 (failing)");
+
+    static_assert(List<int, double>{}.push_back(decltype_<float>()) == List<int, double, float>{},
+                  "hyperion::mpl::List::push_back test case 1 (failing)");
+    static_assert(List<int, double>{}.push_back(List<float, usize>{})
+                      == List<int, double, float, usize>{},
+                  "hyperion::mpl::List::push_back test case 2 (failing)");
 
 } // namespace hyperion::mpl::_test::list
 
