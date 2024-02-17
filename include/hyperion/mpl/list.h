@@ -244,7 +244,7 @@ namespace hyperion::mpl {
         accumulate(TState&& state, TAccumulator&& accumulator) const noexcept {
             return accumulate_impl(std::forward<TState>(state),
                                    std::forward<TAccumulator>(accumulator),
-                                   List{});
+                                   List<as_meta<TTypes>...>{});
         }
 
       private:
@@ -300,6 +300,45 @@ namespace hyperion::mpl {
                                 decltype(meta_result_t<TPredicate, as_meta<TTypes>>::value)>,
                             bool>
                         && ...)
+        [[nodiscard]] constexpr auto count_if(
+            [[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
+            const noexcept {
+            constexpr auto accumulator = [](auto state, auto element) {
+                if constexpr(TPredicate{}(decltype(element){})) {
+                    return state + 1_value;
+                }
+                else {
+                    return state;
+                }
+            };
+
+            return accumulate(0_value, accumulator);
+        }
+
+        [[nodiscard]] constexpr auto count([[maybe_unused]] auto value) const noexcept {
+            return count_if(detail::equal_to(value));
+        }
+
+        template<typename TPredicate>
+            requires(MetaFunctionOf<TPredicate, as_meta<TTypes>> && ...)
+                    && (MetaValue<meta_result_t<TPredicate, as_meta<TTypes>>> && ...)
+                    && (std::same_as<
+                            std::remove_cvref_t<
+                                decltype(meta_result_t<TPredicate, as_meta<TTypes>>::value)>,
+                            bool>
+                        && ...)
+        [[nodiscard]] constexpr auto all_of(TPredicate&& predicate) const noexcept {
+            return count_if(std::forward<TPredicate>(predicate)) == sizeof...(TTypes);
+        }
+
+        template<typename TPredicate>
+            requires(MetaFunctionOf<TPredicate, as_meta<TTypes>> && ...)
+                    && (MetaValue<meta_result_t<TPredicate, as_meta<TTypes>>> && ...)
+                    && (std::same_as<
+                            std::remove_cvref_t<
+                                decltype(meta_result_t<TPredicate, as_meta<TTypes>>::value)>,
+                            bool>
+                        && ...)
         [[nodiscard]] constexpr auto any_of(TPredicate&& predicate) const noexcept {
             return find_if_impl(std::forward<TPredicate>(predicate), 0_value)
                    != Value<sizeof...(TTypes), usize>{};
@@ -316,33 +355,6 @@ namespace hyperion::mpl {
         [[nodiscard]] constexpr auto none_of(TPredicate&& predicate) const noexcept {
             return find_if_impl(std::forward<TPredicate>(predicate), 0_value)
                    == Value<sizeof...(TTypes), usize>{};
-        }
-
-        template<typename TPredicate>
-            requires(MetaFunctionOf<TPredicate, as_meta<TTypes>> && ...)
-                    && (MetaValue<meta_result_t<TPredicate, as_meta<TTypes>>> && ...)
-                    && (std::same_as<
-                            std::remove_cvref_t<
-                                decltype(meta_result_t<TPredicate, as_meta<TTypes>>::value)>,
-                            bool>
-                        && ...)
-        [[nodiscard]] constexpr auto count_if(
-            [[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
-            const noexcept {
-            constexpr auto accumulator = [](auto state, auto element) {
-                if constexpr(TPredicate{}(element)) {
-                    return state + 1_value;
-                }
-                else {
-                    return state;
-                }
-            };
-
-            return accumulate(0_value, accumulator);
-        }
-
-        [[nodiscard]] constexpr auto count([[maybe_unused]] auto value) const noexcept {
-            return count_if(detail::equal_to(value));
         }
 
         template<usize TIndex>
@@ -576,6 +588,26 @@ namespace hyperion::mpl::_test::list {
         }
     }) == decltype_<not_found_tag>(),
                   "hyperion::mpl::List::find_if test case 2 (failing)");
+
+    static_assert(List<int, double, float>{}.all_of([](auto type) {
+        if constexpr(MetaType<decltype(type)>) {
+            return Value<std::is_arithmetic_v<typename decltype(type)::type>, bool>{};
+        }
+        else {
+            return Value<false, bool>{};
+        }
+    }),
+                  "hyperion::mpl::List::all_of test case 1 (failing)");
+
+    static_assert(not List<int, double, float, Value<1>>{}.all_of([](auto type) {
+        if constexpr(MetaType<decltype(type)>) {
+            return Value<std::is_arithmetic_v<typename decltype(type)::type>, bool>{};
+        }
+        else {
+            return Value<false, bool>{};
+        }
+    }),
+                  "hyperion::mpl::List::all_of test case 2 (failing)");
 
     static_assert(List<int, double, float>{}.any_of([](auto type) {
         if constexpr(MetaType<decltype(type)>) {
