@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming facilities for working with a list of types or values
 /// @version 0.1
-/// @date 2024-02-16
+/// @date 2024-02-18
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -58,9 +58,12 @@
 /// };
 ///
 /// constexpr auto list = List<int, double, float>{};
-/// constexpr auto constified = list.apply(add_const);
+/// constexpr auto zipped = list.zip(List<u32, usize, i32>{});
+/// contexpr auto constified = zipped.apply(add_const);
 ///
-/// static_assert(constified == List<const int, const double, const float>{});
+/// static_assert(constified == List<Pair<const int, const u32>,
+///                                  Pair<const double, const usize>,
+///                                  Pair<const float, const i32>>{});
 /// @endcode
 /// @headerfile hyperion/mpl/list.h
 /// @}
@@ -180,19 +183,8 @@ namespace hyperion::mpl {
         }
 
         template<typename TFunction>
-            requires MetaFunctionOf<TFunction, Type<detail::any_tag>>
-                     && MetaType<meta_result_t<TFunction, Type<detail::any_tag>>>
-                     && (MetaType<as_meta<TTypes>> && ...)
-        [[nodiscard]] constexpr auto apply(TFunction&& func) // NOLINT(*-missing-std-forward)
-            const noexcept -> List<as_raw<decltype(as_meta<TTypes>{}.apply(func))>...> {
-            return {};
-        }
-
-        template<typename TFunction>
-            requires MetaFunctionOf<TFunction, Pair<Type<detail::any_tag>, Type<detail::any_tag>>>
-                     && MetaValue<meta_result_t<TFunction,
-                                                Pair<Type<detail::any_tag>, Type<detail::any_tag>>>>
-                     && (MetaPair<as_meta<TTypes>> && ...)
+            requires(MetaFunctionOf<TFunction, as_meta<TTypes>> && ...)
+                    || (requires { as_meta<TTypes>{}.apply(TFunction{}); } && ...)
         [[nodiscard]] constexpr auto apply(TFunction&& func) // NOLINT(*-missing-std-forward)
             const noexcept -> List<as_raw<decltype(as_meta<TTypes>{}.apply(func))>...> {
             return {};
@@ -678,6 +670,9 @@ namespace hyperion::mpl::_test::list {
 
     static_assert(List<Value<3>, Value<2>, Value<3>>{}.count(4_value) == 0_value,
                   "hyperion::mpl::List::count test case 2 (failing)");
+
+    static_assert(List<int, double>{}.zip(List<float, usize>{}).apply(add_const)
+                  == List<Pair<const int, const float>, Pair<const double, const usize>>{});
 
 } // namespace hyperion::mpl::_test::list
 
