@@ -59,7 +59,7 @@
 ///
 /// constexpr auto list = List<int, double, float>{};
 /// constexpr auto zipped = list.zip(List<u32, usize, i32>{});
-/// contexpr auto constified = zipped.apply(add_const);
+/// constexpr auto constified = zipped.apply(add_const);
 ///
 /// static_assert(constified == List<Pair<const int, const u32>,
 ///                                  Pair<const double, const usize>,
