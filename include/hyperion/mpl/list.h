@@ -466,6 +466,10 @@ namespace hyperion::mpl::_test::list {
     static_assert(std::same_as<decltype(List<int, double>{}.zip(List<double, int>{})),
                                List<Pair<int, double>, Pair<double, int>>>,
                   "hyperion::mpl::List::zip test case 1 (failing)");
+    static_assert(List<int, double>{}.zip(List<float, usize>{}).apply(add_const)
+                  == List<Pair<const int, const float>, Pair<const double, const usize>>{},
+                  "hyperion::mpl::List::zip test case 2 (failing)");
+
 
     static_assert(List<int, double>{} == List<int, double>{},
                   "hyperion::mpl::List operator== test case 1 (failing)");
@@ -670,9 +674,6 @@ namespace hyperion::mpl::_test::list {
 
     static_assert(List<Value<3>, Value<2>, Value<3>>{}.count(4_value) == 0_value,
                   "hyperion::mpl::List::count test case 2 (failing)");
-
-    static_assert(List<int, double>{}.zip(List<float, usize>{}).apply(add_const)
-                  == List<Pair<const int, const float>, Pair<const double, const usize>>{});
 
 } // namespace hyperion::mpl::_test::list
 
