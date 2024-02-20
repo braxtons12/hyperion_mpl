@@ -1,9 +1,14 @@
 hyperion::mpl
 *************
 
-hyperion::mpl is a C++20 meta programming library similar to Boost.Hana.
+hyperion::mpl is a C++20 metaprogramming library focused on making metaprogramming simple
+and easy. With hyperion::mpl, metaprogramming almost as easy as typical application code:
+you can metaprogram using (relatively) normal variables, values, and functions,
+in an ergonomic and functional style, instead of the bloat and complexity of the 
+struct templates, partial specializations, SFINAE, and other techniques and tricks typically
+used in C++ metaprogramming.
 
-It's currently under active development and has not yet hit a stable release point.
+hyperion::mpl is currently under active development and has not yet hit a stable release point.
 
 See the :doc:`Quick Start Guide <quick_start>` for how to get started using hyperion::mpl.
 
