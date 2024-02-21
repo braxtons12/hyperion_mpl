@@ -7,7 +7,7 @@ easy.
 CMake
 -----
 
-hyperion::latform is easily incorporated into a raw CMake project with :cmake:`FetchContent` or
+hyperion::mpl is easily incorporated into a raw CMake project with :cmake:`FetchContent` or
 other methods like :cmake:`add_subdirectory`\. Example for :cmake:`FetchContent`\:
 
 .. code-block:: cmake
@@ -29,13 +29,15 @@ other methods like :cmake:`add_subdirectory`\. Example for :cmake:`FetchContent`
 
 Note that hyperion::mpl depends on
 `hyperion::platform <https://github.com/braxtons12/hyperion_platform>`_ for platform and feature
-detection macros and other core utilities, `doctest <https://github.com/doctest/doctestdoctest>`_
-for testing, and optionally depends on `Tracy <https://github.com/wolfpld/tracy>`_ for the profiling
-macros `hyperion::platform` wraps in :cpp:`#include <hyperion/platform/def.h>`\ (set the option
-:cmake:`HYPERION_ENABLE_TRACY` to :cmake:`ON` to enable these). By default, it will use
-:cmake:`FetchContent` to obtain these dependencies, but you can disable this by setting
-:cmake:`HYPERION_USE_FETCH_CONTENT` to :cmake:`OFF`\, in which case you will need to make sure each
-package is findable via CMake's :cmake:`find_package`.
+detection macros and other core utilities, and `doctest <https://github.com/doctest/doctestdoctest>`_
+for runtime testing. `hyperion::platform <https://github.com/braxtons12/hyperion_platform>`_
+optionally depends on `Tracy <https://github.com/wolfpld/tracy>`_ for the profiling macros it wraps
+in :cpp:`#include <hyperion/platform/def.h>`\. Inclusion of this dependency can be configured by
+setting the option :cmake:`HYPERION_ENABLE_TRACY` to :cmake:`ON` or :cmake:`OFF`\.
+
+By default, :cmake:`FetchContent` will be used to obtain these dependencies, but you can disable
+this by setting :cmake:`HYPERION_USE_FETCH_CONTENT` to :cmake:`OFF`\, in which case you will need to
+make sure each package is findable via CMake's :cmake:`find_package`.
 
 XMake
 -----
@@ -49,7 +51,7 @@ way to use Hyperion packages. Example:
 
     set_project("my_project")
 
-    -- add the hyperion_packages git repository as an XMake repository
+    -- add the hyperion_packages git repository as an XMake package repository/registry
     add_repositories("hyperion https://github.com/braxtons12/hyperion_packages.git")
 
     -- add hyperion_mpl as a required dependency for the project
@@ -64,3 +66,10 @@ way to use Hyperion packages. Example:
     target("my_executable")
         set_kind("binary")
         add_packages("hyperion_mpl")
+
+Note that with XMake, hyperion::mpl requires the same dependencies as with the CMake build system.
+Third-party dependencies will be pulled from xmake-repo, the package repository/registry for XMake,
+and dependencies on other hyperion libraries will be pulled from github via the 
+`hyperion package repository/registry for xmake <https://github.com/braxtons12/hyperion_packages>`_.
+As with CMake, you can enable or disable Tracy (defaults to off) by setting the option
+`hyperion_enable_tracy`

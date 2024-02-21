@@ -10,13 +10,6 @@ add_rules("mode.debug", "mode.release")
 add_moduledirs("xmake")
 add_repositories("hyperion https://github.com/braxtons12/hyperion_packages.git")
 
-add_requires("hyperion_platform", {
-    system = false,
-    external = true,
-    configs = {
-        languages = "cxx20"
-    }
-})
 add_requires("doctest", {
     system = false,
     external = true,
@@ -28,18 +21,21 @@ add_requires("doctest", {
 option("hyperion_enable_tracy", function()
     add_defines("TRACY_ENABLE")
     set_default(false)
-    after_check(function(opt)
-        if opt:enabled() then
-            add_requires("tracy", {
-                system = false,
-                external = true,
-                configs = {
-                    languages = "cxx20"
-                }
-            })
-        end
-    end)
 end)
+
+local enable_tracy = false
+if has_config("hyperion_enable_tracy") then
+    enable_tracy = true
+end
+
+add_requires("hyperion_platform", {
+    system = false,
+    external = true,
+    configs = {
+        languages = "cxx20",
+        hyperion_enable_tracy = enable_tracy
+    }
+})
 
 local hyperion_mpl_main_header = {
     "$(projectdir)/include/hyperion/mpl.h",
@@ -87,9 +83,6 @@ target("hyperion_mpl", function()
 
     add_packages("doctest", { public = true })
     add_packages("hyperion_platform", { public = true })
-    if has_package("tracy") then
-        add_packages("tracy", { public = true })
-    end
 end)
 
 target("hyperion_mpl_main", function()

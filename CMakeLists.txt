@@ -4,6 +4,17 @@ project(hyperion_mpl LANGUAGES CXX)
 option(HYPERION_ENABLE_TRACY "Enables Profiling with Tracy" OFF)
 option(HYPERION_USE_FETCH_CONTENT "Enables FetchContent usage for getting dependencies" ON)
 
+set(HYPERION_ENABLE_TRACY
+    ${HYPERION_ENABLE_TRACY}
+    CACHE
+    INTERNAL
+    "force dependencies's `HYPERION_ENABLE_TRACY` to the value of this top-level project")
+set(HYPERION_USE_FETCH_CONTENT
+    ${HYPERION_USE_FETCH_CONTENT}
+    CACHE
+    INTERNAL
+    "force depedencies's `HYPERION_USE_FETCH_CONTENT` to the value of this top-level project")
+
 if(HYPERION_USE_FETCH_CONTENT)
     include(FetchContent)
 endif()
@@ -22,20 +33,6 @@ if(HYPERION_USE_FETCH_CONTENT)
     FetchContent_MakeAvailable(hyperion_platform)
 else()
     find_package(doctest REQUIRED)
-endif()
-
-if(${HYPERION_ENABLE_TRACY})
-    if(HYPERION_USE_FETCH_CONTENT)
-        FetchContent_Declare(Tracy
-            GIT_REPOSITORY "https://github.com/wolfpld/tracy"
-            GIT_TAG "v0.8.2"
-            )
-
-        FetchContent_MakeAvailable(Tracy)
-    else()
-        find_package(Tracy REQUIRED)
-    endif()
-    SET(TRACY_LINK_TARGET Tracy::TracyClient)
 endif()
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/hyperion_compiler_settings.cmake)
@@ -84,7 +81,6 @@ target_link_libraries(
     INTERFACE
     doctest::doctest
     hyperion::platform
-    ${TRACY_LINK_TARGET}
 )
 
 hyperion_compile_settings(hyperion_mpl)
