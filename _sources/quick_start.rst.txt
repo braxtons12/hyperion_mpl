@@ -72,4 +72,4 @@ Third-party dependencies will be pulled from xmake-repo, the package repository/
 and dependencies on other hyperion libraries will be pulled from github via the 
 `hyperion package repository/registry for xmake <https://github.com/braxtons12/hyperion_packages>`_.
 As with CMake, you can enable or disable Tracy (defaults to off) by setting the option
-`hyperion_enable_tracy`
+:bash:`hyperion_enable_tracy`
