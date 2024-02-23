@@ -67,11 +67,33 @@ HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
 
 namespace hyperion::mpl {
 
+    /// @brief Returns a metaprogramming predicate object used to query whether an
+    /// argument is equal to `value`.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent to
+    /// `constexpr operator()(auto arg) noexcept`, that when invoked, returns whether
+    /// `arg` is equal to `value`, as if by `return mpl::Value<arg == value, bool>{};`
+    ///
+    /// # Requirements
+    /// - `value` must be an instance of a `MetaValue`, `MetaType`, or `MetaPair`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// constexpr auto example = decltype_<const int&>{};
+    ///
+    /// static_assert(example.satisfies(equal_to(decltype_<const int&>())));
+    /// static_assert(not example.satisfies(equal_to(decltype_<float>())));
+    /// static_assert(not example.satisfies(equal_to(1_value)));
+    /// @endcode
+    ///
+    /// @param value The value to check for equality with
+    /// @return A metaprogramming predicate object to check that an argument is equal to
+    /// `value`
     [[nodiscard]] constexpr auto equal_to([[maybe_unused]] auto value) noexcept
         requires MetaValue<decltype(value)> || MetaType<decltype(value)>
                  || MetaPair<decltype(value)>
     {
-        return [](auto element)
+        return [](auto element) noexcept
             requires MetaValue<decltype(element)> || MetaType<decltype(element)>
                      || MetaPair<decltype(element)>
         {
@@ -79,7 +101,9 @@ namespace hyperion::mpl {
                          || (MetaType<decltype(element)> && MetaType<decltype(value)>)
                          || (MetaPair<decltype(element)> && MetaPair<decltype(value)>))
             {
-                return Value<(decltype(element){} == decltype(value){}), bool>{};
+                return Value<(detail::convert_to_meta_t<decltype(element)>{}
+                              == detail::convert_to_meta_t<decltype(value)>{}),
+                             bool>{};
             }
             else {
                 return Value<false>{};
@@ -87,6 +111,28 @@ namespace hyperion::mpl {
         };
     }
 
+    /// @brief Returns a metaprogramming predicate object used to query whether an
+    /// argument is _not_ equal to `value`.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent to
+    /// `constexpr operator()(auto arg) noexcept`, that when invoked, returns whether
+    /// `arg` is _not_ equal to `value`, as if by `return mpl::Value<arg != value, bool>{};`
+    ///
+    /// # Requirements
+    /// - `value` must be an instance of a `MetaValue`, `MetaType`, or `MetaPair`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// constexpr auto example = decltype_<const int&>{};
+    ///
+    /// static_assert(not example.satisfies(not_equal_to(decltype_<const int&>())));
+    /// static_assert(example.satisfies(not_equal_to(decltype_<float>())));
+    /// static_assert(example.satisfies(not_equal_to(1_value)));
+    /// @endcode
+    ///
+    /// @param value The value to check for inequality with
+    /// @return A metaprogramming predicate object to check that an argument is _not_
+    /// equal to `value`
     [[nodiscard]] constexpr auto not_equal_to([[maybe_unused]] auto value) noexcept
         requires MetaValue<decltype(value)> || MetaType<decltype(value)>
                  || MetaPair<decltype(value)>
@@ -99,81 +145,117 @@ namespace hyperion::mpl {
         };
     }
 
+    /// @brief Returns a metaprogramming predicate object used to query whether an
+    /// argument is equal to `value`.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent to
+    /// `constexpr operator()(auto arg) noexcept`, that when invoked, returns whether
+    /// `arg` is equal to `value`, as if by `return mpl::Value<arg == value, bool>{};`
+    ///
+    /// # Requirements
+    /// - `value` must be an instance of a `MetaValue`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// constexpr auto example = decltype_<const int&>{};
+    ///
+    /// static_assert(example.satisfies(equal_to(decltype_<const int&>())));
+    /// static_assert(not example.satisfies(equal_to(decltype_<float>())));
+    /// static_assert(not example.satisfies(equal_to(1_value)));
+    /// @endcode
+    ///
+    /// @param value The value to check for equality with
+    /// @return A metaprogramming predicate object to check that an argument is equal to
+    /// `value`
     [[nodiscard]] constexpr auto less_than([[maybe_unused]] MetaValue auto value) noexcept {
         return [](MetaValue auto element) {
-            return Value<(decltype(element){} < decltype(value){}), bool>{};
+            return Value<(detail::convert_to_meta_t<decltype(element)>{}
+                          < detail::convert_to_meta_t<decltype(value)>{}),
+                         bool>{};
         };
     }
 
     [[nodiscard]] constexpr auto
     less_than_or_equal_to([[maybe_unused]] MetaValue auto value) noexcept {
         return [](MetaValue auto element) {
-            return Value<(decltype(element){} <= decltype(value){}), bool>{};
+            return Value<(detail::convert_to_meta_t<decltype(element)>{}
+                          <= detail::convert_to_meta_t<decltype(value)>{}),
+                         bool>{};
         };
     }
 
     [[nodiscard]] constexpr auto greater_than([[maybe_unused]] MetaValue auto value) noexcept {
         return [](MetaValue auto element) {
-            return Value<(decltype(element){} > decltype(value){}), bool>{};
+            return Value<(detail::convert_to_meta_t<decltype(element)>{}
+                          > detail::convert_to_meta_t<decltype(value)>{}),
+                         bool>{};
         };
     }
 
     [[nodiscard]] constexpr auto
     greater_than_or_equal_to([[maybe_unused]] MetaValue auto value) noexcept {
         return [](MetaValue auto element) {
-            return Value<decltype(element){} >= decltype(value){}, bool>{};
+            return Value<detail::convert_to_meta_t<decltype(element)>{}
+                             >= detail::convert_to_meta_t<decltype(value)>{},
+                         bool>{};
         };
     }
 
     [[nodiscard]] constexpr auto is(MetaType auto type) noexcept {
         return [](MetaType auto element) noexcept {
-            return element.is(decltype(type){});
+            return detail::convert_to_meta_t<decltype(element)>{}.is(
+                detail::convert_to_meta_t<decltype(type)>{});
         };
     }
 
     [[nodiscard]] constexpr auto qualification_of(MetaType auto type) noexcept {
         return [](MetaType auto element) noexcept {
-            return element.is_qualification_of(decltype(type){});
+            return detail::convert_to_meta_t<decltype(element)>{}.is_qualification_of(
+                detail::convert_to_meta_t<decltype(type)>{});
         };
     }
 
     constexpr auto is_const = [](MetaType auto type) noexcept {
-        return type.is_const();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_const();
     };
 
     constexpr auto is_lvalue_reference = [](MetaType auto type) noexcept {
-        return type.is_lvalue_reference();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_lvalue_reference();
     };
 
     constexpr auto is_rvalue_reference = [](MetaType auto type) noexcept {
-        return type.is_rvalue_reference();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_rvalue_reference();
     };
 
     constexpr auto is_volatile = [](MetaType auto type) noexcept {
-        return type.is_volatile();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_volatile();
     };
 
     [[nodiscard]] constexpr auto convertible_to(MetaType auto type) noexcept {
         return [](MetaType auto element) noexcept {
-            return element.is_convertible_to(decltype(type){});
+            return detail::convert_to_meta_t<decltype(element)>{}.is_convertible_to(
+                detail::convert_to_meta_t<decltype(type)>{});
         };
     }
 
     [[nodiscard]] constexpr auto derived_from(MetaType auto type) noexcept {
         return [](MetaType auto element) noexcept {
-            return element.is_derived_from(decltype(type){});
+            return detail::convert_to_meta_t<decltype(element)>{}.is_derived_from(
+                detail::convert_to_meta_t<decltype(type)>{});
         };
     }
 
     [[nodiscard]] constexpr auto base_of(MetaType auto type) noexcept {
         return [](MetaType auto element) noexcept {
-            return element.is_base_of(decltype(type){});
+            return detail::convert_to_meta_t<decltype(element)>{}.is_base_of(
+                detail::convert_to_meta_t<decltype(type)>{});
         };
     }
 
     [[nodiscard]] constexpr auto constructible_from(MetaType auto... types) noexcept {
         return [](MetaType auto element) noexcept {
-            return element.is_constructible_from(decltype(types){}...);
+            return detail::convert_to_meta_t<decltype(element)>{}.is_constructible_from(
+                detail::convert_to_meta_t<decltype(types)>{}...);
         };
     }
 
@@ -181,13 +263,15 @@ namespace hyperion::mpl {
         requires(!MetaType<TList<TTypes...>>)
     [[nodiscard]] constexpr auto constructible_from(TList<TTypes...> types) noexcept {
         return [](MetaType auto element) noexcept {
-            return element.is_constructible_from(decltype(types){});
+            return detail::convert_to_meta_t<decltype(element)>{}.is_constructible_from(
+                decltype(types){});
         };
     }
 
     [[nodiscard]] constexpr auto noexcept_constructible_from(MetaType auto... types) noexcept {
         return [](MetaType auto element) noexcept {
-            return element.is_noexcept_constructible_from(decltype(types){}...);
+            return detail::convert_to_meta_t<decltype(element)>{}.is_noexcept_constructible_from(
+                detail::convert_to_meta_t<decltype(types)>{}...);
         };
     }
 
@@ -195,99 +279,102 @@ namespace hyperion::mpl {
         requires(!MetaType<TList<TTypes...>>)
     [[nodiscard]] constexpr auto noexcept_constructible_from(TList<TTypes...> types) noexcept {
         return [](MetaType auto element) noexcept {
-            return element.is_noexcept_constructible_from(decltype(types){});
+            return detail::convert_to_meta_t<decltype(element)>{}.is_noexcept_constructible_from(
+                decltype(types){});
         };
     }
 
     constexpr auto default_constructible = [](MetaType auto type) noexcept {
-        return type.is_default_constructible();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_default_constructible();
     };
 
     constexpr auto noexcept_default_constructible = [](MetaType auto type) noexcept {
-        return type.is_noexcept_default_constructible();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_noexcept_default_constructible();
     };
 
     constexpr auto trivially_default_constructible = [](MetaType auto type) noexcept {
-        return type.is_trivially_default_constructible();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_trivially_default_constructible();
     };
 
     constexpr auto copy_constructible = [](MetaType auto type) noexcept {
-        return type.is_copy_constructible();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_copy_constructible();
     };
 
     constexpr auto noexcept_copy_constructible = [](MetaType auto type) noexcept {
-        return type.is_noexcept_copy_constructible();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_noexcept_copy_constructible();
     };
 
     constexpr auto trivially_copy_constructible = [](MetaType auto type) noexcept {
-        return type.is_trivially_copy_constructible();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_trivially_copy_constructible();
     };
 
     constexpr auto move_constructible = [](MetaType auto type) noexcept {
-        return type.is_move_constructible();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_move_constructible();
     };
 
     constexpr auto noexcept_move_constructible = [](MetaType auto type) noexcept {
-        return type.is_noexcept_move_constructible();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_noexcept_move_constructible();
     };
 
     constexpr auto trivially_move_constructible = [](MetaType auto type) noexcept {
-        return type.is_trivially_move_constructible();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_trivially_move_constructible();
     };
 
     constexpr auto copy_assignable = [](MetaType auto type) noexcept {
-        return type.is_copy_assignable();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_copy_assignable();
     };
 
     constexpr auto noexcept_copy_assignable = [](MetaType auto type) noexcept {
-        return type.is_noexcept_copy_assignable();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_noexcept_copy_assignable();
     };
 
     constexpr auto trivially_copy_assignable = [](MetaType auto type) noexcept {
-        return type.is_trivially_copy_assignable();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_trivially_copy_assignable();
     };
 
     constexpr auto move_assignable = [](MetaType auto type) noexcept {
-        return type.is_move_assignable();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_move_assignable();
     };
 
     constexpr auto noexcept_move_assignable = [](MetaType auto type) noexcept {
-        return type.is_noexcept_move_assignable();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_noexcept_move_assignable();
     };
 
     constexpr auto trivially_move_assignable = [](MetaType auto type) noexcept {
-        return type.is_trivially_move_assignable();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_trivially_move_assignable();
     };
 
     constexpr auto destructible = [](MetaType auto type) noexcept {
-        return type.is_destructible();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_destructible();
     };
 
     constexpr auto noexcept_destructible = [](MetaType auto type) noexcept {
-        return type.is_noexcept_destructible();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_noexcept_destructible();
     };
 
     constexpr auto trivially_destructible = [](MetaType auto type) noexcept {
-        return type.is_trivially_destructible();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_trivially_destructible();
     };
 
     constexpr auto swappable = [](MetaType auto type) noexcept {
-        return type.is_swappable();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_swappable();
     };
 
     constexpr auto noexcept_swappable = [](MetaType auto type) noexcept {
-        return type.is_noexcept_swappable();
+        return detail::convert_to_meta_t<decltype(type)>{}.is_noexcept_swappable();
     };
 
     [[nodiscard]] constexpr auto swappable_with(MetaType auto type) noexcept {
         return [](MetaType auto element) noexcept {
-            return element.is_swappable_with(decltype(type){});
+            return detail::convert_to_meta_t<decltype(element)>{}.is_swappable_with(
+                detail::convert_to_meta_t<decltype(type)>{});
         };
     }
 
     [[nodiscard]] constexpr auto noexcept_swappable_with(MetaType auto type) noexcept {
         return [](MetaType auto element) noexcept {
-            return element.is_noexcept_swappable_with(decltype(type){});
+            return detail::convert_to_meta_t<decltype(element)>{}.is_noexcept_swappable_with(
+                detail::convert_to_meta_t<decltype(type)>{});
         };
     }
 } // namespace hyperion::mpl

@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Metaprogramming type wrapper for use as metafunction parameter and return type
 /// @version 0.1
-/// @date 2024-02-22
+/// @date 2024-02-23
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -870,8 +870,9 @@ namespace hyperion::mpl {
         template<template<typename...> typename TList, typename... TTypes>
         [[nodiscard]] constexpr auto
         is_constructible_from([[maybe_unused]] const TList<TTypes...>& list) const noexcept
-            -> std::enable_if_t<!MetaType<TList<TTypes...>>,
-                                Value<std::is_constructible_v<type, TTypes...>, bool>>;
+            -> std::enable_if_t<
+                !MetaType<TList<TTypes...>>,
+                Value<std::is_constructible_v<type, detail::convert_to_raw_t<TTypes>...>, bool>>;
 
         /// @brief Returns whether the type `this` `Type` specialization represents is constructible
         /// from arguments of types `TTypes...`, as a `Value` specialization.
@@ -935,8 +936,10 @@ namespace hyperion::mpl {
         template<template<typename...> typename TList, typename... TTypes>
         [[nodiscard]] constexpr auto
         is_noexcept_constructible_from([[maybe_unused]] const TList<TTypes...>& list) const noexcept
-            -> std::enable_if_t<!MetaType<TList<TTypes...>>,
-                                Value<std::is_nothrow_constructible_v<type, TTypes...>, bool>>;
+            -> std::enable_if_t<
+                !MetaType<TList<TTypes...>>,
+                Value<std::is_nothrow_constructible_v<type, detail::convert_to_raw_t<TTypes>...>,
+                      bool>>;
 
         /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
         /// constructible from arguments of types `TTypes...`, as a `Value` specialization.
@@ -1909,8 +1912,9 @@ namespace hyperion::mpl {
     template<template<typename...> typename TList, typename... TTypes>
     [[nodiscard]] constexpr auto
     Type<TType>::is_constructible_from([[maybe_unused]] const TList<TTypes...>& list) const noexcept
-        -> std::enable_if_t<!MetaType<TList<TTypes...>>,
-                            Value<std::is_constructible_v<type, TTypes...>, bool>> {
+        -> std::enable_if_t<
+            !MetaType<TList<TTypes...>>,
+            Value<std::is_constructible_v<type, detail::convert_to_raw_t<TTypes>...>, bool>> {
         return {};
     }
 
@@ -1926,8 +1930,10 @@ namespace hyperion::mpl {
     template<template<typename...> typename TList, typename... TTypes>
     [[nodiscard]] constexpr auto Type<TType>::is_noexcept_constructible_from(
         [[maybe_unused]] const TList<TTypes...>& list) const noexcept
-        -> std::enable_if_t<!MetaType<TList<TTypes...>>,
-                            Value<std::is_nothrow_constructible_v<type, TTypes...>, bool>> {
+        -> std::enable_if_t<
+            !MetaType<TList<TTypes...>>,
+            Value<std::is_nothrow_constructible_v<type, detail::convert_to_raw_t<TTypes>...>,
+                  bool>> {
         return {};
     }
 
