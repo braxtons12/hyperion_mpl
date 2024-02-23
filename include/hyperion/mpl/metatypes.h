@@ -503,13 +503,9 @@ namespace hyperion::mpl {
     /// @headerfile hyperion/mpl/metatypes.h
     template<typename TPredicate, typename TType>
     concept MetaPredicateOf
-        = MetaFunctionOf<TPredicate, typename detail::convert_to_meta<TType>::type>
-          && MetaValue<meta_result_t<TPredicate, typename detail::convert_to_meta<TType>::type>>
-          && std::same_as<
-              std::remove_cvref_t<
-                  decltype(meta_result_t<TPredicate,
-                                         typename detail::convert_to_meta<TType>::type>::value)>,
-              bool>;
+        = MetaFunctionOf<TPredicate, TType> && MetaValue<meta_result_t<TPredicate, TType>>
+          && std::same_as<std::remove_cvref_t<decltype(meta_result_t<TPredicate, TType>::value)>,
+                          bool>;
 } // namespace hyperion::mpl
 
 // NOLINTNEXTLINE(misc-header-include-cycle)

@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming facilities for working with a list of types or values
 /// @version 0.1
-/// @date 2024-02-18
+/// @date 2024-02-22
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -263,13 +263,7 @@ namespace hyperion::mpl {
 
       public:
         template<typename TPredicate>
-            requires(MetaFunctionOf<TPredicate, as_meta<TTypes>> && ...)
-                    && (MetaValue<meta_result_t<TPredicate, as_meta<TTypes>>> && ...)
-                    && (std::same_as<
-                            std::remove_cvref_t<
-                                decltype(meta_result_t<TPredicate, as_meta<TTypes>>::value)>,
-                            bool>
-                        && ...)
+            requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
         [[nodiscard]] constexpr auto find_if(TPredicate&& predicate) const noexcept {
             auto result = find_if_impl(std::forward<TPredicate>(predicate), 0_value);
             if constexpr(result == Value<sizeof...(TTypes), usize>{}) {
@@ -285,15 +279,9 @@ namespace hyperion::mpl {
         }
 
         template<typename TPredicate>
-            requires(MetaFunctionOf<TPredicate, as_meta<TTypes>> && ...)
-                    && (MetaValue<meta_result_t<TPredicate, as_meta<TTypes>>> && ...)
-                    && (std::same_as<
-                            std::remove_cvref_t<
-                                decltype(meta_result_t<TPredicate, as_meta<TTypes>>::value)>,
-                            bool>
-                        && ...)
-        [[nodiscard]] constexpr auto count_if(
-            [[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
+            requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
+        [[nodiscard]] constexpr auto
+        count_if([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
             const noexcept {
             constexpr auto accumulator = [](auto state, auto element) {
                 if constexpr(TPredicate{}(decltype(element){})) {
@@ -312,38 +300,20 @@ namespace hyperion::mpl {
         }
 
         template<typename TPredicate>
-            requires(MetaFunctionOf<TPredicate, as_meta<TTypes>> && ...)
-                    && (MetaValue<meta_result_t<TPredicate, as_meta<TTypes>>> && ...)
-                    && (std::same_as<
-                            std::remove_cvref_t<
-                                decltype(meta_result_t<TPredicate, as_meta<TTypes>>::value)>,
-                            bool>
-                        && ...)
+            requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
         [[nodiscard]] constexpr auto all_of(TPredicate&& predicate) const noexcept {
             return count_if(std::forward<TPredicate>(predicate)) == sizeof...(TTypes);
         }
 
         template<typename TPredicate>
-            requires(MetaFunctionOf<TPredicate, as_meta<TTypes>> && ...)
-                    && (MetaValue<meta_result_t<TPredicate, as_meta<TTypes>>> && ...)
-                    && (std::same_as<
-                            std::remove_cvref_t<
-                                decltype(meta_result_t<TPredicate, as_meta<TTypes>>::value)>,
-                            bool>
-                        && ...)
+            requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
         [[nodiscard]] constexpr auto any_of(TPredicate&& predicate) const noexcept {
             return find_if_impl(std::forward<TPredicate>(predicate), 0_value)
                    != Value<sizeof...(TTypes), usize>{};
         }
 
         template<typename TPredicate>
-            requires(MetaFunctionOf<TPredicate, as_meta<TTypes>> && ...)
-                    && (MetaValue<meta_result_t<TPredicate, as_meta<TTypes>>> && ...)
-                    && (std::same_as<
-                            std::remove_cvref_t<
-                                decltype(meta_result_t<TPredicate, as_meta<TTypes>>::value)>,
-                            bool>
-                        && ...)
+            requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
         [[nodiscard]] constexpr auto none_of(TPredicate&& predicate) const noexcept {
             return find_if_impl(std::forward<TPredicate>(predicate), 0_value)
                    == Value<sizeof...(TTypes), usize>{};
@@ -467,9 +437,8 @@ namespace hyperion::mpl::_test::list {
                                List<Pair<int, double>, Pair<double, int>>>,
                   "hyperion::mpl::List::zip test case 1 (failing)");
     static_assert(List<int, double>{}.zip(List<float, usize>{}).apply(add_const)
-                  == List<Pair<const int, const float>, Pair<const double, const usize>>{},
+                      == List<Pair<const int, const float>, Pair<const double, const usize>>{},
                   "hyperion::mpl::List::zip test case 2 (failing)");
-
 
     static_assert(List<int, double>{} == List<int, double>{},
                   "hyperion::mpl::List operator== test case 1 (failing)");

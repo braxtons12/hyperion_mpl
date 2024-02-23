@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming value type
 /// @version 0.1
-/// @date 2024-02-15
+/// @date 2024-02-22
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -312,13 +312,7 @@ namespace hyperion::mpl {
         /// predicate, `predicate`
         ///
         /// # Requirements
-        /// - `TPredicate` must be a `MetaFunctionOf<Value>` type
-        ///     - It must be a callable with an overload taking a single `Value` parameter
-        ///     - The selected overload of `TPredicate` must return either a `MetaType` or a
-        ///     `MetaValue`
-        /// - The result of invoking `predicate` with `Value` must be a `MetaValue`
-        /// - The type of the value of the invoke result of `predicate` must be
-        /// (possibly cv-ref qualified) `bool`
+        /// - `TPredicate` must be a `MetaPredicateOf<Value>` type
         ///
         /// # Example
         /// @code {.cpp}
@@ -336,12 +330,7 @@ namespace hyperion::mpl {
         /// @tparam TPredicate The metafunction predicate to check with
         /// @return The result of checking this `Value` specialization against `TPredicate`, as a
         /// `Value` specialization
-        template<typename TPredicate>
-            requires MetaFunctionOf<TPredicate, Value>
-                     && MetaValue<meta_result_t<TPredicate, Value>>
-                     && std::same_as<
-                         std::remove_cvref_t<decltype(meta_result_t<TPredicate, Value>::value)>,
-                         bool>
+        template<MetaPredicateOf<Value> TPredicate>
         [[nodiscard]] constexpr auto
         satisfies([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
             const noexcept -> meta_result_t<TPredicate, Value> {

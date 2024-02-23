@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming type for operating on a pair of metaprogramming values and/or types
 /// @version 0.1
-/// @date 2024-02-16
+/// @date 2024-02-22
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -419,10 +419,9 @@ namespace hyperion::mpl {
         /// `mpl:Value<result, bool>`.
         ///
         /// # Requirements
-        /// - `TPredicate` must be a `MetaFunctionOf<Pair>`.
-        /// - The result of invoking `predicate` with `Pair`, must be a `MetaValue`
-        /// - The value of the `MetaValue` resulting from invoking `predicate` with `Pair`
-        ///  must be of type (possibly cv-ref qualified) `bool`
+        /// - `TPredicate` must be a `MetaPredicateOf<Pair>`.
+        /// - `TPredicate` _must not_ be a `MetaPredicateOf<first>`.
+        /// - `TPredicate` _must not_ be a `MetaPredicateOf<second>`.
         ///
         /// # Example
         /// @code {.cpp}
@@ -448,12 +447,10 @@ namespace hyperion::mpl {
         /// @tparam TPredicate The metafunction predicate to validate
         /// @return whether this `Pair` satisfies `predicate`, as an `mpl::Value`
         template<typename TPredicate>
-            requires MetaFunctionOf<TPredicate, Pair> && MetaValue<meta_result_t<TPredicate, Pair>>
-                     && std::same_as<
-                         std::remove_cvref_t<decltype(meta_result_t<TPredicate, Pair>::value)>,
-                         bool>
-        [[nodiscard]] constexpr auto
-        satisfies([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
+            requires MetaPredicateOf<TPredicate, Pair> && (!MetaPredicateOf<TPredicate, first>)
+                     && (!MetaPredicateOf<TPredicate, second>)
+        [[nodiscard]] constexpr auto satisfies(
+            [[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
             const noexcept -> meta_result_t<TPredicate, Pair> {
             return {};
         }
@@ -468,14 +465,9 @@ namespace hyperion::mpl {
         /// `make_first` or `make_second`, respectively.
         ///
         /// # Requirements
-        /// - `TPredicate` must be a `MetaFunctionOf<first>` and a `MetaFunctonOf<second>`.
-        /// - `TPredicate` _must not_ be a `MetaFunctionOf<Pair>`
-        /// - The result of invoking `predicate` with `first`, must be a `MetaValue`
-        /// - The result of invoking `predicate` with `second`, must be a `MetaValue`
-        /// - The value of the `MetaValue` resulting from invoking `predicate` with `first`
-        ///  must be of type (possibly cv-ref qualified) `bool`
-        /// - The value of the `MetaValue` resulting from invoking `predicate` with `second`
-        ///  must be of type (possibly cv-ref qualified) `bool`
+        /// - `TPredicate` must be a `MetaPredicateOf<first>`
+        /// - `TPredicate` must be a `MetaPredicateOf<second>`.
+        /// - `TPredicate` _must not_ be a `MetaPredicateOf<Pair>`
         ///
         /// # Example
         /// @code {.cpp}
@@ -497,16 +489,8 @@ namespace hyperion::mpl {
         /// @return whether the types represented by this `Pair` satisfy `predicate`,
         /// as an `mpl::Value`
         template<typename TPredicate>
-            requires MetaFunctionOf<TPredicate, first> && MetaFunctionOf<TPredicate, second>
-                     && (!MetaFunctionOf<TPredicate, Pair>)
-                     && MetaValue<meta_result_t<TPredicate, first>>
-                     && MetaValue<meta_result_t<TPredicate, second>>
-                     && std::same_as<
-                         std::remove_cvref_t<decltype(meta_result_t<TPredicate, first>::value)>,
-                         bool>
-                     && std::same_as<
-                         std::remove_cvref_t<decltype(meta_result_t<TPredicate, second>::value)>,
-                         bool>
+            requires MetaPredicateOf<TPredicate, first> && MetaPredicateOf<TPredicate, second>
+                     && (!MetaPredicateOf<TPredicate, Pair>)
         [[nodiscard]] constexpr auto satisfies(
             [[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
             const noexcept {
@@ -904,35 +888,35 @@ namespace hyperion::mpl::_test::pair {
     };
 
     static_assert(Pair<const int, const double>{}.satisfies(is_const),
-                  "hyperion::mpl::Pair::satisfies(MetaFunctionOf<Pair>) test case 1 (failing)");
+                  "hyperion::mpl::Pair::satisfies(MetaPredicateOf<Pair>) test case 1 (failing)");
     static_assert(not Pair<const int, double>{}.satisfies(is_const),
-                  "hyperion::mpl::Pair::satisfies(MetaFunctionOf<Pair>) test case 2 (failing)");
+                  "hyperion::mpl::Pair::satisfies(MetaPredicateOf<Pair>) test case 2 (failing)");
     static_assert(not Pair<int, const double>{}.satisfies(is_const),
-                  "hyperion::mpl::Pair::satisfies(MetaFunctionOf<Pair>) test case 3 (failing)");
+                  "hyperion::mpl::Pair::satisfies(MetaPredicateOf<Pair>) test case 3 (failing)");
     static_assert(not Pair<int, double>{}.satisfies(is_const),
-                  "hyperion::mpl::Pair::satisfies(MetaFunctionOf<Pair>) test case 4 (failing)");
+                  "hyperion::mpl::Pair::satisfies(MetaPredicateOf<Pair>) test case 4 (failing)");
 
     static_assert(Pair<const int, const double>{}.satisfies(is_const_inner),
-                  "hyperion::mpl::Pair::satisifes(MetaFunctionOf<Type>) test case 1 (failing)");
+                  "hyperion::mpl::Pair::satisifes(MetaPredicateOf<Type>) test case 1 (failing)");
     static_assert(not Pair<const int, double>{}.satisfies(is_const_inner),
-                  "hyperion::mpl::Pair::satisifes(MetaFunctionOf<Type>) test case 2 (failing)");
+                  "hyperion::mpl::Pair::satisifes(MetaPredicateOf<Type>) test case 2 (failing)");
     static_assert(not Pair<int, const double>{}.satisfies(is_const_inner),
-                  "hyperion::mpl::Pair::satisifes(MetaFunctionOf<Type>) test case 3 (failing)");
+                  "hyperion::mpl::Pair::satisifes(MetaPredicateOf<Type>) test case 3 (failing)");
     static_assert(not Pair<int, double>{}.satisfies(is_const_inner),
-                  "hyperion::mpl::Pair::satisifes(MetaFunctionOf<Type>) test case 4 (failing)");
+                  "hyperion::mpl::Pair::satisifes(MetaPredicateOf<Type>) test case 4 (failing)");
 
     static_assert(
         Pair<const int, Value<1>>{}.satisfies(is_one_or_const),
-        "hyperion::mpl::Pair::satisfies(MetaFunctionOf<TypeOrValue>) test case 1 (failing)");
+        "hyperion::mpl::Pair::satisfies(MetaPredicateOf<TypeOrValue>) test case 1 (failing)");
     static_assert(
         not Pair<int, Value<1>>{}.satisfies(is_one_or_const),
-        "hyperion::mpl::Pair::satisfies(MetaFunctionOf<TypeOrValue>) test case 2 (failing)");
+        "hyperion::mpl::Pair::satisfies(MetaPredicateOf<TypeOrValue>) test case 2 (failing)");
     static_assert(
         not Pair<const int, Value<2>>{}.satisfies(is_one_or_const),
-        "hyperion::mpl::Pair::satisfies(MetaFunctionOf<TypeOrValue>) test case 3 (failing)");
+        "hyperion::mpl::Pair::satisfies(MetaPredicateOf<TypeOrValue>) test case 3 (failing)");
     static_assert(
         not Pair<int, Value<2>>{}.satisfies(is_one_or_const),
-        "hyperion::mpl::Pair::satisfies(MetaFunctionOf<TypeOrValue>) test case 4 (failing)");
+        "hyperion::mpl::Pair::satisfies(MetaPredicateOf<TypeOrValue>) test case 4 (failing)");
 
     template<typename TPair>
     struct is_const_t
