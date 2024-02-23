@@ -41,19 +41,16 @@ local hyperion_mpl_main_header = {
     "$(projectdir)/include/hyperion/mpl.h",
 }
 local hyperion_mpl_headers = {
-    "$(projectdir)/include/hyperion/mpl/algorithms.h",
     "$(projectdir)/include/hyperion/mpl/concepts.h",
     "$(projectdir)/include/hyperion/mpl/index.h",
     "$(projectdir)/include/hyperion/mpl/list.h",
+    "$(projectdir)/include/hyperion/mpl/metapredicates.h",
     "$(projectdir)/include/hyperion/mpl/metatypes.h",
     "$(projectdir)/include/hyperion/mpl/pair.h",
     "$(projectdir)/include/hyperion/mpl/type.h",
     "$(projectdir)/include/hyperion/mpl/type_traits.h",
     "$(projectdir)/include/hyperion/mpl/value.h",
 }
---local hyperion_mpl_algorithms_headers = {
---    "$(projectdir)/include/hyperion/mpl/algorithms/all_of.h",
---}
 local hyperion_mpl_concepts_headers = {
     "$(projectdir)/include/hyperion/mpl/concepts/comparable.h",
     "$(projectdir)/include/hyperion/mpl/concepts/operator_able.h",
@@ -71,7 +68,6 @@ target("hyperion_mpl", function()
     add_includedirs("$(projectdir)/include", { public = true })
     add_headerfiles(hyperion_mpl_main_header, { prefixdir = "hyperion", public = true })
     add_headerfiles(hyperion_mpl_headers, { prefixdir = "hyperion/mpl", public = true })
-    --add_headerfiles(hyperion_mpl_algorithms_headers, { prefixdir = "hyperion/mpl/algorithms", public = true })
     add_headerfiles(hyperion_mpl_concepts_headers, { prefixdir = "hyperion/mpl/concepts", public = true })
     add_headerfiles(hyperion_mpl_type_traits_headers, { prefixdir = "hyperion/mpl/type_traits", public = true })
     set_default(true)
