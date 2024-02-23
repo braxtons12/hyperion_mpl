@@ -25,6 +25,7 @@
 /// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 /// IN THE SOFTWARE.
 
+#include <hyperion/mpl/metapredicates.h>
 #include <hyperion/mpl/metatypes.h>
 #include <hyperion/mpl/type.h>
 #include <hyperion/mpl/value.h>
@@ -152,20 +153,6 @@ namespace hyperion::mpl {
             using back = not_found_tag;
             using remaining = TList<>;
         };
-
-        [[nodiscard]] constexpr auto equal_to([[maybe_unused]] auto value) noexcept {
-            return [](auto element) {
-                if constexpr((MetaValue<decltype(element)> && MetaValue<decltype(value)>)
-                             || (MetaType<decltype(element)> && MetaType<decltype(value)>)
-                             || (MetaPair<decltype(element)> && MetaPair<decltype(value)>))
-                {
-                    return Value<decltype(value){} == decltype(element){}, bool>{};
-                }
-                else {
-                    return Value<false>{};
-                }
-            };
-        }
     } // namespace detail
 
     template<typename... TTypes>
@@ -273,7 +260,7 @@ namespace hyperion::mpl {
         }
 
         [[nodiscard]] constexpr auto find([[maybe_unused]] auto value) const noexcept {
-            return find_if(detail::equal_to(value));
+            return find_if(equal_to(value));
         }
 
         template<typename TPredicate>
@@ -294,7 +281,7 @@ namespace hyperion::mpl {
         }
 
         [[nodiscard]] constexpr auto count([[maybe_unused]] auto value) const noexcept {
-            return count_if(detail::equal_to(value));
+            return count_if(equal_to(value));
         }
 
         template<typename TPredicate>
@@ -315,6 +302,18 @@ namespace hyperion::mpl {
         [[nodiscard]] constexpr auto none_of(TPredicate&& predicate) const noexcept {
             return find_if_impl(std::forward<TPredicate>(predicate), 0_value)
                    == Value<sizeof...(TTypes), usize>{};
+        }
+
+        template<typename TPredicate>
+            requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
+        [[nodiscard]] constexpr auto index_of(TPredicate&& predicate) const noexcept {
+            return find_if_impl(std::forward<TPredicate>(predicate), 0_value);
+        }
+
+        template<typename TValue>
+            requires((!MetaPredicateOf<TValue, as_meta<TTypes>>) || ...)
+        [[nodiscard]] constexpr auto index_of([[maybe_unused]] TValue value) const noexcept {
+            return find_if(equal_to(value));
         }
 
         template<usize TIndex>
@@ -400,9 +399,15 @@ namespace hyperion::mpl {
     [[nodiscard]] constexpr auto
     operator==([[maybe_unused]] const List<TLHTypes...>& lhs,
                [[maybe_unused]] const List<TRHTypes...>& rhs) noexcept -> bool {
-        constexpr auto is_same = []<typename TFirst, typename TSecond>(Pair<TFirst, TSecond> pair) {
-            return detail::equal_to(typename decltype(pair)::first{})(
-                typename decltype(pair)::second{});
+        constexpr auto is_same = []<typename TFirst, typename TSecond>(Pair<TFirst, TSecond> pair)
+            requires(MetaType<typename decltype(pair)::first>
+                     || MetaValue<typename decltype(pair)::first>
+                     || MetaPair<typename decltype(pair)::first>)
+                    && (MetaType<typename decltype(pair)::second>
+                        || MetaValue<typename decltype(pair)::second>
+                        || MetaPair<typename decltype(pair)::second>)
+        {
+            return equal_to(typename decltype(pair)::first{})(typename decltype(pair)::second{});
         };
 
         constexpr auto check_all

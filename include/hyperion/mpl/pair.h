@@ -251,7 +251,7 @@ namespace hyperion::mpl {
         /// @endcode
         ///
         /// @tparam TFunction The type of the metafunction to apply
-        /// @param TFunction The metafunction to apply
+        /// @param func The metafunction to apply
         /// @return The result of applying `TFunction` to this `Pair`
         template<typename TFunction>
             requires MetaFunctionOf<TFunction, Pair>
@@ -292,7 +292,7 @@ namespace hyperion::mpl {
         /// @endcode
         ///
         /// @tparam TFunction The type of the metafunction to apply
-        /// @param TFunction The metafunction to apply
+        /// @param func The metafunction to apply
         /// @return The result of applying `TFunction` to the types represented in this `Pair`
         template<typename TFunction>
             requires MetaFunctionOf<TFunction, first> && MetaFunctionOf<TFunction, second>
