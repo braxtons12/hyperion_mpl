@@ -452,10 +452,10 @@ namespace hyperion::mpl {
             "hyperion::mpl::noexcept_default_constructible predicate test case 3 (failing)");
         static_assert(
             // MSVC and GCC override our `noexcept(false) above`
-            HYPERION_PLATFORM_COMPILER_IS_CLANG ?
-                static_cast<bool>(not decltype_<trivially_default_constructible>().satisfies(
+            HYPERION_PLATFORM_COMPILER_IS_GCC ?
+                static_cast<bool>(decltype_<trivially_default_constructible>().satisfies(
                     mpl::noexcept_default_constructible)) :
-                decltype_<trivially_default_constructible>().satisfies(
+                not decltype_<trivially_default_constructible>().satisfies(
                     mpl::noexcept_default_constructible),
             "hyperion::mpl::noexcept_default_constructible predicate test case 4 (failing)");
         static_assert(
@@ -524,10 +524,10 @@ namespace hyperion::mpl {
             "hyperion::mpl::noexcept_copy_constructible predicate test case 3 (failing)");
         static_assert(
             // MSVC and GCC override our `noexcept(false) above`
-            HYPERION_PLATFORM_COMPILER_IS_CLANG ?
-                static_cast<bool>(not decltype_<trivially_copy_constructible>().satisfies(
+            HYPERION_PLATFORM_COMPILER_IS_GCC ?
+                static_cast<bool>(decltype_<trivially_copy_constructible>().satisfies(
                     mpl::noexcept_copy_constructible)) :
-                decltype_<trivially_copy_constructible>().satisfies(
+                not decltype_<trivially_copy_constructible>().satisfies(
                     mpl::noexcept_copy_constructible),
             "hyperion::mpl::noexcept_copy_constructible predicate test case 4 (failing)");
         static_assert(
@@ -594,10 +594,10 @@ namespace hyperion::mpl {
             "hyperion::mpl::noexcept_move_constructible predicate test case 3 (failing)");
         static_assert(
             // MSVC and GCC override our `noexcept(false) above`
-            HYPERION_PLATFORM_COMPILER_IS_CLANG ?
-                static_cast<bool>(not decltype_<trivially_move_constructible>().satisfies(
+            HYPERION_PLATFORM_COMPILER_IS_GCC ?
+                static_cast<bool>(decltype_<trivially_move_constructible>().satisfies(
                     mpl::noexcept_move_constructible)) :
-                decltype_<trivially_move_constructible>().satisfies(
+                not decltype_<trivially_move_constructible>().satisfies(
                     mpl::noexcept_move_constructible),
             "hyperion::mpl::noexcept_move_constructible predicate test case 4 (failing)");
         static_assert(
@@ -788,10 +788,10 @@ namespace hyperion::mpl {
                       "hyperion::mpl::noexcept_destructible predicate test case 3 (failing)");
         static_assert(
             // MSVC and GCC override our `noexcept(false) above`
-            HYPERION_PLATFORM_COMPILER_IS_CLANG ?
+            HYPERION_PLATFORM_COMPILER_IS_GCC ?
                 static_cast<bool>(
-                    not decltype_<trivially_destructible>().satisfies(mpl::noexcept_destructible)) :
-                decltype_<trivially_destructible>().satisfies(mpl::noexcept_destructible),
+                    decltype_<trivially_destructible>().satisfies(mpl::noexcept_destructible)) :
+                not decltype_<trivially_destructible>().satisfies(mpl::noexcept_destructible),
             "hyperion::mpl::noexcept_destructible predicate test case 4 (failing)");
         static_assert(not decltype_<not_destructible>().satisfies(mpl::noexcept_destructible),
                       "hyperion::mpl::noexcept_destructible predicate test case 5 (failing)");
