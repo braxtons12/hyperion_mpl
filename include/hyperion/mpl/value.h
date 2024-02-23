@@ -760,7 +760,7 @@ namespace hyperion::mpl {
         return {};
     }
 
-    #else
+    #endif // HYPERION?HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
 
     /// @brief Less-than comparison operator between two `mpl::Value`s
     ///
@@ -863,8 +863,6 @@ namespace hyperion::mpl {
         -> Value<(TLhs >= TRhs)> {
         return {};
     }
-
-    #endif // HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
 
 } // namespace hyperion::mpl
 
