@@ -32,8 +32,6 @@
 #include <hyperion/platform/ignore.h>
 #include <hyperion/platform/types.h>
 
-//
-
 #include <concepts>
 #include <functional>
 #include <type_traits>

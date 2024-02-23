@@ -29,8 +29,6 @@
 #include <hyperion/platform/def.h>
 #include <hyperion/platform/types.h>
 
-//
-
 #include <concepts>
 #include <type_traits>
 
