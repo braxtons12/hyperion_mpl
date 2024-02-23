@@ -3,7 +3,7 @@
 /// @brief Concept and type trait definitions for what consitutes various categories of
 /// metaprogramming types
 /// @version 0.1
-/// @date 2024-02-15
+/// @date 2024-02-22
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -110,6 +110,8 @@
 /// @}
 
 #include <hyperion/platform/def.h>
+
+#include <concepts>
 #include <type_traits>
 
 HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
@@ -204,15 +206,53 @@ namespace hyperion::mpl {
     template<typename TType>
     static inline constexpr auto is_meta_type_v = is_meta_type<TType>::value;
 
+    /// @brief Concept specifying the requirements for a metaprogramming pair.
+    ///
+    /// A metaprogramming pair type is any type that represents a 2 element combination
+    /// (a pair) of (potentially different) `MetaType` and/or `MetaValue`,
+    /// representing each via the member `using` aliases `first` and `second`, respectively.
+    ///
+    /// # Requirements
+    /// - `TType` must have a member `using` alias type `first` (e.g. `using type = bool;`).
+    /// - `TType` must have a member `using` alias type `second` (e.g. `using type = bool;`).
+    ///
+    /// @tparam TType The type to check
+    /// @ingroup metatypes
+    /// @headerfile hyperion/mpl/metatypes.h
     template<typename TType>
     concept MetaPair = requires {
         typename TType::first;
         typename TType::second;
     };
 
+    /// @brief Type trait to determine whether type `TType` is a metaprogramming pair type.
+    ///
+    /// A metaprogramming pair type is any type that represents a 2 element combination
+    /// (a pair) of (potentially different) `MetaType` and/or `MetaValue`,
+    /// representing each via the member `using` aliases `first` and `second`, respectively.
+    ///
+    /// - `TType` must have a member `using` alias type `first` (e.g. `using type = bool;`).
+    /// - `TType` must have a member `using` alias type `second` (e.g. `using type = bool;`).
+    ///
+    /// @tparam TType The type to check
+    /// @ingroup metatypes
+    /// @headerfile hyperion/mpl/metatypes.h
     template<typename TType>
     struct is_meta_pair : std::bool_constant<MetaPair<TType>> { };
 
+    /// @brief Value of the type trait `is_meta_pair`.
+    /// Used to determine whether type `TType` is a metaprogramming pair type.
+    ///
+    /// A metaprogramming pair type is any type that represents a 2 element combination
+    /// (a pair) of (potentially different) `MetaType` and/or `MetaValue`,
+    /// representing each via the member `using` aliases `first` and `second`, respectively.
+    ///
+    /// - `TType` must have a member `using` alias type `first` (e.g. `using type = bool;`).
+    /// - `TType` must have a member `using` alias type `second` (e.g. `using type = bool;`).
+    ///
+    /// @tparam TType The type to check
+    /// @ingroup metatypes
+    /// @headerfile hyperion/mpl/metatypes.h
     template<typename TType>
     static inline constexpr auto is_meta_pair_v = is_meta_pair<TType>::value;
 
@@ -453,6 +493,23 @@ namespace hyperion::mpl {
     template<typename TFunction, typename TType>
     using meta_result_t = typename meta_result<TFunction, TType>::type;
 
+    /// @brief A `MetaPredicateOf` is a callable metafunction predicate that
+    /// accepts a single value parameter of the specified type, `TType`,
+    /// and returns a `MetaValue` with value type of `bool`.
+    ///
+    /// @tparam TFunction The callable to check
+    /// @tparam TType The metaprogramming type to check that `TPredicate` is invocable with
+    /// @ingroup metatypes
+    /// @headerfile hyperion/mpl/metatypes.h
+    template<typename TPredicate, typename TType>
+    concept MetaPredicateOf
+        = MetaFunctionOf<TPredicate, typename detail::convert_to_meta<TType>::type>
+          && MetaValue<meta_result_t<TPredicate, typename detail::convert_to_meta<TType>::type>>
+          && std::same_as<
+              std::remove_cvref_t<
+                  decltype(meta_result_t<TPredicate,
+                                         typename detail::convert_to_meta<TType>::type>::value)>,
+              bool>;
 } // namespace hyperion::mpl
 
 // NOLINTNEXTLINE(misc-header-include-cycle)
