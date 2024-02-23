@@ -565,7 +565,7 @@ namespace hyperion::mpl {
     ///
     /// The returned metaprogramming predicate object has call operator equivalent to
     /// `constexpr operator()(MetaType auto arg) noexcept`, that when invoked, returns
-    /// whether `arg` represents a type a base of the type represented by `type`,
+    /// whether `arg` represents a type that is a base of the type represented by `type`,
     /// determined as if by `decltype_(element).is_base_of(decltype_(type))`.
     ///
     /// # Requirements
@@ -770,92 +770,810 @@ namespace hyperion::mpl {
         };
     }
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is default constructible.
+    ///
+    /// Determines whether the represented type is default constructible,
+    /// as if by `decltype_(type).is_default_constructible()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {};
+    /// struct example3_t {
+    ///     example3_t() = delete;
+    /// };
+    /// constexpr auto example1 = decltype_<example_t>{};
+    /// constexpr auto example2 = decltype_<int>{};
+    /// constexpr auto example3 = decltype_<example3_t>{};
+    ///
+    /// static_assert(example1.satisfies(default_constructible));
+    /// static_assert(example2.satisfies(default_constructible));
+    /// static_assert(not example3.satisfies(default_constructible));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// default constructible
+    /// @return whether the type represented by `type` is default constructible
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto default_constructible = [](MetaType auto type) noexcept {
         return decltype_(type).is_default_constructible();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is `noexcept` default constructible.
+    ///
+    /// Determines whether the represented type is `noexcept` default constructible,
+    /// as if by `decltype_(type).is_noexcept_default_constructible()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    ///     example_t() noexcept;
+    /// };
+    /// struct example2_t {
+    ///     example2_t() noexcept(false);
+    /// }
+    /// struct example3_t {
+    ///     example3_t() = delete;
+    /// };
+    /// constexpr auto example1 = decltype_<example_t>{};
+    /// constexpr auto example2 = decltype_<example2_t>{};
+    /// constexpr auto example3 = decltype_<example3_t>{};
+    ///
+    /// static_assert(example1.satisfies(noexcept_default_constructible));
+    /// static_assert(not example2.satisfies(noexcept_default_constructible));
+    /// static_assert(not example3.satisfies(noexcept_default_constructible));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// `noexcept` default constructible
+    /// @return whether the type represented by `type` is `noexcept` default constructible
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto noexcept_default_constructible = [](MetaType auto type) noexcept {
         return decltype_(type).is_noexcept_default_constructible();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is trivially default constructible.
+    ///
+    /// Determines whether the represented type is trivially default constructible
+    /// as if by `decltype_(type).is_trivially_default_constructible()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    /// };
+    /// struct example2_t {
+    ///     example2_t();
+    /// };
+    /// struct example3_t {
+    ///     example3_t() = delete;
+    /// };
+    /// constexpr auto example1 = decltype_<example_t>{};
+    /// constexpr auto example2 = decltype_<example2_t>{};
+    /// constexpr auto example3 = decltype_<example3_t>{};
+    ///
+    /// static_assert(example1.satisfies(trivially_default_constructible));
+    /// static_assert(not example2.satisfies(trivially_default_constructible));
+    /// static_assert(not example3.satisfies(trivially_default_constructible));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// trivially default constructible
+    /// @return whether the type represented by `type` is trivially default constructible
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto trivially_default_constructible = [](MetaType auto type) noexcept {
         return decltype_(type).is_trivially_default_constructible();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is copy constructible.
+    ///
+    /// Determines whether the represented type is copy constructible,
+    /// as if by `decltype_(type).is_copy_constructible()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {};
+    /// struct example3_t {
+    ///     example3_t(const example3_t&) = delete;
+    /// };
+    /// constexpr auto example1 = decltype_<example_t>{};
+    /// constexpr auto example2 = decltype_<int>{};
+    /// constexpr auto example3 = decltype_<example3_t>{};
+    ///
+    /// static_assert(example1.satisfies(copy_constructible));
+    /// static_assert(example2.satisfies(copy_constructible));
+    /// static_assert(not example3.satisfies(copy_constructible));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// copy constructible
+    /// @return whether the type represented by `type` is copy constructible
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto copy_constructible = [](MetaType auto type) noexcept {
         return decltype_(type).is_copy_constructible();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is `noexcept` copy constructible.
+    ///
+    /// Determines whether the represented type is `noexcept` copy constructible,
+    /// as if by `decltype_(type).is_noexcept_copy_constructible()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    ///     example_t(const example_t&) noexcept;
+    /// };
+    /// struct example2_t {
+    ///     example2_t(const example2_t&) noexcept(false);
+    /// }
+    /// struct example3_t {
+    ///     example3_t(const example3_t&) = delete;
+    /// };
+    /// constexpr auto example1 = decltype_<example_t>{};
+    /// constexpr auto example2 = decltype_<example2_t>{};
+    /// constexpr auto example3 = decltype_<example3_t>{};
+    ///
+    /// static_assert(example1.satisfies(noexcept_copy_constructible));
+    /// static_assert(not example2.satisfies(noexcept_copy_constructible));
+    /// static_assert(not example3.satisfies(noexcept_copy_constructible));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// `noexcept` copy constructible
+    /// @return whether the type represented by `type` is `noexcept` copy constructible
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto noexcept_copy_constructible = [](MetaType auto type) noexcept {
         return decltype_(type).is_noexcept_copy_constructible();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is trivially copy constructible.
+    ///
+    /// Determines whether the represented type is trivially copy constructible
+    /// as if by `decltype_(type).is_trivially_copy_constructible()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    /// };
+    /// struct example2_t {
+    ///     example2_t(const example2_t&);
+    /// };
+    /// struct example3_t {
+    ///     example3_t(const example3_t&) = delete;
+    /// };
+    /// constexpr auto example1 = decltype_<example_t>{};
+    /// constexpr auto example2 = decltype_<example2_t>{};
+    /// constexpr auto example3 = decltype_<example3_t>{};
+    ///
+    /// static_assert(example1.satisfies(trivially_copy_constructible));
+    /// static_assert(not example2.satisfies(trivially_copy_constructible));
+    /// static_assert(not example3.satisfies(trivially_copy_constructible));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// trivially copy constructible
+    /// @return whether the type represented by `type` is trivially copy constructible
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto trivially_copy_constructible = [](MetaType auto type) noexcept {
         return decltype_(type).is_trivially_copy_constructible();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is move constructible.
+    ///
+    /// Determines whether the represented type is move constructible,
+    /// as if by `decltype_(type).is_move_constructible()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {};
+    /// struct example3_t {
+    ///     example3_t(example3_t&&) = delete;
+    /// };
+    /// constexpr auto example1 = decltype_<example_t>{};
+    /// constexpr auto example2 = decltype_<int>{};
+    /// constexpr auto example3 = decltype_<example3_t>{};
+    ///
+    /// static_assert(example1.satisfies(move_constructible));
+    /// static_assert(example2.satisfies(move_constructible));
+    /// static_assert(not example3.satisfies(move_constructible));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// move constructible
+    /// @return whether the type represented by `type` is move constructible
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto move_constructible = [](MetaType auto type) noexcept {
         return decltype_(type).is_move_constructible();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is `noexcept` move constructible.
+    ///
+    /// Determines whether the represented type is `noexcept` move constructible,
+    /// as if by `decltype_(type).is_noexcept_move_constructible()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    ///     example_t(example_t&&) noexcept;
+    /// };
+    /// struct example2_t {
+    ///     example2_t(example2_t&&) noexcept(false);
+    /// }
+    /// struct example3_t {
+    ///     example3_t(example3_t&&) = delete;
+    /// };
+    /// constexpr auto example1 = decltype_<example_t>{};
+    /// constexpr auto example2 = decltype_<example2_t>{};
+    /// constexpr auto example3 = decltype_<example3_t>{};
+    ///
+    /// static_assert(example1.satisfies(noexcept_move_constructible));
+    /// static_assert(not example2.satisfies(noexcept_move_constructible));
+    /// static_assert(not example3.satisfies(noexcept_move_constructible));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// `noexcept` move constructible
+    /// @return whether the type represented by `type` is `noexcept` move constructible
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto noexcept_move_constructible = [](MetaType auto type) noexcept {
         return decltype_(type).is_noexcept_move_constructible();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is trivially move constructible.
+    ///
+    /// Determines whether the represented type is trivially move constructible
+    /// as if by `decltype_(type).is_trivially_move_constructible()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    /// };
+    /// struct example2_t {
+    ///     example2_t(example2_t&&);
+    /// };
+    /// struct example3_t {
+    ///     example3_t(example3_t&&) = delete;
+    /// };
+    /// constexpr auto example1 = decltype_<example_t>{};
+    /// constexpr auto example2 = decltype_<example2_t>{};
+    /// constexpr auto example3 = decltype_<example3_t>{};
+    ///
+    /// static_assert(example1.satisfies(trivially_move_constructible));
+    /// static_assert(not example2.satisfies(trivially_move_constructible));
+    /// static_assert(not example3.satisfies(trivially_move_constructible));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// trivially move constructible
+    /// @return whether the type represented by `type` is trivially move constructible
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto trivially_move_constructible = [](MetaType auto type) noexcept {
         return decltype_(type).is_trivially_move_constructible();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is copy assignable.
+    ///
+    /// Determines whether the represented type is copy assignable,
+    /// as if by `decltype_(type).is_copy_assignable()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {};
+    /// struct example3_t {
+    ///     auto operator=(const example3_t&) -> example3_t& = delete;
+    /// };
+    /// constexpr auto example1 = decltype_<example_t>{};
+    /// constexpr auto example2 = decltype_<int>{};
+    /// constexpr auto example3 = decltype_<example3_t>{};
+    ///
+    /// static_assert(example1.satisfies(copy_assignable));
+    /// static_assert(example2.satisfies(copy_assignable));
+    /// static_assert(not example3.satisfies(copy_assignable));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// copy assignable
+    /// @return whether the type represented by `type` is copy assignable
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto copy_assignable = [](MetaType auto type) noexcept {
         return decltype_(type).is_copy_assignable();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is `noexcept` copy assignable.
+    ///
+    /// Determines whether the represented type is `noexcept` copy assignable,
+    /// as if by `decltype_(type).is_noexcept_copy_assignable()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    ///     auto operator=(const example_t&) noexcept -> example_t&;
+    /// };
+    /// struct example2_t {
+    ///     auto operator=(const example2_t&) noexcept(false) -> example2_t&;
+    /// }
+    /// struct example3_t {
+    ///     auto operator=(const example3_t&) -> example3_t& = delete;
+    /// };
+    /// constexpr auto example1 = decltype_<example_t>{};
+    /// constexpr auto example2 = decltype_<example2_t>{};
+    /// constexpr auto example3 = decltype_<example3_t>{};
+    ///
+    /// static_assert(example1.satisfies(noexcept_copy_assignable));
+    /// static_assert(not example2.satisfies(noexcept_copy_assignable));
+    /// static_assert(not example3.satisfies(noexcept_copy_assignable));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// `noexcept` copy assignable
+    /// @return whether the type represented by `type` is `noexcept` copy assignable
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto noexcept_copy_assignable = [](MetaType auto type) noexcept {
         return decltype_(type).is_noexcept_copy_assignable();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is trivially copy assignable.
+    ///
+    /// Determines whether the represented type is trivially copy assignable
+    /// as if by `decltype_(type).is_trivially_copy_assignable()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    /// };
+    /// struct example2_t {
+    ///     auto operator=(const example2_t&) -> example2_t&;
+    /// };
+    /// struct example3_t {
+    ///     auto operator=(const example3_t&) -> example3_t& = delete;
+    /// };
+    /// constexpr auto example1 = decltype_<example_t>{};
+    /// constexpr auto example2 = decltype_<example2_t>{};
+    /// constexpr auto example3 = decltype_<example3_t>{};
+    ///
+    /// static_assert(example1.satisfies(trivially_copy_assignable));
+    /// static_assert(not example2.satisfies(trivially_copy_assignable));
+    /// static_assert(not example3.satisfies(trivially_copy_assignable));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// trivially copy assignable
+    /// @return whether the type represented by `type` is trivially copy assignable
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto trivially_copy_assignable = [](MetaType auto type) noexcept {
         return decltype_(type).is_trivially_copy_assignable();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is move assignable.
+    ///
+    /// Determines whether the represented type is move assignable,
+    /// as if by `decltype_(type).is_move_assignable()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {};
+    /// struct example3_t {
+    ///     auto operator=(example3_t&&) -> example3_t& = delete;
+    /// };
+    /// constexpr auto example1 = decltype_<example_t>{};
+    /// constexpr auto example2 = decltype_<int>{};
+    /// constexpr auto example3 = decltype_<example3_t>{};
+    ///
+    /// static_assert(example1.satisfies(move_assignable));
+    /// static_assert(example2.satisfies(move_assignable));
+    /// static_assert(not example3.satisfies(move_assignable));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// move assignable
+    /// @return whether the type represented by `type` is move assignable
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto move_assignable = [](MetaType auto type) noexcept {
         return decltype_(type).is_move_assignable();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is `noexcept` move assignable.
+    ///
+    /// Determines whether the represented type is `noexcept` move assignable,
+    /// as if by `decltype_(type).is_noexcept_move_assignable()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    ///     auto operator=(example_t&&) noexcept -> example_t&;
+    /// };
+    /// struct example2_t {
+    ///     auto operator=(example2_t&&) noexcept(false) -> example2_t&;
+    /// }
+    /// struct example3_t {
+    ///     auto operator=(example3_t&&) -> example3_t& = delete;
+    /// };
+    /// constexpr auto example1 = decltype_<example_t>{};
+    /// constexpr auto example2 = decltype_<example2_t>{};
+    /// constexpr auto example3 = decltype_<example3_t>{};
+    ///
+    /// static_assert(example1.satisfies(noexcept_move_assignable));
+    /// static_assert(not example2.satisfies(noexcept_move_assignable));
+    /// static_assert(not example3.satisfies(noexcept_move_assignable));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// `noexcept` move assignable
+    /// @return whether the type represented by `type` is `noexcept` move assignable
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto noexcept_move_assignable = [](MetaType auto type) noexcept {
         return decltype_(type).is_noexcept_move_assignable();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is trivially move assignable.
+    ///
+    /// Determines whether the represented type is trivially move assignable
+    /// as if by `decltype_(type).is_trivially_move_assignable()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    /// };
+    /// struct example2_t {
+    ///     auto operator=(example2_t&&) -> example2_t&;
+    /// };
+    /// struct example3_t {
+    ///     auto operator=(example3_t&&) -> example3_t& = delete;
+    /// };
+    /// constexpr auto example1 = decltype_<example_t>{};
+    /// constexpr auto example2 = decltype_<example2_t>{};
+    /// constexpr auto example3 = decltype_<example3_t>{};
+    ///
+    /// static_assert(example1.satisfies(trivially_move_assignable));
+    /// static_assert(not example2.satisfies(trivially_move_assignable));
+    /// static_assert(not example3.satisfies(trivially_move_assignable));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// trivially move assignable
+    /// @return whether the type represented by `type` is trivially move assignable
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto trivially_move_assignable = [](MetaType auto type) noexcept {
         return decltype_(type).is_trivially_move_assignable();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is destructible.
+    ///
+    /// Determines whether the represented type is destructible,
+    /// as if by `decltype_(type).is_destructible()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {};
+    /// struct example3_t {
+    ///     ~example3_t() = delete;
+    /// };
+    /// constexpr auto example1 = decltype_<example_t>{};
+    /// constexpr auto example2 = decltype_<int>{};
+    /// constexpr auto example3 = decltype_<example3_t>{};
+    ///
+    /// static_assert(example1.satisfies(destructible));
+    /// static_assert(example2.satisfies(destructible));
+    /// static_assert(not example3.satisfies(destructible));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// destructible
+    /// @return whether the type represented by `type` is destructible
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto destructible = [](MetaType auto type) noexcept {
         return decltype_(type).is_destructible();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is `noexcept` destructible.
+    ///
+    /// Determines whether the represented type is `noexcept` destructible,
+    /// as if by `decltype_(type).is_noexcept_destructible()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    ///     ~example_t() noexcept;
+    /// };
+    /// struct example2_t {
+    ///     ~example2_t() noexcept(false);
+    /// }
+    /// struct example3_t {
+    ///     ~example3_t() = delete;
+    /// };
+    /// constexpr auto example1 = decltype_<example_t>{};
+    /// constexpr auto example2 = decltype_<example2_t>{};
+    /// constexpr auto example3 = decltype_<example3_t>{};
+    ///
+    /// static_assert(example1.satisfies(noexcept_destructible));
+    /// static_assert(not example2.satisfies(noexcept_destructible));
+    /// static_assert(not example3.satisfies(noexcept_destructible));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// `noexcept` destructible
+    /// @return whether the type represented by `type` is `noexcept` destructible
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto noexcept_destructible = [](MetaType auto type) noexcept {
         return decltype_(type).is_noexcept_destructible();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is trivially destructible.
+    ///
+    /// Determines whether the represented type is trivially destructible
+    /// as if by `decltype_(type).is_trivially_destructible()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    /// };
+    /// struct example2_t {
+    ///     ~example2_t();
+    /// };
+    /// struct example3_t {
+    ///     ~example3_t() = delete;
+    /// };
+    /// constexpr auto example1 = decltype_<example_t>{};
+    /// constexpr auto example2 = decltype_<example2_t>{};
+    /// constexpr auto example3 = decltype_<example3_t>{};
+    ///
+    /// static_assert(example1.satisfies(trivially_destructible));
+    /// static_assert(not example2.satisfies(trivially_destructible));
+    /// static_assert(not example3.satisfies(trivially_destructible));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// trivially destructible
+    /// @return whether the type represented by `type` is trivially destructible
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto trivially_destructible = [](MetaType auto type) noexcept {
         return decltype_(type).is_trivially_destructible();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is swappable.
+    ///
+    /// A type, `type` is swappable if , given `lhs` and `rhs` that are
+    /// both `type&`, `std::swap(lhs, rhs)` is well-formed.
+    ///
+    /// Determines whether the represented type is swappable
+    /// as if by `decltype_(type).is_swappable()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    ///     friend void swap(example_t&, example_t&);
+    /// };
+    /// struct example2_t {
+    ///     friend void swap(example2_t&, example2_t&) = delete;
+    /// };
+    ///
+    /// static_assert(example_t.satisfies(swappable));
+    /// static_assert(not example2_t.satisfies(swappable));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check for swappability
+    /// @return whether the type represented by `type` is swappable
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto swappable = [](MetaType auto type) noexcept {
         return decltype_(type).is_swappable();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is `noexcept` swappable.
+    ///
+    /// A type, `type` is `noexcept` swappable if , given `lhs` and `rhs`
+    /// that are both `type&`, `std::swap(lhs, rhs)` is well-formed and `noexcept`.
+    ///
+    /// Determines whether the represented type is `noexcept` swappable
+    /// as if by `decltype_(type).is_noexcept_swappable()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    ///     friend void swap(example_t&, example_t&) noexcept;
+    /// };
+    /// struct example2_t {
+    ///     friend void swap(example2_t&, example2_t&) noexcept(false);
+    /// };
+    /// struct example3_t {
+    ///     friend void swap(example3_t&, example3_t&) = delete;
+    /// };
+    ///
+    /// static_assert(example_t.satisfies(swappable));
+    /// static_assert(not example2_t.satisfies(swappable));
+    /// static_assert(not example3_t.satisfies(swappable));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check for
+    /// `noexcept` swappability
+    /// @return whether the type represented by `type` is `noexcept` swappable
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto noexcept_swappable = [](MetaType auto type) noexcept {
         return decltype_(type).is_noexcept_swappable();
     };
 
+    /// @brief Returns a metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is swappable with the type
+    /// represented by `type`.
+    ///
+    /// A type, `type1`, is swappable with another type, `type2`, if ,
+    /// given `lhs` and `rhs` that are `type1&` and `type2&`, respectively,
+    /// `std::swap(lhs, rhs)` and `std::swap(rhs, lhs)` are both well-formed.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent to
+    /// `constexpr operator()(MetaType auto arg) noexcept`, that when invoked, returns
+    /// whether `arg` represents a type swappable with the type represented by `type`,
+    /// determined as if by `decltype_(element).is_swappable_with(decltype_(type))`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    ///     friend void swap(example_t&, example_t&);
+    ///     friend void swap(example_t&, int&);
+    ///     friend void swap(int&, example_t&);
+    /// };
+    /// struct example2_t {
+    ///     friend void swap(example2_t&, int&) = delete;
+    /// };
+    ///
+    /// static_assert(example_t.satisfies(swappable_with(decltype_<int>())));
+    /// static_assert(example_t.satisfies(swappable_with(decltype_<example_t>())));
+    /// static_assert(not example2_t.satisfies(swappable_with(decltype_<int>())));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check for
+    /// swappability with
+    /// @return A metaprogramming predicate object used to check that an argument
+    /// represents a type that is swappable with the type represented by `type`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     [[nodiscard]] constexpr auto swappable_with(MetaType auto type) noexcept {
         return [](MetaType auto element) noexcept {
             return decltype_(element).is_swappable_with(decltype_(decltype(type){}));
         };
     }
 
+    /// @brief Returns a metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is `noexcept` swappable
+    /// with the type represented by `type`.
+    ///
+    /// A type, `type1`, is `noexcept` swappable with another type, `type2`, if ,
+    /// given `lhs` and `rhs` that are `type1&` and `type2&`, respectively,
+    /// `std::swap(lhs, rhs)` and `std::swap(rhs, lhs)` are both well-formed
+    /// and `noexcept`.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent
+    /// to `constexpr operator()(MetaType auto arg) noexcept`, that when invoked,
+    /// returns whether `arg` represents a type `noexcept` swappable with the type
+    /// represented by `type`, determined as if by
+    /// `decltype_(element).is_noexcept_swappable_with(decltype_(type))`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    ///     friend void swap(example_t&, example_t&) noexcept(false);
+    ///     friend void swap(example_t&, int&) noexcept;
+    ///     friend void swap(int&, example_t&) noexcept;
+    /// };
+    /// struct example2_t {
+    ///     friend void swap(example2_t&, int&) = delete;
+    /// };
+    ///
+    /// static_assert(example_t.satisfies(noexcept_swappable_with(decltype_<int>())));
+    /// static_assert(not example_t.satisfies(noexcept_swappable_with(decltype_<example_t>())));
+    /// static_assert(not example2_t.satisfies(noexcept_swappable_with(decltype_<int>())));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check for
+    /// `noexcept` swappability with
+    /// @return A metaprogramming predicate object used to check that an argument
+    /// represents a type that is `noexcept` swappable with the type represented
+    /// by `type`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     [[nodiscard]] constexpr auto noexcept_swappable_with(MetaType auto type) noexcept {
         return [](MetaType auto element) noexcept {
             return decltype_(element).is_noexcept_swappable_with(decltype_(decltype(type){}));
