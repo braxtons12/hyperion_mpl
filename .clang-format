@@ -70,13 +70,15 @@ ForEachMacros:
   - BOOST_FOREACH
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex: "^(<|/)"
+  - Regex: '^".*'
+    Priority: 0
+  - Regex: '[<hyperion](/|\\).*'
     Priority: 1
-    SortPriority: 0
-  - Regex: ".*"
+  - Regex: '[<].*(/|\\).*'
     Priority: 2
-    SortPriority: 0
-IncludeIsMainRegex: "(Test)?$"
+  - Regex: '[<].*[>]'
+    Priority: 3
+IncludeIsMainRegex: "(_test)?$"
 IncludeIsMainSourceRegex: ""
 IndentAccessModifiers: false
 IndentCaseBlocks: true
