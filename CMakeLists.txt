@@ -46,7 +46,6 @@ set(HYPERION_MPL_INCLUDE_PATH
 )
 set(HYPERION_MPL_HEADERS
     "${HYPERION_MPL_INCLUDE_PATH}/mpl.h"
-    "${HYPERION_MPL_INCLUDE_PATH}/mpl/index.h"
     "${HYPERION_MPL_INCLUDE_PATH}/mpl/list.h"
     "${HYPERION_MPL_INCLUDE_PATH}/mpl/metapredicates.h"
     "${HYPERION_MPL_INCLUDE_PATH}/mpl/metatypes.h"

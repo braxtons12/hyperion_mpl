@@ -42,7 +42,6 @@ local hyperion_mpl_main_header = {
 }
 local hyperion_mpl_headers = {
     "$(projectdir)/include/hyperion/mpl/concepts.h",
-    "$(projectdir)/include/hyperion/mpl/index.h",
     "$(projectdir)/include/hyperion/mpl/list.h",
     "$(projectdir)/include/hyperion/mpl/metapredicates.h",
     "$(projectdir)/include/hyperion/mpl/metatypes.h",
