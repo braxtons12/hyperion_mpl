@@ -72,7 +72,12 @@ namespace hyperion::mpl {
     ///
     /// The returned metaprogramming predicate object has call operator equivalent to
     /// `constexpr operator()(auto arg) noexcept`, that when invoked, returns whether
-    /// `arg` is equal to `value`, as if by `return mpl::Value<arg == value, bool>{};`
+    /// `arg` is equal to `value`, determined as if by:
+    /// @code {.cpp}
+    /// constexpr auto arg_as_mpl_value = Value<decltype(arg)::value>{};
+    /// constexpr auto value_as_mpl_value = Value<decltype(value)::value>{};
+    /// constexpr auto result = arg_as_mpl_value == value_as_mpl_value;
+    /// @endcode
     ///
     /// # Requirements
     /// - `value` must be an instance of a `MetaValue`, `MetaType`, or `MetaPair`
@@ -89,6 +94,8 @@ namespace hyperion::mpl {
     /// @param value The value to check for equality with
     /// @return A metaprogramming predicate object to check that an argument is equal to
     /// `value`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     [[nodiscard]] constexpr auto equal_to([[maybe_unused]] auto value) noexcept
         requires MetaValue<decltype(value)> || MetaType<decltype(value)>
                  || MetaPair<decltype(value)>
@@ -116,7 +123,12 @@ namespace hyperion::mpl {
     ///
     /// The returned metaprogramming predicate object has call operator equivalent to
     /// `constexpr operator()(auto arg) noexcept`, that when invoked, returns whether
-    /// `arg` is _not_ equal to `value`, as if by `return mpl::Value<arg != value, bool>{};`
+    /// `arg` is _not_ equal to `value`, determined as if by:
+    /// @code {.cpp}
+    /// constexpr auto arg_as_mpl_value = Value<decltype(arg)::value>{};
+    /// constexpr auto value_as_mpl_value = Value<decltype(value)::value>{};
+    /// constexpr auto result = arg_as_mpl_value != value_as_mpl_value;
+    /// @endcode
     ///
     /// # Requirements
     /// - `value` must be an instance of a `MetaValue`, `MetaType`, or `MetaPair`
@@ -133,6 +145,8 @@ namespace hyperion::mpl {
     /// @param value The value to check for inequality with
     /// @return A metaprogramming predicate object to check that an argument is _not_
     /// equal to `value`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     [[nodiscard]] constexpr auto not_equal_to([[maybe_unused]] auto value) noexcept
         requires MetaValue<decltype(value)> || MetaType<decltype(value)>
                  || MetaPair<decltype(value)>
@@ -146,235 +160,705 @@ namespace hyperion::mpl {
     }
 
     /// @brief Returns a metaprogramming predicate object used to query whether an
-    /// argument is equal to `value`.
+    /// argument is less than `value`.
     ///
     /// The returned metaprogramming predicate object has call operator equivalent to
     /// `constexpr operator()(auto arg) noexcept`, that when invoked, returns whether
-    /// `arg` is equal to `value`, as if by `return mpl::Value<arg == value, bool>{};`
+    /// `arg` is less than `value`, determined as if by:
+    /// @code {.cpp}
+    /// constexpr auto arg_as_mpl_value = Value<decltype(arg)::value>{};
+    /// constexpr auto value_as_mpl_value = Value<decltype(value)::value>{};
+    /// constexpr auto result = arg_as_mpl_value < value_as_mpl_value;
+    /// @endcode
     ///
     /// # Requirements
     /// - `value` must be an instance of a `MetaValue`
     ///
     /// # Example
     /// @code {.cpp}
-    /// constexpr auto example = decltype_<const int&>{};
+    /// constexpr auto example = 3_value;
     ///
-    /// static_assert(example.satisfies(equal_to(decltype_<const int&>())));
-    /// static_assert(not example.satisfies(equal_to(decltype_<float>())));
-    /// static_assert(not example.satisfies(equal_to(1_value)));
+    /// static_assert(example.satisfies(less_than(1_value)));
+    /// static_assert(not example.satisfies(less_than(4_value)));
+    /// static_assert(not example.satisfies(less_than(5_value)));
     /// @endcode
     ///
-    /// @param value The value to check for equality with
-    /// @return A metaprogramming predicate object to check that an argument is equal to
-    /// `value`
+    /// @param value The value to check that arguments are less than
+    /// @return A metaprogramming predicate object to check that an argument is
+    /// less than `value`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     [[nodiscard]] constexpr auto less_than([[maybe_unused]] MetaValue auto value) noexcept {
         return [](MetaValue auto element) {
-            return Value<(detail::convert_to_meta_t<decltype(element)>{}
-                          < detail::convert_to_meta_t<decltype(value)>{}),
-                         bool>{};
+            return detail::convert_to_meta_t<decltype(element)>{}
+                   < detail::convert_to_meta_t<decltype(value)>{};
         };
     }
 
+    /// @brief Returns a metaprogramming predicate object used to query whether an
+    /// argument is less than or equal to `value`.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent to
+    /// `constexpr operator()(auto arg) noexcept`, that when invoked, returns whether
+    /// `arg` is less than or equal to `value`, determined as if by:
+    /// @code {.cpp}
+    /// constexpr auto arg_as_mpl_value = Value<decltype(arg)::value>{};
+    /// constexpr auto value_as_mpl_value = Value<decltype(value)::value>{};
+    /// constexpr auto result = arg_as_mpl_value <= value_as_mpl_value;
+    /// @endcode
+    ///
+    /// # Requirements
+    /// - `value` must be an instance of a `MetaValue`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// constexpr auto example = 3_value;
+    ///
+    /// static_assert(example.satisfies(less_than_or_equal_to(1_value)));
+    /// static_assert(example.satisfies(less_than_or_equal_to(3_value)));
+    /// static_assert(not example.satisfies(less_than_or_equal_to(5_value)));
+    /// @endcode
+    ///
+    /// @param value The value to check that arguments are less than or equal to
+    /// @return A metaprogramming predicate object to check that an argument is
+    /// less than or equal to `value`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     [[nodiscard]] constexpr auto
     less_than_or_equal_to([[maybe_unused]] MetaValue auto value) noexcept {
         return [](MetaValue auto element) {
-            return Value<(detail::convert_to_meta_t<decltype(element)>{}
-                          <= detail::convert_to_meta_t<decltype(value)>{}),
-                         bool>{};
+            return detail::convert_to_meta_t<decltype(element)>{}
+                   <= detail::convert_to_meta_t<decltype(value)>{};
         };
     }
 
+    /// @brief Returns a metaprogramming predicate object used to query whether an
+    /// argument is greater than `value`.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent to
+    /// `constexpr operator()(auto arg) noexcept`, that when invoked, returns whether
+    /// `arg` is greater than `value`, determined as if by:
+    /// @code {.cpp}
+    /// constexpr auto arg_as_mpl_value = Value<decltype(arg)::value>{};
+    /// constexpr auto value_as_mpl_value = Value<decltype(value)::value>{};
+    /// constexpr auto result = arg_as_mpl_value > value_as_mpl_value;
+    /// @endcode
+    ///
+    /// # Requirements
+    /// - `value` must be an instance of a `MetaValue`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// constexpr auto example = 3_value;
+    ///
+    /// static_assert(example.satisfies(greater_than(1_value)));
+    /// static_assert(not example.satisfies(greater_than(4_value)));
+    /// static_assert(not example.satisfies(greater_than(5_value)));
+    /// @endcode
+    ///
+    /// @param value The value to check that arguments are greater than
+    /// @return A metaprogramming predicate object to check that an argument is
+    /// greater than `value`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     [[nodiscard]] constexpr auto greater_than([[maybe_unused]] MetaValue auto value) noexcept {
         return [](MetaValue auto element) {
-            return Value<(detail::convert_to_meta_t<decltype(element)>{}
-                          > detail::convert_to_meta_t<decltype(value)>{}),
-                         bool>{};
+            return detail::convert_to_meta_t<decltype(element)>{}
+                   > detail::convert_to_meta_t<decltype(value)>{};
         };
     }
 
+    /// @brief Returns a metaprogramming predicate object used to query whether an
+    /// argument is greater than or equal to `value`.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent to
+    /// `constexpr operator()(auto arg) noexcept`, that when invoked, returns whether
+    /// `arg` is greater than or equal to `value`, determined as if by:
+    /// @code {.cpp}
+    /// constexpr auto arg_as_mpl_value = Value<decltype(arg)::value>{};
+    /// constexpr auto value_as_mpl_value = Value<decltype(value)::value>{};
+    /// constexpr auto result = arg_as_mpl_value >= value_as_mpl_value;
+    /// @endcode
+    ///
+    /// # Requirements
+    /// - `value` must be an instance of a `MetaValue`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// constexpr auto example = 3_value;
+    ///
+    /// static_assert(example.satisfies(greater_than_or_equal_to(1_value)));
+    /// static_assert(example.satisfies(greater_than_or_equal_to(3_value)));
+    /// static_assert(not example.satisfies(greater_than_or_equal_to(5_value)));
+    /// @endcode
+    ///
+    /// @param value The value to check that arguments are greater than or equal to
+    /// @return A metaprogramming predicate object to check that an argument is
+    /// greater than or equal to `value`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     [[nodiscard]] constexpr auto
     greater_than_or_equal_to([[maybe_unused]] MetaValue auto value) noexcept {
         return [](MetaValue auto element) {
-            return Value<detail::convert_to_meta_t<decltype(element)>{}
-                             >= detail::convert_to_meta_t<decltype(value)>{},
-                         bool>{};
+            return detail::convert_to_meta_t<decltype(element)>{}
+                   >= detail::convert_to_meta_t<decltype(value)>{};
         };
     }
 
+    /// @brief Returns a metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents the same type as `type`.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent to
+    /// `constexpr operator()(MetaType auto arg) noexcept`, that when invoked, returns
+    /// whether `arg` represents the same type as `type`, determined as if by:
+    /// @code {.cpp}
+    /// constexpr auto arg_as_mpl_type = decltype_(arg);
+    /// constexpr auto result = as_mpl_type.is(decltype_(type));
+    /// @endcode
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// constexpr auto example = decltype_<const int&>{};
+    ///
+    /// static_assert(example.satisfies(is(decltype_<const int&>())));
+    /// static_assert(not example.satisfies(is(decltype_<int>())));
+    /// static_assert(not example.satisfies(is(decltype_<float>())));
+    /// @endcode
+    ///
+    /// @note This is very similar to `equal_to`, with the sole difference being that
+    /// this and the returned predicate object are _only_ invocable with `MetaType`s,
+    /// whereas `equal_to` is invocable with any type fulfilling a metaprogramming
+    /// concept's requirements.
+    ///
+    /// @param type The `MetaType` representing the type to check that an argument is
+    /// @return A metaprogramming predicate object to check that an argument represents
+    /// the same type as `typ`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     [[nodiscard]] constexpr auto is(MetaType auto type) noexcept {
         return [](MetaType auto element) noexcept {
-            return detail::convert_to_meta_t<decltype(element)>{}.is(
-                detail::convert_to_meta_t<decltype(type)>{});
+            return decltype_(element).is(decltype_(decltype(type){}));
         };
     }
 
+    /// @brief Returns a metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is a qualification of the type
+    /// represented by `type`.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent to
+    /// `constexpr operator()(MetaType auto arg) noexcept`, that when invoked, returns
+    /// whether `arg` represents the same type as, or a qualification of, the type
+    /// represented by `type`, determined as if by:
+    /// @code {.cpp}
+    /// constexpr auto as_mpl_type = decltype_(arg);
+    /// constexpr auto result = as_mpl_type.is_qualification_of(decltype_(type));
+    /// @endcode
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// constexpr auto example = decltype_<const int&>{};
+    ///
+    /// static_assert(example.satisfies(qualification_of(decltype_<int>())));
+    /// static_assert(not example.satisfies(qualification_of(decltype_<const int&>())));
+    /// static_assert(not example.satisfies(qualification_of(decltype_<float>())));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that an argument is a
+    /// qualification of
+    /// @return A metaprogramming predicate object to check that an argument represents
+    /// a type that is (possibly) a qualification of the type represented by `type`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     [[nodiscard]] constexpr auto qualification_of(MetaType auto type) noexcept {
         return [](MetaType auto element) noexcept {
-            return detail::convert_to_meta_t<decltype(element)>{}.is_qualification_of(
-                detail::convert_to_meta_t<decltype(type)>{});
+            return decltype_(element).is_qualification_of(decltype_(decltype(type){}));
         };
     }
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is `const` qualified.
+    ///
+    /// Determines whether the represented type is `const` as if by
+    /// `decltype_(type).is_const()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// constexpr auto example1 = decltype_<const int&>{};
+    /// constexpr auto example2 = decltype_<const int>{};
+    /// constexpr auto example3 = decltype_<int>{};
+    ///
+    /// static_assert(example1.satisfies(is_const));
+    /// static_assert(example2.satisfies(is_const));
+    /// static_assert(not example3.satisfies(is_const));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is `const`
+    /// @return whether the type represented by `type` is `const`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto is_const = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_const();
+        return decltype_(type).is_const();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is lvalue-reference qualified.
+    ///
+    /// Determines whether the represented type is lvalue-reference qualified as
+    /// if by `decltype_(type).is_lvalue_reference()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// constexpr auto example1 = decltype_<const int&>{};
+    /// constexpr auto example2 = decltype_<const int>{};
+    /// constexpr auto example3 = decltype_<int>{};
+    ///
+    /// static_assert(example1.satisfies(is_lvalue_reference));
+    /// static_assert(not example2.satisfies(is_lvalue_reference));
+    /// static_assert(not example3.satisfies(is_lvalue_reference));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// an lvalue-reference
+    /// @return whether the type represented by `type` is an lvalue-reference
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto is_lvalue_reference = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_lvalue_reference();
+        return decltype_(type).is_lvalue_reference();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is rvalue-reference qualified.
+    ///
+    /// Determines whether the represented type is rvalue-reference qualified as
+    /// if by `decltype_(type).is_rvalue_reference()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// constexpr auto example1 = decltype_<const int&&>{};
+    /// constexpr auto example2 = decltype_<const int>{};
+    /// constexpr auto example3 = decltype_<int>{};
+    ///
+    /// static_assert(example1.satisfies(is_rvalue_reference));
+    /// static_assert(not example2.satisfies(is_rvalue_reference));
+    /// static_assert(not example3.satisfies(is_rvalue_reference));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is
+    /// an rvalue-reference
+    /// @return whether the type represented by `type` is an rvalue-reference
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto is_rvalue_reference = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_rvalue_reference();
+        return decltype_(type).is_rvalue_reference();
     };
 
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is `volatile` qualified.
+    ///
+    /// Determines whether the represented type is `volatile` as if by
+    /// `decltype_(type).is_volatile()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// constexpr auto example1 = decltype_<volatile int&>{};
+    /// constexpr auto example2 = decltype_<volatile int>{};
+    /// constexpr auto example3 = decltype_<int>{};
+    ///
+    /// static_assert(example1.satisfies(is_volatile));
+    /// static_assert(example2.satisfies(is_volatile));
+    /// static_assert(not example3.satisfies(is_volatile));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is `volatile`
+    /// @return whether the type represented by `type` is `volatile`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     constexpr auto is_volatile = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_volatile();
+        return decltype_(type).is_volatile();
     };
 
+    /// @brief Returns a metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is convertible to the type
+    /// represented by `type`.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent to
+    /// `constexpr operator()(MetaType auto arg) noexcept`, that when invoked, returns
+    /// whether `arg` represents a type convertible to the type represented by `type`,
+    /// determined as if by `decltype_(element).is_convertible_to(decltype_(type))`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// constexpr auto example = decltype_<int>{};
+    /// struct example2 {};
+    ///
+    /// static_assert(example.satisfies(convertible_to(decltype_<float>())));
+    /// static_assert(not example.satisfies(convertible_to(decltype_<example2>())));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check for convertibility to
+    /// @return A metaprogramming predicate object to check that an argument represents
+    /// a type that is convertible to the type represented by `type`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     [[nodiscard]] constexpr auto convertible_to(MetaType auto type) noexcept {
         return [](MetaType auto element) noexcept {
-            return detail::convert_to_meta_t<decltype(element)>{}.is_convertible_to(
-                detail::convert_to_meta_t<decltype(type)>{});
+            return decltype_(element).is_convertible_to(decltype_(decltype(type){}));
         };
     }
 
+    /// @brief Returns a metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is derived from the type
+    /// represented by `type`.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent to
+    /// `constexpr operator()(MetaType auto arg) noexcept`, that when invoked, returns
+    /// whether `arg` represents a type derived from the type represented by `type`,
+    /// determined as if by `decltype_(element).is_derived_from(decltype_(type))`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// constexpr auto example = decltype_<int>{};
+    /// struct example2 {};
+    ///
+    /// static_assert(example.satisfies(derived_from(decltype_<float>())));
+    /// static_assert(not example.satisfies(derived_from(decltype_<example2>())));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check for convertibility to
+    /// @return A metaprogramming predicate object to check that an argument represents
+    /// a type that is derived from the type represented by `type`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     [[nodiscard]] constexpr auto derived_from(MetaType auto type) noexcept {
         return [](MetaType auto element) noexcept {
-            return detail::convert_to_meta_t<decltype(element)>{}.is_derived_from(
-                detail::convert_to_meta_t<decltype(type)>{});
+            return decltype_(element).is_derived_from(decltype_(decltype(type){}));
         };
     }
 
+    /// @brief Returns a metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is a base of the type
+    /// represented by `type`.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent to
+    /// `constexpr operator()(MetaType auto arg) noexcept`, that when invoked, returns
+    /// whether `arg` represents a type a base of the type represented by `type`,
+    /// determined as if by `decltype_(element).is_base_of(decltype_(type))`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// constexpr auto example = decltype_<int>{};
+    /// struct example2 {};
+    ///
+    /// static_assert(example.satisfies(base_of(decltype_<float>())));
+    /// static_assert(not example.satisfies(base_of(decltype_<example2>())));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check for convertibility to
+    /// @return A metaprogramming predicate object to check that an argument represents
+    /// a type that is a base of the type represented by `type`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     [[nodiscard]] constexpr auto base_of(MetaType auto type) noexcept {
         return [](MetaType auto element) noexcept {
-            return detail::convert_to_meta_t<decltype(element)>{}.is_base_of(
-                detail::convert_to_meta_t<decltype(type)>{});
+            return decltype_(element).is_base_of(decltype_(decltype(type){}));
         };
     }
 
+    /// @brief Returns a metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type constructible from a pack of
+    /// parameters of the types represented by `types...`.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent to
+    /// `constexpr operator()(MetaType auto arg) noexcept`, that when invoked, returns
+    /// whether `arg` represents a type constructible from the types represented by
+    /// `types...`, determined as if by
+    /// `decltype_(element).is_constructible_from(decltype_(types)...)`.
+    ///
+    /// # Requirements
+    /// - `types...` must be instances of a `MetaType`s
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    ///     example_t(int, float, double);
+    ///
+    /// };
+    /// constexpr auto example = decltype_<example_t>{};
+    ///
+    /// static_assert(example.satisfies(constructible_from(decltype_<int>(),
+    ///                                                    decltype_<float>(),
+    ///                                                    decltype_<double>())));
+    /// static_assert(not example.satisfies(constructible_from(decltype_<float>())));
+    /// @endcode
+    ///
+    /// @param types The `MetaType` representing the types of the argument pack to check
+    /// for constructibility from
+    /// @return A metaprogramming predicate object to check that an argument represents
+    /// a type that is constructible from an argument pack of the types represented by
+    /// `types...`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     [[nodiscard]] constexpr auto constructible_from(MetaType auto... types) noexcept {
         return [](MetaType auto element) noexcept {
-            return detail::convert_to_meta_t<decltype(element)>{}.is_constructible_from(
-                detail::convert_to_meta_t<decltype(types)>{}...);
+            return decltype_(element).is_constructible_from(decltype_(decltype(types){})...);
         };
     }
 
+    /// @brief Returns a metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type constructible from a pack of
+    /// parameters of the types `TTypes...`.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent to
+    /// `constexpr operator()(MetaType auto arg) noexcept`, that when invoked, returns
+    /// whether `arg` represents a type constructible from the raw types represented by
+    /// `TTypes...`. That is, if any type `type` of `TTypes...` is a `MetaType`,
+    /// the check will use the wrapped type of `type`, `typename type::type`
+    /// (this guarantee is provided by `mpl::Type::is_constructible_from`).
+    /// The constructibility is determined as if by
+    /// `decltype_(element).is_constructible_from(types)`.
+    ///
+    /// # Requirements
+    /// - `types` _must not_ be a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    ///     example_t(int, float, double);
+    ///
+    /// };
+    /// constexpr auto example = decltype_<example_t>{};
+    ///
+    /// static_assert(example.satisfies(constructible_from(List<int, float, double>{})));
+    /// static_assert(not example.satisfies(constructible_from(List<float>{})));
+    /// @endcode
+    ///
+    /// @tparam TList The metaprogramming list type representing the types of the arguments
+    /// to check constructibility with
+    /// @tparam TTypes The types of the arguments to check constructibility with
+    /// @param types The metaprogramming list representing the types of the arguments to
+    /// check constructibility with
+    /// @return A metaprogramming predicate object to check that an argument represents
+    /// a type that is constructible from an argument pack of the types represented by
+    /// `types`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     template<template<typename...> typename TList, typename... TTypes>
         requires(!MetaType<TList<TTypes...>>)
     [[nodiscard]] constexpr auto constructible_from(TList<TTypes...> types) noexcept {
         return [](MetaType auto element) noexcept {
-            return detail::convert_to_meta_t<decltype(element)>{}.is_constructible_from(
-                decltype(types){});
+            return decltype_(element).is_constructible_from(decltype(types){});
         };
     }
 
+    /// @brief Returns a metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type `noexcept` constructible from a
+    /// pack of parameters of the types represented by `types...`.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent to
+    /// `constexpr operator()(MetaType auto arg) noexcept`, that when invoked, returns
+    /// whether `arg` represents a type `noexcept` constructible from the types
+    /// represented by `types...`, determined as if by
+    /// `decltype_(element).is_noexcept_constructible_from(decltype_(types)...)`.
+    ///
+    /// # Requirements
+    /// - `types...` must be instances of a `MetaType`s
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    ///     example_t(int, float, double) noexcept;
+    ///     example_t(float, int);
+    ///
+    /// };
+    /// constexpr auto example = decltype_<example_t>{};
+    ///
+    /// static_assert(example.satisfies(noexcept_constructible_from(decltype_<int>(),
+    ///                                                             decltype_<float>(),
+    ///                                                             decltype_<double>())));
+    /// static_assert(not example.satisfies(noexcept_constructible_from(decltype_<float>())));
+    /// static_assert(not example.satisfies(noexcept_constructible_from(decltype_<float>(),
+    ///                                                                 decltype_<int>()))));
+    /// @endcode
+    ///
+    /// @param types The `MetaType` representing the types of the argument pack to check
+    /// for `noexcept` constructibility from
+    /// @return A metaprogramming predicate object to check that an argument represents
+    /// a type that is `noexcept` constructible from an argument pack of the types
+    /// represented by `types...`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     [[nodiscard]] constexpr auto noexcept_constructible_from(MetaType auto... types) noexcept {
         return [](MetaType auto element) noexcept {
-            return detail::convert_to_meta_t<decltype(element)>{}.is_noexcept_constructible_from(
-                detail::convert_to_meta_t<decltype(types)>{}...);
+            return decltype_(element).is_noexcept_constructible_from(
+                decltype_(decltype(types){})...);
         };
     }
 
+    /// @brief Returns a metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type `noexcept` constructible from a pack of
+    /// parameters of the types `TTypes...`.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent to
+    /// `constexpr operator()(MetaType auto arg) noexcept`, that when invoked, returns
+    /// whether `arg` represents a type `noexcept` constructible from the raw types
+    /// represented by `TTypes...`. That is, if any type `type` of `TTypes...`
+    /// is a `MetaType`, the check will use the wrapped type of `type`,
+    /// `typename type::type` (this guarantee is provided by
+    /// `mpl::Type::is_constructible_from`).
+    /// The constructibility is determined as if by
+    /// `decltype_(element).is_noexcept_constructible_from(types)`.
+    ///
+    /// # Requirements
+    /// - `types` _must not_ be a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example_t {
+    ///     example_t(int, float, double) noexcept;
+    ///     example_t(float, int);
+    ///
+    /// };
+    /// constexpr auto example = decltype_<example_t>{};
+    ///
+    /// static_assert(example.satisfies(noexcept_constructible_from(List<int, float, double>{})));
+    /// static_assert(not example.satisfies(noexcept_constructible_from(List<float>{})));
+    /// static_assert(not example.satisfies(noexcept_constructible_from(List<float, int>{}))));
+    /// @endcode
+    ///
+    /// @tparam TList The metaprogramming list type representing the types of the arguments
+    /// to check `noexcept` constructibility with
+    /// @tparam TTypes The types of the arguments to check `noexcept` constructibility with
+    /// @param types The metaprogramming list representing the types of the arguments to
+    /// check `noexcept` constructibility with
+    /// @return A metaprogramming predicate object to check that an argument represents
+    /// a type that is `noexcept` constructible from an argument pack of the types
+    /// represented by `types`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
     template<template<typename...> typename TList, typename... TTypes>
         requires(!MetaType<TList<TTypes...>>)
     [[nodiscard]] constexpr auto noexcept_constructible_from(TList<TTypes...> types) noexcept {
         return [](MetaType auto element) noexcept {
-            return detail::convert_to_meta_t<decltype(element)>{}.is_noexcept_constructible_from(
-                decltype(types){});
+            return decltype_(element).is_noexcept_constructible_from(decltype(types){});
         };
     }
 
     constexpr auto default_constructible = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_default_constructible();
+        return decltype_(type).is_default_constructible();
     };
 
     constexpr auto noexcept_default_constructible = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_noexcept_default_constructible();
+        return decltype_(type).is_noexcept_default_constructible();
     };
 
     constexpr auto trivially_default_constructible = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_trivially_default_constructible();
+        return decltype_(type).is_trivially_default_constructible();
     };
 
     constexpr auto copy_constructible = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_copy_constructible();
+        return decltype_(type).is_copy_constructible();
     };
 
     constexpr auto noexcept_copy_constructible = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_noexcept_copy_constructible();
+        return decltype_(type).is_noexcept_copy_constructible();
     };
 
     constexpr auto trivially_copy_constructible = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_trivially_copy_constructible();
+        return decltype_(type).is_trivially_copy_constructible();
     };
 
     constexpr auto move_constructible = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_move_constructible();
+        return decltype_(type).is_move_constructible();
     };
 
     constexpr auto noexcept_move_constructible = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_noexcept_move_constructible();
+        return decltype_(type).is_noexcept_move_constructible();
     };
 
     constexpr auto trivially_move_constructible = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_trivially_move_constructible();
+        return decltype_(type).is_trivially_move_constructible();
     };
 
     constexpr auto copy_assignable = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_copy_assignable();
+        return decltype_(type).is_copy_assignable();
     };
 
     constexpr auto noexcept_copy_assignable = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_noexcept_copy_assignable();
+        return decltype_(type).is_noexcept_copy_assignable();
     };
 
     constexpr auto trivially_copy_assignable = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_trivially_copy_assignable();
+        return decltype_(type).is_trivially_copy_assignable();
     };
 
     constexpr auto move_assignable = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_move_assignable();
+        return decltype_(type).is_move_assignable();
     };
 
     constexpr auto noexcept_move_assignable = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_noexcept_move_assignable();
+        return decltype_(type).is_noexcept_move_assignable();
     };
 
     constexpr auto trivially_move_assignable = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_trivially_move_assignable();
+        return decltype_(type).is_trivially_move_assignable();
     };
 
     constexpr auto destructible = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_destructible();
+        return decltype_(type).is_destructible();
     };
 
     constexpr auto noexcept_destructible = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_noexcept_destructible();
+        return decltype_(type).is_noexcept_destructible();
     };
 
     constexpr auto trivially_destructible = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_trivially_destructible();
+        return decltype_(type).is_trivially_destructible();
     };
 
     constexpr auto swappable = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_swappable();
+        return decltype_(type).is_swappable();
     };
 
     constexpr auto noexcept_swappable = [](MetaType auto type) noexcept {
-        return detail::convert_to_meta_t<decltype(type)>{}.is_noexcept_swappable();
+        return decltype_(type).is_noexcept_swappable();
     };
 
     [[nodiscard]] constexpr auto swappable_with(MetaType auto type) noexcept {
         return [](MetaType auto element) noexcept {
-            return detail::convert_to_meta_t<decltype(element)>{}.is_swappable_with(
-                detail::convert_to_meta_t<decltype(type)>{});
+            return decltype_(element).is_swappable_with(decltype_(decltype(type){}));
         };
     }
 
     [[nodiscard]] constexpr auto noexcept_swappable_with(MetaType auto type) noexcept {
         return [](MetaType auto element) noexcept {
-            return detail::convert_to_meta_t<decltype(element)>{}.is_noexcept_swappable_with(
-                detail::convert_to_meta_t<decltype(type)>{});
+            return decltype_(element).is_noexcept_swappable_with(decltype_(decltype(type){}));
         };
     }
 } // namespace hyperion::mpl

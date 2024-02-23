@@ -124,6 +124,11 @@ For an overview of each module, see the links in the left sidebar or below.
     pair
 
 .. toctree::
+    :caption: Metaprogramming Predicate Functions
+    
+    metapredicates
+
+.. toctree::
     :caption: Type Traits
     
     type_traits
