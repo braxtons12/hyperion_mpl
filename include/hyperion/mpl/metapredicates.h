@@ -780,6 +780,85 @@ namespace hyperion::mpl {
         static_assert(not decltype_<not_destructible>().satisfies(mpl::trivially_destructible),
                       "hyperion::mpl::trivially_destructible predicate test case 5 (failing)");
 
+        struct swappable {
+            friend void swap(swappable& lhs, swappable& rhs) noexcept(false);
+        };
+
+        struct not_swappable {
+            friend void swap(not_swappable& lhs, not_swappable& rhs) = delete;
+        };
+
+        struct noexcept_swappable {
+            friend void swap(noexcept_swappable& lhs, noexcept_swappable& rhs) noexcept;
+        };
+
+        static_assert(decltype_<int>().satisfies(mpl::swappable),
+                      "hyperion::mpl::swappable predicate test case 1 (failing)");
+        static_assert(decltype_<swappable>().satisfies(mpl::swappable),
+                      "hyperion::mpl::swappable predicate test case 2 (failing)");
+        static_assert(decltype_<noexcept_swappable>().satisfies(mpl::swappable),
+                      "hyperion::mpl::swappable predicate test case 3 (failing)");
+        static_assert(not decltype_<not_swappable>().satisfies(mpl::swappable),
+                      "hyperion::mpl::swappable predicate test case 4 (failing)");
+
+        static_assert(decltype_<int>().satisfies(mpl::noexcept_swappable),
+                      "hyperion::mpl::noexcept_swappable predicate test case 1 (failing)");
+        static_assert(decltype_<noexcept_swappable>().satisfies(mpl::noexcept_swappable),
+                      "hyperion::mpl::noexcept_swappable predicate test case 2 (failing)");
+        static_assert(not decltype_<swappable>().satisfies(mpl::noexcept_swappable),
+                      "hyperion::mpl::noexcept_swappable predicate test case 3 (failing)");
+        static_assert(not decltype_<not_swappable>().satisfies(mpl::noexcept_swappable),
+                      "hyperion::mpl::noexcept_swappable predicate test case 4 (failing)");
+
+        struct swappable_with {
+            friend void swap(swappable_with& lhs, int& rhs) noexcept(false);
+            friend void swap(int& lhs, swappable_with& rhs) noexcept(false);
+        };
+
+        struct noexcept_swappable_with {
+            friend void swap(noexcept_swappable_with& lhs, int& rhs) noexcept;
+            friend void swap(int& lhs, noexcept_swappable_with& rhs) noexcept;
+        };
+
+        static_assert(decltype_<int>().satisfies(mpl::swappable_with(decltype_<int>())),
+                      "hyperion::mpl::swappable_with predicate test case 1 (failing)");
+        static_assert(decltype_<swappable>().satisfies(mpl::swappable_with(decltype_<swappable>())),
+                      "hyperion::mpl::swappable_with predicate test case 2 (failing)");
+        static_assert(decltype_<noexcept_swappable>().satisfies(
+                          mpl::swappable_with(decltype_<noexcept_swappable>())),
+                      "hyperion::mpl::swappable_with predicate test case 3 (failing)");
+        static_assert(not decltype_<not_swappable>().satisfies(
+                          mpl::swappable_with(decltype_<not_swappable>())),
+                      "hyperion::mpl::swappable_with predicate test case 4 (failing)");
+        static_assert(decltype_<swappable_with>().satisfies(mpl::swappable_with(decltype_<int>())),
+                      "hyperion::mpl::swappable_with predicate test case 5 (failing)");
+        static_assert(
+            decltype_<noexcept_swappable_with>().satisfies(mpl::swappable_with(decltype_<int>())),
+            "hyperion::mpl::swappable_with predicate test case 6 (failing)");
+        static_assert(
+            not decltype_<not_swappable>().satisfies(mpl::swappable_with(decltype_<int>())),
+            "hyperion::mpl::swappable_with predicate test case 7 (failing)");
+
+        static_assert(decltype_<int>().satisfies(mpl::noexcept_swappable_with(decltype_<int>())),
+                      "hyperion::mpl::noexcept_swappable_with predicate test case 1 (failing)");
+        static_assert(decltype_<noexcept_swappable>().satisfies(
+                          mpl::noexcept_swappable_with(decltype_<noexcept_swappable>())),
+                      "hyperion::mpl::noexcept_swappable_with predicate test case 2 (failing)");
+        static_assert(not decltype_<swappable>().satisfies(
+                          mpl::noexcept_swappable_with(decltype_<swappable>())),
+                      "hyperion::mpl::noexcept_swappable_with predicate test case 3 (failing)");
+        static_assert(not decltype_<not_swappable>().satisfies(
+                          mpl::noexcept_swappable_with(decltype_<not_swappable>())),
+                      "hyperion::mpl::noexcept_swappable_with predicate test case 4 (failing)");
+        static_assert(decltype_<noexcept_swappable_with>().satisfies(
+                          mpl::noexcept_swappable_with(decltype_<int>())),
+                      "hyperion::mpl::noexcept_swappable_with predicate test case 5 (failing)");
+        static_assert(not decltype_<swappable_with>().satisfies(
+                          mpl::noexcept_swappable_with(decltype_<int>())),
+                      "hyperion::mpl::noexcept_swappable_with predicate test case 6 (failing)");
+        static_assert(not decltype_<not_swappable>().satisfies(
+                          mpl::noexcept_swappable_with(decltype_<int>())),
+                      "hyperion::mpl::noexcept_swappable_with predicate test case 7 (failing)");
     } // namespace _test::metapredicates
 } // namespace hyperion::mpl
 
