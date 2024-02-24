@@ -85,7 +85,7 @@ namespace hyperion::mpl::concepts {
     ///
     /// @tparam TType The type to check
     /// @ingroup std_supplemental_traits
-    /// @headerfile hyperion/mpl/type_traits/std_supplemental
+    /// @headerfile hyperion/mpl/type_traits/std_supplemental.h
     template<typename TType>
     concept TriviallyMovable = type_traits::is_trivially_movable_v<TType>;
 

@@ -79,7 +79,7 @@ namespace hyperion::mpl::type_traits {
     ///
     /// @tparam TType The type to check
     /// @ingroup std_supplemental_traits
-    /// @headerfile hyperion/mpl/type_traits/std_supplemental
+    /// @headerfile hyperion/mpl/type_traits/std_supplemental.h
     template<typename TType>
     struct is_trivially_movable
         : public std::bool_constant<std::is_trivially_move_constructible_v<TType>
@@ -99,7 +99,7 @@ namespace hyperion::mpl::type_traits {
     ///
     /// @tparam TType The type to check
     /// @ingroup std_supplemental_traits
-    /// @headerfile hyperion/mpl/type_traits/std_supplemental
+    /// @headerfile hyperion/mpl/type_traits/std_supplemental.h
     template<typename TType>
     static inline constexpr auto is_trivially_movable_v = is_trivially_movable<TType>::value;
 
