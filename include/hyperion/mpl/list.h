@@ -47,6 +47,7 @@
 /// # Example
 /// @code {.cpp}
 /// #include <hyperion/mpl/list.h>
+/// #include <hyperion/mpl/metapredicates.h>
 ///
 /// using namespace hyperion::mpl;
 ///
@@ -61,6 +62,7 @@
 /// static_assert(constified == List<Pair<const int, const u32>,
 ///                                  Pair<const double, const usize>,
 ///                                  Pair<const float, const i32>>{});
+/// static_assert(constified.all_of(is_const));
 /// @endcode
 /// @headerfile hyperion/mpl/list.h
 /// @}
@@ -237,10 +239,9 @@ namespace hyperion::mpl {
                      [[maybe_unused]] MetaValue auto index) const noexcept
             requires(decltype(index)::value <= sizeof...(TTypes))
         {
-            if constexpr(meta_result_t<TPredicate,
-                                       typename detail::at<decltype(index)::value,
-                                                           0_usize,
-                                                           List<as_meta<TTypes>...>>::type>{})
+            if constexpr(typename detail::
+                             at<decltype(index)::value, 0_usize, List<as_meta<TTypes>...>>::type{}
+                                 .satisfies(TPredicate{}))
             {
                 return index;
             }
@@ -255,6 +256,7 @@ namespace hyperion::mpl {
       public:
         template<typename TPredicate>
             requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
+                    || requires { (as_meta<TTypes>{}.satisfies(TPredicate{}), ...); }
         [[nodiscard]] constexpr auto find_if(TPredicate&& predicate) const noexcept {
             auto result = find_if_impl(std::forward<TPredicate>(predicate), 0_value);
             if constexpr(result == Value<sizeof...(TTypes), usize>{}) {
@@ -271,11 +273,12 @@ namespace hyperion::mpl {
 
         template<typename TPredicate>
             requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
+                    || requires { (as_meta<TTypes>{}.satisfies(TPredicate{}), ...); }
         [[nodiscard]] constexpr auto
         count_if([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
             const noexcept {
             constexpr auto accumulator = [](auto state, auto element) {
-                if constexpr(TPredicate{}(decltype(element){})) {
+                if constexpr((decltype(element){}.satisfies(TPredicate{}))) {
                     return state + 1_value;
                 }
                 else {
@@ -296,12 +299,14 @@ namespace hyperion::mpl {
 
         template<typename TPredicate>
             requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
+                    || requires { (as_meta<TTypes>{}.satisfies(TPredicate{}), ...); }
         [[nodiscard]] constexpr auto all_of(TPredicate&& predicate) const noexcept {
             return count_if(std::forward<TPredicate>(predicate)) == sizeof...(TTypes);
         }
 
         template<typename TPredicate>
             requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
+                    || requires { (as_meta<TTypes>{}.satisfies(TPredicate{}), ...); }
         [[nodiscard]] constexpr auto any_of(TPredicate&& predicate) const noexcept {
             return find_if_impl(std::forward<TPredicate>(predicate), 0_value)
                    != Value<sizeof...(TTypes), usize>{};
@@ -309,6 +314,7 @@ namespace hyperion::mpl {
 
         template<typename TPredicate>
             requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
+                    || requires { (as_meta<TTypes>{}.satisfies(TPredicate{}), ...); }
         [[nodiscard]] constexpr auto none_of(TPredicate&& predicate) const noexcept {
             return find_if_impl(std::forward<TPredicate>(predicate), 0_value)
                    == Value<sizeof...(TTypes), usize>{};
@@ -316,6 +322,7 @@ namespace hyperion::mpl {
 
         template<typename TPredicate>
             requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
+                    || requires { (as_meta<TTypes>{}.satisfies(TPredicate{}), ...); }
         [[nodiscard]] constexpr auto index_if(TPredicate&& predicate) const noexcept {
             return find_if_impl(std::forward<TPredicate>(predicate), 0_value);
         }
@@ -467,6 +474,8 @@ namespace hyperion::mpl::_test::list {
     static_assert(List<int, double>{}.zip(List<float, usize>{}).apply(add_const)
                       == List<Pair<const int, const float>, Pair<const double, const usize>>{},
                   "hyperion::mpl::List::zip test case 2 (failing)");
+    static_assert(List<int, double>{}.zip(List<float, usize>{}).apply(add_const).all_of(is_const),
+                  "hyperion::mpl::List::zip test case 3 (failing)");
 
     static_assert(List<int, double>{} == List<int, double>{},
                   "hyperion::mpl::List operator== test case 1 (failing)");
