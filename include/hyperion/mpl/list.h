@@ -260,7 +260,7 @@ namespace hyperion::mpl {
             }
         }
 
-        [[nodiscard]] constexpr auto find([[maybe_unused]] auto value) const noexcept {
+        [[nodiscard]] constexpr auto find(auto value) const noexcept {
             return find_if(equal_to(value));
         }
 
@@ -283,6 +283,10 @@ namespace hyperion::mpl {
 
         [[nodiscard]] constexpr auto count([[maybe_unused]] auto value) const noexcept {
             return count_if(equal_to(value));
+        }
+
+        [[nodiscard]] constexpr auto contains(auto value) const noexcept {
+            return find_if(equal_to(value)).satisfies(not_equal_to(decltype_<not_found_tag>()));
         }
 
         template<typename TPredicate>
@@ -647,6 +651,15 @@ namespace hyperion::mpl::_test::list {
                   "hyperion::mpl::List::count test case 1 (failing)");
     static_assert(List<Value<3>, Value<2>, Value<3>>{}.count(4_value) == 0_value,
                   "hyperion::mpl::List::count test case 2 (failing)");
+
+    static_assert(List<Value<3>, int, double, Value<2>>{}.contains(2_value),
+                  "hyperion::mpl::List::contains test case 1 (failing)");
+    static_assert(List<Value<3>, int, double, Value<2>>{}.contains(decltype_<int>()),
+                  "hyperion::mpl::List::contains test case 2 (failing)");
+    static_assert(not List<Value<3>, int, double, Value<2>>{}.contains(decltype_<float>()),
+                  "hyperion::mpl::List::contains test case 3 (failing)");
+    static_assert(not List<Value<3>, int, double, Value<2>>{}.contains(4_value),
+                  "hyperion::mpl::List::contains test case 4 (failing)");
 
     static_assert(List<Value<3>, Value<2>, Value<4>>{}.index_if(greater_than(3_value)) == 2_value,
                   "hyperion::mpl::List::index_if test case 1 (failing)");
