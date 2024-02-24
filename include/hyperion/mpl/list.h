@@ -307,14 +307,14 @@ namespace hyperion::mpl {
 
         template<typename TPredicate>
             requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
-        [[nodiscard]] constexpr auto index_of(TPredicate&& predicate) const noexcept {
+        [[nodiscard]] constexpr auto index_if(TPredicate&& predicate) const noexcept {
             return find_if_impl(std::forward<TPredicate>(predicate), 0_value);
         }
 
         template<typename TValue>
             requires((!MetaPredicateOf<TValue, as_meta<TTypes>>) || ...)
         [[nodiscard]] constexpr auto index_of([[maybe_unused]] TValue value) const noexcept {
-            return find_if(equal_to(value));
+            return index_if(equal_to(value));
         }
 
         template<usize TIndex>
@@ -546,7 +546,6 @@ namespace hyperion::mpl::_test::list {
         }
     }) == decltype_<double>(),
                   "hyperion::mpl::List::find_if test case 1 (failing)");
-
     static_assert(List<int, double, float>{}.find_if([](auto type) {
         if constexpr(MetaType<decltype(type)>) {
             return Value<decltype(type){} == decltype_<usize>(), bool>{};
@@ -566,7 +565,6 @@ namespace hyperion::mpl::_test::list {
         }
     }),
                   "hyperion::mpl::List::all_of test case 1 (failing)");
-
     static_assert(not List<int, double, float, Value<1>>{}.all_of([](auto type) {
         if constexpr(MetaType<decltype(type)>) {
             return Value<std::is_arithmetic_v<typename decltype(type)::type>, bool>{};
@@ -586,7 +584,6 @@ namespace hyperion::mpl::_test::list {
         }
     }),
                   "hyperion::mpl::List::any_of test case 1 (failing)");
-
     static_assert(not List<int, double, float>{}.any_of([](auto type) {
         if constexpr(MetaType<decltype(type)>) {
             return Value<decltype(type){} == decltype_<usize>(), bool>{};
@@ -606,7 +603,6 @@ namespace hyperion::mpl::_test::list {
         }
     }),
                   "hyperion::mpl::List::none_of test case 1 (failing)");
-
     static_assert(not List<int, double, float>{}.none_of([](auto type) {
         if constexpr(MetaType<decltype(type)>) {
             return Value<decltype(type){} == decltype_<double>(), bool>{};
@@ -623,7 +619,6 @@ namespace hyperion::mpl::_test::list {
                                                                   })
                       == 6_value,
                   "hyperion::mpl::List::accumulate test case 1 (failing)");
-
     static_assert(List<Value<3>, Value<2>, Value<3>>{}.accumulate(0_value,
                                                                   [](auto state, auto val) {
                                                                       return state + val;
@@ -635,7 +630,6 @@ namespace hyperion::mpl::_test::list {
         return val == 3_value;
     }) == 2_value,
                   "hyperion::mpl::List::count_if test case 1 (failing)");
-
     static_assert(List<Value<3>, Value<2>, Value<3>>{}.count_if([](auto val) {
         return val == 4_value;
     }) == 0_value,
@@ -643,10 +637,20 @@ namespace hyperion::mpl::_test::list {
 
     static_assert(List<Value<3>, Value<2>, Value<3>>{}.count(3_value) == 2_value,
                   "hyperion::mpl::List::count test case 1 (failing)");
-
     static_assert(List<Value<3>, Value<2>, Value<3>>{}.count(4_value) == 0_value,
                   "hyperion::mpl::List::count test case 2 (failing)");
 
+    static_assert(List<Value<3>, Value<2>, Value<4>>{}.index_if(greater_than(3_value)) == 2_value,
+                  "hyperion::mpl::List::index_if test case 1 (failing)");
+    static_assert(List<Value<3>, Value<2>, Value<4>>{}.index_if(less_than(3_value)) == 1_value,
+                  "hyperion::mpl::List::index_if test case 2 (failing)");
+
+    static_assert(List<Value<3>, int, double, Value<4>>{}.index_of(decltype_<double>()) == 2_value,
+                  "hyperion::mpl::List::index_of test case 1 (failing)");
+    static_assert(List<Value<3>, int, double, Value<4>>{}.index_of(decltype_<int>()) == 1_value,
+                  "hyperion::mpl::List::index_of test case 2 (failing)");
+    static_assert(List<Value<3>, int, double, Value<4>>{}.index_of(4_value) == 3_value,
+                  "hyperion::mpl::List::index_of test case 3 (failing)");
 } // namespace hyperion::mpl::_test::list
 
 #endif // HYPERION_MPL_LIST_H
