@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming type for operating on a pair of metaprogramming values and/or types
 /// @version 0.1
-/// @date 2024-02-22
+/// @date 2024-02-23
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -33,9 +33,6 @@
 #include <cstddef>
 #include <type_traits>
 
-#ifndef HYPERION_MPL_PAIR_H
-    #define HYPERION_MPL_PAIR_H
-
 /// @ingroup mpl
 /// @{
 /// @defgroup pair Metaprogramming Pair Type
@@ -60,6 +57,9 @@
 /// @endcode
 /// @headerfile hyperion/mpl/pair.h
 /// @}
+
+#ifndef HYPERION_MPL_PAIR_H
+    #define HYPERION_MPL_PAIR_H
 
 namespace hyperion::mpl {
 
@@ -798,9 +798,12 @@ template<typename TFirst, typename TSecond>
 struct std::tuple_size<hyperion::mpl::Pair<TFirst, TSecond>>
     : std::integral_constant<std::size_t, 2> { };
 
-    #include <hyperion/mpl/list.h>
+// NOLINTNEXTLINE(misc-header-include-cycle)
     #include <hyperion/mpl/type.h>
+// NOLINTNEXTLINE(misc-header-include-cycle)
     #include <hyperion/mpl/value.h>
+// NOLINTNEXTLINE(misc-header-include-cycle)
+    #include <hyperion/mpl/list.h>
 
 namespace hyperion::mpl::_test::pair {
 

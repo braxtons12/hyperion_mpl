@@ -25,17 +25,14 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
 
+#include <hyperion/platform/def.h>
+//
 #include <hyperion/mpl/metatypes.h>
-#include <hyperion/mpl/pair.h>
 #include <hyperion/mpl/type.h>
 #include <hyperion/mpl/value.h>
-#include <hyperion/platform/def.h>
 
 #include <concepts>
 #include <type_traits>
-
-#ifndef HYPERION_MPL_METAPREDICATES_H
-    #define HYPERION_MPL_METAPREDICATES_H
 
 /// @ingroup mpl
 /// @{
@@ -63,7 +60,8 @@
 /// @headerfile hyperion/mpl/metatypes.h
 /// @}
 
-HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
+#ifndef HYPERION_MPL_METAPREDICATES_H
+    #define HYPERION_MPL_METAPREDICATES_H
 
 namespace hyperion::mpl {
 
@@ -108,8 +106,8 @@ namespace hyperion::mpl {
                          || (MetaType<decltype(element)> && MetaType<decltype(value)>)
                          || (MetaPair<decltype(element)> && MetaPair<decltype(value)>))
             {
-                return Value<(detail::convert_to_meta_t<decltype(element)>{}
-                              == detail::convert_to_meta_t<decltype(value)>{}),
+                return Value<detail::convert_to_meta_t<decltype(element)>{}
+                                 == detail::convert_to_meta_t<decltype(value)>{},
                              bool>{};
             }
             else {
@@ -1581,6 +1579,9 @@ namespace hyperion::mpl {
     }
 } // namespace hyperion::mpl
 
+    // NOLINTNEXTLINE(misc-header-include-cycle)
+    #include <hyperion/mpl/pair.h>
+    // NOLINTNEXTLINE(misc-header-include-cycle)
     #include <hyperion/mpl/list.h>
 
 namespace hyperion::mpl::_test::metapredicates {

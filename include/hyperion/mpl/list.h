@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming facilities for working with a list of types or values
 /// @version 0.1
-/// @date 2024-02-22
+/// @date 2024-02-23
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -25,20 +25,18 @@
 /// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 /// IN THE SOFTWARE.
 
-#include <hyperion/mpl/metapredicates.h>
-#include <hyperion/mpl/metatypes.h>
-#include <hyperion/mpl/type.h>
-#include <hyperion/mpl/value.h>
 #include <hyperion/platform/def.h>
 #include <hyperion/platform/ignore.h>
 #include <hyperion/platform/types.h>
+//
+#include <hyperion/mpl/metatypes.h>
+#include <hyperion/mpl/type.h>
+#include <hyperion/mpl/value.h>
+//
+#include <hyperion/mpl/metapredicates.h>
 
 #include <concepts>
-#include <functional>
 #include <type_traits>
-
-#ifndef HYPERION_MPL_LIST_H
-    #define HYPERION_MPL_LIST_H
 
 /// @ingroup mpl
 /// @{
@@ -66,6 +64,9 @@
 /// @endcode
 /// @headerfile hyperion/mpl/list.h
 /// @}
+
+#ifndef HYPERION_MPL_LIST_H
+    #define HYPERION_MPL_LIST_H
 
 namespace hyperion::mpl {
 
@@ -158,10 +159,10 @@ namespace hyperion::mpl {
     template<typename... TTypes>
     struct List {
         template<typename TType>
-        using as_meta = typename detail::convert_to_meta<TType>::type;
+        using as_meta = detail::convert_to_meta_t<TType>;
 
         template<typename TType>
-        using as_raw = typename detail::convert_to_raw<TType>::type;
+        using as_raw = detail::convert_to_raw_t<TType>;
 
         [[nodiscard]] constexpr auto size() const noexcept -> Value<sizeof...(TTypes), usize> {
             return {};
@@ -169,10 +170,10 @@ namespace hyperion::mpl {
 
         template<typename TFunction>
             requires(MetaFunctionOf<TFunction, as_meta<TTypes>> && ...)
-                    || (requires { as_meta<TTypes>{}.apply(TFunction{}); } && ...)
+                    || requires { (as_meta<TTypes>{}.apply(TFunction{}), ...); }
         [[nodiscard]] constexpr auto apply(TFunction&& func) // NOLINT(*-missing-std-forward)
-            const noexcept -> List<as_raw<decltype(as_meta<TTypes>{}.apply(func))>...> {
-            return {};
+            const noexcept {
+            return List<as_raw<decltype(as_meta<TTypes>{}.apply(func))>...>{};
         }
 
         template<typename TVisitor>
@@ -383,18 +384,19 @@ namespace hyperion::mpl {
         template<typename... TRHTypes>
             requires(sizeof...(TRHTypes) == sizeof...(TTypes))
         [[nodiscard]] constexpr auto zip([[maybe_unused]] List<TRHTypes...> rhs) const noexcept {
-            return std::invoke(
-                []<usize... TIndices>(std::index_sequence<TIndices...>) {
-                    constexpr auto _list = decltype(rhs){};
+            return []<usize... TIndices>(std::index_sequence<TIndices...>) {
+                constexpr auto _list = decltype(rhs){};
 
-                    return mpl::List<
-                        as_raw<decltype(make_pair(List{}.template at<TIndices>(),
-                                                  _list.template at<TIndices>()))>...>{};
-                },
-                std::index_sequence_for<TTypes...>{});
+                return mpl::List<as_raw<decltype(make_pair(List{}.template at<TIndices>(),
+                                                           _list.template at<TIndices>()))>...>{};
+            }(std::index_sequence_for<TTypes...>{});
         }
     };
+} // namespace hyperion::mpl
 
+    #include <hyperion/mpl/pair.h>
+
+namespace hyperion::mpl {
     template<typename... TLHTypes, typename... TRHTypes>
     [[nodiscard]] constexpr auto
     operator==([[maybe_unused]] const List<TLHTypes...>& lhs,
@@ -418,8 +420,6 @@ namespace hyperion::mpl {
         return check_all(List<TLHTypes...>{}.zip(List<TRHTypes...>{}).apply(is_same));
     }
 } // namespace hyperion::mpl
-
-    #include <hyperion/mpl/pair.h>
 
 namespace hyperion::mpl::_test::list {
 

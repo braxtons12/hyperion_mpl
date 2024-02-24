@@ -3,7 +3,7 @@
 /// @brief Concept and type trait definitions for what consitutes various categories of
 /// metaprogramming types
 /// @version 0.1
-/// @date 2024-02-22
+/// @date 2024-02-23
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -25,9 +25,6 @@
 /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
-
-#ifndef HYPERION_MPL_METATYPES_H
-#define HYPERION_MPL_METATYPES_H
 
 /// @ingroup mpl
 /// @{
@@ -113,6 +110,9 @@
 
 #include <concepts>
 #include <type_traits>
+
+#ifndef HYPERION_MPL_METATYPES_H
+    #define HYPERION_MPL_METATYPES_H
 
 HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
 
@@ -300,27 +300,36 @@ namespace hyperion::mpl {
         using convert_to_meta_t = typename convert_to_meta<TType>::type;
 
         template<typename TType>
-        struct convert_to_raw {
+        struct convert_to_raw;
+
+        template<typename TType>
+            requires(!MetaType<std::remove_cvref_t<TType>>)
+                    && (!MetaValue<std::remove_cvref_t<TType>>)
+                    && (!MetaPair<std::remove_cvref_t<TType>>)
+        struct convert_to_raw<TType> {
             using type = TType;
         };
 
         template<typename TType>
-            requires MetaValue<TType>
+            requires MetaValue<std::remove_cvref_t<TType>>
         struct convert_to_raw<TType> {
-            using type = mpl::Value<TType::value, std::remove_cvref_t<decltype(TType::value)>>;
+            using type
+                = mpl::Value<std::remove_cvref_t<TType>::value,
+                             std::remove_cvref_t<decltype(std::remove_cvref_t<TType>::value)>>;
         };
 
         template<typename TType>
-            requires MetaType<TType>
+            requires MetaType<std::remove_cvref_t<TType>>
         struct convert_to_raw<TType> {
-            using type = typename TType::type;
+            using type = typename convert_to_raw<typename std::remove_cvref_t<TType>::type>::type;
         };
 
         template<typename TType>
-            requires MetaPair<TType>
+            requires MetaPair<std::remove_cvref_t<TType>>
         struct convert_to_raw<TType> {
-            using type = mpl::Pair<typename convert_to_raw<typename TType::first>::type,
-                                   typename convert_to_raw<typename TType::second>::type>;
+            using type = mpl::Pair<
+                typename convert_to_raw<typename std::remove_cvref_t<TType>::first>::type,
+                typename convert_to_raw<typename std::remove_cvref_t<TType>::second>::type>;
         };
 
         template<typename TType>
@@ -509,13 +518,11 @@ namespace hyperion::mpl {
 } // namespace hyperion::mpl
 
 // NOLINTNEXTLINE(misc-header-include-cycle)
-#include <hyperion/mpl/list.h>
+    #include <hyperion/mpl/type.h>
+  // NOLINTNEXTLINE(misc-header-include-cycle)
+    #include <hyperion/mpl/value.h>
 // NOLINTNEXTLINE(misc-header-include-cycle)
-#include <hyperion/mpl/pair.h>
-// NOLINTNEXTLINE(misc-header-include-cycle)
-#include <hyperion/mpl/type.h>
-// NOLINTNEXTLINE(misc-header-include-cycle)
-#include <hyperion/mpl/value.h>
+    #include <hyperion/mpl/pair.h>
 
 namespace hyperion::mpl::_test::metatypes {
     struct not_meta { };

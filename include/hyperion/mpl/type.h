@@ -25,15 +25,13 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
 
-#include <hyperion/mpl/metatypes.h>
 #include <hyperion/platform/def.h>
 #include <hyperion/platform/types.h>
+//
+#include <hyperion/mpl/metatypes.h>
 
 #include <concepts>
 #include <type_traits>
-
-#ifndef HYPERION_MPL_TYPE_H
-    #define HYPERION_MPL_TYPE_H
 
 /// @ingroup mpl
 /// @{
@@ -55,6 +53,9 @@
 /// @endcode
 /// @headerfile hyperion/mpl/type.h
 /// @}
+
+#ifndef HYPERION_MPL_TYPE_H
+    #define HYPERION_MPL_TYPE_H
 
 namespace hyperion::mpl {
     template<auto TValue, typename TType>

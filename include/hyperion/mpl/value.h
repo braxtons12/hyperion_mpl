@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming value type
 /// @version 0.1
-/// @date 2024-02-22
+/// @date 2024-02-23
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -25,11 +25,12 @@
 /// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 /// IN THE SOFTWARE.
 
+#include <hyperion/platform/def.h>
+#include <hyperion/platform/types.h>
+//
 #include <hyperion/mpl/concepts/comparable.h>
 #include <hyperion/mpl/concepts/operator_able.h>
 #include <hyperion/mpl/metatypes.h>
-#include <hyperion/platform/def.h>
-#include <hyperion/platform/types.h>
 
 #if HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
     #include <compare>
@@ -37,11 +38,6 @@
 
 #include <concepts>
 #include <type_traits>
-
-#ifndef HYPERION_MPL_VALUE_H
-    #define HYPERION_MPL_VALUE_H
-
-HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
 
 /// @ingroup mpl
 /// @{
@@ -64,6 +60,9 @@ HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
 /// @endcode
 /// @headerfile hyperion/mpl/value.h
 /// @}
+
+#ifndef HYPERION_MPL_VALUE_H
+    #define HYPERION_MPL_VALUE_H
 
 namespace hyperion::mpl {
     template<typename TType>
@@ -190,9 +189,7 @@ namespace hyperion::mpl {
         /// @return The result of applying `TMetaFunction`
         template<template<auto> typename TMetaFunction>
             requires ValueMetaFunction<TMetaFunction>
-        [[nodiscard]] constexpr auto
-
-        apply() const noexcept
+        [[nodiscard]] constexpr auto apply() const noexcept
             -> detail::unwrap_inner_t<detail::convert_to_meta_t<TMetaFunction<value>>> {
             return {};
         }
@@ -864,12 +861,6 @@ namespace hyperion::mpl {
         return {};
     }
 
-} // namespace hyperion::mpl
-
-    // NOLINTNEXTLINE(misc-header-include-cycle)
-    #include <hyperion/mpl/type.h>
-
-namespace hyperion::mpl {
     namespace _test::value {
 
         static_assert(value_of(Value<3>{}) == 3, "hyperion::mpl::value_of test case 1 (failing)");
@@ -1147,7 +1138,5 @@ namespace hyperion::mpl {
 
     } // namespace _test::value
 } // namespace hyperion::mpl
-
-HYPERION_IGNORE_DOCUMENTATION_WARNING_STOP;
 
 #endif // HYPERION_MPL_VALUE_H
