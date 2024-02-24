@@ -322,16 +322,15 @@ namespace hyperion::mpl {
 
         template<typename TValue>
             requires((!MetaPredicateOf<TValue, as_meta<TTypes>>) || ...)
-        [[nodiscard]] constexpr auto index_of([[maybe_unused]] TValue value) const noexcept {
+        [[nodiscard]] constexpr auto index_of(TValue value) const noexcept {
             return index_if(equal_to(value));
         }
 
         template<typename TFunction>
             requires std::invocable<TFunction, as_meta<TTypes>...>
-        [[nodiscard]] constexpr auto
-        unwrap([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
-            const noexcept -> std::invoke_result_t<TFunction, as_meta<TTypes>...> {
-            return TFunction{}(as_meta<TTypes>{}...);
+        [[nodiscard]] constexpr auto unwrap(TFunction&& func) const noexcept
+            -> std::invoke_result_t<TFunction, as_meta<TTypes>...> {
+            return std::forward<TFunction>(func)(as_meta<TTypes>{}...);
         }
 
         template<usize TIndex>

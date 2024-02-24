@@ -535,9 +535,8 @@ namespace hyperion::mpl {
         template<typename TFunction>
             requires std::invocable<TFunction, first, second>
         [[nodiscard]] constexpr auto
-        unwrap([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
-            const noexcept -> std::invoke_result_t<TFunction, first, second> {
-            return TFunction{}(make_first(), make_second());
+        unwrap(TFunction&& func) const noexcept -> std::invoke_result_t<TFunction, first, second> {
+            return std::forward<TFunction>(func)(make_first(), make_second());
         }
 
         /// @brief Returns the metaprogramming type at `TIndex` of this `Pair`
