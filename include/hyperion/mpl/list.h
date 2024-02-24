@@ -317,6 +317,14 @@ namespace hyperion::mpl {
             return index_if(equal_to(value));
         }
 
+        template<typename TFunction>
+            requires std::invocable<TFunction, as_meta<TTypes>...>
+        [[nodiscard]] constexpr auto
+        unwrap([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
+            const noexcept -> std::invoke_result_t<TFunction, as_meta<TTypes>...> {
+            return TFunction{}(as_meta<TTypes>{}...);
+        }
+
         template<usize TIndex>
             requires(TIndex < sizeof...(TTypes))
         [[nodiscard]] constexpr auto at() const noexcept ->
@@ -651,6 +659,37 @@ namespace hyperion::mpl::_test::list {
                   "hyperion::mpl::List::index_of test case 2 (failing)");
     static_assert(List<Value<3>, int, double, Value<4>>{}.index_of(4_value) == 3_value,
                   "hyperion::mpl::List::index_of test case 3 (failing)");
+
+    static constexpr auto sum = [](MetaValue auto... value) noexcept {
+        return (value + ...);
+    };
+
+    static constexpr auto num_ints = [](auto... value) noexcept {
+        constexpr auto to_value = [](auto val) {
+            if constexpr(MetaType<decltype(val)>) {
+                if constexpr(detail::convert_to_meta_t<decltype(val)>{} == decltype_<int>()) {
+                    return 1_value;
+                }
+                else {
+                    return 0_value;
+                }
+            }
+            else {
+                return 0_value;
+            }
+        };
+
+        return (to_value(value) + ...);
+    };
+
+    static_assert(List<Value<1>, Value<2>, Value<3>, Value<4>>{}.unwrap(sum) == 10_value,
+                  "hyperion::mpl::List::unwrap test case 1 (failing)");
+    static_assert(List<Value<3>, Value<4>, Value<3>, Value<4>>{}.unwrap(sum) == 14_value,
+                  "hyperion::mpl::List::unwrap test case 2 (failing)");
+    static_assert(List<Value<3>, Value<4>, Value<3>, Value<4>>{}.unwrap(sum) == 14_value,
+                  "hyperion::mpl::List::unwrap test case 3 (failing)");
+    static_assert(List<int, Value<1>, int, Value<2>, int>{}.unwrap(num_ints) == 3_value,
+                  "hyperion::mpl::List::unwrap test case 4 (failing)");
 } // namespace hyperion::mpl::_test::list
 
 #endif // HYPERION_MPL_LIST_H
