@@ -509,6 +509,37 @@ namespace hyperion::mpl {
             return List<TDelayFirst, TDelaySecond>{};
         }
 
+        /// @brief Unwraps this `Pair` into `first` and `second`, and invokes `func`
+        /// with them.
+        ///
+        /// Decomposes `this` into its constituent `first` and `second` metaprogramming
+        /// elements and invokes `func`, passing `first` and `second` as the invocation
+        /// arguments, returning the result of the invocation.
+        ///
+        /// # Requirements
+        /// - `func` must be invocable with `first, second`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto sum = [](MetaValue auto lhs, MetaValue auto rhs) noexcept {
+        ///     return lhs + rhs;
+        /// };
+        ///
+        /// static_assert(Pair<Value<1>, Value<2>>{}.unpack(sum) == 3_value);
+        /// @endcode
+        ///
+        /// @tparam TFunction the type of the function to invoke with `first` and
+        /// `second` as arguments
+        /// @param func the function to invoke with `first` and `second` as arguments
+        /// @return The result of invoking `func` with `first` and `second` as arguments
+        template<typename TFunction>
+            requires std::invocable<TFunction, first, second>
+        [[nodiscard]] constexpr auto
+        unwrap([[maybe_unused]] TFunction&& func) // NOLINT(*-missing-std-forward)
+            const noexcept -> std::invoke_result_t<TFunction, first, second> {
+            return TFunction{}(make_first(), make_second());
+        }
+
         /// @brief Returns the metaprogramming type at `TIndex` of this `Pair`
         ///
         /// If `TIndex` is `0`, returns `first`.
@@ -985,6 +1016,15 @@ namespace hyperion::mpl::_test::pair {
     static_assert(
         not Pair<int, Value<2>>{}.satisfies<is_one_or_const_inner_t>(),
         "hyperion::mpl::Pair::satisfies<MetaFunction<TypeOrValue>> test case 4 (failing)");
+
+    constexpr auto sum = [](MetaValue auto lhs, MetaValue auto rhs) noexcept {
+        return lhs + rhs;
+    };
+
+    static_assert(Pair<Value<1>, Value<2>>{}.unwrap(sum) == 3_value,
+                  "hyperion::mpl::Pair::unwrap test case 1 (failing)");
+    static_assert(Pair<Value<3>, Value<2>>{}.unwrap(sum) == 5_value,
+                  "hyperion::mpl::Pair::unwrap test case 2 (failing)");
 
     static_assert(Pair<int, double>{} == Pair<int, double>{},
                   "hyperion::mpl::Pair operator== test case 1 (failing)");
