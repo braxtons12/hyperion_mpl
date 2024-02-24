@@ -1,12 +1,4 @@
-#include <hyperion/mpl/concepts.h>
-#include <hyperion/mpl/list.h>
-#include <hyperion/mpl/metapredicates.h>
-#include <hyperion/mpl/metatypes.h>
-#include <hyperion/mpl/pair.h>
-#include <hyperion/mpl/type.h>
-#include <hyperion/mpl/type_traits.h>
-#include <hyperion/mpl/value.h>
-#include <hyperion/platform/types.h>
+#include <hyperion/mpl.h>
 
 using namespace hyperion;      // NOLINT(google-build-using-namespace)
 using namespace hyperion::mpl; // NOLINT(google-build-using-namespace)

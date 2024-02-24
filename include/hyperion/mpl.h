@@ -36,13 +36,18 @@
 /// techniques that are difficult to reason about.
 /// @headerfile "hyperion/mpl.h"
 
-#include <hyperion/mpl/metatypes.h>
-#include <hyperion/mpl/metapredicates.h>
 #include <hyperion/mpl/concepts.h>
-#include <hyperion/mpl/list.h>
-#include <hyperion/mpl/pair.h>
-#include <hyperion/mpl/type.h>
 #include <hyperion/mpl/type_traits.h>
+//
+#include <hyperion/mpl/metatypes.h>
+//
+#include <hyperion/mpl/type.h>
 #include <hyperion/mpl/value.h>
+//
+#include <hyperion/mpl/pair.h>
+//
+#include <hyperion/mpl/metapredicates.h>
+//
+#include <hyperion/mpl/list.h>
 
 #endif // HYPERION_MPL_H
