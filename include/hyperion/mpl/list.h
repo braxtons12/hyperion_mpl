@@ -168,6 +168,11 @@ namespace hyperion::mpl {
             return {};
         }
 
+        [[nodiscard]] constexpr auto
+        is_empty() const noexcept -> Value<sizeof...(TTypes) == 0, bool> {
+            return {};
+        }
+
         template<typename TFunction>
             requires(MetaFunctionOf<TFunction, as_meta<TTypes>> && ...)
                     || requires { (as_meta<TTypes>{}.apply(TFunction{}), ...); }
@@ -434,6 +439,15 @@ namespace hyperion::mpl {
 } // namespace hyperion::mpl
 
 namespace hyperion::mpl::_test::list {
+
+    static_assert(List<int, double>{}.size() == 2,
+                  "hyperion::mpl::List::size test case 1 (failing)");
+    static_assert(List<int, Value<1>, double, Value<2>>{}.size() == 4,
+                  "hyperion::mpl::List::size test case 2 (failing)");
+
+    static_assert(List<>{}.is_empty(), "hyperion::mpl::List::is_empty test case 1 (failing)");
+    static_assert(not List<int>{}.is_empty(),
+                  "hyperion::mpl::List::is_empty test case 2 (failing)");
 
     static constexpr auto add_const = [](MetaType auto type) {
         return type.as_const();
