@@ -124,7 +124,7 @@ namespace hyperion::mpl {
         /// @tparam TList The list to lookup an element in
         /// @tparam TCurrent the current index in the recursive lookup.
         /// In most cases, this should be left as the default (0).
-        template<usize TIndex, typename TList, usize TCurrent = 0_usize>
+        template<usize TIndex, typename TList, usize TCurrent = 0>
         struct at;
 
         // specialization for recursive lookup
@@ -275,15 +275,14 @@ namespace hyperion::mpl {
       public:
         /// @brief Returns the size of this `List`
         /// @return the size of this `List`
-        [[nodiscard]] constexpr auto size() const noexcept -> Value<sizeof...(TTypes), usize> {
-            return {};
+        [[nodiscard]] constexpr auto size() const noexcept {
+            return Value<sizeof...(TTypes), usize>{};
         }
 
         /// @brief Returns whether this `List` is empty
         /// @return whether this `List` is empty, as a `Value` specialization
-        [[nodiscard]] constexpr auto
-        is_empty() const noexcept -> Value<sizeof...(TTypes) == 0, bool> {
-            return {};
+        [[nodiscard]] constexpr auto is_empty() const noexcept {
+            return Value<sizeof...(TTypes) == 0, bool>{};
         }
 
         /// @brief Applies the metafunction `func` to the elements of this `List`,
