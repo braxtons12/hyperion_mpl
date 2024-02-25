@@ -326,21 +326,94 @@ namespace hyperion::mpl {
             return List<as_raw<decltype(as_meta<TTypes>{}.apply(func))>...>{};
         }
 
+        /// @brief Invokes the function `vis` with each element of this `List`.
+        ///
+        /// This is the canonical way to iterate through the elements of a `List`.
+        ///
+        /// Using the exposition-only template metafunction `as_meta`
+        /// (see the corresponding section in the @ref list module-level documentation),
+        /// applies `vis` to each element, `TElement`, of this `List` as if by
+        /// `vis(typename as_meta<TElement>::type{})`.
+        ///
+        /// # Requirements
+        /// - `vis` must be invocable with the corresponding metaprogramming type
+        /// for each element of this `List`. This is, for each element, `TElement`,
+        /// `std::invocable<TVisitor, typename as_meta<TElement>::type>` must be true.
+        /// - The invoke result of `vis` for each element of this `List` must be `void`.
+        ///
+        /// # Example
+        /// @code{.cpp}
+        /// constexpr auto example = List<Value<1>, int, float, double, int>{};
+        /// constexpr auto count_if = [](auto list, auto predicate) noexcept {
+        ///     auto num_satisfied = 0;
+        ///     list.for_each([&num_satisfied, predicate](auto element) {
+        ///         if(element.satisfies(predicate)) {
+        ///             num_satisfied++;
+        ///         }
+        ///     });
+        ///     return num_satisfied;
+        /// };
+        ///
+        /// constexpr auto num_ints = count_if(example, equal_to(decltype_<int>()));
+        /// static_assert(num_ints == 2);
+        /// @endcode
+        ///
+        /// @tparam TVisitor the type of the function to invoke with each element
+        /// of this `List`
+        /// @param vis the function to invoke with each element of this `List`
         template<typename TVisitor>
             requires(std::invocable<TVisitor, as_meta<TTypes>> && ...)
                     && (std::same_as<std::invoke_result_t<TVisitor, as_meta<TTypes>>, void> && ...)
-        constexpr auto for_each(TVisitor&& vis) const noexcept -> void {
-            (std::forward<TVisitor>(vis)(as_meta<TTypes>{}), ...);
+        constexpr auto for_each(TVisitor&& vis) // NOLINT(*-missing-std-forward)
+            const noexcept -> void {
+            (vis(as_meta<TTypes>{}), ...);
         }
 
-        template<typename TVisitor>
+        /// @brief Invokes the function `vis` with the first `count` elements of this `List`.
+        ///
+        /// This is the canonical way to iterate through a subset of the elements of a `List`.
+        ///
+        /// Using the exposition-only template metafunction `as_meta`
+        /// (see the corresponding section in the @ref list module-level documentation),
+        /// applies `vis` to each element, `TElement`, of this `List` as if by
+        /// `vis(typename as_meta<TElement>::type{})`.
+        ///
+        /// # Requirements
+        /// - `vis` must be invocable with the corresponding metaprogramming type
+        /// for each element of this `List`. This is, for each element, `TElement`,
+        /// `std::invocable<TVisitor, typename as_meta<TElement>::type>` must be true.
+        /// - The invoke result of `vis` for each element of this `List` must be `void`.
+        /// - `count` must be less than or equal to the number of elements of this `List`
+        ///
+        /// # Example
+        /// @code{.cpp}
+        /// constexpr auto example = List<Value<1>, int, float, double, int>{};
+        /// constexpr auto count_if_in_first_half = [](auto list, auto predicate) noexcept {
+        ///     auto num_satisfied = 0;
+        ///     list.for_each_n([&num_satisfied, predicate](auto element) {
+        ///         if(element.satisfies(predicate)) {
+        ///             num_satisfied++;
+        ///         }
+        ///     }, list.size() / 2_value);
+        ///     return num_satisfied;
+        /// };
+        ///
+        /// constexpr auto num_ints = count_if_in_first_half(example, equal_to(decltype_<int>()));
+        /// static_assert(num_ints == 1);
+        /// @endcode
+        ///
+        /// @tparam TVisitor the type of the function to invoke with the first `count` elements
+        /// of this `List`
+        /// @param vis the function to invoke with the first `count` elements of this `List`
+        template<typename TVisitor, MetaValue TCount>
             requires(std::invocable<TVisitor, as_meta<TTypes>> && ...)
                     && (std::same_as<std::invoke_result_t<TVisitor, as_meta<TTypes>>, void> && ...)
-        constexpr auto for_each_n(TVisitor&& vis, auto count) const noexcept -> void {
-            return typename detail::pop_back_base<List,
-                                                  std::make_index_sequence<decltype(count)::value>,
-                                                  TTypes...>::remaining{}
-                .for_each(std::forward<TVisitor>(vis));
+                    && (TCount::value <= sizeof...(TTypes))
+        constexpr auto for_each_n(TVisitor&& vis, [[maybe_unused]] TCount count) const noexcept
+            -> void {
+            return typename detail::
+                pop_back_base<List, std::make_index_sequence<TCount::value>, TTypes...>::remaining{}
+                    .for_each(std::forward<TVisitor>(vis));
         }
 
       private:
