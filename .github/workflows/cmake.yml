@@ -46,7 +46,7 @@ jobs:
           CXX: gcc-13
           ACTIONS_STEP_DEBUG: true
         working-directory: ${{github.workspace}}
-        run: ctest --preset env-cc-release --output-on-failure --verbose --no-tests=error
+        run: ctest --preset env-cc-release --verbose
 
       - name: Configure Clang
         env:
@@ -71,7 +71,7 @@ jobs:
           CXX: clang-16
           ACTIONS_STEP_DEBUG: true
         working-directory: ${{github.workspace}}
-        run: ctest --preset env-cc-release --output-on-failure --verbose --no-tests=error
+        run: ctest --preset env-cc-release --verbose
 
   build-windows:
     runs-on: windows-latest
@@ -108,7 +108,7 @@ jobs:
         env:
           ACTIONS_STEP_DEBUG: true
         working-directory: ${{github.workspace}}
-        run: ctest --preset msvc-release --output-on-failure --verbose --no-tests=error
+        run: ctest --preset msvc-release --verbose
 
   build-macos:
     runs-on: macos-latest
@@ -144,5 +144,5 @@ jobs:
           CXX: clang-15
           ACTIONS_STEP_DEBUG: true
         working-directory: ${{github.workspace}}
-        run: ctest --preset env-cc-release --output-on-failure --verbose --no-tests=error
+        run: ctest --preset env-cc-release --verbose
 
