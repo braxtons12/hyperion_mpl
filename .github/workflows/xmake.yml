@@ -126,7 +126,9 @@ jobs:
       - uses: seanmiddleditch/gha-setup-ninja@v4
 
       - name: Install XMake
-        run: brew install xmake
+        run: |
+          brew install xmake
+          sudo xmake update
 
       - name: Install LLVM
         run: xrepo install -y llvm
