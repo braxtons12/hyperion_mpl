@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming facilities for working with a list of types or values
 /// @version 0.1
-/// @date 2024-02-23
+/// @date 2024-02-24
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -65,6 +65,33 @@
 /// static_assert(constified.all_of(is_const));
 /// @endcode
 /// @headerfile hyperion/mpl/list.h
+///
+/// # Exposition-Only Types
+///
+/// - `struct as_meta`: Exposition-only template metafunction that converts
+/// a type, `TType`, to the corresponding metaprogramming type, exposed via
+/// the member `using` alias `type`. Maps `TType` in the following manner:
+///     - If `TType` is a `MetaType`, maps to
+///     `Type<typename as_meta<typename TType::type>::type>`, else
+///     - If `TType` is a `MetaValue`, maps to `Value<TType::value>`, else
+///     - If `TType` is a `MetaPair`, maps to
+///     @code{.cpp}
+///     Pair<typename as_meta<typename TType::first>::type,
+///          typename as_meta<typename TType::second>::type>
+///     @endcode, else
+///     - Maps to `Type<TType>`
+/// - `struct as_raw`: Exposition-only template metafunction that converts
+/// a type, `TType`, to the corresponding raw type, exposed via the member
+/// `using` alias `type`. Maps `TType` in the following manner:
+///     - If `TType` is a `MetaType`, maps to
+///     `typename as_raw<typename TType::type>::type`, else
+///     - If `TType` is a `MetaValue`, maps to `Value<TType::value>`, else
+///     - If `TType` is a `MetaPair`, maps to
+///     @code {.cpp}
+///     Pair<typename as_raw<typename TType::first>::type,
+///          typename as_raw<typename TType::second>::type>
+///     @endcode, else
+///     - Maps to `TType`
 /// @}
 
 #ifndef HYPERION_MPL_LIST_H
@@ -78,79 +105,123 @@ namespace hyperion::mpl {
     template<typename TFirst, typename TSecond>
     struct Pair;
 
+    /// @brief Tag type indicating that a searching operation in an `mpl::List`
+    /// could not find a/the desired result.
+    /// @ingroup list
+    /// @headerfile hyperion/mpl/list.h
     struct not_found_tag { };
 
     namespace detail {
-        struct any_tag { };
-
-        static inline constexpr auto any_value = 0;
-
-        template<usize TIndex, usize TCurrent, typename TList>
+        /// @brief Retrieves the `TIndex`th element of `TList`,
+        /// starting lookup at `TCurrent`.
+        ///
+        /// # Requirements
+        /// - `TIndex` < the number of elements of `TList`
+        /// - `TCurrent` < the number of elements of `TList`
+        /// - `TCurrent` <= `TIndex`
+        ///
+        /// @tparam TIndex the index of the element to get
+        /// @tparam TList The list to lookup an element in
+        /// @tparam TCurrent the current index in the recursive lookup.
+        /// In most cases, this should be left as the default (0).
+        template<usize TIndex, typename TList, usize TCurrent = 0_usize>
         struct at;
 
+        // specialization for recursive lookup
         template<usize TIndex,
                  usize TCurrent,
                  template<typename...>
                  typename TList,
                  typename THead,
                  typename... TTails>
-        struct at<TIndex, TCurrent, TList<THead, TTails...>> {
+        struct at<TIndex, TList<THead, TTails...>, TCurrent> {
     #if HYPERION_COMPILER_HAS_TYPE_PACK_ELEMENT
             using type = __type_pack_element<TIndex, THead, TTails...>;
     #else
             using type = std::conditional_t<
                 TIndex == TCurrent,
                 THead,
-                typename at<TIndex, TCurrent + 1_usize, TList<TTails...>>::type>;
+                typename at<TIndex, TList<TTails...>, TCurrent + 1_usize>::type>;
     #endif
         };
 
+        // specialization for end of the list
         template<usize TIndex, usize TCurrent, template<typename...> typename TList>
-        struct at<TIndex, TCurrent, TList<>> {
+        struct at<TIndex, TList<>, TCurrent> {
             using type = void;
         };
 
+        /// @brief Removes the first element from the list, `TList`, exposing that element as
+        /// the member `using` alias `front`, and the list of remaining elements from the list
+        /// as the member `using` alias `remaining`
+        ///
+        /// @tparam TList The list to remove the first element from
         template<typename TList>
         struct pop_front;
 
+        // specialization for removal
         template<template<typename...> typename TList, typename TFront, typename... TTypes>
         struct pop_front<TList<TFront, TTypes...>> {
             using front = TFront;
             using remaining = TList<TTypes...>;
         };
 
+        // specialization for single element list
         template<template<typename...> typename TList, typename TFront>
         struct pop_front<TList<TFront>> {
             using front = TFront;
             using remaining = TList<>;
         };
 
+        // specialization for empty list
         template<template<typename...> typename TList>
         struct pop_front<TList<>> {
             using front = not_found_tag;
             using remaining = TList<>;
         };
 
+        /// @brief Implementation of `remaining` in `pop_back`.
+        /// Removes the last element of the list `TList`, assuming `TIndexSequence`
+        /// is the index sequence from `0` to `sizeof...(TTypes) - 1`
+        ///
+        /// @tparam TList The list to remove the last element from
+        /// @tparam TIndexSequence The index sequence from `0` to `sizeof...(TTypes) - 1`
+        /// @tparam TTypes The type stored in `TList`
         template<template<typename...> typename TList, typename TIndexSequence, typename... TTypes>
         struct pop_back_base;
 
+        // specialization to use the index sequence to drop the last element
         template<template<typename...> typename TList, std::size_t... TIndices, typename... TTypes>
         struct pop_back_base<TList, std::index_sequence<TIndices...>, TTypes...> {
-            using remaining = TList<typename at<TIndices, 0_usize, List<TTypes...>>::type...>;
+            using remaining = TList<typename at<TIndices, List<TTypes...>>::type...>;
         };
 
+        /// @brief Removes the last element from the list, `TList`, exposing that element as
+        /// the member `using` alias `back`, and the list of remaining elements from the list
+        /// as the member `using` alias `remaining`
+        ///
+        /// @tparam TList The list to remove the last element from
         template<typename TList>
         struct pop_back;
 
+        // specialization for removal
         template<template<typename...> typename TList, typename... TTypes>
         struct pop_back<TList<TTypes...>> {
-            using back = typename at<sizeof...(TTypes) - 1, 0_usize, TList<TTypes...>>::type;
+            using back = typename at<sizeof...(TTypes) - 1, TList<TTypes...>>::type;
             using remaining =
                 typename pop_back_base<TList,
                                        std::make_index_sequence<sizeof...(TTypes) - 1>,
                                        TTypes...>::remaining;
         };
 
+        // specialization for single element list
+        template<template<typename...> typename TList, typename TType>
+        struct pop_back<TList<TType>> {
+            using back = TType;
+            using remaining = TList<>;
+        };
+
+        // specialization for empty list
         template<template<typename...> typename TList>
         struct pop_back<TList<>> {
             using back = not_found_tag;
@@ -158,23 +229,96 @@ namespace hyperion::mpl {
         };
     } // namespace detail
 
+    /// @brief `List` is a metaprogramming type for storing, communicating,
+    /// working with, and operating on lists of types or values.
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// #include <hyperion/mpl/list.h>
+    /// #include <hyperion/mpl/metapredicates.h>
+    ///
+    /// using namespace hyperion::mpl;
+    ///
+    /// constexpr auto add_const = [](MetaType auto type) noexcept {
+    ///     return type.add_const();
+    /// };
+    ///
+    /// constexpr auto const_zipped = List<int, double, float>{}
+    ///                               .zip(List<u32, usize, i32>{})
+    ///                               .apply(add_const);
+    /// static_assert(const_zipped == List<Pair<const int, const u32>,
+    ///                                  Pair<const double, const usize>,
+    ///                                  Pair<const float, const i32>>{});
+    /// static_assert(const_zipped.all_of(is_const));
+    ///
+    /// constexpr auto nums = List<Value<1>, Value<2>, Value<3>>{};
+    /// static_assert(nums.accumulate(0_value) == 6_value);
+    /// @endcode
+    ///
+    /// @tparam TTypes The types to represent in the list
+    ///
+    /// @ingroup list
+    /// @headerfile hyperion/mpl/list.h
     template<typename... TTypes>
     struct List {
+      private:
+        // shorthand to convert the (possibly raw) type `TType` to the
+        // appropriate metaprogramming type
         template<typename TType>
         using as_meta = detail::convert_to_meta_t<TType>;
 
+        // shorthand to convert the (possibly metaprogramming) type `TType`
+        // to the appropriate raw type
         template<typename TType>
         using as_raw = detail::convert_to_raw_t<TType>;
 
+      public:
+        /// @brief Returns the size of this `List`
+        /// @return the size of this `List`
         [[nodiscard]] constexpr auto size() const noexcept -> Value<sizeof...(TTypes), usize> {
             return {};
         }
 
+        /// @brief Returns whether this `List` is empty
+        /// @return whether this `List` is empty, as a `Value` specialization
         [[nodiscard]] constexpr auto
         is_empty() const noexcept -> Value<sizeof...(TTypes) == 0, bool> {
             return {};
         }
 
+        /// @brief Applies the metafunction `func` to the elements of this `List`,
+        /// returning the result as a new `List` specialization.
+        ///
+        /// Using the exposition-only template metafunctions `as_meta` and `as_raw`
+        /// (see the corresponding section in the @ref list module-level documentation),
+        /// applies `func` to each element, `TElement`, of this `List` as if by
+        /// `typename as_raw<decltype(typename as_meta<TElement>::type{}.apply(func))>::type`.
+        ///
+        /// # Requirements
+        /// - `func` must be a metafunction invocable with the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `func` must be a `MetaFunctionOf<TFunction, typename as_meta<TElement>::type>`
+        /// for each element,`TElement`, of this `List`
+        /// - OR, `func` must be a metafunction appliable to the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `typename as_meta<TElement>::type{}.apply(func)` must be well formed
+        /// for each element, `TElement`, of this `List`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        ///
+        /// constexpr auto add_const = [](MetaType auto type) noexcept {
+        ///     return type.add_const();
+        /// };
+        ///
+        /// static_assert(List<int, double>{}.apply(add_const)
+        ///               == List<const int, const double>{});
+        /// @endcode
+        ///
+        /// @tparam TFunction The type of the metafunction to apply to the elements
+        /// of this `List`
+        /// @param func The metafunction to apply to the elements of this `List`
+        /// @return a `List` specialization containing the modified elements
         template<typename TFunction>
             requires(MetaFunctionOf<TFunction, as_meta<TTypes>> && ...)
                     || requires { (as_meta<TTypes>{}.apply(TFunction{}), ...); }
@@ -222,7 +366,17 @@ namespace hyperion::mpl {
             }
         }
 
+        static constexpr auto sum = [](auto _state, auto current) noexcept {
+            return _state + current;
+        };
+
       public:
+        template<typename TState>
+            requires(std::invocable<decltype(sum), TState, as_meta<TTypes>> && ...)
+        [[nodiscard]] constexpr auto accumulate(TState&& state) const noexcept {
+            return accumulate_impl(std::forward<TState>(state), sum, List<as_meta<TTypes>...>{});
+        }
+
         template<typename TState, typename TAccumulator>
             requires(std::invocable<TAccumulator, TState, as_meta<TTypes>> && ...)
         [[nodiscard]] constexpr auto
@@ -239,9 +393,9 @@ namespace hyperion::mpl {
                      [[maybe_unused]] MetaValue auto index) const noexcept
             requires(decltype(index)::value <= sizeof...(TTypes))
         {
-            if constexpr(typename detail::
-                             at<decltype(index)::value, 0_usize, List<as_meta<TTypes>...>>::type{}
-                                 .satisfies(TPredicate{}))
+            if constexpr(typename detail::at<decltype(index)::value,
+                                             List<as_meta<TTypes>...>>::type{}
+                             .satisfies(TPredicate{}))
             {
                 return index;
             }
@@ -254,6 +408,42 @@ namespace hyperion::mpl {
         }
 
       public:
+        /// @brief Returns the first element of this `List` that satisfies the
+        /// metafunction predicate `predicate`.
+        ///
+        /// Using the exposition-only template metafunctions `as_meta`
+        /// (see the corresponding section in the @ref list module-level documentation),
+        /// checks each element, `TElement`, of this `List` to see whether it satisfies
+        /// `predicate`, as if by `typename as_meta<TElement>::type{}.satisfies(predicate)`,
+        /// and if satisfied, returns that element.
+        ///
+        /// If no element satisfying `predicate` is found, returns `Type<not_found_tag>`
+        ///
+        /// # Requirements
+        /// - `predicate` must be a metapredicate invocable with the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `func` must be a `MetaPredicateOf<TFunction, typename as_meta<TElement>::type>`
+        /// for each element,`TElement`, of this `List`
+        /// - OR, `predicate` must be a metapredicate satisfiable with the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `typename as_meta<TElement>::type{}.satisfy(predicate)` must be well formed
+        /// for each element, `TElement`, of this `List`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        ///
+        /// static_assert(List<int, const double, float>{}.find_if(is_const)
+        ///               == decltype_<const double>());
+        /// static_assert(List<int, const double, float>{}.find_if(is_volatile)
+        ///               == decltype_<not_found_tag>());
+        /// static_assert(List<Value<1>, Value<2>, Value<3>>{}.count_if(is_const)
+        ///               == decltype_<not_found_tag>());
+        /// @endcode
+        ///
+        /// @tparam TPredicate The type of the metapredicate to use for searcch
+        /// @param predicate The metapredicate to use for search
+        /// @return the first element satisfying `predicate`, or `Type<not_found_tag>`
+        /// if no element satisfies `predicate`
         template<typename TPredicate>
             requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
                     || requires { (as_meta<TTypes>{}.satisfies(TPredicate{}), ...); }
@@ -271,6 +461,39 @@ namespace hyperion::mpl {
             return find_if(equal_to(value));
         }
 
+        /// @brief Returns the number of elements of this `List` that satisfy the
+        /// metafunction predicate `predicate`, as a `Value` specialization.
+        ///
+        /// Using the exposition-only template metafunctions `as_meta`
+        /// (see the corresponding section in the @ref list module-level documentation),
+        /// checks each element, `TElement`, of this `List` to see whether it satisfies
+        /// `predicate`, as if by `typename as_meta<TElement>::type{}.satisfies(predicate)`,
+        /// and if satisfied, increments the internal count.
+        ///
+        /// # Requirements
+        /// - `predicate` must be a metapredicate invocable with the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `func` must be a `MetaPredicateOf<TFunction, typename as_meta<TElement>::type>`
+        /// for each element,`TElement`, of this `List`
+        /// - OR, `predicate` must be a metapredicate satisfiable with the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `typename as_meta<TElement>::type{}.satisfy(predicate)` must be well formed
+        /// for each element, `TElement`, of this `List`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        ///
+        /// static_assert(List<int, const double, float>{}.count_if(is_const)
+        ///               == 1_value);
+        /// static_assert(List<int, const double, float>{}.count_if(is_volatile)
+        ///               == 0_value);
+        /// static_assert(List<Value<1>, Value<2>, Value<3>>{}.count_if(is_const)
+        ///               == 0_value);
+        /// @endcode
+        ///
+        /// @tparam TPredicate The type of the metapredicate to use
+        /// @param predicate The metapredicate to use
+        /// @return the number of elements satisfying `predicate`
         template<typename TPredicate>
             requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
                     || requires { (as_meta<TTypes>{}.satisfies(TPredicate{}), ...); }
@@ -297,6 +520,34 @@ namespace hyperion::mpl {
             return find_if(equal_to(value)).satisfies(not_equal_to(decltype_<not_found_tag>()));
         }
 
+        /// @brief Returns whether all elements of this `List` satisfy the
+        /// metafunction predicate `predicate`, as a `Value` specialization.
+        ///
+        /// Using the exposition-only template metafunctions `as_meta`
+        /// (see the corresponding section in the @ref list module-level documentation),
+        /// checks each element, `TElement`, of this `List` to see whether it satisfies
+        /// `predicate`, as if by `typename as_meta<TElement>::type{}.satisfies(predicate)`.
+        ///
+        /// # Requirements
+        /// - `predicate` must be a metapredicate invocable with the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `func` must be a `MetaPredicateOf<TFunction, typename as_meta<TElement>::type>`
+        /// for each element,`TElement`, of this `List`
+        /// - OR, `predicate` must be a metapredicate satisfiable with the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `typename as_meta<TElement>::type{}.satisfy(predicate)` must be well formed
+        /// for each element, `TElement`, of this `List`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// static_assert(List<const int, const double, const float>{}.all_of(is_const));
+        /// static_assert(not List<int, const double, float>{}.all_of(is_const));
+        /// static_assert(not List<Value<1>, Value<2>, Value<3>>{}.all_of(is_const));
+        /// @endcode
+        ///
+        /// @tparam TPredicate The type of the metapredicate to use
+        /// @param predicate The metapredicate to use
+        /// @return whether all elements satisfy `predicate`
         template<typename TPredicate>
             requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
                     || requires { (as_meta<TTypes>{}.satisfies(TPredicate{}), ...); }
@@ -304,22 +555,116 @@ namespace hyperion::mpl {
             return count_if(std::forward<TPredicate>(predicate)) == sizeof...(TTypes);
         }
 
+        /// @brief Returns whether any elements of this `List` satisfy the
+        /// metafunction predicate `predicate`, as a `Value` specialization.
+        ///
+        /// Using the exposition-only template metafunctions `as_meta`
+        /// (see the corresponding section in the @ref list module-level documentation),
+        /// checks each element, `TElement`, of this `List` to see whether it satisfies
+        /// `predicate`, as if by `typename as_meta<TElement>::type{}.satisfies(predicate)`.
+        ///
+        /// # Requirements
+        /// - `predicate` must be a metapredicate invocable with the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `func` must be a `MetaPredicateOf<TFunction, typename as_meta<TElement>::type>`
+        /// for each element,`TElement`, of this `List`
+        /// - OR, `predicate` must be a metapredicate satisfiable with the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `typename as_meta<TElement>::type{}.satisfy(predicate)` must be well formed
+        /// for each element, `TElement`, of this `List`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// static_assert(List<const int, const double, const float>{}.any_of(is_const));
+        /// static_assert(List<int, const double, float>{}.any_of(is_const));
+        /// static_assert(not List<int, double, float>{}.any_of(is_const));
+        /// static_assert(not List<Value<1>, Value<2>, Value<3>>{}.all_of(is_const));
+        /// @endcode
+        ///
+        /// @tparam TPredicate The type of the metapredicate to use
+        /// @param predicate The metapredicate to use
+        /// @return whether any elements satisfy `predicate`
         template<typename TPredicate>
             requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
                     || requires { (as_meta<TTypes>{}.satisfies(TPredicate{}), ...); }
         [[nodiscard]] constexpr auto any_of(TPredicate&& predicate) const noexcept {
-            return find_if_impl(std::forward<TPredicate>(predicate), 0_value)
-                   != Value<sizeof...(TTypes), usize>{};
+            return find_if(std::forward<TPredicate>(predicate))
+                .satisfies(not_equal_to(decltype_<not_found_tag>()));
         }
 
+        /// @brief Returns whether zero elements of this `List` satisfy the
+        /// metafunction predicate `predicate`, as a `Value` specialization.
+        ///
+        /// Using the exposition-only template metafunctions `as_meta`
+        /// (see the corresponding section in the @ref list module-level documentation),
+        /// checks each element, `TElement`, of this `List` to see whether it satisfies
+        /// `predicate`, as if by `typename as_meta<TElement>::type{}.satisfies(predicate)`.
+        ///
+        /// # Requirements
+        /// - `predicate` must be a metapredicate invocable with the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `func` must be a `MetaPredicateOf<TFunction, typename as_meta<TElement>::type>`
+        /// for each element,`TElement`, of this `List`
+        /// - OR, `predicate` must be a metapredicate satisfiable with the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `typename as_meta<TElement>::type{}.satisfy(predicate)` must be well formed
+        /// for each element, `TElement`, of this `List`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// static_assert(not List<const int, const double, const float>{}.none_of(is_const));
+        /// static_assert(not List<int, const double, float>{}.none_of(is_const));
+        /// static_assert(List<int, double, float>{}.none_of(is_const));
+        /// static_assert(List<Value<1>, Value<2>, Value<3>>{}.none_of(is_const));
+        /// @endcode
+        ///
+        /// @tparam TPredicate The type of the metapredicate to use
+        /// @param predicate The metapredicate to use
+        /// @return whether zero elements satisfy `predicate`
         template<typename TPredicate>
             requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
                     || requires { (as_meta<TTypes>{}.satisfies(TPredicate{}), ...); }
         [[nodiscard]] constexpr auto none_of(TPredicate&& predicate) const noexcept {
-            return find_if_impl(std::forward<TPredicate>(predicate), 0_value)
-                   == Value<sizeof...(TTypes), usize>{};
+            return find_if(std::forward<TPredicate>(predicate))
+                .satisfies(equal_to(decltype_<not_found_tag>()));
         }
 
+        /// @brief Returns the index of the first element satisfying `predicate`,
+        /// as a `Value` specialization or `Value<sizeof...(TTypes)>` if no element
+        /// satisfies `predicate`.
+        ///
+        /// Using the exposition-only template metafunctions `as_meta`
+        /// (see the corresponding section in the @ref list module-level documentation),
+        /// checks each element, `TElement`, of this `List` to see whether it satisfies
+        /// `predicate`, as if by `typename as_meta<TElement>::type{}.satisfies(predicate)`,
+        /// and if satisfied, returns the index of that element.
+        ///
+        /// # Requirements
+        /// - `predicate` must be a metapredicate invocable with the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `func` must be a `MetaPredicateOf<TFunction, typename as_meta<TElement>::type>`
+        /// for each element,`TElement`, of this `List`
+        /// - OR, `predicate` must be a metapredicate satisfiable with the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `typename as_meta<TElement>::type{}.satisfy(predicate)` must be well formed
+        /// for each element, `TElement`, of this `List`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// static_assert(List<int, const double, float>{}.index_if(is_const)
+        ///               == 1_value);
+        /// static_assert(List<int, double, const float>{}.index_if(is_const)
+        ///               == 2_value);
+        /// static_assert(List<int, double, float>{}.index_if(is_const)
+        ///               == 3_value);
+        /// static_assert(List<Value<1>, Value<2>, Value<3>>{}.index_if(is_const)
+        ///               == 3_value);
+        /// @endcode
+        ///
+        /// @tparam TPredicate The type of the metapredicate to use
+        /// @param predicate The metapredicate to use
+        /// @return the index of the first element to satisfy `predicate`,
+        /// or `sizeof...(TTypes)` if no element satisfies `predicate`
         template<typename TPredicate>
             requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
                     || requires { (as_meta<TTypes>{}.satisfies(TPredicate{}), ...); }
@@ -342,25 +687,25 @@ namespace hyperion::mpl {
 
         template<usize TIndex>
             requires(TIndex < sizeof...(TTypes))
-        [[nodiscard]] constexpr auto at() const noexcept ->
-            typename detail::at<TIndex, 0_usize, List<as_meta<TTypes>...>>::type {
+        [[nodiscard]] constexpr auto
+        at() const noexcept -> typename detail::at<TIndex, List<as_meta<TTypes>...>>::type {
             return {};
         }
 
         [[nodiscard]] constexpr auto at(MetaValue auto index) const noexcept ->
-            typename detail::at<decltype(index)::value, 0_usize, List<as_meta<TTypes>...>>::type
+            typename detail::at<decltype(index)::value, List<as_meta<TTypes>...>>::type
             requires(decltype(index)::value < sizeof...(TTypes))
         {
             return {};
         }
 
-        [[nodiscard]] constexpr auto front() const noexcept ->
-            typename detail::at<0_usize, 0_usize, List<as_meta<TTypes>...>>::type {
+        [[nodiscard]] constexpr auto
+        front() const noexcept -> typename detail::at<0_usize, List<as_meta<TTypes>...>>::type {
             return {};
         }
 
-        [[nodiscard]] constexpr auto back() const noexcept -> typename detail::
-            at<sizeof...(TTypes) - 1_usize, 0_usize, List<as_meta<TTypes>...>>::type {
+        [[nodiscard]] constexpr auto back() const noexcept ->
+            typename detail::at<sizeof...(TTypes) - 1_usize, List<as_meta<TTypes>...>>::type {
             return {};
         }
 
@@ -589,6 +934,9 @@ namespace hyperion::mpl::_test::list {
         }
     }) == decltype_<not_found_tag>(),
                   "hyperion::mpl::List::find_if test case 2 (failing)");
+    static_assert(List<Value<1>, Value<2>, Value<3>>{}.find_if(is_const)
+                      == decltype_<not_found_tag>(),
+                  "hyperion::mpl::List::find_if test case 3 (failing)");
 
     static_assert(List<int, double, float>{}.all_of([](auto type) {
         if constexpr(MetaType<decltype(type)>) {
@@ -608,6 +956,8 @@ namespace hyperion::mpl::_test::list {
         }
     }),
                   "hyperion::mpl::List::all_of test case 2 (failing)");
+    static_assert(not List<Value<1>, Value<2>, Value<3>>{}.all_of(is_const),
+                  "hyperion::mpl::List::all_of test case 3 (failing)");
 
     static_assert(List<int, double, float>{}.any_of([](auto type) {
         if constexpr(MetaType<decltype(type)>) {
@@ -627,6 +977,8 @@ namespace hyperion::mpl::_test::list {
         }
     }),
                   "hyperion::mpl::List::any_of test case 2 (failing)");
+    static_assert(not List<Value<1>, Value<2>, Value<3>>{}.any_of(is_const),
+                  "hyperion::mpl::List::any_of test case 3 (failing)");
 
     static_assert(List<int, double, float>{}.none_of([](auto type) {
         if constexpr(MetaType<decltype(type)>) {
@@ -646,12 +998,10 @@ namespace hyperion::mpl::_test::list {
         }
     }),
                   "hyperion::mpl::List::none_of test case 2 (failing)");
+    static_assert(List<Value<1>, Value<2>, Value<3>>{}.none_of(is_const),
+                  "hyperion::mpl::List::none_of test case 3 (failing)");
 
-    static_assert(List<Value<1>, Value<2>, Value<3>>{}.accumulate(0_value,
-                                                                  [](auto state, auto val) {
-                                                                      return state + val;
-                                                                  })
-                      == 6_value,
+    static_assert(List<Value<1>, Value<2>, Value<3>>{}.accumulate(0_value) == 6_value,
                   "hyperion::mpl::List::accumulate test case 1 (failing)");
     static_assert(List<Value<3>, Value<2>, Value<3>>{}.accumulate(0_value,
                                                                   [](auto state, auto val) {
@@ -659,6 +1009,15 @@ namespace hyperion::mpl::_test::list {
                                                                   })
                       == 8_value,
                   "hyperion::mpl::List::accumulate test case 2 (failing)");
+
+    static_assert(List<Value<1>, Value<2>, Value<3>>{}.accumulate(0_value) == 6_value,
+                  "hyperion::mpl::List::accumulate test case 3 (failing)");
+    static_assert(List<Value<3>, Value<2>, Value<3>>{}.accumulate(0_value,
+                                                                  [](auto state, auto val) {
+                                                                      return state + val;
+                                                                  })
+                      == 8_value,
+                  "hyperion::mpl::List::accumulate test case 4 (failing)");
 
     static_assert(List<Value<3>, Value<2>, Value<3>>{}.count_if([](auto val) {
         return val == 3_value;
@@ -668,6 +1027,8 @@ namespace hyperion::mpl::_test::list {
         return val == 4_value;
     }) == 0_value,
                   "hyperion::mpl::List::count_if test case 2 (failing)");
+    static_assert(List<Value<1>, Value<2>, Value<3>>{}.count_if(is_const) == 0_value,
+                  "hyperion::mpl::List::count_if test case 3 (failing)");
 
     static_assert(List<Value<3>, Value<2>, Value<3>>{}.count(3_value) == 2_value,
                   "hyperion::mpl::List::count test case 1 (failing)");
@@ -687,6 +1048,8 @@ namespace hyperion::mpl::_test::list {
                   "hyperion::mpl::List::index_if test case 1 (failing)");
     static_assert(List<Value<3>, Value<2>, Value<4>>{}.index_if(less_than(3_value)) == 1_value,
                   "hyperion::mpl::List::index_if test case 2 (failing)");
+    static_assert(List<Value<1>, Value<2>, Value<3>>{}.index_if(is_const) == 3_value,
+                  "hyperion::mpl::List::count_if test case 3 (failing)");
 
     static_assert(List<Value<3>, int, double, Value<4>>{}.index_of(decltype_<double>()) == 2_value,
                   "hyperion::mpl::List::index_of test case 1 (failing)");
