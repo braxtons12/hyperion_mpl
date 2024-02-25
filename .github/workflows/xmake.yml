@@ -127,8 +127,7 @@ jobs:
 
       - name: Install XMake
         run: |
-          brew install xmake
-          xmake update
+          brew install xmake@2.8.7
 
       - name: Install LLVM
         run: xrepo install -y llvm
