@@ -2,7 +2,7 @@
 set_project("hyperion_mpl")
 set_version("0.1.0")
 
-set_xmakever("2.8.2")
+set_xmakever("2.8.7")
 
 set_languages("cxx20")
 
@@ -90,6 +90,7 @@ target("hyperion_mpl_main", function()
         import("hyperion_compiler_settings", { alias = "settings" })
         settings.set_compiler_settings(target)
     end)
+    add_tests("hyperion_mpl_main")
 end)
 
 target("hyperion_mpl_docs", function()
