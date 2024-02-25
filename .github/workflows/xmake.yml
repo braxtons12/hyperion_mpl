@@ -46,6 +46,12 @@ jobs:
         working-directory: ${{github.workspace}}
         run: xmake b
 
+      - name: Test
+        env:
+          ACTIONS_STEP_DEBUG: true
+        working-directory: ${{github.workspace}}
+        run: xmake test
+
       - name: Configure Clang
         env:
           CC: clang-16
@@ -64,6 +70,12 @@ jobs:
         run: |
           xmake b
           xmake check clang.tidy
+
+      - name: Test
+        env:
+          ACTIONS_STEP_DEBUG: true
+        working-directory: ${{github.workspace}}
+        run: xmake test
 
   build-windows:
     runs-on: windows-latest
@@ -99,6 +111,12 @@ jobs:
         working-directory: ${{github.workspace}}
         run: xmake b
 
+      - name: Test
+        env:
+          ACTIONS_STEP_DEBUG: true
+        working-directory: ${{github.workspace}}
+        run: xmake test
+
   build-macos:
     runs-on: macos-latest
     strategy:
@@ -124,4 +142,10 @@ jobs:
         run: |
           xmake b -y
           xmake check clang.tidy
+
+      - name: Test
+        env:
+          ACTIONS_STEP_DEBUG: true
+        working-directory: ${{github.workspace}}
+        run: xmake test
 

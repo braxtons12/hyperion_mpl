@@ -40,6 +40,14 @@ jobs:
         working-directory: ${{github.workspace}}
         run: cmake --build --preset env-cc-release
 
+      - name: Test GCC
+        env:
+          CC: gcc-13
+          CXX: gcc-13
+          ACTIONS_STEP_DEBUG: true
+        working-directory: ${{github.workspace}}
+        run: ctest --preset env-cc-release --output-on-failure --verbose --no-tests=error
+
       - name: Configure Clang
         env:
           CC: clang-16
@@ -56,6 +64,14 @@ jobs:
           ACTIONS_STEP_DEBUG: true
         working-directory: ${{github.workspace}}
         run: cmake --build --preset env-cc-release
+
+      - name: Test Clang
+        env:
+          CC: clang-16
+          CXX: clang-16
+          ACTIONS_STEP_DEBUG: true
+        working-directory: ${{github.workspace}}
+        run: ctest --preset env-cc-release --output-on-failure --verbose --no-tests=error
 
   build-windows:
     runs-on: windows-latest
@@ -88,6 +104,12 @@ jobs:
         working-directory: ${{github.workspace}}
         run: cmake --build --preset msvc-release
 
+      - name: Test
+        env:
+          ACTIONS_STEP_DEBUG: true
+        working-directory: ${{github.workspace}}
+        run: ctest --preset msvc-release --output-on-failure --verbose --no-tests=error
+
   build-macos:
     runs-on: macos-latest
     strategy:
@@ -115,4 +137,12 @@ jobs:
           ACTIONS_STEP_DEBUG: true
         working-directory: ${{github.workspace}}
         run: cmake --build --preset env-cc-release
+
+      - name: Test
+        env:
+          CC: clang-15
+          CXX: clang-15
+          ACTIONS_STEP_DEBUG: true
+        working-directory: ${{github.workspace}}
+        run: ctest --preset env-cc-release --output-on-failure --verbose --no-tests=error
 
