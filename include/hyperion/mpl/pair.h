@@ -448,20 +448,6 @@ namespace hyperion::mpl {
             }
         }
 
-        /// @brief Converts this `Pair` to an `mpl::List<TFirst, TSecond>`.
-        ///
-        /// # Example
-        /// @code {.cpp}
-        /// constexpr auto as_list = Pair<int, double>{}.as_list();
-        /// static_assert(as_list == List<int, double>{});
-        /// @endcode
-        /// @return an `mpl::List` representing `TFirst` and `TSecond`
-        template<typename TDelayFirst = TFirst, typename TDelaySecond = TSecond>
-            requires std::same_as<TDelayFirst, TFirst> && std::same_as<TDelaySecond, TSecond>
-        [[nodiscard]] constexpr auto as_list() const noexcept {
-            return List<TDelayFirst, TDelaySecond>{};
-        }
-
         /// @brief Unwraps this `Pair` into `first` and `second`, and invokes `func`
         /// with them.
         ///
@@ -785,8 +771,6 @@ struct std::tuple_size<hyperion::mpl::Pair<TFirst, TSecond>>
     #include <hyperion/mpl/type.h>
 // NOLINTNEXTLINE(misc-header-include-cycle)
     #include <hyperion/mpl/value.h>
-// NOLINTNEXTLINE(misc-header-include-cycle)
-    #include <hyperion/mpl/list.h>
 
 namespace hyperion::mpl::_test::pair {
 
@@ -996,9 +980,6 @@ namespace hyperion::mpl::_test::pair {
 
     static_assert(test_pair_decomposition(),
                   "hyperion::mpl::Pair structured binding test (failing)");
-
-    static_assert(Pair<int, double>{}.as_list() == List<int, double>{},
-                  "hyperion::mpl::Pair::as_list test (failing)");
 
     constexpr auto test_make_pair() -> bool {
         int first = 0;
