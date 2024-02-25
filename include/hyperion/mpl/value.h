@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming value type
 /// @version 0.1
-/// @date 2024-02-23
+/// @date 2024-02-24
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -308,8 +308,7 @@ namespace hyperion::mpl {
         /// @brief Checks to see if this `Value` specialization satisfies the given metafunction
         /// predicate, `predicate`
         ///
-        /// # Requirements
-        /// - `TPredicate` must be a `MetaPredicateOf<Value>` type
+        /// If `predicate` is not a `MetaPredicateOf<Value>` type, returns `Value<false>`
         ///
         /// # Example
         /// @code {.cpp}
@@ -327,11 +326,14 @@ namespace hyperion::mpl {
         /// @tparam TPredicate The metafunction predicate to check with
         /// @return The result of checking this `Value` specialization against `TPredicate`, as a
         /// `Value` specialization
-        template<MetaPredicateOf<Value> TPredicate>
-        [[nodiscard]] constexpr auto
-        satisfies([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
-            const noexcept -> meta_result_t<TPredicate, Value> {
-            return {};
+        template<typename TPredicate>
+        [[nodiscard]] constexpr auto satisfies(TPredicate&& predicate) const noexcept {
+            if constexpr(MetaPredicateOf<TPredicate, Value>) {
+                return std::forward<TPredicate>(predicate)(Value{});
+            }
+            else {
+                return Value<false>{};
+            }
         }
     };
 
@@ -1105,36 +1107,45 @@ namespace hyperion::mpl {
                       "3 (failing)");
 
         template<auto TValue>
-        struct is_const_value : public std::bool_constant<bool(TValue)> { };
+        struct is_true_value : public std::bool_constant<bool(TValue)> { };
+
+        static_assert((1_value).satisfies<is_true_value>(),
+                      "hyperion::mpl::Value::satisfies<ValueMetaFunction> -> MetaValue test case 1 "
+                      "(failing)");
+        static_assert(!(0_value).satisfies<is_true_value>(),
+                      "hyperion::mpl::Value::satisfies<ValueMetaFunction> -> MetaValue test case 2 "
+                      "(failing)");
 
         template<MetaValue TValue>
-        struct is_const_meta : public std::bool_constant<bool(TValue::value)> { };
+        struct is_true_meta : public std::bool_constant<bool(TValue::value)> { };
 
-        constexpr auto is_const
+        static_assert((1_value).satisfies<is_true_meta>(),
+                      "hyperion::mpl::Value::satisfies<TypeMetaFunction> -> MetaValue test case 1 "
+                      "(failing)");
+        static_assert(!(0_value).satisfies<is_true_meta>(),
+                      "hyperion::mpl::Value::satisfies<TypeMetaFunction> -> MetaValue test case 2 "
+                      "(failing)");
+
+        constexpr auto is_true
             = [](MetaValue auto value) noexcept -> Value<decltype(value)::value, bool> {
             return {};
         };
 
-        static_assert((1_value).satisfies<is_const_value>(),
-                      "hyperion::mpl::Value::satisfies<ValueMetaFunction> -> MetaValue test case 1 "
+        static_assert((1_value).satisfies(is_true),
+                      "hyperion::mpl::Value::satisfies(MetaPredicate) -> MetaValue test case 1 "
                       "(failing)");
-        static_assert(!(0_value).satisfies<is_const_value>(),
-                      "hyperion::mpl::Value::satisfies<ValueMetaFunction> -> MetaValue test case 2 "
-                      "(failing)");
-
-        static_assert((1_value).satisfies<is_const_meta>(),
-                      "hyperion::mpl::Value::satisfies<TypeMetaFunction> -> MetaValue test case 1 "
-                      "(failing)");
-        static_assert(!(0_value).satisfies<is_const_meta>(),
-                      "hyperion::mpl::Value::satisfies<TypeMetaFunction> -> MetaValue test case 2 "
+        static_assert(not(0_value).satisfies(is_true),
+                      "hyperion::mpl::Value::satisfies(MetaPredicate) -> MetaValue test case 2 "
                       "(failing)");
 
-        static_assert((1_value).satisfies(is_const),
-                      "hyperion::mpl::Value::satisfies(MetaFunction) -> MetaValue test case 1 "
-                      "(failing)");
-        static_assert(!(0_value).satisfies(is_const),
-                      "hyperion::mpl::Value::satisfies(MetaFunction) -> MetaValue test case 2 "
-                      "(failing)");
+        constexpr auto is_int = [](MetaType auto type) noexcept
+            -> Value<std::is_same_v<int, typename decltype(type)::type>, bool> {
+            return {};
+        };
+
+        static_assert(
+            not(1_value).satisfies(is_int),
+            "hyperion::mpl::Value::satisfies(MetaPredicate) -> MetaValue test case 3 (failing)");
 
     } // namespace _test::value
 } // namespace hyperion::mpl

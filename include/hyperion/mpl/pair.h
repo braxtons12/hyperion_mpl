@@ -416,27 +416,20 @@ namespace hyperion::mpl {
         /// Checks that this `Pair` satisfies `predicate` and returns the result as an
         /// `mpl:Value<result, bool>`.
         ///
-        /// # Requirements
-        /// - `TPredicate` must be a `MetaPredicateOf<Pair>`.
-        /// - `TPredicate` _must not_ be a `MetaPredicateOf<first>`.
-        /// - `TPredicate` _must not_ be a `MetaPredicateOf<second>`.
+        /// If `predicate` is a `MetaPredicateOf<Pair>`, invokes `predicate` with this
+        /// `Pair` specialization and returns the result.
+        /// Otherwise, checks if `first` and `second` separately satisfy `predicate`,
+        /// and returns the boolean and of those results.
         ///
         /// # Example
         /// @code {.cpp}
-        /// constexpr auto is_one_or_const = [](MetaPair auto pair) noexcept {
-        ///     constexpr auto satisfies_inner = [](auto val) noexcept
-        ///         requires (!MetaPair<decltype(val)>)
-        ///     {
-        ///         if constexpr(MetaType<decltype(val)>) {
-        ///             return val.is_const();
-        ///         }
-        ///         else if constexpr(MetaValue<decltype(val)>) {
-        ///             return Value<decltype(val)::value == 1, bool>{};
-        ///         }
+        /// constexpr auto is_one_or_const = [](auto value) noexcept {
+        ///     if constexpr(MetaType<decltype(value)>) {
+        ///         return value.is_const();
         ///     }
-        ///
-        ///     return pair.make_first().satisfies(satisfies_inner)
-        ///            && pair.make_second().satisfies(satisfies_inner);
+        ///     else if constexpr(MetaValue<decltype(value)>) {
+        ///         return Value<decltype(value)::value == 1, bool>{};
+        ///     }
         /// };
         ///
         /// static_assert(Pair<int, Value<1>>{}.satisfies(is_one_or_const));
@@ -445,54 +438,14 @@ namespace hyperion::mpl {
         /// @tparam TPredicate The metafunction predicate to validate
         /// @return whether this `Pair` satisfies `predicate`, as an `mpl::Value`
         template<typename TPredicate>
-            requires MetaPredicateOf<TPredicate, Pair> && (!MetaPredicateOf<TPredicate, first>)
-                     && (!MetaPredicateOf<TPredicate, second>)
-        [[nodiscard]] constexpr auto satisfies(
-            [[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
-            const noexcept -> meta_result_t<TPredicate, Pair> {
-            return {};
-        }
-
-        /// @brief Checks that the types represented by this `Pair` both satisfy the metafunction
-        /// predicate, `predicate`.
-        ///
-        /// Checks that `first` and `second` both satisfy `predicate` and returns the result as an
-        /// `mpl:Value<result, bool>`.
-        /// Checks that `first` and `second` both satisfy `TPredicate` as if by
-        /// `make().template satisfies(std::forward<TPredicate>(predicate))` where `make` is
-        /// `make_first` or `make_second`, respectively.
-        ///
-        /// # Requirements
-        /// - `TPredicate` must be a `MetaPredicateOf<first>`
-        /// - `TPredicate` must be a `MetaPredicateOf<second>`.
-        /// - `TPredicate` _must not_ be a `MetaPredicateOf<Pair>`
-        ///
-        /// # Example
-        /// @code {.cpp}
-        /// constexpr auto is_one_or_const = [](auto pair) noexcept {
-        ///     requires (!MetaPair<decltype(val)>)
-        /// {
-        ///     if constexpr(MetaType<decltype(val)>) {
-        ///         return val.is_const();
-        ///     }
-        ///     else if constexpr(MetaValue<decltype(val)>) {
-        ///         return Value<decltype(val)::value == 1, bool>{};
-        ///     }
-        /// };
-        ///
-        /// static_assert(Pair<int, Value<1>>{}.satisfies(is_one_or_const));
-        /// @endcode
-        ///
-        /// @tparam TPredicate The metafunction predicate to validate
-        /// @return whether the types represented by this `Pair` satisfy `predicate`,
-        /// as an `mpl::Value`
-        template<typename TPredicate>
-            requires MetaPredicateOf<TPredicate, first> && MetaPredicateOf<TPredicate, second>
-                     && (!MetaPredicateOf<TPredicate, Pair>)
-        [[nodiscard]] constexpr auto satisfies(
-            [[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
-            const noexcept {
-            return make_first().satisfies(TPredicate{}) && make_second().satisfies(TPredicate{});
+        [[nodiscard]] constexpr auto satisfies(TPredicate&& predicate) const noexcept {
+            if constexpr(MetaPredicateOf<TPredicate, Pair>) {
+                return std::forward<TPredicate>(predicate)(Pair{});
+            }
+            else {
+                return make_first().satisfies(TPredicate{})
+                       && make_second().satisfies(TPredicate{});
+            }
         }
 
         /// @brief Converts this `Pair` to an `mpl::List<TFirst, TSecond>`.

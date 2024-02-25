@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Metaprogramming type wrapper for use as metafunction parameter and return type
 /// @version 0.1
-/// @date 2024-02-23
+/// @date 2024-02-24
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -338,21 +338,35 @@ namespace hyperion::mpl {
         /// predicate.
         ///
         /// # Requirements
-        /// - `TPredicate` must be a `MetaPredicateOf<Type<type>>` type
+        /// - If `type` is a `MetaValue`:
+        ///     - If `predicate` is invocable with `type`:
+        ///         - The value returned by invoking `predicate` with `type` must either be a
+        ///         `MetaValue`, or a `Type` specialization representing a `MetaValue`.
+        ///             - Using `TValue` to represent that `MetaValue` type, the type of the value
+        ///             of `TValue`, that is `decltype(TValue::value)`, must be of type
+        ///             (possibly cv-ref qualified) `bool`
+        ///         - If the above conditions on the return value of `predicate` are not met,
+        ///         the program is ill-formed
+        ///     - If `predicate` is not invocable with `type`, see the case where `predicate` is
+        ///     invocable with `Type<type>`
+        /// - If `predicate` is invocable with `Type<type>`:
+        ///     - The value returned by invoking `predicate` with `Type<type>` must either be a
+        ///     `MetaValue`, or a `Type` specialization representing a `MetaValue`.
+        ///         - Using `TValue` to represent that `MetaValue` type, the type of the value of
+        ///         `TValue`, that is `decltype(TValue::value)`, must be of type
+        ///         (possibly cv-ref qualified) `bool`
+        ///     - If the above conditions on the return value of `predicate` are not met,
+        ///     the program is ill-formed
+        /// - If `predicate` is not invocable with `Type<type>` nor `type`, returns `Value<false>`
         ///
         /// # Example
         /// @code {.cpp}
-        /// constexpr auto is_const = [](MetaType auto type)
-        ///     -> decltype(decltype(type){}.is_const())
-        /// {
-        ///     return {};
+        /// constexpr auto is_const = [](MetaType auto type) {
+        ///     return type.is_const();
         /// };
         ///
-        /// // `not_two` is `Value<false, bool>`
         /// constexpr auto not_const = decltype_<int>().satisfies(is_const);
-        /// // `was_two` is `Value<true, bool>`
         /// constexpr auto was_const = decltype_<const int>().satisfies(is_const);
-        ///
         /// static_assert(was_const);
         /// static_assert(not not_const);
         /// @endcode
@@ -360,149 +374,8 @@ namespace hyperion::mpl {
         /// @tparam TPredicate The type of the metafunction predicate to check with
         /// @param predicate The metafunction predicate to check with
         /// `Value` specialization
-        template<MetaPredicateOf<Type<type>> TPredicate>
-        [[nodiscard]] constexpr auto
-        satisfies([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
-            const noexcept -> meta_result_t<TPredicate, Type<type>> {
-            return {};
-        }
-
-        /// @brief Checks to see if this `Type` specialization satisfies the given metafunction
-        /// predicate.
-        ///
-        /// # Requirements
-        /// - `TPredicate` must be a `MetaFunctionOf<Type<type>>` type
-        ///     - It must be a callable with an overload taking a single `Type` parameter
-        ///     - The selected overload of `TPredicate` must return either a `MetaType` or a
-        ///     `MetaValue`
-        /// - The result of invoking `predicate` with `Type` must be a `MetaType`
-        /// - The `type` of the invoke result of `predicate`, ie,
-        /// `typename meta_result_t<TPredicate, Type<type>>::type` must be a `MetaValue`
-        /// - The type of the value of the `MetaValue` `type` of the invoke result of `predicate`
-        /// must be (possibly cv-ref qualified) `bool`. That is,
-        /// `decltype(typename meta_result_t<TPredicate, Type<type>>::type::value)` must be
-        /// (possibly cv-ref qualified) `bool`.
-        ///
-        /// # Example
-        /// @code {.cpp}
-        /// constexpr auto is_const = [](MetaType auto type)
-        ///     -> Type<decltype(decltype(type){}.is_const())>
-        /// {
-        ///     return {};
-        /// };
-        ///
-        /// // `not_const` is `Value<false, bool>`
-        /// constexpr auto not_const = decltype_<int>().satisfies(is_const);
-        /// // `was_const` is `Value<true, bool>`
-        /// constexpr auto was_const = decltype_<const int>().satisfies(is_const);
-        ///
-        /// static_assert(was_const);
-        /// static_assert(not not_const);
-        /// @endcode
-        ///
-        /// @tparam TPredicate The type of the metafunction predicate to check with
-        /// @param predicate The metafunction predicate to check with
-        /// @return The result of checking this `Type` specialization against `TPredicate`, as a
-        /// `Value` specialization
         template<typename TPredicate>
-        [[nodiscard]] constexpr auto
-        satisfies([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
-            const noexcept -> std::enable_if_t<
-                MetaFunctionOf<TPredicate, Type<type>>
-                    && MetaType<meta_result_t<TPredicate, Type<type>>>
-                    && MetaValue<typename meta_result_t<TPredicate, Type<type>>::type>
-                    && std::same_as<
-                        std::remove_cvref_t<
-                            decltype(meta_result_t<TPredicate, Type<type>>::type::value)>,
-                        bool>,
-                Value<meta_result_t<TPredicate, Type<type>>::type::value, bool>>;
-
-        /// @brief Checks to see if this `Type` specialization satisfies the given metafunction
-        /// predicate.
-        ///
-        /// Given that `type` is a `MetaValue`, checks that `predicate` is satisfied by the
-        /// `MetaValue` `type` of this specialization of `Type`, as if by
-        /// `type{}.satisfies(std::forward<TPredicate>(predicate))`.
-        ///
-        /// # Requirements
-        /// - `type` must be a `MetaValue`
-        /// - `TPredicate` must be a `MetaPredicateOf<type>` type
-        ///
-        /// # Example
-        ///
-        /// @code {.cpp}
-        /// constexpr auto is_two = [](MetaValue auto value)
-        ///     -> Value<decltype(value)::value == 2, bool>
-        /// {
-        ///     return {};
-        /// };
-        ///
-        /// constexpr auto is_two = decltype_(2_value).satisfies(is_two); // Value<true, bool>
-        /// constexpr auto not_two = decltype_(1_value).satisfies(is_two); // Value<false, bool>
-        ///
-        /// static_assert(is_two);
-        /// static_assert(not not_two);
-        /// @endcode
-        ///
-        /// @tparam TPredicate The type of the metafunction predicate to check with
-        /// @param predicate The metafunction predicate to check with
-        /// @return The result of checking this `Type` specialization against `predicate`, as a
-        /// `Value` specialization
-        template<MetaPredicateOf<type> TPredicate>
-            requires MetaValue<type>
-        [[nodiscard]] constexpr auto
-        satisfies([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-forward)
-            const noexcept {
-            return type{}.satisfies(TPredicate{});
-        }
-
-        /// @brief Checks to see if this `Type` specialization satisfies the given metafunction
-        /// predicate.
-        ///
-        /// # Requirements
-        /// - `type` must be a `MetaValue`
-        /// - `TPredicate` must be a `MetaFunctionOf<type>` type
-        ///     - It must be a callable with an overload taking a single `type` parameter
-        ///     - The selected overload of `TPredicate` must return either a `MetaType` or a
-        ///     `MetaValue`
-        /// - The result of invoking `predicate` with `type` must be a `MetaType`
-        /// - The `type` of the invoke result of `predicate`, ie,
-        /// `typename meta_result_t<TPredicate, type>::type` must be a `MetaValue`
-        /// - The type of the value of the `MetaValue` `type` of the invoke result of `predicate`
-        /// must be (possibly cv-ref qualified) `bool`. That is,
-        /// `decltype(typename meta_result_t<TPredicate, type>::type::value)` must be
-        /// (possibly cv-ref qualified) `bool`.
-        ///
-        /// # Example
-        /// @code {.cpp}
-        /// constexpr auto is_two = [](MetaValue auto value)
-        ///     -> Type<Value<decltype(value)::value == 2, bool>>
-        /// {
-        ///     return {};
-        /// };
-        ///
-        /// constexpr auto is_two = decltype_(2_value).satisfies(is_two); // Value<true, bool>
-        /// constexpr auto not_two = decltype_(1_value).satisfies(is_two); // Value<false, bool>
-        ///
-        /// static_assert(is_two);
-        /// static_assert(not not_two);
-        /// @endcode
-        ///
-        /// @tparam TPredicate The type of the metafunction predicate to check with
-        /// @param predicate The metafunction predicate to check with
-        /// @return The result of checking this `Type` specialization against `TPredicate`, as a
-        /// `Value` specialization
-        template<typename TPredicate>
-        [[nodiscard]] constexpr auto
-        satisfies([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-forward)
-            const noexcept -> std::enable_if_t<
-                MetaFunctionOf<TPredicate, type> && MetaType<meta_result_t<TPredicate, type>>
-                    && MetaValue<typename meta_result_t<TPredicate, type>::type>
-                    && std::same_as<
-                        std::remove_cvref_t<decltype(meta_result_t<TPredicate, type>::type::value)>,
-                        bool>
-                    && MetaValue<type>,
-                Value<meta_result_t<TPredicate, type>::type::value, bool>>;
+        [[nodiscard]] constexpr auto satisfies(TPredicate&& predicate) const noexcept;
 
         /// @brief Returns whether `this` `Type` specialization is the same as the given one.
         ///
@@ -1817,32 +1690,39 @@ namespace hyperion::mpl {
 
     template<typename TType>
     template<typename TPredicate>
-    [[nodiscard]] constexpr auto
-    Type<TType>::satisfies([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
-        const noexcept -> std::enable_if_t<
-            MetaFunctionOf<TPredicate, Type<type>>
-                && MetaType<meta_result_t<TPredicate, Type<type>>>
-                && MetaValue<typename meta_result_t<TPredicate, Type<type>>::type>
-                && std::same_as<std::remove_cvref_t<
-                                    decltype(meta_result_t<TPredicate, Type<type>>::type::value)>,
-                                bool>,
-            Value<meta_result_t<TPredicate, Type<type>>::type::value, bool>> {
-        return {};
-    }
+    [[nodiscard]] constexpr auto Type<TType>::satisfies(TPredicate&& predicate) const noexcept {
+        constexpr auto invoke = []<typename TPred>(TPred&& pred) noexcept {
+            using invoke_type = std::
+                conditional_t<MetaValue<type> && std::invocable<TPred, type>, type, Type<type>>;
+            if constexpr(std::invocable<TPred, invoke_type>) {
+                return std::forward<TPred>(pred)(invoke_type{});
+            }
+            else {
+                return Value<false, bool>{};
+            }
+        };
 
-    template<typename TType>
-    template<typename TPredicate>
-    [[nodiscard]] constexpr auto
-    Type<TType>::satisfies([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-forward)
-        const noexcept -> std::enable_if_t<
-            MetaFunctionOf<TPredicate, type> && MetaType<meta_result_t<TPredicate, type>>
-                && MetaValue<typename meta_result_t<TPredicate, type>::type>
-                && std::same_as<
-                    std::remove_cvref_t<decltype(meta_result_t<TPredicate, type>::type::value)>,
-                    bool>
-                && MetaValue<type>,
-            Value<meta_result_t<TPredicate, type>::type::value, bool>> {
-        return {};
+        const auto result = invoke(std::forward<TPredicate>(predicate));
+        if constexpr(MetaType<decltype(result)>) {
+            using inner = typename decltype(result)::type;
+            static_assert(MetaValue<inner>,
+                          "Predicates passed to mpl::Type::satisifes must return a `MetaValue`"
+                          "or an `mpl::Type<MetaValue>`");
+            static_assert(std::is_same_v<std::remove_cvref_t<decltype(inner::value)>, bool>,
+                          "`MetaValue`s returned by predicates passed to mpl::Type::satisfies"
+                          "must have `value` of type (possibly cv-ref qualified) `bool`");
+            return inner{};
+        }
+        else {
+            static_assert(MetaValue<decltype(result)>,
+                          "Predicates passed to mpl::Type::satisifes must return a `MetaValue`"
+                          "or an `mpl::Type<MetaValue>`");
+            static_assert(
+                std::is_same_v<std::remove_cvref_t<decltype(decltype(result)::value)>, bool>,
+                "`MetaValue`s returned by predicates passed to mpl::Type::satisfies"
+                "must have `value` of type (possibly cv-ref qualified) `bool`");
+            return decltype(result){};
+        }
     }
 
     template<typename TType>
@@ -2233,17 +2113,23 @@ namespace hyperion::mpl {
 
         static_assert(decltype_(1_value).satisfies(is_true_value_type),
                       "hyperion::mpl::Type::satisfies(MetaFunctionOf<Value>) -> Type<Value> "
-                      "test case 3 (failing)");
+                      "test case 1 (failing)");
         static_assert(!decltype_(0_value).satisfies(is_true_value_type),
                       "hyperion::mpl::Type::satisfies(MetaFunctionOf<Value>) -> Type<Value> "
-                      "test case 4 (failing)");
+                      "test case 2 (failing)");
+        static_assert(not decltype_<int>().satisfies(is_true_value_type),
+                      "hyperion::mpl::Type::satisfies(MetaFunctionOf<Value>) -> Type<Value> "
+                      "test case 3 (failing)");
 
         static_assert(decltype_(1_value).satisfies(is_true_value_value),
                       "hyperion::mpl::Type::satisfies(MetaFunctionOf<Value>) -> Value "
-                      "test case 3 (failing)");
+                      "test case 1 (failing)");
         static_assert(!decltype_(0_value).satisfies(is_true_value_value),
                       "hyperion::mpl::Type::satisfies(MetaFunctionOf<Value>) -> Value "
-                      "test case 4 (failing)");
+                      "test case 2 (failing)");
+        static_assert(not decltype_<int>().satisfies(is_true_value_value),
+                      "hyperion::mpl::Type::satisfies(MetaFunctionOf<Value>) -> Type<Value> "
+                      "test case 3 (failing)");
 
         template<MetaValue TValue>
         struct add_one {
