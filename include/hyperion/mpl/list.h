@@ -436,10 +436,10 @@ namespace hyperion::mpl {
         /// @return the result of the accumulation (at the top level of the call chain)
         /// or the current state of the accumulation (at any other level of the call chain)
         template<typename TState, typename TAccumulator, typename... TTs>
-        [[nodiscard]] constexpr auto
+        [[nodiscard]] static constexpr auto
         accumulate_impl(TState&& state,
                         TAccumulator&& accumulator,
-                        [[maybe_unused]] List<TTs...> remaining) const noexcept {
+                        [[maybe_unused]] List<TTs...> remaining) noexcept {
             using popped = detail::pop_front<List<TTs...>>;
             using front = typename popped::front;
             using remainder = typename popped::remaining;
@@ -550,9 +550,9 @@ namespace hyperion::mpl {
 
       private:
         template<typename TPredicate>
-        [[nodiscard]] constexpr auto
+        [[nodiscard]] static constexpr auto
         find_if_impl([[maybe_unused]] TPredicate&& predicate, // NOLINT(*-missing-std-forward))
-                     [[maybe_unused]] MetaValue auto index) const noexcept
+                     [[maybe_unused]] MetaValue auto index) noexcept
             requires(decltype(index)::value <= sizeof...(TTypes))
         {
             if constexpr(typename detail::at<decltype(index)::value,
