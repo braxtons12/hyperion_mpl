@@ -533,11 +533,12 @@ namespace hyperion::mpl {
         /// @endcode
         ///
         /// @param state the initial state to begin the accumulation with
-        /// @param callable the callable to perform the accumulation operation
+        /// @param accumulator the callable to perform the accumulation operation
         /// @return the accumulation of `state` and the elements of this `List`,
         /// according to `accumulator`
+        template<typename TDelay = List<as_meta<TTypes>...>>
         [[nodiscard]] constexpr auto accumulate(auto state, auto&& accumulator) const noexcept
-            requires requires {
+            requires std::same_as<TDelay, List<as_meta<TTypes>...>> && requires {
                 accumulate_impl(as_meta<decltype(state)>{},
                                 std::forward<decltype(accumulator)>(accumulator),
                                 List<as_meta<TTypes>...>{});
