@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming facilities for working with a list of types or values
 /// @version 0.1
-/// @date 2024-02-24
+/// @date 2024-02-26
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -417,8 +417,25 @@ namespace hyperion::mpl {
         }
 
       private:
+        /// @brief Implementation for `accumulate`.
+        /// Recursively called for each type in `TTs...`, in pack order.
+        ///
+        /// `state` may be a different type for each invocation step
+        /// in the recursive call chain.
+        ///
+        /// @tparam TState the type of the initial (at the top level of the call chain)
+        /// or current (at any other level of the call chain) state of the accumulation
+        /// @tparam TAccumulator the type of the callable to perform the accumulation with
+        /// @tparam TTs the remaining metaprogramming types in the list of types to
+        /// recursively accumulate
+        ///
+        /// @param state the initial (at the top level of the call chain) or current
+        /// (at any other level of the call chain) state of the accumulation
+        /// @param accumulator the callable to perform the accumulation with
+        /// @param remaining the remaining metaprogramming types to recursively accumulate
+        /// @return the result of the accumulation (at the top level of the call chain)
+        /// or the current state of the accumulation (at any other level of the call chain)
         template<typename TState, typename TAccumulator, typename... TTs>
-            requires(std::invocable<TAccumulator, TState, as_meta<TTs>> && ...)
         [[nodiscard]] constexpr auto
         accumulate_impl(TState&& state,
                         TAccumulator&& accumulator,
@@ -438,23 +455,96 @@ namespace hyperion::mpl {
             }
         }
 
-        static constexpr auto sum = [](auto _state, auto current) noexcept {
+        /// @brief Default accumulation operation.
+        /// Performs the arithmetic sum of the two `MetaValue`s
+        static constexpr auto sum = [](MetaValue auto _state, MetaValue auto current) noexcept {
             return _state + current;
         };
 
       public:
-        template<typename TState>
-            requires(std::invocable<decltype(sum), TState, as_meta<TTypes>> && ...)
-        [[nodiscard]] constexpr auto accumulate(TState&& state) const noexcept {
-            return accumulate_impl(std::forward<TState>(state), sum, List<as_meta<TTypes>...>{});
+        /// @brief Computes the arithmetic sum of `state` and the elements of this `List`.
+        ///
+        /// # Requirements
+        /// - All elements of this `List` must be `MetaValue`s
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// static_assert(List<Value<1>, Value<2>, Value<3>>{}.accumulate(4_value) == 10);
+        /// @endcode
+        ///
+        /// @param state the initial state to begin the summation with
+        /// @return the arithmetic sum of `state` and the elements of this `List`,
+        /// as a `Value` specialization
+        [[nodiscard]] constexpr auto accumulate(MetaValue auto state) const noexcept
+            requires(std::invocable<decltype(sum), as_meta<decltype(state)>, as_meta<TTypes>>
+                     && ...)
+        {
+            return accumulate_impl(as_meta<decltype(state)>{}, sum, List<as_meta<TTypes>...>{});
         }
 
-        template<typename TState, typename TAccumulator>
-            requires(std::invocable<TAccumulator, TState, as_meta<TTypes>> && ...)
-        [[nodiscard]] constexpr auto
-        accumulate(TState&& state, TAccumulator&& accumulator) const noexcept {
-            return accumulate_impl(std::forward<TState>(state),
-                                   std::forward<TAccumulator>(accumulator),
+        /// @brief Computes the accumulation of `state` and the elements of this `List`.
+        ///
+        /// Using the exposition-only template metafunction `as_meta`
+        /// (see the corresponding section in the @ref list module-level documentation),
+        /// and `TElement_N` to represent the type of each element in this `List`,
+        /// uses the accumulation operation `accumulator`, performs the accumulation
+        /// of the elements of this `List`, in order, by first invoking `accumulator` with
+        /// `as_meta<decltype(state)>{}, as_meta<TElement_0>{}`, then continues to call
+        /// `accumulator` for each successive `TElement`, using the result of
+        /// the previous invocation as the `state` parameter for the next invocation
+        /// in the sequence.
+        ///
+        /// # Requirements
+        /// - Using `TElement_N` to represent the type of each element in this `List`
+        /// and `TState` to represent both `decltype(state)` and the (possibly different)
+        /// type(s) of the return value of each possible invocation of `accumulator`,
+        /// `accumulator` must be a callable taking two parameters, separately invocable
+        /// with parameters of types `as_meta<TState_N>, as_meta<TElement_N>`,
+        /// for each of all `TElement`s and `TState`s. That is, the recursive call chain
+        /// @code {.cpp}
+        /// accumulator(
+        ///     accumulator(
+        ///         ...(
+        ///             accumulator(as_meta<decltype(state)>{},
+        ///                         as_meta<TElement_0>{}),
+        ///             as_meta<TElement_1>{}),
+        ///         ...),
+        ///     as_meta<TElement_N-1>{})
+        /// @endcode
+        /// must be well-formed.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// static_assert(List<int, double, float, int>{}
+        ///               .accumulate(0_value, [](auto state, auto element) {
+        ///                 // increment state if `element` is a `MetaType` representing `int`
+        ///                 if constexpr(MetaType<decltype(element)>) {
+        ///                     if constexpr(decltype(element){} == decltype_<int>()) {
+        ///                         return state + 1_value;
+        ///                     }
+        ///                     else {
+        ///                         return state;
+        ///                     }
+        ///                 }
+        ///                 else {
+        ///                     return state;
+        ///                 }
+        ///               }) == 2);
+        /// @endcode
+        ///
+        /// @param state the initial state to begin the accumulation with
+        /// @param callable the callable to perform the accumulation operation
+        /// @return the accumulation of `state` and the elements of this `List`,
+        /// according to `accumulator`
+        [[nodiscard]] constexpr auto accumulate(auto state, auto&& accumulator) const noexcept
+            requires requires {
+                accumulate_impl(as_meta<decltype(state)>{},
+                                std::forward<decltype(accumulator)>(accumulator),
+                                List<as_meta<TTypes>...>{});
+            }
+        {
+            return accumulate_impl(as_meta<decltype(state)>{},
+                                   std::forward<decltype(accumulator)>(accumulator),
                                    List<as_meta<TTypes>...>{});
         }
 
@@ -521,7 +611,7 @@ namespace hyperion::mpl {
                     || requires { (as_meta<TTypes>{}.satisfies(TPredicate{}), ...); }
         [[nodiscard]] constexpr auto find_if(TPredicate&& predicate) const noexcept {
             auto result = find_if_impl(std::forward<TPredicate>(predicate), 0_value);
-            if constexpr(result == Value<sizeof...(TTypes), usize>{}) {
+            if constexpr(decltype(result){} == Value<sizeof...(TTypes), usize>{}) {
                 return decltype_<not_found_tag>();
             }
             else {
@@ -624,7 +714,8 @@ namespace hyperion::mpl {
             requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
                     || requires { (as_meta<TTypes>{}.satisfies(TPredicate{}), ...); }
         [[nodiscard]] constexpr auto all_of(TPredicate&& predicate) const noexcept {
-            return count_if(std::forward<TPredicate>(predicate)) == sizeof...(TTypes);
+            return count_if(std::forward<TPredicate>(predicate))
+                .satisfies(equal_to(Value<sizeof...(TTypes)>{}));
         }
 
         /// @brief Returns whether any elements of this `List` satisfy the
