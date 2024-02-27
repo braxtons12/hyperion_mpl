@@ -541,7 +541,7 @@ namespace hyperion::mpl {
             requires std::same_as<TDelay, List<as_meta<TTypes>...>> && requires {
                 accumulate_impl(as_meta<decltype(state)>{},
                                 std::forward<decltype(accumulator)>(accumulator),
-                                List<as_meta<TTypes>...>{});
+                                TDelay{});
             }
         {
             return accumulate_impl(as_meta<decltype(state)>{},
