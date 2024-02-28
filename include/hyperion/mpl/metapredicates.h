@@ -57,6 +57,34 @@
 /// static_assert(example3.all_of(constructible_from(List<const char*, std::size_t>{})));
 ///
 /// @endcode
+///
+/// # Exposition-Only Types
+///
+/// - `struct as_meta`: Exposition-only template metafunction that converts
+/// a type, `TType`, to the corresponding metaprogramming type, exposed via
+/// the member `using` alias `type`. Maps `TType` in the following manner:
+///     - If `TType` is a `MetaType`, maps to
+///     `Type<typename as_meta<typename TType::type>::type>`, else
+///     - If `TType` is a `MetaValue`, maps to `Value<TType::value>`, else
+///     - If `TType` is a `MetaPair`, maps to
+///     @code{.cpp}
+///     Pair<typename as_meta<typename TType::first>::type,
+///          typename as_meta<typename TType::second>::type>
+///     @endcode, else
+///     - Maps to `Type<TType>`
+/// - `struct as_raw`: Exposition-only template metafunction that converts
+/// a type, `TType`, to the corresponding raw type, exposed via the member
+/// `using` alias `type`. Maps `TType` in the following manner:
+///     - If `TType` is a `MetaType`, maps to
+///     `typename as_raw<typename TType::type>::type`, else
+///     - If `TType` is a `MetaValue`, maps to `Value<TType::value>`, else
+///     - If `TType` is a `MetaPair`, maps to
+///     @code {.cpp}
+///     Pair<typename as_raw<typename TType::first>::type,
+///          typename as_raw<typename TType::second>::type>
+///     @endcode, else
+///     - Maps to `TType`
+
 /// @headerfile hyperion/mpl/metatypes.h
 /// @}
 
@@ -70,12 +98,17 @@ namespace hyperion::mpl {
     ///
     /// The returned metaprogramming predicate object has call operator equivalent to
     /// `constexpr operator()(auto arg) noexcept`, that when invoked, returns whether
-    /// `arg` is equal to `value`, determined as if by:
+    /// `arg` is equal to `value`. Equality is determined, using the exposition-only
+    /// template metafunction `as_meta` (see the corresponding section in the
+    /// @ref list module-level documentation), as if by:
     /// @code {.cpp}
-    /// constexpr auto arg_as_mpl_value = Value<decltype(arg)::value>{};
-    /// constexpr auto value_as_mpl_value = Value<decltype(value)::value>{};
-    /// constexpr auto result = arg_as_mpl_value == value_as_mpl_value;
+    /// constexpr auto arg_as_mpl = typename as_meta<decltype(arg)>::type{};
+    /// constexpr auto value_as_mpl = typename as_meta<decltype(value)::type{};
+    /// constexpr auto result = arg_as_mpl == value_as_mpl;
     /// @endcode
+    /// If `arg` and `value` do not fulfill the same metaprogramming type concept
+    /// (e.g. if `arg` is `MetaValue` but `value` is `MetaType`), always returns
+    /// `Value<false>`.
     ///
     /// # Requirements
     /// - `value` must be an instance of a `MetaValue`, `MetaType`, or `MetaPair`
@@ -121,12 +154,17 @@ namespace hyperion::mpl {
     ///
     /// The returned metaprogramming predicate object has call operator equivalent to
     /// `constexpr operator()(auto arg) noexcept`, that when invoked, returns whether
-    /// `arg` is _not_ equal to `value`, determined as if by:
+    /// `arg` is _not_ equal to `value`. Inequality is determined, using the
+    /// exposition-only template metafunction `as_meta` (see the corresponding section
+    /// in the @ref list module-level documentation), as if by:
     /// @code {.cpp}
-    /// constexpr auto arg_as_mpl_value = Value<decltype(arg)::value>{};
-    /// constexpr auto value_as_mpl_value = Value<decltype(value)::value>{};
-    /// constexpr auto result = arg_as_mpl_value != value_as_mpl_value;
+    /// constexpr auto arg_as_mpl = typename as_meta<decltype(arg)>::type{};
+    /// constexpr auto value_as_mpl = typename as_meta<decltype(value)::type{};
+    /// constexpr auto result = arg_as_mpl != value_as_mpl;
     /// @endcode
+    /// If `arg` and `value` do not fulfill the same metaprogramming type concept
+    /// (e.g. if `arg` is `MetaValue` but `value` is `MetaType`), always returns
+    /// `Value<true>`.
     ///
     /// # Requirements
     /// - `value` must be an instance of a `MetaValue`, `MetaType`, or `MetaPair`
@@ -1581,7 +1619,7 @@ namespace hyperion::mpl {
 
     // NOLINTNEXTLINE(misc-header-include-cycle)
     #include <hyperion/mpl/pair.h>
-    // NOLINTNEXTLINE(misc-header-include-cycle)
+  // NOLINTNEXTLINE(misc-header-include-cycle)
     #include <hyperion/mpl/list.h>
 
 namespace hyperion::mpl::_test::metapredicates {
