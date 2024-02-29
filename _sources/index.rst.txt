@@ -8,8 +8,6 @@ in an ergonomic and functional style, instead of the bloat and complexity of the
 struct templates, partial specializations, SFINAE, and other techniques and tricks typically
 used in C++ metaprogramming.
 
-hyperion::mpl is currently under active development and has not yet hit a stable release point.
-
 See the :doc:`Quick Start Guide <quick_start>` for how to get started using hyperion::mpl.
 
 For an overview of each module, see the links in the left sidebar or below.
