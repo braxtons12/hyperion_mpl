@@ -1,5 +1,8 @@
 # hyperion::mpl
 
+[![XMake](https://github.com/braxtons12/hyperion_mpl/actions/workflows/xmake.yml/badge.svg?event=push)](https://github.com/braxtons12/hyperion_mpl/actions/workflows/xmake.yml)
+[![CMake](https://github.com/braxtons12/hyperion_mpl/actions/workflows/cmake.yml/badge.svg?event=push)](https://github.com/braxtons12/hyperion_mpl/actions/workflows/cmake.yml)
+
 hyperion::mpl is a C++20 metaprogramming library focused on making metaprogramming simple
 and easy. With hyperion::mpl, metaprogramming almost as easy as typical application code:
 you can metaprogram using (relatively) normal variables, values, and functions,
