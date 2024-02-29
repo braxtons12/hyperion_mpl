@@ -42,6 +42,21 @@ jobs:
         working-directory: ${{github.workspace}}
         run: xmake test
 
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
+      - name: Install Package
+        env:
+          CC: gcc-13
+          CXX: gcc-13
+          ACTIONS_STEP_DEBUG: true
+        run: |
+          xrepo add-repo -y hyperion "https://github.com/braxtons12/hyperion_packages.git"
+          xrepo update-repo -y
+          xrepo install -y --toolchain=envs "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
+
   build-linux-clang-16-x64:
     runs-on: ubuntu-latest
     strategy:
@@ -91,6 +106,21 @@ jobs:
         working-directory: ${{github.workspace}}
         run: xmake test
 
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
+      - name: Install Package
+        env:
+          CC: clang-16
+          CXX: clang-16
+          ACTIONS_STEP_DEBUG: true
+        run: |
+          xrepo add-repo -y hyperion "https://github.com/braxtons12/hyperion_packages.git"
+          xrepo update-repo -y
+          xrepo install -y --toolchain=envs "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
+
   build-windows-msvc-x64:
     runs-on: windows-latest
     strategy:
@@ -131,6 +161,19 @@ jobs:
         working-directory: ${{github.workspace}}
         run: xmake test
 
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
+      - name: Install Package
+        env:
+          ACTIONS_STEP_DEBUG: true
+        run: |
+          xrepo add-repo -y hyperion "https://github.com/braxtons12/hyperion_packages.git"
+          xrepo update-repo -y
+          xrepo install -y --toolchain=msvc "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
+
   build-macos-xcode-x64:
     runs-on: macos-latest
     strategy:
@@ -165,3 +208,15 @@ jobs:
         working-directory: ${{github.workspace}}
         run: xmake test
 
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
+      - name: Install Package
+        env:
+          ACTIONS_STEP_DEBUG: true
+        run: |
+          xrepo add-repo -y hyperion "https://github.com/braxtons12/hyperion_packages.git"
+          xrepo update-repo -y
+          xrepo install -y --toolchain=xcode "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
