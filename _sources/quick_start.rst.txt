@@ -29,15 +29,15 @@ other methods like :cmake:`add_subdirectory`\. Example for :cmake:`FetchContent`
 
 Note that hyperion::mpl depends on
 `hyperion::platform <https://github.com/braxtons12/hyperion_platform>`_ for platform and feature
-detection macros and other core utilities, and `doctest <https://github.com/doctest/doctestdoctest>`_
-for runtime testing. `hyperion::platform <https://github.com/braxtons12/hyperion_platform>`_
-optionally depends on `Tracy <https://github.com/wolfpld/tracy>`_ for the profiling macros it wraps
-in :cpp:`#include <hyperion/platform/def.h>`\. Inclusion of this dependency can be configured by
-setting the option :cmake:`HYPERION_ENABLE_TRACY` to :cmake:`ON` or :cmake:`OFF`\.
+detection macros and other core utilities. `hyperion::platform <https://github.com/braxtons12/hyperion_platform>`_
+has several optional features with optional dependencies, and hyperion::mpl exposes those settings
+to its users as well (see the
+`hyperion::platform documentation <https://braxtons12.github.io/hyperion_platform/quick_start.html>`_
+for how to enable these).
 
 By default, :cmake:`FetchContent` will be used to obtain these dependencies, but you can disable
 this by setting :cmake:`HYPERION_USE_FETCH_CONTENT` to :cmake:`OFF`\, in which case you will need to
-make sure each package is findable via CMake's :cmake:`find_package`.
+make sure each package is findable via CMake's :cmake:`find_package`\.
 
 XMake
 -----
@@ -70,6 +70,5 @@ way to use Hyperion packages. Example:
 Note that with XMake, hyperion::mpl requires the same dependencies as with the CMake build system.
 Third-party dependencies will be pulled from xmake-repo, the package repository/registry for XMake,
 and dependencies on other hyperion libraries will be pulled from github via the 
-`hyperion package repository/registry for xmake <https://github.com/braxtons12/hyperion_packages>`_.
-As with CMake, you can enable or disable Tracy (defaults to off) by setting the option
-:bash:`hyperion_enable_tracy`
+`hyperion package repository/registry for xmake <https://github.com/braxtons12/hyperion_packages>`_\.
+

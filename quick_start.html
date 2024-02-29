@@ -597,11 +597,11 @@ other methods like <code class="code highlight cmake docutils literal highlight-
 </div>
 <p>Note that hyperion::mpl depends on
 <a class="reference external" href="https://github.com/braxtons12/hyperion_platform">hyperion::platform</a> for platform and feature
-detection macros and other core utilities, and <a class="reference external" href="https://github.com/doctest/doctestdoctest">doctest</a>
-for runtime testing. <a class="reference external" href="https://github.com/braxtons12/hyperion_platform">hyperion::platform</a>
-optionally depends on <a class="reference external" href="https://github.com/wolfpld/tracy">Tracy</a> for the profiling macros it wraps
-in <code class="code highlight cpp docutils literal highlight-cpp"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/platform/def.h&gt;</span></code>. Inclusion of this dependency can be configured by
-setting the option <code class="code highlight cmake docutils literal highlight-cmake"><span class="err">HYPERION_ENABLE_TRACY</span></code> to <code class="code highlight cmake docutils literal highlight-cmake"><span class="err">ON</span></code> or <code class="code highlight cmake docutils literal highlight-cmake"><span class="err">OFF</span></code>.</p>
+detection macros and other core utilities. <a class="reference external" href="https://github.com/braxtons12/hyperion_platform">hyperion::platform</a>
+has several optional features with optional dependencies, and hyperion::mpl exposes those settings
+to its users as well (see the
+<a class="reference external" href="https://braxtons12.github.io/hyperion_platform/quick_start.html">hyperion::platform documentation</a>
+for how to enable these).</p>
 <p>By default, <code class="code highlight cmake docutils literal highlight-cmake"><span class="err">FetchContent</span></code> will be used to obtain these dependencies, but you can disable
 this by setting <code class="code highlight cmake docutils literal highlight-cmake"><span class="err">HYPERION_USE_FETCH_CONTENT</span></code> to <code class="code highlight cmake docutils literal highlight-cmake"><span class="err">OFF</span></code>, in which case you will need to
 make sure each package is findable via CMake’s <code class="code highlight cmake docutils literal highlight-cmake"><span class="err">find_package</span></code>.</p>
@@ -635,9 +635,7 @@ way to use Hyperion packages. Example:</p>
 <p>Note that with XMake, hyperion::mpl requires the same dependencies as with the CMake build system.
 Third-party dependencies will be pulled from xmake-repo, the package repository/registry for XMake,
 and dependencies on other hyperion libraries will be pulled from github via the
-<a class="reference external" href="https://github.com/braxtons12/hyperion_packages">hyperion package repository/registry for xmake</a>.
-As with CMake, you can enable or disable Tracy (defaults to off) by setting the option
-<code class="code highlight bash docutils literal highlight-bash">hyperion_enable_tracy</code></p>
+<a class="reference external" href="https://github.com/braxtons12/hyperion_packages">hyperion package repository/registry for xmake</a>.</p>
 </section>
 </section>
 
