@@ -7,7 +7,42 @@ on:
     branches: ["*"]
 
 jobs:
-  build-linux:
+  build-linux-gcc-13-x64:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: seanmiddleditch/gha-setup-ninja@v4
+
+      - name: Install XMake
+        run: |
+          sudo add-apt-repository ppa:xmake-io/xmake
+          sudo apt-get -y update
+          sudo apt-get -y install xmake
+
+      - name: Configure
+        env:
+          CC: gcc-13
+          CXX: gcc-13
+        working-directory: ${{github.workspace}}
+        run: xmake f -c -y --toolchain=envs
+
+      - name: Build
+        env:
+          CC: gcc-13
+          CXX: gcc-13
+          ACTIONS_STEP_DEBUG: true
+        working-directory: ${{github.workspace}}
+        run: xmake b
+
+      - name: Test
+        env:
+          ACTIONS_STEP_DEBUG: true
+        working-directory: ${{github.workspace}}
+        run: xmake test
+
+  build-linux-clang-16-x64:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -31,28 +66,7 @@ jobs:
       - name: Replace clang-tidy
         run: sudo cp /usr/bin/clang-tidy-16 /usr/bin/clang-tidy -f
 
-      - name: Configure GCC
-        env:
-          CC: gcc-13
-          CXX: gcc-13
-        working-directory: ${{github.workspace}}
-        run: xmake f -c -y --toolchain=envs
-
-      - name: Build GCC
-        env:
-          CC: gcc-13
-          CXX: gcc-13
-          ACTIONS_STEP_DEBUG: true
-        working-directory: ${{github.workspace}}
-        run: xmake b
-
-      - name: Test
-        env:
-          ACTIONS_STEP_DEBUG: true
-        working-directory: ${{github.workspace}}
-        run: xmake test
-
-      - name: Configure Clang
+      - name: Configure
         env:
           CC: clang-16
           CXX: clang-16
@@ -61,7 +75,7 @@ jobs:
           rm -rf build .xmake
           xmake f -c -y --toolchain=envs
 
-      - name: Build Clang
+      - name: Build
         env:
           CC: clang-16
           CXX: clang-16
@@ -77,7 +91,7 @@ jobs:
         working-directory: ${{github.workspace}}
         run: xmake test
 
-  build-windows:
+  build-windows-msvc-x64:
     runs-on: windows-latest
     strategy:
       fail-fast: false
@@ -117,7 +131,7 @@ jobs:
         working-directory: ${{github.workspace}}
         run: xmake test
 
-  build-macos:
+  build-macos-xcode-x64:
     runs-on: macos-latest
     strategy:
       fail-fast: false
