@@ -1,0 +1,19 @@
+name: Check for Versioning Labels
+on:
+  pull_request:
+    types: [opened, labeled, unlabeled, synchronize]
+jobs:
+  check_versioning_labels:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: mheap/github-action-required-labels@v5
+        with:
+          mode: exactly
+          count: 1
+          labels: "bump:major, bump:minor, bump:patch"
+          add_comment: true
+          message: "Missing label for the version update type associated with this PR.\n\
+                    Please add the appropriate lable of [bump:major, bump:minor, bump:patch]"
