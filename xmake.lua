@@ -1,6 +1,6 @@
 ---@diagnostic disable: undefined-global,undefined-field
 set_project("hyperion_mpl")
-set_version("0.1.0")
+set_version("0.2.0")
 
 set_xmakever("2.8.7")
 
@@ -10,30 +10,21 @@ add_rules("mode.debug", "mode.release")
 add_moduledirs("xmake")
 add_repositories("hyperion https://github.com/braxtons12/hyperion_packages.git")
 
-add_requires("doctest", {
-    system = false,
-    external = true,
-    configs = {
-        languages = "cxx20"
-    }
-})
-
 option("hyperion_enable_tracy", function()
-    add_defines("TRACY_ENABLE")
     set_default(false)
 end)
 
-local enable_tracy = false
-if has_config("hyperion_enable_tracy") then
-    enable_tracy = true
-end
+option("hyperion_enable_testing", function()
+    set_default(false)
+end)
 
 add_requires("hyperion_platform", {
     system = false,
     external = true,
     configs = {
         languages = "cxx20",
-        hyperion_enable_tracy = enable_tracy
+        hyperion_enable_tracy = has_config("hyperion_enable_tracy"),
+        hyperion_enable_testing = has_config("hyperion_enable_testing"),
     }
 })
 
@@ -75,8 +66,8 @@ target("hyperion_mpl", function()
         settings.set_compiler_settings(target)
     end)
     add_options("hyperion_enable_tracy")
+    add_options("hyperion_enable_testing")
 
-    add_packages("doctest", { public = true })
     add_packages("hyperion_platform", { public = true })
 end)
 
