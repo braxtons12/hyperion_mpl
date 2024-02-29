@@ -37,7 +37,7 @@ using namespace hyperion;
 using namespace hyperion::mpl;
 
 constexpr auto add_const = [](MetaType auto type) noexcept {
-    return type.add_const();
+    return type.as_const();
 };
 
 constexpr auto list = List<int, double, float>{};
@@ -47,6 +47,7 @@ constexpr auto constified = zipped.apply(add_const);
 static_assert(constified == List<Pair<const int, const u32>,
                                  Pair<const double, const usize>,
                                  Pair<const float, const i32>>{});
+static_assert(constified.all_of(is_const));
 
 constexpr auto val1 = Value<4>{};
 constexpr auto val2 = Value<2>{};
@@ -76,12 +77,6 @@ static_assert(decltype_(val3)
               .apply<std::remove_const>()
               .apply<std::add_rvalue_reference>()
               == decltype_<int&&>());
-
-constexpr auto add_const = [](MetaType auto type)
-    -> std::add_const<typename decltype(type)::type>
-{
-    return {};
-};
 
 constexpr auto add_lvalue_reference = [](MetaType auto type)
     -> std::add_lvalue_reference<typename decltype(type)::type>
