@@ -28,7 +28,7 @@ For an overview of each module, see the links in the left sidebar or below.
     using namespace hyperion::mpl;
 
     constexpr auto add_const = [](MetaType auto type) noexcept {
-        return type.add_const();
+        return type.as_const();
     };
 
     constexpr auto list = List<int, double, float>{};
@@ -67,12 +67,6 @@ For an overview of each module, see the links in the left sidebar or below.
                   .apply<std::remove_const>()
                   .apply<std::add_rvalue_reference>()
                   == decltype_<int&&>());
-
-    constexpr auto add_const = [](MetaType auto type)
-        -> std::add_const<typename decltype(type)::type>
-    {
-        return {};
-    };
 
     constexpr auto add_lvalue_reference = [](MetaType auto type)
         -> std::add_lvalue_reference<typename decltype(type)::type>
