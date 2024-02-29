@@ -4,6 +4,7 @@ project(hyperion_mpl LANGUAGES CXX)
 include(CTest)
 
 option(HYPERION_ENABLE_TRACY "Enables Profiling with Tracy" OFF)
+option(HYPERION_ENABLE_TESTING "Enables Testing Macros with Doctest" OFF)
 option(HYPERION_USE_FETCH_CONTENT "Enables FetchContent usage for getting dependencies" ON)
 
 set(HYPERION_ENABLE_TRACY
@@ -11,6 +12,11 @@ set(HYPERION_ENABLE_TRACY
     CACHE
     INTERNAL
     "force dependencies's `HYPERION_ENABLE_TRACY` to the value of this top-level project")
+set(HYPERION_ENABLE_TESTING
+    ${HYPERION_ENABLE_TESTING}
+    CACHE
+    INTERNAL
+    "force dependencies's `HYPERION_ENABLE_TESTING` to the value of this top-level project")
 set(HYPERION_USE_FETCH_CONTENT
     ${HYPERION_USE_FETCH_CONTENT}
     CACHE
@@ -21,20 +27,14 @@ if(HYPERION_USE_FETCH_CONTENT)
     include(FetchContent)
 endif()
 
-if(HYPERION_USE_FETCH_CONTENT)
-    FetchContent_Declare(doctest
-        GIT_REPOSITORY "https://github.com/doctest/doctest"
-        GIT_TAG "v2.4.11"
-        )
-    FetchContent_MakeAvailable(doctest)
-
+if(${HYPERION_USE_FETCH_CONTENT})
     FetchContent_Declare(hyperion_platform
         GIT_REPOSITORY "https://github.com/braxtons12/hyperion_platform"
         GIT_TAG "origin/main"
         )
     FetchContent_MakeAvailable(hyperion_platform)
 else()
-    find_package(doctest REQUIRED)
+    find_package(hyperion_platform REQUIRED)
 endif()
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/hyperion_compiler_settings.cmake)
@@ -79,7 +79,6 @@ target_sources(
 target_link_libraries(
     hyperion_mpl
     INTERFACE
-    doctest::doctest
     hyperion::platform
 )
 
@@ -105,6 +104,20 @@ set(HYPERION_MPL_DOCS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/docs")
 set(HYPERION_MPL_DOCS_FILES
     "${HYPERION_MPL_DOCS_DIR}/index.rst"
     "${HYPERION_MPL_DOCS_DIR}/quick_start.rst"
+    "${HYPERION_MPL_DOCS_DIR}/concepts.rst"
+    "${HYPERION_MPL_DOCS_DIR}/list.rst"
+    "${HYPERION_MPL_DOCS_DIR}/metapredicates.rst"
+    "${HYPERION_MPL_DOCS_DIR}/metatypes.rst"
+    "${HYPERION_MPL_DOCS_DIR}/pair.rst"
+    "${HYPERION_MPL_DOCS_DIR}/type.rst"
+    "${HYPERION_MPL_DOCS_DIR}/type_traits.rst"
+    "${HYPERION_MPL_DOCS_DIR}/value.rst"
+    "${HYPERION_MPL_DOCS_DIR}/concepts/comparable.rst"
+    "${HYPERION_MPL_DOCS_DIR}/concepts/operator_able.rst"
+    "${HYPERION_MPL_DOCS_DIR}/concepts/std_supplemental.rst"
+    "${HYPERION_MPL_DOCS_DIR}/type_traits/is_comparable.rst"
+    "${HYPERION_MPL_DOCS_DIR}/type_traits/is_operator_able.rst"
+    "${HYPERION_MPL_DOCS_DIR}/type_traits/std_supplemental.rst"
 )
 
 add_custom_command(
