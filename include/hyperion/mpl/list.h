@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming facilities for working with a list of types or values
 /// @version 0.1
-/// @date 2024-02-28
+/// @date 2024-02-29
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -112,44 +112,33 @@ namespace hyperion::mpl {
     struct not_found_tag { };
 
     namespace detail {
-        /// @brief Retrieves the `TIndex`th element of `TList`,
-        /// starting lookup at `TCurrent`.
-        ///
-        /// # Requirements
-        /// - `TIndex` < the number of elements of `TList`
-        /// - `TCurrent` < the number of elements of `TList`
-        /// - `TCurrent` <= `TIndex`
-        ///
-        /// @tparam TIndex the index of the element to get
-        /// @tparam TList The list to lookup an element in
-        /// @tparam TCurrent the current index in the recursive lookup.
-        /// In most cases, this should be left as the default (0).
-        template<usize TIndex, typename TList, usize TCurrent = 0>
-        struct at;
-
-        // specialization for recursive lookup
-        template<usize TIndex,
-                 usize TCurrent,
-                 template<typename...>
-                 typename TList,
-                 typename THead,
-                 typename... TTails>
-        struct at<TIndex, TList<THead, TTails...>, TCurrent> {
-    #if HYPERION_COMPILER_HAS_TYPE_PACK_ELEMENT
-            using type = __type_pack_element<TIndex, THead, TTails...>;
-    #else
-            using type = std::conditional_t<
-                TIndex == TCurrent,
-                THead,
-                typename at<TIndex, TList<TTails...>, TCurrent + 1_usize>::type>;
-    #endif
+        /// @brief Represents an element at index `TIndex` in a `List`
+        /// @tparam TIndex the index in the `List` of this element
+        /// @tparam TType the `as_meta` type of this element
+        template<usize TIndex, typename TType>
+        struct element {
+            [[nodiscard]] constexpr auto
+            at([[maybe_unused]] Value<TIndex> index) const noexcept -> TType {
+                return {};
+            }
         };
 
-        // specialization for end of the list
-        template<usize TIndex, usize TCurrent, template<typename...> typename TList>
-        struct at<TIndex, TList<>, TCurrent> {
-            using type = void;
-        };
+        /// @brief Returns the `index`th element of `list`
+        /// @tparam TTypes the elements of the `List`
+        /// @param index the index of the element of `list` to get
+        /// @return the `index`th element of `list`
+        template<typename... TTypes>
+        [[nodiscard]] constexpr auto at(MetaValue auto index) noexcept {
+            constexpr auto get = []<usize... TIndices>(std::index_sequence<TIndices...>) noexcept {
+                struct ret : element<TIndices, TTypes>... {
+                    using element<TIndices, TTypes>::at...;
+                };
+
+                return ret{};
+            };
+
+            return get(std::make_index_sequence<sizeof...(TTypes)>{}).at(index);
+        }
 
         /// @brief Removes the first element from the list, `TList`, exposing that element as
         /// the member `using` alias `front`, and the list of remaining elements from the list
@@ -193,7 +182,7 @@ namespace hyperion::mpl {
         // specialization to use the index sequence to drop the last element
         template<template<typename...> typename TList, std::size_t... TIndices, typename... TTypes>
         struct pop_back_base<TList, std::index_sequence<TIndices...>, TTypes...> {
-            using remaining = TList<typename at<TIndices, List<TTypes...>>::type...>;
+            using remaining = TList<decltype(at<TTypes...>(Value<TIndices>{}))...>;
         };
 
         /// @brief Removes the last element from the list, `TList`, exposing that element as
@@ -207,7 +196,7 @@ namespace hyperion::mpl {
         // specialization for removal
         template<template<typename...> typename TList, typename... TTypes>
         struct pop_back<TList<TTypes...>> {
-            using back = typename at<sizeof...(TTypes) - 1, TList<TTypes...>>::type;
+            using back = decltype(at<TTypes...>(Value<sizeof...(TTypes) - 1>{}));
             using remaining =
                 typename pop_back_base<TList,
                                        std::make_index_sequence<sizeof...(TTypes) - 1>,
@@ -566,10 +555,7 @@ namespace hyperion::mpl {
                      [[maybe_unused]] MetaValue auto index) noexcept
             requires(decltype(index)::value <= sizeof...(TTypes))
         {
-            if constexpr(typename detail::at<decltype(index)::value,
-                                             List<as_meta<TTypes>...>>::type{}
-                             .satisfies(TPredicate{}))
-            {
+            if constexpr(detail::at<as_meta<TTypes>...>(index).satisfies(TPredicate{})) {
                 return index;
             }
             else if constexpr(decltype(index){} + 1_value < sizeof...(TTypes)) {
@@ -986,9 +972,8 @@ namespace hyperion::mpl {
         /// @return the element at index `TIndex`
         template<usize TIndex>
             requires(TIndex < sizeof...(TTypes))
-        [[nodiscard]] constexpr auto
-        at() const noexcept -> typename detail::at<TIndex, List<as_meta<TTypes>...>>::type {
-            return {};
+        [[nodiscard]] constexpr auto at() const noexcept {
+            return detail::at<as_meta<TTypes>...>(Value<TIndex>{});
         }
 
         /// @brief Returns the element of this `List` at index, `index`.
@@ -1011,11 +996,10 @@ namespace hyperion::mpl {
         ///
         /// @param index the index of the element to access
         /// @return the element at index `TIndex`
-        [[nodiscard]] constexpr auto at(MetaValue auto index) const noexcept ->
-            typename detail::at<decltype(index)::value, List<as_meta<TTypes>...>>::type
+        [[nodiscard]] constexpr auto at(MetaValue auto index) const noexcept
             requires(decltype(index)::value < sizeof...(TTypes))
         {
-            return {};
+            return detail::at<as_meta<TTypes>...>(index);
         }
 
         /// @brief Returns the first element of this `List`
@@ -1034,9 +1018,8 @@ namespace hyperion::mpl {
         /// @endcode
         ///
         /// @return the first element of this `List`
-        [[nodiscard]] constexpr auto
-        front() const noexcept -> typename detail::at<0_usize, List<as_meta<TTypes>...>>::type {
-            return {};
+        [[nodiscard]] constexpr auto front() const noexcept {
+            return detail::at<as_meta<TTypes>...>(0_value);
         }
 
         /// @brief Returns the last element of this `List`
@@ -1055,9 +1038,8 @@ namespace hyperion::mpl {
         /// @endcode
         ///
         /// @return the last element of this `List`
-        [[nodiscard]] constexpr auto back() const noexcept ->
-            typename detail::at<sizeof...(TTypes) - 1_usize, List<as_meta<TTypes>...>>::type {
-            return {};
+        [[nodiscard]] constexpr auto back() const noexcept {
+            return detail::at<as_meta<TTypes>...>(Value<sizeof...(TTypes) - 1>{});
         }
 
         /// @brief Returns a copy of this `List`,
