@@ -123,21 +123,27 @@ namespace hyperion::mpl {
             }
         };
 
+        template<typename... TTypes>
+        struct elements {
+            template<usize... TIndices>
+            [[nodiscard]] static constexpr auto
+            make([[maybe_unused]] std::integer_sequence<usize, TIndices...> seq) noexcept {
+                struct ret : element<TIndices, TTypes>... {
+                    using element<TIndices, TTypes>::at...;
+                };
+
+                return ret{};
+            }
+        };
+
         /// @brief Returns the `index`th element of `list`
         /// @tparam TTypes the elements of the `List`
         /// @param index the index of the element of `list` to get
         /// @return the `index`th element of `list`
         template<typename... TTypes>
         [[nodiscard]] constexpr auto at(MetaValue auto index) noexcept {
-            constexpr auto get = []<usize... TIndices>(std::index_sequence<TIndices...>) noexcept {
-                struct ret : element<TIndices, TTypes>... {
-                    using element<TIndices, TTypes>::at...;
-                };
-
-                return ret{};
-            };
-
-            return get(std::make_index_sequence<sizeof...(TTypes)>{}).at(index);
+            return elements<TTypes...>::make(std::make_integer_sequence<usize, sizeof...(TTypes)>{})
+                .at(index);
         }
 
         /// @brief Removes the first element from the list, `TList`, exposing that element as
