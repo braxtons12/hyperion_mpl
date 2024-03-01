@@ -123,8 +123,11 @@ namespace hyperion::mpl {
             }
         };
 
+        /// @brief Factory for an indexible representation of the elements of a `List`
+        /// @tparam TTypes the elements of the `List`
         template<typename... TTypes>
         struct elements {
+            /// @brief Returns an indexible overload set of `at` for the elements of a `List`
             template<usize... TIndices>
             [[nodiscard]] static constexpr auto
             make([[maybe_unused]] std::integer_sequence<usize, TIndices...> seq) noexcept {
