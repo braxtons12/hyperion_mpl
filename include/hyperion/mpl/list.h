@@ -1631,6 +1631,22 @@ namespace hyperion::mpl {
         template<typename TType>
         auto get_function(TType) -> void;
 
+    #if HYPERION_PLATFORM_COMPILER_IS_MSVC
+        template<template<typename...> typename TTemplate, typename TType, typename... TTypes>
+        constexpr auto extend_constexpr_lifetime(const TTemplate<TType, TTypes...>&) {
+            return TTemplate<TType, TTypes...>{TTypes{}...};
+        }
+        template<typename TType>
+        constexpr auto extend_constexpr_lifetime([[maybe_unused]] const TType& value) {
+            return TType{};
+        }
+    #else
+        template<typename TType>
+        constexpr auto extend_constexpr_lifetime(const TType& value) -> decltype(auto) {
+            return value;
+        }
+    #endif // HYPERION_PLATFORM_COMPILER_IS_MSVC
+
         template<typename TType, usize TSize>
         class static_vector {
           public:
@@ -1730,7 +1746,7 @@ namespace hyperion::mpl {
             constexpr auto indices = [](auto range_obj, MetaValue auto size) {
                 constexpr auto to_process = detail::iota(0_value, size);
                 return detail::to_array<usize, sizeof...(TTypes)>(range_obj(to_process));
-            }(range_object, list.size());
+            }(detail::extend_constexpr_lifetime(range_object), list.size());
 
             return [indices]<auto... TIndices>(std::index_sequence<TIndices...>, auto _list) {
                 return _list.sift(List<Value<indices[TIndices]>...>{});
@@ -1740,7 +1756,9 @@ namespace hyperion::mpl {
 
 } // namespace hyperion::mpl
 
-    #include <ranges>
+    #if __has_include(<ranges>)
+        #include <ranges>
+    #endif // __has_include(<ranges>)
 
 namespace hyperion::mpl::_test::list {
 
@@ -2094,6 +2112,8 @@ namespace hyperion::mpl::_test::list {
     static_assert(List<int, Value<1>, int, Value<2>, int>{}.unwrap(num_ints) == 3_value,
                   "hyperion::mpl::List::unwrap test case 4 (failing)");
 
+    #if __cpp_lib_ranges >= 202110L
+
     static constexpr auto test_ranges1() noexcept {
         constexpr auto list = List<int, double, float>{};
         constexpr auto manipped
@@ -2125,6 +2145,8 @@ namespace hyperion::mpl::_test::list {
     static_assert(test_ranges1(), "hyperion::mpl::List ranges support test case 1 (failing)");
     static_assert(test_ranges2(), "hyperion::mpl::List ranges support test case 2 (failing)");
     static_assert(test_ranges3(), "hyperion::mpl::List ranges support test case 3 (failing)");
+
+    #endif // __cpp_lib_ranges >= 202110L
 } // namespace hyperion::mpl::_test::list
 
 #endif // HYPERION_MPL_LIST_H
