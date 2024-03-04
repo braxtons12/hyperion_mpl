@@ -1,7 +1,7 @@
 /// @file list.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming facilities for working with a list of types or values
-/// @version 0.4
+/// @version 0.5
 /// @date 2024-03-04
 ///
 /// MIT License
@@ -1632,22 +1632,42 @@ namespace hyperion::mpl {
         auto get_function(TType) -> void;
 
     #if HYPERION_PLATFORM_COMPILER_IS_MSVC
+        /// @brief Used to extend the lifetime of the given value in a `constexpr` context.
+        /// MSVC can be bad about assuming an object's lifetime has ended in `constexpr`
+        /// contexts when it really hasn't.
+        ///
+        /// This is a hack to prevent that.
         template<template<typename...> typename TTemplate, typename TType, typename... TTypes>
         constexpr auto extend_constexpr_lifetime(const TTemplate<TType, TTypes...>&) {
             return TTemplate<TType, TTypes...>{TTypes{}...};
         }
+        /// @brief Used to extend the lifetime of the given value in a `constexpr` context.
+        /// MSVC can be bad about assuming an object's lifetime has ended in `constexpr`
+        /// contexts when it really hasn't.
+        ///
+        /// This is a hack to prevent that.
         template<typename TType>
         constexpr auto extend_constexpr_lifetime([[maybe_unused]] const TType& value) {
             return TType{};
         }
     #else
+        /// @brief Used to extend the lifetime of the given value in a `constexpr` context.
+        /// MSVC can be bad about assuming an object's lifetime has ended in `constexpr`
+        /// contexts when it really hasn't.
+        ///
+        /// This provides usage consistency w/ the hack used for MSVC.
         template<typename TType>
         constexpr auto extend_constexpr_lifetime(const TType& value) -> decltype(auto) {
             return value;
         }
     #endif // HYPERION_PLATFORM_COMPILER_IS_MSVC
 
-        template<typename TType, usize TSize>
+        /// @brief Statically stack-allocated vector containing elements of type `TType`,
+        /// up to `TCapacity` number of elements
+        ///
+        /// @note This is only a minimal implementation providing enough functionality to
+        /// support a vector containing primitive types
+        template<typename TType, usize TCapacity>
         class static_vector {
           public:
             template<typename TValue>
@@ -1684,10 +1704,17 @@ namespace hyperion::mpl {
             }
 
           private:
-            std::array<TType, TSize> m_values = {};
+            std::array<TType, TCapacity> m_values = {};
             usize m_size = 0_usize;
         };
 
+        /// @brief Return a range of size `end - begin`,
+        /// starting at `begin` and incrementing for each successive element,
+        /// until the size is reached.
+        ///
+        /// @param begin The initial value
+        /// @param end The one-after-the-end value
+        /// @return a range of values from `begin` to `end`
         constexpr auto iota(MetaValue auto begin, MetaValue auto end) noexcept {
             std::array<std::remove_cvref_t<decltype(decltype(begin)::value)>,
                        decltype(end)::value - decltype(begin)::value>
@@ -1699,9 +1726,13 @@ namespace hyperion::mpl {
             return range;
         }
 
-        template<typename TType, usize TCount>
-        constexpr auto to_array(auto&& range) noexcept {
-            static_vector<TType, TCount> arr{};
+        /// @brief Converts the given range to a `static_vector<TType, TCapacity`
+        /// @param range the range to convert
+        /// @return a `static_vector<TType, TCapacity>` containing the elements
+        /// of the `range`
+        template<typename TType, usize TCapacity>
+        constexpr auto to_vector(auto&& range) noexcept {
+            static_vector<TType, TCapacity> arr{};
             for(const auto& elem : range) {
                 arr.push_back(elem);
             }
@@ -1709,14 +1740,53 @@ namespace hyperion::mpl {
         }
     } // namespace detail
 
+    /// @brief Pipeline operator for `mpl::List`s.
+    /// Provides support for piping `mpl::List`s into `std::ranges` algorithms and views.
+    ///
+    /// # Example
+    /// @code{.cpp}
+    /// constexpr auto list = List<int, const double, float>{};
+    /// constexpr auto ranged
+    ///     = list
+    ///         | std::ranges::views::filter([](auto type) { return not type.is_const(); })
+    ///         | std::ranges::views::transform([](auto type) {
+    ///                 return type.as_lvalue_reference().as_volatile();
+    ///           })
+    ///         | std::ranges::views::reverse
+    ///         | std::ranges::views::drop(1_value);
+    /// static_assert(ranged == List<volatile int&>{});
+    /// @endcode
+    ///
+    /// @tparam TTypes the types represented in the `List`
+    /// @param list the list to pipe into a `std::ranges` algorithm or view
+    /// @param range_object the `std::ranges` algorithm or view to pipe into
+    /// @return the result of the pipeline, up to this point
     template<typename... TTypes>
     [[nodiscard]] constexpr auto operator|(List<TTypes...> list, auto range_object) {
+        // This is a fairly complicated sequence of metaprogramming.
+        // The primary technique involves taking the results of a range algorithm,
+        // converting them into a `constexpr` sequence of indices into the `list`,
+        // and then using those indices to sift the `list` for the correct output elements.
+        //
+        // The original technique was discovered by Kris Jusiak and Daisy Hollman
+        // and used in [Kris's mp library](https://github.com/boost-ext/mp),
+        // which uses the [Boost Software License](http://www.boost.org/LICENSE_1_0.txt).
+        //
+        // It has been adapted (and reduced) here to work with `mpl::List`
+
+        // the range adaptor type, if applicable
         using adaptor = decltype(detail::get_adaptor(range_object));
+        // the function type (possibly a transform, predicate, etc), if applicable
         using function = decltype(detail::get_function(range_object));
 
+        // case for transforms/predicates/etc (transform, filter, etc)
         if constexpr(not std::is_void_v<function>
                      && requires { (function{}(detail::convert_to_meta_t<TTypes>{}), ...); })
         {
+            // case for predicates
+            // we use `std::common_type` here to force conversion of
+            // `Value<true || false>` to `bool` to enable storing the
+            // results of invoking the predicate in a `std::array`
             if constexpr(requires {
                              std::array<std::common_type_t<decltype(function{}(
                                             detail::convert_to_meta_t<TTypes>{}))...>,
@@ -1724,7 +1794,8 @@ namespace hyperion::mpl {
                                  function{}(detail::convert_to_meta_t<TTypes>{})...};
                          })
             {
-                constexpr auto indices = detail::to_array<usize, sizeof...(TTypes)>(
+                // calculate the indices of the "good" elements based on the range adaptor in use
+                constexpr auto indices = detail::to_vector<usize, sizeof...(TTypes)>(
                     adaptor{}([values = std::array<std::common_type_t<decltype(function{}(
                                                        detail::convert_to_meta_t<TTypes>{}))...>,
                                                    sizeof...(TTypes)>{function{}(
@@ -1733,21 +1804,27 @@ namespace hyperion::mpl {
                         return values[index];
                     })(detail::iota(0_value, list.size())));
 
+                // use those indices to sift the `list`
                 return [indices]<auto... TIndices>(std::index_sequence<TIndices...>, auto _list) {
                     return _list.sift(List<Value<indices[TIndices]>...>{});
                 }(std::make_index_sequence<std::size(indices)>{}, list);
             }
+            // case for transforms and similar
             else {
                 return List<detail::convert_to_raw_t<decltype(function{}(
                     detail::convert_to_meta_t<TTypes>{}))>...>{};
             }
         }
+        // all other sequence-based range adaptors (reverse, drop, take, etc)
         else {
+            // calculate the indices of the "good" or "re-arranged" elements based on the
+            // range adaptor in use
             constexpr auto indices = [](auto range_obj, MetaValue auto size) {
                 constexpr auto to_process = detail::iota(0_value, size);
-                return detail::to_array<usize, sizeof...(TTypes)>(range_obj(to_process));
+                return detail::to_vector<usize, sizeof...(TTypes)>(range_obj(to_process));
             }(detail::extend_constexpr_lifetime(range_object), list.size());
 
+            // use those indices to sift the `list`
             return [indices]<auto... TIndices>(std::index_sequence<TIndices...>, auto _list) {
                 return _list.sift(List<Value<indices[TIndices]>...>{});
             }(std::make_index_sequence<std::size(indices)>{}, list);

@@ -1,8 +1,8 @@
 /// @file value.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming value type
-/// @version 0.1
-/// @date 2024-02-24
+/// @version 0.5
+/// @date 2024-03-04
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
