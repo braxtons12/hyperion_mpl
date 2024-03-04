@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming facilities for working with a list of types or values
 /// @version 0.4
-/// @date 2024-03-03
+/// @date 2024-03-04
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -36,6 +36,7 @@
 #include <hyperion/mpl/metapredicates.h>
 
 #include <concepts>
+#include <ranges>
 #include <type_traits>
 
 /// @ingroup mpl
@@ -146,7 +147,7 @@ namespace hyperion::mpl {
         template<typename... TTypes>
         [[nodiscard]] constexpr auto at(MetaValue auto index) noexcept {
             return elements<TTypes...>::make(std::make_integer_sequence<usize, sizeof...(TTypes)>{})
-                .at(index);
+                .at(Value<static_cast<usize>(decltype(index)::value), usize>{});
         }
 
         /// @brief Removes the first element from the list, `TList`, exposing that element as
@@ -1086,6 +1087,44 @@ namespace hyperion::mpl {
             return remove_if(equal_to(value));
         }
 
+        /// @brief Returns a `List` containing the elements of this `List` occurring at
+        /// the indices specified in `list`.
+        ///
+        /// Ordering of elements in the returned list follows ordering of indices
+        /// specified in `list`.
+        ///
+        /// # Requirements
+        /// - `list` must be a `MetaList` type
+        /// - Every element of `list` must be a `MetaValue`
+        /// - Every element of `list` must have a value in the range `[0, this->size())`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        ///
+        /// constexpr auto sifter = List<Value<1>, Value<2>>{};
+        ///
+        /// static_assert(List<int, const double, float>{}.sift(sifter)
+        ///               == List<const double, float>{});
+        /// static_assert(List<int, double, float>{}.sift(sifter)
+        ///               == List<double, float>{});
+        /// static_assert(List<int, Value<1>, double, Value<2>, float>{}.sift(sifter)
+        ///               == List<Value<1>, double>{});
+        /// @endcode
+        ///
+        /// @tparam TList The metaprogramming list class template
+        /// @tparam TValues The metaprogramming value types stored in `list`
+        /// @param list The metaprogramming list containing the indices of the
+        /// elements of this `List` to get
+        /// @return a `List` containing the elements of this `List` occurring
+        /// at the indices specified in `list`
+        template<template<typename...> typename TList, typename... TValues>
+            requires MetaList<TList<TValues...>> && (MetaValue<TValues> && ...)
+                     && ((TValues::value < sizeof...(TTypes)) && ...)
+                     && ((TValues::value >= 0) && ...)
+        [[nodiscard]] constexpr auto sift([[maybe_unused]] TList<TValues...> list) const noexcept {
+            return List<as_raw<decltype(at(TValues{}))>...>{};
+        }
+
         /// @brief Converts the elements of this list into a parameter pack, and invokes
         /// `func` with that pack, returning the result of the invocation.
         ///
@@ -1487,22 +1526,29 @@ namespace hyperion::mpl {
     [[nodiscard]] constexpr auto
     operator==([[maybe_unused]] const List<TLHTypes...>& lhs,
                [[maybe_unused]] const List<TRHTypes...>& rhs) noexcept {
-        constexpr auto is_same = []<typename TFirst, typename TSecond>(Pair<TFirst, TSecond> pair)
-            requires(MetaType<typename decltype(pair)::first>
-                     || MetaValue<typename decltype(pair)::first>
-                     || MetaPair<typename decltype(pair)::first>)
-                    && (MetaType<typename decltype(pair)::second>
-                        || MetaValue<typename decltype(pair)::second>
-                        || MetaPair<typename decltype(pair)::second>)
-        {
-            return equal_to(typename decltype(pair)::first{})(typename decltype(pair)::second{});
-        };
+        if constexpr(sizeof...(TLHTypes) != sizeof...(TRHTypes)) {
+            return Value<false>{};
+        }
+        else {
+            constexpr auto is_same
+                = []<typename TFirst, typename TSecond>(Pair<TFirst, TSecond> pair)
+                requires(MetaType<typename decltype(pair)::first>
+                         || MetaValue<typename decltype(pair)::first>
+                         || MetaPair<typename decltype(pair)::first>)
+                        && (MetaType<typename decltype(pair)::second>
+                            || MetaValue<typename decltype(pair)::second>
+                            || MetaPair<typename decltype(pair)::second>)
+            {
+                return equal_to(typename decltype(pair)::first{})(
+                    typename decltype(pair)::second{});
+            };
 
-        constexpr auto check_all = [](auto... results) noexcept {
-            return (results && ...);
-        };
+            constexpr auto check_all = [](auto... results) noexcept {
+                return (results && ...);
+            };
 
-        return List<TLHTypes...>{}.zip(List<TRHTypes...>{}).apply(is_same).unwrap(check_all);
+            return List<TLHTypes...>{}.zip(List<TRHTypes...>{}).apply(is_same).unwrap(check_all);
+        }
     }
 
     /// @brief Inequality comparison operator for `List`
@@ -1530,23 +1576,29 @@ namespace hyperion::mpl {
     [[nodiscard]] constexpr auto
     operator!=([[maybe_unused]] const List<TLHTypes...>& lhs,
                [[maybe_unused]] const List<TRHTypes...>& rhs) noexcept {
-        constexpr auto is_same = []<typename TFirst, typename TSecond>(Pair<TFirst, TSecond> pair)
-            requires(MetaType<typename decltype(pair)::first>
-                     || MetaValue<typename decltype(pair)::first>
-                     || MetaPair<typename decltype(pair)::first>)
-                    && (MetaType<typename decltype(pair)::second>
-                        || MetaValue<typename decltype(pair)::second>
-                        || MetaPair<typename decltype(pair)::second>)
-        {
-            return not_equal_to(typename decltype(pair)::first{})(
-                typename decltype(pair)::second{});
-        };
+        if constexpr(sizeof...(TLHTypes) != sizeof...(TRHTypes)) {
+            return Value<true>{};
+        }
+        else {
+            constexpr auto is_same
+                = []<typename TFirst, typename TSecond>(Pair<TFirst, TSecond> pair)
+                requires(MetaType<typename decltype(pair)::first>
+                         || MetaValue<typename decltype(pair)::first>
+                         || MetaPair<typename decltype(pair)::first>)
+                        && (MetaType<typename decltype(pair)::second>
+                            || MetaValue<typename decltype(pair)::second>
+                            || MetaPair<typename decltype(pair)::second>)
+            {
+                return not_equal_to(typename decltype(pair)::first{})(
+                    typename decltype(pair)::second{});
+            };
 
-        constexpr auto check_all = [](auto... results) noexcept {
-            return (results || ...);
-        };
+            constexpr auto check_all = [](auto... results) noexcept {
+                return (results || ...);
+            };
 
-        return List<TLHTypes...>{}.zip(List<TRHTypes...>{}).apply(is_same).unwrap(check_all);
+            return List<TLHTypes...>{}.zip(List<TRHTypes...>{}).apply(is_same).unwrap(check_all);
+        }
     }
 } // namespace hyperion::mpl
 
@@ -1860,6 +1912,16 @@ namespace hyperion::mpl::_test::list {
     static_assert(List<int, Value<1>, double, Value<2>, float>{}.remove(1_value)
                       == List<int, double, Value<2>, float>{},
                   "hyperion::mpl::List::remove test case 4 (failing)");
+
+    static_assert(List<int, const double, float>{}.sift(List<Value<1>, Value<2>>{})
+                      == List<const double, float>{},
+                  "hyperion::mpl::List::sift test case 1 (failing)");
+    static_assert(List<int, double, float>{}.sift(List<Value<0>, Value<2>>{}) == List<int, float>{},
+                  "hyperion::mpl::List::sift test case 2 (failing)");
+    static_assert(
+        List<int, Value<1>, double, Value<2>, float>{}.sift(List<Value<1>, Value<2>, Value<4>>{})
+            == List<Value<1>, double, float>{},
+        "hyperion::mpl::List::sift test case 3 (failing)");
 
     static constexpr auto sum = [](MetaValue auto... value) noexcept {
         return (value + ...);
