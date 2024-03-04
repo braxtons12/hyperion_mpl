@@ -36,7 +36,6 @@
 #include <hyperion/mpl/metapredicates.h>
 
 #include <concepts>
-#include <ranges>
 #include <type_traits>
 
 /// @ingroup mpl
@@ -1449,16 +1448,20 @@ namespace hyperion::mpl {
 
         /// @brief Returns a copy of this `List` with the first element removed
         /// @return a copy of this `List` with the first element removed
-        [[nodiscard]] constexpr auto
-        pop_front() const noexcept -> typename detail::pop_front<List>::remaining {
-            return {};
+        [[nodiscard]] constexpr auto pop_front() const noexcept {
+            constexpr auto to_raw = []<typename... TMetas>([[maybe_unused]] List<TMetas...> list) {
+                return List<as_raw<TMetas>...>{};
+            };
+            return to_raw(typename detail::pop_front<List<as_meta<TTypes>...>>::remaining{});
         }
 
         /// @brief Returns a copy of this `List` with the last element removed
         /// @return a copy of this `List` with the last element removed
-        [[nodiscard]] constexpr auto
-        pop_back() const noexcept -> typename detail::pop_back<List>::remaining {
-            return {};
+        [[nodiscard]] constexpr auto pop_back() const noexcept {
+            constexpr auto to_raw = []<typename... TMetas>([[maybe_unused]] List<TMetas...> list) {
+                return List<as_raw<TMetas>...>{};
+            };
+            return to_raw(typename detail::pop_back<List<as_meta<TTypes>...>>::remaining{});
         }
 
         /// @brief Converts the elements of this `List` and `rhs` into a single list
@@ -1600,7 +1603,144 @@ namespace hyperion::mpl {
             return List<TLHTypes...>{}.zip(List<TRHTypes...>{}).apply(is_same).unwrap(check_all);
         }
     }
+
+    namespace detail {
+        /// @brief Overload set to map to the Range Adaptor of the given bound
+        /// (bound as in `std::bind_back`) ranges object
+        template<template<typename...> typename TBoundRange, typename TAdaptor, typename TFunction>
+        auto get_adaptor(TBoundRange<TAdaptor, TFunction>) -> TAdaptor;
+        template<template<typename...> typename TFunctor,
+                 template<typename...>
+                 typename TBoundRange,
+                 typename TAdaptor,
+                 typename TFunction>
+        auto get_adaptor(TFunctor<TBoundRange<TAdaptor, TFunction>>) -> TAdaptor;
+        template<typename TType>
+        auto get_adaptor(TType) -> void;
+
+        /// @brief Overload set to map to the predicate/function of the given bound
+        /// (bound as in `std::bind_back`) ranges object
+        template<template<typename...> typename TBoundRange, typename TAdaptor, typename TFunction>
+        auto get_function(TBoundRange<TAdaptor, TFunction>) -> TFunction;
+        template<template<typename...> typename TFunctor,
+                 template<typename...>
+                 typename TBoundRange,
+                 typename TAdaptor,
+                 typename TFunction>
+        auto get_function(TFunctor<TBoundRange<TAdaptor, TFunction>>) -> TFunction;
+        template<typename TType>
+        auto get_function(TType) -> void;
+
+        template<typename TType, usize TSize>
+        class static_vector {
+          public:
+            template<typename TValue>
+            constexpr auto push_back(TValue&& value) noexcept(
+                decltype_<TType>().is_noexcept_constructible_from(decltype_<decltype(value)>()))
+                -> void {
+                // NOLINTNEXTLINE(*-pro-bounds-constant-array-index)
+                m_values[m_size++] = std::forward<TValue>(value);
+            }
+
+            [[nodiscard]] constexpr auto operator[](auto index) const noexcept -> const TType& {
+                // NOLINTNEXTLINE(*-pro-bounds-constant-array-index)
+                return m_values[index];
+            }
+
+            [[nodiscard]] constexpr auto size() const noexcept -> usize {
+                return m_size;
+            }
+
+            [[nodiscard]] constexpr auto begin() noexcept {
+                return m_values.begin();
+            }
+
+            [[nodiscard]] constexpr auto end() noexcept {
+                return m_values.begin() + m_size;
+            }
+
+            [[nodiscard]] constexpr auto begin() const noexcept {
+                return m_values.begin();
+            }
+
+            [[nodiscard]] constexpr auto end() const noexcept {
+                return m_values.begin() + m_size;
+            }
+
+          private:
+            std::array<TType, TSize> m_values = {};
+            usize m_size = 0_usize;
+        };
+
+        constexpr auto iota(MetaValue auto begin, MetaValue auto end) noexcept {
+            std::array<std::remove_cvref_t<decltype(decltype(begin)::value)>,
+                       decltype(end)::value - decltype(begin)::value>
+                range{};
+            auto curr = decltype(begin)::value;
+            for(auto& elem : range) {
+                elem = curr++;
+            }
+            return range;
+        }
+
+        template<typename TType, usize TCount>
+        constexpr auto to_array(auto&& range) noexcept {
+            static_vector<TType, TCount> arr{};
+            for(const auto& elem : range) {
+                arr.push_back(elem);
+            }
+            return arr;
+        }
+    } // namespace detail
+
+    template<typename... TTypes>
+    [[nodiscard]] constexpr auto operator|(List<TTypes...> list, auto range_object) {
+        using adaptor = decltype(detail::get_adaptor(range_object));
+        using function = decltype(detail::get_function(range_object));
+
+        if constexpr(not std::is_void_v<function>
+                     && requires { (function{}(detail::convert_to_meta_t<TTypes>{}), ...); })
+        {
+            if constexpr(requires {
+                             std::array<std::common_type_t<decltype(function{}(
+                                            detail::convert_to_meta_t<TTypes>{}))...>,
+                                        sizeof...(TTypes)>{
+                                 function{}(detail::convert_to_meta_t<TTypes>{})...};
+                         })
+            {
+                constexpr auto indices = detail::to_array<usize, sizeof...(TTypes)>(
+                    adaptor{}([values = std::array<std::common_type_t<decltype(function{}(
+                                                       detail::convert_to_meta_t<TTypes>{}))...>,
+                                                   sizeof...(TTypes)>{function{}(
+                                   detail::convert_to_meta_t<TTypes>{})...}](auto index) {
+                        // NOLINTNEXTLINE(*-pro-bounds-constant-array-index)
+                        return values[index];
+                    })(detail::iota(0_value, list.size())));
+
+                return [indices]<auto... TIndices>(std::index_sequence<TIndices...>, auto _list) {
+                    return _list.sift(List<Value<indices[TIndices]>...>{});
+                }(std::make_index_sequence<std::size(indices)>{}, list);
+            }
+            else {
+                return List<detail::convert_to_raw_t<decltype(function{}(
+                    detail::convert_to_meta_t<TTypes>{}))>...>{};
+            }
+        }
+        else {
+            constexpr auto indices = [](auto range_obj, MetaValue auto size) {
+                constexpr auto to_process = detail::iota(0_value, size);
+                return detail::to_array<usize, sizeof...(TTypes)>(range_obj(to_process));
+            }(range_object, list.size());
+
+            return [indices]<auto... TIndices>(std::index_sequence<TIndices...>, auto _list) {
+                return _list.sift(List<Value<indices[TIndices]>...>{});
+            }(std::make_index_sequence<std::size(indices)>{}, list);
+        }
+    }
+
 } // namespace hyperion::mpl
+
+    #include <ranges>
 
 namespace hyperion::mpl::_test::list {
 
@@ -1953,6 +2093,38 @@ namespace hyperion::mpl::_test::list {
                   "hyperion::mpl::List::unwrap test case 3 (failing)");
     static_assert(List<int, Value<1>, int, Value<2>, int>{}.unwrap(num_ints) == 3_value,
                   "hyperion::mpl::List::unwrap test case 4 (failing)");
+
+    static constexpr auto test_ranges1() noexcept {
+        constexpr auto list = List<int, double, float>{};
+        constexpr auto manipped
+            = list
+              | std::ranges::views::transform([](MetaType auto type) { return type.as_const(); })
+              | std::ranges::views::drop(1_value) | std::ranges::views::reverse;
+        return manipped == List<const float, const double>{};
+    }
+
+    static constexpr auto test_ranges2() noexcept {
+        constexpr auto list = List<int, const double, float>{};
+        constexpr auto manipped
+            = list | std::ranges::views::filter([](auto type) { return not type.is_const(); })
+              | std::ranges::views::reverse;
+        return manipped == List<float, int>{};
+    }
+
+    static constexpr auto test_ranges3() noexcept {
+        constexpr auto list = List<int, const double, float>{};
+        constexpr auto manipped
+            = list | std::ranges::views::filter([](auto type) { return not type.is_const(); })
+              | std::ranges::views::transform(
+                  [](auto type) { return type.as_lvalue_reference().as_volatile(); })
+              | std::ranges::views::reverse | std::ranges::views::drop(1_value);
+
+        return manipped == List<volatile int&>{};
+    }
+
+    static_assert(test_ranges1(), "hyperion::mpl::List ranges support test case 1 (failing)");
+    static_assert(test_ranges2(), "hyperion::mpl::List ranges support test case 2 (failing)");
+    static_assert(test_ranges3(), "hyperion::mpl::List ranges support test case 3 (failing)");
 } // namespace hyperion::mpl::_test::list
 
 #endif // HYPERION_MPL_LIST_H

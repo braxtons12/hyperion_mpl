@@ -86,10 +86,18 @@ namespace hyperion::mpl {
     struct Value {
         /// @brief The value of this metaprogramming value.
         static inline constexpr auto value = static_cast<TType>(TValue);
+        /// @brief The type of `value`
+        using value_type = TType;
 
         /// @brief Conversion operator to the `value`.
         /// @return The `value` of this specialization of `Value`
         [[nodiscard]] constexpr operator TType() const noexcept { // NOLINT
+            return value;
+        }
+
+        /// @brief Call operator to get the `value`.
+        /// @return The `value` of this specialization of `Value`
+        [[nodiscard]] constexpr auto operator()() const noexcept -> TType {
             return value;
         }
 

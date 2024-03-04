@@ -341,7 +341,8 @@ namespace hyperion::mpl {
         };
 
         template<typename TType>
-            requires MetaType<std::remove_cvref_t<TType>> && MetaType<typename TType::type>
+            requires MetaType<std::remove_cvref_t<TType>>
+                     && MetaType<typename std::remove_cvref_t<TType>::type>
         struct convert_to_meta<TType> {
             using type = Type<typename std::remove_cvref_t<TType>::type::type>;
         };
