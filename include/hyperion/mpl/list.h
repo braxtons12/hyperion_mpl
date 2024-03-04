@@ -1,8 +1,8 @@
 /// @file list.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming facilities for working with a list of types or values
-/// @version 0.1
-/// @date 2024-02-29
+/// @version 0.4
+/// @date 2024-03-03
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -923,10 +923,167 @@ namespace hyperion::mpl {
         /// @param value The metaprogramming value to search for
         /// @return the index of the first element equal to `value`,
         /// or `Value<sizeof...(TTypes)>` if no element equals `value`
-        template<typename TValue>
-            requires((!MetaPredicateOf<TValue, as_meta<TTypes>>) || ...)
-        [[nodiscard]] constexpr auto index_of(TValue value) const noexcept {
+        [[nodiscard]] constexpr auto index_of(auto value) const noexcept {
             return index_if(equal_to(value));
+        }
+
+        /// @brief Returns a `List` containing only the elements of this `List` that
+        /// satisfy `predicate`.
+        ///
+        /// Using the exposition-only template metafunction `as_meta`
+        /// (see the corresponding section in the @ref list module-level documentation),
+        /// checks each element, `TElement`, of this `List` to see whether it satisfies
+        /// `predicate`, as if by `typename as_meta<TElement>::type{}.satisfies(predicate)`,
+        /// and if satisfied, that element is included in the returned `List`.
+        ///
+        /// Relative ordering of elements is maintained in the returned `List`.
+        ///
+        /// # Requirements
+        /// - `predicate` must be a metapredicate invocable with the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `func` must be a `MetaPredicateOf<TFunction, typename as_meta<TElement>::type>`
+        /// for each element,`TElement`, of this `List`
+        /// - OR, `predicate` must be a metapredicate satisfiable with the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `typename as_meta<TElement>::type{}.satisfy(predicate)` must be well formed
+        /// for each element, `TElement`, of this `List`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto is_value = [](MetaValue auto val) noexcept {
+        ///     return Value<true>{};
+        /// };
+        ///
+        /// static_assert(List<int, const double, float>{}.filter(is_const)
+        ///               == List<const double>{});
+        /// static_assert(List<int, double, float>{}.filter(is_const)
+        ///               == List<>{});
+        /// static_assert(List<int, double, const float>{}.filter(is_const)
+        ///               == List<const float>{});
+        /// static_assert(List<int, Value<1>, double, Value<2>, float>{}.filter(is_value)
+        ///               == List<Value<1>, Value<2>>{});
+        /// @endcode
+        ///
+        /// @tparam TPredicate The type of the metapredicate to use
+        /// @param predicate The metapredicate to use
+        /// @return the `List` containing only the elements of this `List` that
+        /// satisfy `predicate`
+        template<typename TPredicate>
+            requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
+                    || requires { (as_meta<TTypes>{}.satisfies(TPredicate{}), ...); }
+        [[nodiscard]] constexpr auto
+        filter([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
+            const noexcept {
+            constexpr auto append_valid = [](auto list, auto element) noexcept {
+                if constexpr(decltype(element){}.satisfies(TPredicate{})) {
+                    return list.push_back(element);
+                }
+                else {
+                    return list;
+                }
+            };
+
+            return accumulate(List<>{}, append_valid);
+        }
+
+        /// @brief Returns a copy of this `List`, but with all elements that satisfy
+        /// `predicate` removed.
+        ///
+        /// Using the exposition-only template metafunction `as_meta`
+        /// (see the corresponding section in the @ref list module-level documentation),
+        /// checks each element, `TElement`, of this `List` to see whether it satisfies
+        /// `predicate`, as if by `typename as_meta<TElement>::type{}.satisfies(predicate)`,
+        /// and if satisfied, that element is _not_ included in the returned `List`.
+        ///
+        /// Relative ordering of elements is maintained in the returned `List`.
+        ///
+        /// # Requirements
+        /// - `predicate` must be a metapredicate invocable with the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `func` must be a `MetaPredicateOf<TFunction, typename as_meta<TElement>::type>`
+        /// for each element,`TElement`, of this `List`
+        /// - OR, `predicate` must be a metapredicate satisfiable with the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `typename as_meta<TElement>::type{}.satisfy(predicate)` must be well formed
+        /// for each element, `TElement`, of this `List`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto is_value = [](MetaValue auto val) noexcept {
+        ///     return Value<true>{};
+        /// };
+        ///
+        /// static_assert(List<int, const double, float>{}.remove_if(is_const)
+        ///               == List<int, float>{});
+        /// static_assert(List<int, double, float>{}.remove_if(is_const)
+        ///               == List<int, double, float>{});
+        /// static_assert(List<int, double, const float>{}.remove_if(is_const)
+        ///               == List<int, double>{});
+        /// static_assert(List<int, Value<1>, double, Value<2>, float>{}.remove_if(is_value)
+        ///               == List<int, double, float>{});
+        /// @endcode
+        ///
+        /// @tparam TPredicate The type of the metapredicate to use
+        /// @param predicate The metapredicate to use
+        /// @return a copy of this `List`, but with all elements that satisfy
+        /// `predicate` removed
+        template<typename TPredicate>
+            requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
+                    || requires { (as_meta<TTypes>{}.satisfies(TPredicate{}), ...); }
+        [[nodiscard]] constexpr auto
+        remove_if([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward)
+            const noexcept {
+            constexpr auto append_valid = [](auto list, auto element) noexcept {
+                if constexpr(not decltype(element){}.satisfies(TPredicate{})) {
+                    return list.push_back(element);
+                }
+                else {
+                    return list;
+                }
+            };
+
+            return accumulate(List<>{}, append_valid);
+        }
+
+        /// @brief Returns a copy of this `List`, but with all elements that
+        /// are equal to `value` removed.
+        ///
+        /// Using the exposition-only template metafunction `as_meta`
+        /// (see the corresponding section in the @ref list module-level documentation),
+        /// checks each element, `TElement`, of this `List` to see whether it is equal to
+        /// `value`, as if by `typename as_meta<TElement>::type{}.satisfies(equal_to(value))`,
+        /// and if equal, that element is _not_ included in the returned `List`.
+        ///
+        /// Relative ordering of elements is maintained in the returned `List`.
+        ///
+        /// # Requirements
+        /// - `predicate` must be a metapredicate invocable with the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `func` must be a `MetaPredicateOf<TFunction, typename as_meta<TElement>::type>`
+        /// for each element,`TElement`, of this `List`
+        /// - OR, `predicate` must be a metapredicate satisfiable with the corresponding
+        /// metaprogramming type of each element in this `List`. That is,
+        /// `typename as_meta<TElement>::type{}.satisfy(predicate)` must be well formed
+        /// for each element, `TElement`, of this `List`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// static_assert(List<int, const double, float>{}.remove(decltype_<const double>())
+        ///               == List<int, float>{});
+        /// static_assert(List<int, double, float>{}.remove(decltype_<u32>())
+        ///               == List<int, double, float>{});
+        /// static_assert(List<int, double, const float>{}.remove(decltype_<const float>())
+        ///               == List<int, double>{});
+        /// static_assert(List<int, Value<1>, double, Value<2>, float>{}.remove(1_value)
+        ///               == List<int, double, Value<2>, float>{});
+        /// @endcode
+        ///
+        /// @tparam TPredicate The type of the metapredicate to use
+        /// @param predicate The metapredicate to use
+        /// @return a copy of this `List`, but with all elements that are equal to
+        /// `value` removed
+        [[nodiscard]] constexpr auto remove(auto value) const noexcept {
+            return remove_if(equal_to(value));
         }
 
         /// @brief Converts the elements of this list into a parameter pack, and invokes
@@ -1667,6 +1824,42 @@ namespace hyperion::mpl::_test::list {
                   "hyperion::mpl::List::index_of test case 2 (failing)");
     static_assert(List<Value<3>, int, double, Value<4>>{}.index_of(4_value) == 3_value,
                   "hyperion::mpl::List::index_of test case 3 (failing)");
+
+    constexpr auto is_value = []([[maybe_unused]] MetaValue auto value) noexcept {
+        return Value<true>{};
+    };
+
+    static_assert(List<int, const double, float>{}.filter(is_const) == List<const double>{},
+                  "hyperion::mpl::List::filter test case 1 (failing)");
+    static_assert(List<int, double, float>{}.filter(is_const) == List<>{},
+                  "hyperion::mpl::List::filter test case 2 (failing)");
+    static_assert(List<int, double, const float>{}.filter(is_const) == List<const float>{},
+                  "hyperion::mpl::List::filter test case 3 (failing)");
+    static_assert(List<int, Value<1>, double, Value<2>, float>{}.filter(is_value)
+                      == List<Value<1>, Value<2>>{},
+                  "hyperion::mpl::List::filter test case 4 (failing)");
+
+    static_assert(List<int, const double, float>{}.remove_if(is_const) == List<int, float>{},
+                  "hyperion::mpl::List::remove_if test case 1 (failing)");
+    static_assert(List<int, double, float>{}.remove_if(is_const) == List<int, double, float>{},
+                  "hyperion::mpl::List::remove_if test case 2 (failing)");
+    static_assert(List<int, double, const float>{}.remove_if(is_const) == List<int, double>{},
+                  "hyperion::mpl::List::remove_if test case 3 (failing)");
+    static_assert(List<int, Value<1>, double, Value<2>, float>{}.remove_if(is_value)
+                      == List<int, double, float>{},
+                  "hyperion::mpl::List::remove_if test case 4 (failing)");
+
+    static_assert(List<int, const double, float>{}.remove(decltype_<const double>())
+                      == List<int, float>{},
+                  "hyperion::mpl::List::remove test case 1 (failing)");
+    static_assert(List<int, double, float>{}.remove(decltype_<u32>()) == List<int, double, float>{},
+                  "hyperion::mpl::List::remove test case 2 (failing)");
+    static_assert(List<int, double, const float>{}.remove(decltype_<const float>())
+                      == List<int, double>{},
+                  "hyperion::mpl::List::remove test case 3 (failing)");
+    static_assert(List<int, Value<1>, double, Value<2>, float>{}.remove(1_value)
+                      == List<int, double, Value<2>, float>{},
+                  "hyperion::mpl::List::remove test case 4 (failing)");
 
     static constexpr auto sum = [](MetaValue auto... value) noexcept {
         return (value + ...);

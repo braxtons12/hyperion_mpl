@@ -2,8 +2,8 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Concept and type trait definitions for what consitutes various categories of
 /// metaprogramming types
-/// @version 0.1
-/// @date 2024-02-23
+/// @version 0.4
+/// @date 2024-03-03
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -256,6 +256,57 @@ namespace hyperion::mpl {
     template<typename TType>
     static inline constexpr auto is_meta_pair_v = is_meta_pair<TType>::value;
 
+    /// @brief Type trait to determine whether type `TType` is a metaprogramming list type.
+    ///
+    /// A metaprogramming list type is any type that represents a list of types and is not
+    /// a `MetaPair`.
+    ///
+    /// - `TType` must be a class/struct template accepting a variadic list of types.
+    /// I.E. it must be a type of the form
+    /// `template<typename... TTypes> struct type { /** contents **/ };`
+    ///
+    /// @tparam TType The type to check
+    /// @ingroup metatypes
+    /// @headerfile hyperion/mpl/metatypes.h
+    template<typename TType>
+    struct is_meta_list : std::false_type { };
+
+    // specialization for the true case
+    template<template<typename...> typename TList, typename... TTypes>
+    struct is_meta_list<TList<TTypes...>>
+        : std::conditional_t<MetaPair<TList<TTypes...>>, std::false_type, std::true_type> { };
+
+    /// @brief Value of the type trait `is_meta_list`.
+    /// Used to determine whether type `TType` is a metaprogramming list type.
+    ///
+    /// A metaprogramming list type is any type that represents a list of types and is not
+    /// a `MetaPair`.
+    ///
+    /// - `TType` must be a class/struct template accepting a variadic list of types.
+    /// I.E. it must be a type of the form
+    /// `template<typename... TTypes> struct type { /** contents **/ };`
+    ///
+    /// @tparam TType The type to check
+    /// @ingroup metatypes
+    /// @headerfile hyperion/mpl/metatypes.h
+    template<typename TType>
+    static inline constexpr auto is_meta_list_v = is_meta_list<TType>::value;
+
+    /// @brief Concept specifying the requirements for a metaprogramming list type.
+    ///
+    /// A metaprogramming list type is any type that represents a list of types and is not
+    /// a `MetaPair`.
+    ///
+    /// - `TType` must be a class/struct template accepting a variadic list of types.
+    /// I.E. it must be a type of the form
+    /// `template<typename... TTypes> struct type { /** contents **/ };`
+    ///
+    /// @tparam TType The type to check
+    /// @ingroup metatypes
+    /// @headerfile hyperion/mpl/metatypes.h
+    template<typename TType>
+    concept MetaList = is_meta_list_v<TType>;
+
     template<typename TType>
     struct Type;
 
@@ -265,6 +316,9 @@ namespace hyperion::mpl {
     template<typename TFirst, typename TSecond>
     struct Pair;
 
+    template<typename... TTypes>
+    struct List;
+
     namespace detail {
         template<typename TType>
         struct convert_to_meta {
@@ -272,28 +326,38 @@ namespace hyperion::mpl {
         };
 
         template<typename TType>
-            requires MetaValue<TType>
+            requires MetaValue<std::remove_cvref_t<TType>>
         struct convert_to_meta<TType> {
-            using type = mpl::Value<TType::value, std::remove_cvref_t<decltype(TType::value)>>;
+            using type
+                = mpl::Value<std::remove_cvref_t<TType>::value,
+                             std::remove_cvref_t<decltype(std::remove_cvref_t<TType>::value)>>;
         };
 
         template<typename TType>
-            requires MetaType<TType>
+            requires MetaType<std::remove_cvref_t<TType>>
         struct convert_to_meta<TType> {
-            using type = Type<typename TType::type>;
+            // NOLINTNEXTLINE(modernize-type-traits)
+            using type = Type<typename std::remove_cvref_t<TType>::type>;
         };
 
         template<typename TType>
-            requires MetaType<TType> && MetaType<typename TType::type>
+            requires MetaType<std::remove_cvref_t<TType>> && MetaType<typename TType::type>
         struct convert_to_meta<TType> {
-            using type = Type<typename TType::type::type>;
+            using type = Type<typename std::remove_cvref_t<TType>::type::type>;
         };
 
         template<typename TType>
-            requires MetaPair<TType>
+            requires MetaPair<std::remove_cvref_t<TType>>
         struct convert_to_meta<TType> {
-            using type = mpl::Pair<typename convert_to_meta<typename TType::first>::type,
-                                   typename convert_to_meta<typename TType::second>::type>;
+            using type = mpl::Pair<
+                typename convert_to_meta<typename std::remove_cvref_t<TType>::first>::type,
+                typename convert_to_meta<typename std::remove_cvref_t<TType>::second>::type>;
+        };
+
+        template<template<typename...> typename TList, typename... TTypes>
+            requires MetaList<TList<TTypes...>> && std::same_as<List<TTypes...>, TList<TTypes...>>
+        struct convert_to_meta<TList<TTypes...>> {
+            using type = TList<TTypes...>;
         };
 
         template<typename TType>
@@ -341,9 +405,11 @@ namespace hyperion::mpl {
         };
 
         template<typename TType>
-            requires MetaType<TType> && MetaValue<typename TType::type>
+            requires MetaType<std::remove_cvref_t<TType>>
+                     && MetaValue<typename std::remove_cvref_t<TType>::type>
         struct unwrap_inner<TType> {
-            using type = Value<TType::type::value, decltype(TType::type::value)>;
+            using type = Value<std::remove_cvref_t<TType>::type::value,
+                               decltype(std::remove_cvref_t<TType>::type::value)>;
         };
 
         template<typename TType>
