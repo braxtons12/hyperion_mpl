@@ -696,6 +696,89 @@ document.write(`
 </dl>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4IDpE9make_listDaDpRR6TTypes">
+<span id="_CPPv3IDpE9make_listDpRR6TTypes"></span><span id="_CPPv2IDpE9make_listDpRR6TTypes"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">TTypes</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="group__list_1gaae6daec4a58cd8c7469dee4b9caef967"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">make_list</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4IDpE9make_listDaDpRR6TTypes" title="make_list::TTypes"><span class="n"><span class="pre">TTypes</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">types</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4IDpE9make_listDaDpRR6TTypes" title="Link to this definition">#</a><br /></dt>
+<dd><p>Creates an <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1List"><span class="std std-ref"><span class="pre">mpl::List</span></span></a></code> representing the types of the given arguments, <code class="docutils literal notranslate"><span class="pre">types</span></code></p>
+<section id="group__list_1autotoc_md68">
+<h2>Example<a class="headerlink" href="#group__list_1autotoc_md68" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate" id="group__list_1autotoc_md68"><div class="highlight"><pre><span></span><span class="k">static_assert</span><span class="p">(</span><span class="n">make_list</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="n">_usize</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="n">_value</span><span class="p">)</span>
+<span class="w">              </span><span class="o">==</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="n">usize</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="o">&lt;</span><span class="mi">1</span><span class="n">_usize</span><span class="o">&gt;&gt;</span><span class="p">{});</span>
+</pre></div>
+</div>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TTypes</strong> – the types to store in the <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1List"><span class="std std-ref"><span class="pre">mpl::List</span></span></a></code></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>types</strong> – the arguments of the types to represent </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>an <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1List"><span class="std std-ref"><span class="pre">mpl::List</span></span></a></code> representing the types of the given arguments </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4IDpE9make_listDav">
+<span id="_CPPv3IDpE9make_listv"></span><span id="_CPPv2IDpE9make_listv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">TTypes</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="group__list_1gae8d45f99201d6950b2b89efe9dbd3189"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">make_list</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4IDpE9make_listDav" title="Link to this definition">#</a><br /></dt>
+<dd><p>Creates an <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1List"><span class="std std-ref"><span class="pre">mpl::List</span></span></a></code> representing the specified types. </p>
+<section id="group__list_1autotoc_md69">
+<h2>Example<a class="headerlink" href="#group__list_1autotoc_md69" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate" id="group__list_1autotoc_md69"><div class="highlight"><pre><span></span><span class="k">static_assert</span><span class="p">(</span><span class="n">make_list</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="n">usize</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">Type</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="p">()</span>
+<span class="w">              </span><span class="o">==</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="n">usize</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="p">{});</span>
+</pre></div>
+</div>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TTypes</strong> – the types to store in the <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1List"><span class="std std-ref"><span class="pre">mpl::List</span></span></a></code></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>an <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1List"><span class="std std-ref"><span class="pre">mpl::List</span></span></a></code> representing <code class="docutils literal notranslate"><span class="pre">TTypes...</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4IDpEorDa4ListIDp6TTypesEDa">
+<span id="_CPPv3IDpEor4ListIDp6TTypesEDa"></span><span id="_CPPv2IDpEor4ListIDp6TTypesEDa"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">TTypes</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="group__list_1ga5a70ee756bc6aba5c420eaab21487459"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">|</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">List</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4IDpEorDa4ListIDp6TTypesEDa" title="operator|::TTypes"><span class="n"><span class="pre">TTypes</span></span></a><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">list</span></span>, <span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">range_object</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEorDa4ListIDp6TTypesEDa" title="Link to this definition">#</a><br /></dt>
+<dd><p>Pipeline operator for <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1List"><span class="std std-ref"><span class="pre">mpl::List</span></span></a></code>s. Provides support for piping <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1List"><span class="std std-ref"><span class="pre">mpl::List</span></span></a></code>s into <code class="docutils literal notranslate"><span class="pre">std::ranges</span></code> algorithms and views. </p>
+<section id="group__list_1autotoc_md70">
+<h2>Example<a class="headerlink" href="#group__list_1autotoc_md70" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate" id="group__list_1autotoc_md70"><div class="highlight"><pre><span></span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="o">&gt;</span><span class="p">{};</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">ranged</span>
+<span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">list</span>
+<span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ranges</span><span class="o">::</span><span class="n">views</span><span class="o">::</span><span class="n">filter</span><span class="p">([](</span><span class="k">auto</span><span class="w"> </span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">type</span><span class="p">.</span><span class="n">is_const</span><span class="p">();</span><span class="w"> </span><span class="p">})</span>
+<span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ranges</span><span class="o">::</span><span class="n">views</span><span class="o">::</span><span class="n">transform</span><span class="p">([](</span><span class="k">auto</span><span class="w"> </span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="n">type</span><span class="p">.</span><span class="n">as_lvalue_reference</span><span class="p">().</span><span class="n">as_volatile</span><span class="p">();</span>
+<span class="w">          </span><span class="p">})</span>
+<span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ranges</span><span class="o">::</span><span class="n">views</span><span class="o">::</span><span class="n">reverse</span>
+<span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ranges</span><span class="o">::</span><span class="n">views</span><span class="o">::</span><span class="n">drop</span><span class="p">(</span><span class="mi">1</span><span class="n">_value</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">ranged</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="k">volatile</span><span class="w"> </span><span class="kt">int</span><span class="o">&amp;&gt;</span><span class="p">{});</span>
+</pre></div>
+</div>
+<p></p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TTypes</strong> – the types represented in the <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1List"><span class="std std-ref"><span class="pre">List</span></span></a></code></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>list</strong> – the list to pipe into a <code class="docutils literal notranslate"><span class="pre">std::ranges</span></code> algorithm or view </p></li>
+<li><p><strong>range_object</strong> – the <code class="docutils literal notranslate"><span class="pre">std::ranges</span></code> algorithm or view to pipe into </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the result of the pipeline, up to this point </p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N8hyperion3mpl13not_found_tagE">
@@ -1971,6 +2054,9 @@ document.write(`
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4IDpDpEeqDaRK4ListIDp8TLHTypesERK4ListIDp8TRHTypesE"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4IDpDpEneDaRK4ListIDp8TLHTypesERK4ListIDp8TRHTypesE"><code class="docutils literal notranslate"><span class="pre">operator!=()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4IDpE9make_listDaDpRR6TTypes"><code class="docutils literal notranslate"><span class="pre">make_list()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4IDpE9make_listDav"><code class="docutils literal notranslate"><span class="pre">make_list()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4IDpEorDa4ListIDp6TTypesEDa"><code class="docutils literal notranslate"><span class="pre">operator|()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N8hyperion3mpl13not_found_tagE"><code class="docutils literal notranslate"><span class="pre">not_found_tag</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4IDpEN8hyperion3mpl4ListE"><code class="docutils literal notranslate"><span class="pre">List</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK8hyperion3mpl4List4sizeEv"><code class="docutils literal notranslate"><span class="pre">List::size()</span></code></a></li>
