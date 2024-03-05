@@ -1,7 +1,7 @@
 /// @file list.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming facilities for working with a list of types or values
-/// @version 0.5
+/// @version 0.6
 /// @date 2024-03-04
 ///
 /// MIT License
@@ -1604,6 +1604,43 @@ namespace hyperion::mpl {
         }
     }
 
+    /// @brief Creates an `mpl::List` representing the types of the given arguments, `types`
+    ///
+    /// # Example
+    /// @code{.cpp}
+    /// static_assert(make_list(1, 1.0, 1_usize, 1_value)
+    ///               == List<int, double, usize, Value<1_usize>>{});
+    /// @endcode
+    ///
+    /// @tparam TTypes the types to store in the `mpl::List`
+    /// @param types the arguments of the types to represent
+    /// @return an `mpl::List` representing the types of the given arguments
+    /// @ingroup list
+    /// @headerfile hyperion/mpl/list.h
+    template<typename... TTypes>
+    [[nodiscard]] constexpr auto
+    make_list([[maybe_unused]] TTypes&&... types) // NOLINT(*-missing-std-forward)
+        noexcept {
+        return List<detail::convert_to_raw_t<detail::convert_to_meta_t<TTypes>>...>{};
+    }
+
+    /// @brief Creates an `mpl::List` representing the specified types
+    ///
+    /// # Example
+    /// @code{.cpp}
+    /// static_assert(make_list<int, double, usize, Value<1>, Type<int>>()
+    ///               == List<int, double, usize, Value<1>, int>{});
+    /// @endcode
+    ///
+    /// @tparam TTypes the types to store in the `mpl::List`
+    /// @return an `mpl::List` representing `TTypes...`
+    /// @ingroup list
+    /// @headerfile hyperion/mpl/list.h
+    template<typename... TTypes>
+    [[nodiscard]] constexpr auto make_list() noexcept {
+        return List<detail::convert_to_raw_t<detail::convert_to_meta_t<TTypes>>...>{};
+    }
+
     namespace detail {
         /// @brief Overload set to map to the Range Adaptor of the given bound
         /// (bound as in `std::bind_back`) ranges object
@@ -1761,6 +1798,8 @@ namespace hyperion::mpl {
     /// @param list the list to pipe into a `std::ranges` algorithm or view
     /// @param range_object the `std::ranges` algorithm or view to pipe into
     /// @return the result of the pipeline, up to this point
+    /// @ingroup list
+    /// @headerfile hyperion/mpl/list.h
     template<typename... TTypes>
     [[nodiscard]] constexpr auto operator|(List<TTypes...> list, auto range_object) {
         // This is a fairly complicated sequence of metaprogramming.
@@ -1877,6 +1916,20 @@ namespace hyperion::mpl::_test::list {
     static_assert(List<int, double>{}.zip(List<double, int>{})
                       == List<Pair<int, double>, Pair<double, int>>{},
                   "hyperion::mpl::List operator== test case 3 (failing)");
+
+    constexpr auto test_metavalue = 1_value;
+    constexpr auto test_metatype = decltype_<int>();
+    constexpr auto test_value = "a string";
+
+    static_assert(make_list(1, 1.0, 2_usize) == List<int, double, usize>{},
+                  "hyperion::mpl::make_list test case 1 (failing)");
+    static_assert(make_list(test_metavalue, test_metatype, test_value)
+                      == List<Value<1_usize>, int, const char* const&>{},
+                  "hyperion::mpl::make_list test case 2 (failing)");
+    static_assert(make_list<int, double, Value<1>>() == List<int, double, Value<1>>{},
+                  "hyperion::mpl::make_list test case 3 (failing)");
+    static_assert(make_list<int, double, Type<usize>>() == List<int, double, usize>{},
+                  "hyperion::mpl::make_list test case 4 (failing)");
 
     static_assert(List<int, double>{}.front() == decltype_<int>(),
                   "hyperion::mpl::List::front test (failing)");
