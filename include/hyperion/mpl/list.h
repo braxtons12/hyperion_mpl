@@ -1,8 +1,8 @@
 /// @file list.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming facilities for working with a list of types or values
-/// @version 0.6
-/// @date 2024-03-04
+/// @version 0.7
+/// @date 2024-03-05
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
