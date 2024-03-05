@@ -2219,9 +2219,22 @@ namespace hyperion::mpl::_test::list {
         return manipped == List<volatile int&>{};
     }
 
+    static constexpr auto test_ranges4() noexcept {
+        constexpr auto list = List<int, Value<1>, const double, Value<2>, float>{};
+        constexpr auto manipped
+            = list
+              | std::ranges::views::filter([](auto elem) { return not MetaValue<decltype(elem)>; })
+              | std::ranges::views::transform(
+                  [](auto type) { return type.as_lvalue_reference().as_volatile(); })
+              | std::ranges::views::reverse | std::ranges::views::drop(1_value);
+
+        return manipped == List<const volatile double&, volatile int&>{};
+    }
+
     static_assert(test_ranges1(), "hyperion::mpl::List ranges support test case 1 (failing)");
     static_assert(test_ranges2(), "hyperion::mpl::List ranges support test case 2 (failing)");
     static_assert(test_ranges3(), "hyperion::mpl::List ranges support test case 3 (failing)");
+    static_assert(test_ranges4(), "hyperion::mpl::List ranges support test case 4 (failing)");
 
     #endif // __cpp_lib_ranges >= 202110L
 } // namespace hyperion::mpl::_test::list
