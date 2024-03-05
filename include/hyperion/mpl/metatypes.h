@@ -2,8 +2,8 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Concept and type trait definitions for what consitutes various categories of
 /// metaprogramming types
-/// @version 0.4
-/// @date 2024-03-03
+/// @version 0.5
+/// @date 2024-03-04
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -341,7 +341,8 @@ namespace hyperion::mpl {
         };
 
         template<typename TType>
-            requires MetaType<std::remove_cvref_t<TType>> && MetaType<typename TType::type>
+            requires MetaType<std::remove_cvref_t<TType>>
+                     && MetaType<typename std::remove_cvref_t<TType>::type>
         struct convert_to_meta<TType> {
             using type = Type<typename std::remove_cvref_t<TType>::type::type>;
         };

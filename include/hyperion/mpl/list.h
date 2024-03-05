@@ -1,8 +1,8 @@
 /// @file list.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming facilities for working with a list of types or values
-/// @version 0.4
-/// @date 2024-03-03
+/// @version 0.5
+/// @date 2024-03-04
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -146,7 +146,7 @@ namespace hyperion::mpl {
         template<typename... TTypes>
         [[nodiscard]] constexpr auto at(MetaValue auto index) noexcept {
             return elements<TTypes...>::make(std::make_integer_sequence<usize, sizeof...(TTypes)>{})
-                .at(index);
+                .at(Value<static_cast<usize>(decltype(index)::value), usize>{});
         }
 
         /// @brief Removes the first element from the list, `TList`, exposing that element as
@@ -1086,6 +1086,44 @@ namespace hyperion::mpl {
             return remove_if(equal_to(value));
         }
 
+        /// @brief Returns a `List` containing the elements of this `List` occurring at
+        /// the indices specified in `list`.
+        ///
+        /// Ordering of elements in the returned list follows ordering of indices
+        /// specified in `list`.
+        ///
+        /// # Requirements
+        /// - `list` must be a `MetaList` type
+        /// - Every element of `list` must be a `MetaValue`
+        /// - Every element of `list` must have a value in the range `[0, this->size())`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        ///
+        /// constexpr auto sifter = List<Value<1>, Value<2>>{};
+        ///
+        /// static_assert(List<int, const double, float>{}.sift(sifter)
+        ///               == List<const double, float>{});
+        /// static_assert(List<int, double, float>{}.sift(sifter)
+        ///               == List<double, float>{});
+        /// static_assert(List<int, Value<1>, double, Value<2>, float>{}.sift(sifter)
+        ///               == List<Value<1>, double>{});
+        /// @endcode
+        ///
+        /// @tparam TList The metaprogramming list class template
+        /// @tparam TValues The metaprogramming value types stored in `list`
+        /// @param list The metaprogramming list containing the indices of the
+        /// elements of this `List` to get
+        /// @return a `List` containing the elements of this `List` occurring
+        /// at the indices specified in `list`
+        template<template<typename...> typename TList, typename... TValues>
+            requires MetaList<TList<TValues...>> && (MetaValue<TValues> && ...)
+                     && ((TValues::value < sizeof...(TTypes)) && ...)
+                     && ((TValues::value >= 0) && ...)
+        [[nodiscard]] constexpr auto sift([[maybe_unused]] TList<TValues...> list) const noexcept {
+            return List<as_raw<decltype(at(TValues{}))>...>{};
+        }
+
         /// @brief Converts the elements of this list into a parameter pack, and invokes
         /// `func` with that pack, returning the result of the invocation.
         ///
@@ -1410,16 +1448,20 @@ namespace hyperion::mpl {
 
         /// @brief Returns a copy of this `List` with the first element removed
         /// @return a copy of this `List` with the first element removed
-        [[nodiscard]] constexpr auto
-        pop_front() const noexcept -> typename detail::pop_front<List>::remaining {
-            return {};
+        [[nodiscard]] constexpr auto pop_front() const noexcept {
+            constexpr auto to_raw = []<typename... TMetas>([[maybe_unused]] List<TMetas...> list) {
+                return List<as_raw<TMetas>...>{};
+            };
+            return to_raw(typename detail::pop_front<List<as_meta<TTypes>...>>::remaining{});
         }
 
         /// @brief Returns a copy of this `List` with the last element removed
         /// @return a copy of this `List` with the last element removed
-        [[nodiscard]] constexpr auto
-        pop_back() const noexcept -> typename detail::pop_back<List>::remaining {
-            return {};
+        [[nodiscard]] constexpr auto pop_back() const noexcept {
+            constexpr auto to_raw = []<typename... TMetas>([[maybe_unused]] List<TMetas...> list) {
+                return List<as_raw<TMetas>...>{};
+            };
+            return to_raw(typename detail::pop_back<List<as_meta<TTypes>...>>::remaining{});
         }
 
         /// @brief Converts the elements of this `List` and `rhs` into a single list
@@ -1487,22 +1529,29 @@ namespace hyperion::mpl {
     [[nodiscard]] constexpr auto
     operator==([[maybe_unused]] const List<TLHTypes...>& lhs,
                [[maybe_unused]] const List<TRHTypes...>& rhs) noexcept {
-        constexpr auto is_same = []<typename TFirst, typename TSecond>(Pair<TFirst, TSecond> pair)
-            requires(MetaType<typename decltype(pair)::first>
-                     || MetaValue<typename decltype(pair)::first>
-                     || MetaPair<typename decltype(pair)::first>)
-                    && (MetaType<typename decltype(pair)::second>
-                        || MetaValue<typename decltype(pair)::second>
-                        || MetaPair<typename decltype(pair)::second>)
-        {
-            return equal_to(typename decltype(pair)::first{})(typename decltype(pair)::second{});
-        };
+        if constexpr(sizeof...(TLHTypes) != sizeof...(TRHTypes)) {
+            return Value<false>{};
+        }
+        else {
+            constexpr auto is_same
+                = []<typename TFirst, typename TSecond>(Pair<TFirst, TSecond> pair)
+                requires(MetaType<typename decltype(pair)::first>
+                         || MetaValue<typename decltype(pair)::first>
+                         || MetaPair<typename decltype(pair)::first>)
+                        && (MetaType<typename decltype(pair)::second>
+                            || MetaValue<typename decltype(pair)::second>
+                            || MetaPair<typename decltype(pair)::second>)
+            {
+                return equal_to(typename decltype(pair)::first{})(
+                    typename decltype(pair)::second{});
+            };
 
-        constexpr auto check_all = [](auto... results) noexcept {
-            return (results && ...);
-        };
+            constexpr auto check_all = [](auto... results) noexcept {
+                return (results && ...);
+            };
 
-        return List<TLHTypes...>{}.zip(List<TRHTypes...>{}).apply(is_same).unwrap(check_all);
+            return List<TLHTypes...>{}.zip(List<TRHTypes...>{}).apply(is_same).unwrap(check_all);
+        }
     }
 
     /// @brief Inequality comparison operator for `List`
@@ -1530,25 +1579,263 @@ namespace hyperion::mpl {
     [[nodiscard]] constexpr auto
     operator!=([[maybe_unused]] const List<TLHTypes...>& lhs,
                [[maybe_unused]] const List<TRHTypes...>& rhs) noexcept {
-        constexpr auto is_same = []<typename TFirst, typename TSecond>(Pair<TFirst, TSecond> pair)
-            requires(MetaType<typename decltype(pair)::first>
-                     || MetaValue<typename decltype(pair)::first>
-                     || MetaPair<typename decltype(pair)::first>)
-                    && (MetaType<typename decltype(pair)::second>
-                        || MetaValue<typename decltype(pair)::second>
-                        || MetaPair<typename decltype(pair)::second>)
-        {
-            return not_equal_to(typename decltype(pair)::first{})(
-                typename decltype(pair)::second{});
-        };
+        if constexpr(sizeof...(TLHTypes) != sizeof...(TRHTypes)) {
+            return Value<true>{};
+        }
+        else {
+            constexpr auto is_same
+                = []<typename TFirst, typename TSecond>(Pair<TFirst, TSecond> pair)
+                requires(MetaType<typename decltype(pair)::first>
+                         || MetaValue<typename decltype(pair)::first>
+                         || MetaPair<typename decltype(pair)::first>)
+                        && (MetaType<typename decltype(pair)::second>
+                            || MetaValue<typename decltype(pair)::second>
+                            || MetaPair<typename decltype(pair)::second>)
+            {
+                return not_equal_to(typename decltype(pair)::first{})(
+                    typename decltype(pair)::second{});
+            };
 
-        constexpr auto check_all = [](auto... results) noexcept {
-            return (results || ...);
-        };
+            constexpr auto check_all = [](auto... results) noexcept {
+                return (results || ...);
+            };
 
-        return List<TLHTypes...>{}.zip(List<TRHTypes...>{}).apply(is_same).unwrap(check_all);
+            return List<TLHTypes...>{}.zip(List<TRHTypes...>{}).apply(is_same).unwrap(check_all);
+        }
     }
+
+    namespace detail {
+        /// @brief Overload set to map to the Range Adaptor of the given bound
+        /// (bound as in `std::bind_back`) ranges object
+        template<template<typename...> typename TBoundRange, typename TAdaptor, typename TFunction>
+        auto get_adaptor(TBoundRange<TAdaptor, TFunction>) -> TAdaptor;
+        template<template<typename...> typename TFunctor,
+                 template<typename...>
+                 typename TBoundRange,
+                 typename TAdaptor,
+                 typename TFunction>
+        auto get_adaptor(TFunctor<TBoundRange<TAdaptor, TFunction>>) -> TAdaptor;
+        template<typename TType>
+        auto get_adaptor(TType) -> void;
+
+        /// @brief Overload set to map to the predicate/function of the given bound
+        /// (bound as in `std::bind_back`) ranges object
+        template<template<typename...> typename TBoundRange, typename TAdaptor, typename TFunction>
+        auto get_function(TBoundRange<TAdaptor, TFunction>) -> TFunction;
+        template<template<typename...> typename TFunctor,
+                 template<typename...>
+                 typename TBoundRange,
+                 typename TAdaptor,
+                 typename TFunction>
+        auto get_function(TFunctor<TBoundRange<TAdaptor, TFunction>>) -> TFunction;
+        template<typename TType>
+        auto get_function(TType) -> void;
+
+    #if HYPERION_PLATFORM_COMPILER_IS_MSVC
+        /// @brief Used to extend the lifetime of the given value in a `constexpr` context.
+        /// MSVC can be bad about assuming an object's lifetime has ended in `constexpr`
+        /// contexts when it really hasn't.
+        ///
+        /// This is a hack to prevent that.
+        template<template<typename...> typename TTemplate, typename TType, typename... TTypes>
+        constexpr auto extend_constexpr_lifetime(const TTemplate<TType, TTypes...>&) {
+            return TTemplate<TType, TTypes...>{TTypes{}...};
+        }
+        /// @brief Used to extend the lifetime of the given value in a `constexpr` context.
+        /// MSVC can be bad about assuming an object's lifetime has ended in `constexpr`
+        /// contexts when it really hasn't.
+        ///
+        /// This is a hack to prevent that.
+        template<typename TType>
+        constexpr auto extend_constexpr_lifetime([[maybe_unused]] const TType& value) {
+            return TType{};
+        }
+    #else
+        /// @brief Used to extend the lifetime of the given value in a `constexpr` context.
+        /// MSVC can be bad about assuming an object's lifetime has ended in `constexpr`
+        /// contexts when it really hasn't.
+        ///
+        /// This provides usage consistency w/ the hack used for MSVC.
+        template<typename TType>
+        constexpr auto extend_constexpr_lifetime(const TType& value) -> decltype(auto) {
+            return value;
+        }
+    #endif // HYPERION_PLATFORM_COMPILER_IS_MSVC
+
+        /// @brief Statically stack-allocated vector containing elements of type `TType`,
+        /// up to `TCapacity` number of elements
+        ///
+        /// @note This is only a minimal implementation providing enough functionality to
+        /// support a vector containing primitive types
+        template<typename TType, usize TCapacity>
+        class static_vector {
+          public:
+            template<typename TValue>
+            constexpr auto push_back(TValue&& value) noexcept(
+                decltype_<TType>().is_noexcept_constructible_from(decltype_<decltype(value)>()))
+                -> void {
+                // NOLINTNEXTLINE(*-pro-bounds-constant-array-index)
+                m_values[m_size++] = std::forward<TValue>(value);
+            }
+
+            [[nodiscard]] constexpr auto operator[](auto index) const noexcept -> const TType& {
+                // NOLINTNEXTLINE(*-pro-bounds-constant-array-index)
+                return m_values[index];
+            }
+
+            [[nodiscard]] constexpr auto size() const noexcept -> usize {
+                return m_size;
+            }
+
+            [[nodiscard]] constexpr auto begin() noexcept {
+                return m_values.begin();
+            }
+
+            [[nodiscard]] constexpr auto end() noexcept {
+                return m_values.begin() + m_size;
+            }
+
+            [[nodiscard]] constexpr auto begin() const noexcept {
+                return m_values.begin();
+            }
+
+            [[nodiscard]] constexpr auto end() const noexcept {
+                return m_values.begin() + m_size;
+            }
+
+          private:
+            std::array<TType, TCapacity> m_values = {};
+            usize m_size = 0_usize;
+        };
+
+        /// @brief Return a range of size `end - begin`,
+        /// starting at `begin` and incrementing for each successive element,
+        /// until the size is reached.
+        ///
+        /// @param begin The initial value
+        /// @param end The one-after-the-end value
+        /// @return a range of values from `begin` to `end`
+        constexpr auto iota(MetaValue auto begin, MetaValue auto end) noexcept {
+            std::array<std::remove_cvref_t<decltype(decltype(begin)::value)>,
+                       decltype(end)::value - decltype(begin)::value>
+                range{};
+            auto curr = decltype(begin)::value;
+            for(auto& elem : range) {
+                elem = curr++;
+            }
+            return range;
+        }
+
+        /// @brief Converts the given range to a `static_vector<TType, TCapacity`
+        /// @param range the range to convert
+        /// @return a `static_vector<TType, TCapacity>` containing the elements
+        /// of the `range`
+        template<typename TType, usize TCapacity>
+        constexpr auto to_vector(auto&& range) noexcept {
+            static_vector<TType, TCapacity> arr{};
+            for(const auto& elem : range) {
+                arr.push_back(elem);
+            }
+            return arr;
+        }
+    } // namespace detail
+
+    /// @brief Pipeline operator for `mpl::List`s.
+    /// Provides support for piping `mpl::List`s into `std::ranges` algorithms and views.
+    ///
+    /// # Example
+    /// @code{.cpp}
+    /// constexpr auto list = List<int, const double, float>{};
+    /// constexpr auto ranged
+    ///     = list
+    ///         | std::ranges::views::filter([](auto type) { return not type.is_const(); })
+    ///         | std::ranges::views::transform([](auto type) {
+    ///                 return type.as_lvalue_reference().as_volatile();
+    ///           })
+    ///         | std::ranges::views::reverse
+    ///         | std::ranges::views::drop(1_value);
+    /// static_assert(ranged == List<volatile int&>{});
+    /// @endcode
+    ///
+    /// @tparam TTypes the types represented in the `List`
+    /// @param list the list to pipe into a `std::ranges` algorithm or view
+    /// @param range_object the `std::ranges` algorithm or view to pipe into
+    /// @return the result of the pipeline, up to this point
+    template<typename... TTypes>
+    [[nodiscard]] constexpr auto operator|(List<TTypes...> list, auto range_object) {
+        // This is a fairly complicated sequence of metaprogramming.
+        // The primary technique involves taking the results of a range algorithm,
+        // converting them into a `constexpr` sequence of indices into the `list`,
+        // and then using those indices to sift the `list` for the correct output elements.
+        //
+        // The original technique was discovered by Kris Jusiak and Daisy Hollman
+        // and used in [Kris's mp library](https://github.com/boost-ext/mp),
+        // which uses the [Boost Software License](http://www.boost.org/LICENSE_1_0.txt).
+        //
+        // It has been adapted (and reduced) here to work with `mpl::List`
+
+        // the range adaptor type, if applicable
+        using adaptor = decltype(detail::get_adaptor(range_object));
+        // the function type (possibly a transform, predicate, etc), if applicable
+        using function = decltype(detail::get_function(range_object));
+
+        // case for transforms/predicates/etc (transform, filter, etc)
+        if constexpr(not std::is_void_v<function>
+                     && requires { (function{}(detail::convert_to_meta_t<TTypes>{}), ...); })
+        {
+            // case for predicates
+            // we use `std::common_type` here to force conversion of
+            // `Value<true || false>` to `bool` to enable storing the
+            // results of invoking the predicate in a `std::array`
+            if constexpr(requires {
+                             std::array<std::common_type_t<decltype(function{}(
+                                            detail::convert_to_meta_t<TTypes>{}))...>,
+                                        sizeof...(TTypes)>{
+                                 function{}(detail::convert_to_meta_t<TTypes>{})...};
+                         })
+            {
+                // calculate the indices of the "good" elements based on the range adaptor in use
+                constexpr auto indices = detail::to_vector<usize, sizeof...(TTypes)>(
+                    adaptor{}([values = std::array<std::common_type_t<decltype(function{}(
+                                                       detail::convert_to_meta_t<TTypes>{}))...>,
+                                                   sizeof...(TTypes)>{function{}(
+                                   detail::convert_to_meta_t<TTypes>{})...}](auto index) {
+                        // NOLINTNEXTLINE(*-pro-bounds-constant-array-index)
+                        return values[index];
+                    })(detail::iota(0_value, list.size())));
+
+                // use those indices to sift the `list`
+                return [indices]<auto... TIndices>(std::index_sequence<TIndices...>, auto _list) {
+                    return _list.sift(List<Value<indices[TIndices]>...>{});
+                }(std::make_index_sequence<std::size(indices)>{}, list);
+            }
+            // case for transforms and similar
+            else {
+                return List<detail::convert_to_raw_t<decltype(function{}(
+                    detail::convert_to_meta_t<TTypes>{}))>...>{};
+            }
+        }
+        // all other sequence-based range adaptors (reverse, drop, take, etc)
+        else {
+            // calculate the indices of the "good" or "re-arranged" elements based on the
+            // range adaptor in use
+            constexpr auto indices = [](auto range_obj, MetaValue auto size) {
+                constexpr auto to_process = detail::iota(0_value, size);
+                return detail::to_vector<usize, sizeof...(TTypes)>(range_obj(to_process));
+            }(detail::extend_constexpr_lifetime(range_object), list.size());
+
+            // use those indices to sift the `list`
+            return [indices]<auto... TIndices>(std::index_sequence<TIndices...>, auto _list) {
+                return _list.sift(List<Value<indices[TIndices]>...>{});
+            }(std::make_index_sequence<std::size(indices)>{}, list);
+        }
+    }
+
 } // namespace hyperion::mpl
+
+    #if __has_include(<ranges>)
+        #include <ranges>
+    #endif // __has_include(<ranges>)
 
 namespace hyperion::mpl::_test::list {
 
@@ -1861,6 +2148,16 @@ namespace hyperion::mpl::_test::list {
                       == List<int, double, Value<2>, float>{},
                   "hyperion::mpl::List::remove test case 4 (failing)");
 
+    static_assert(List<int, const double, float>{}.sift(List<Value<1>, Value<2>>{})
+                      == List<const double, float>{},
+                  "hyperion::mpl::List::sift test case 1 (failing)");
+    static_assert(List<int, double, float>{}.sift(List<Value<0>, Value<2>>{}) == List<int, float>{},
+                  "hyperion::mpl::List::sift test case 2 (failing)");
+    static_assert(
+        List<int, Value<1>, double, Value<2>, float>{}.sift(List<Value<1>, Value<2>, Value<4>>{})
+            == List<Value<1>, double, float>{},
+        "hyperion::mpl::List::sift test case 3 (failing)");
+
     static constexpr auto sum = [](MetaValue auto... value) noexcept {
         return (value + ...);
     };
@@ -1891,6 +2188,55 @@ namespace hyperion::mpl::_test::list {
                   "hyperion::mpl::List::unwrap test case 3 (failing)");
     static_assert(List<int, Value<1>, int, Value<2>, int>{}.unwrap(num_ints) == 3_value,
                   "hyperion::mpl::List::unwrap test case 4 (failing)");
+
+    #if __cpp_lib_ranges >= 202110L
+
+    static constexpr auto test_ranges1() noexcept {
+        constexpr auto list = List<int, double, float>{};
+        constexpr auto manipped
+            = list
+              | std::ranges::views::transform([](MetaType auto type) { return type.as_const(); })
+              | std::ranges::views::drop(1_value) | std::ranges::views::reverse;
+        return manipped == List<const float, const double>{};
+    }
+
+    static constexpr auto test_ranges2() noexcept {
+        constexpr auto list = List<int, const double, float>{};
+        constexpr auto manipped
+            = list | std::ranges::views::filter([](auto type) { return not type.is_const(); })
+              | std::ranges::views::reverse;
+        return manipped == List<float, int>{};
+    }
+
+    static constexpr auto test_ranges3() noexcept {
+        constexpr auto list = List<int, const double, float>{};
+        constexpr auto manipped
+            = list | std::ranges::views::filter([](auto type) { return not type.is_const(); })
+              | std::ranges::views::transform(
+                  [](auto type) { return type.as_lvalue_reference().as_volatile(); })
+              | std::ranges::views::reverse | std::ranges::views::drop(1_value);
+
+        return manipped == List<volatile int&>{};
+    }
+
+    static constexpr auto test_ranges4() noexcept {
+        constexpr auto list = List<int, Value<1>, const double, Value<2>, float>{};
+        constexpr auto manipped
+            = list
+              | std::ranges::views::filter([](auto elem) { return not MetaValue<decltype(elem)>; })
+              | std::ranges::views::transform(
+                  [](auto type) { return type.as_lvalue_reference().as_volatile(); })
+              | std::ranges::views::reverse | std::ranges::views::drop(1_value);
+
+        return manipped == List<const volatile double&, volatile int&>{};
+    }
+
+    static_assert(test_ranges1(), "hyperion::mpl::List ranges support test case 1 (failing)");
+    static_assert(test_ranges2(), "hyperion::mpl::List ranges support test case 2 (failing)");
+    static_assert(test_ranges3(), "hyperion::mpl::List ranges support test case 3 (failing)");
+    static_assert(test_ranges4(), "hyperion::mpl::List ranges support test case 4 (failing)");
+
+    #endif // __cpp_lib_ranges >= 202110L
 } // namespace hyperion::mpl::_test::list
 
 #endif // HYPERION_MPL_LIST_H

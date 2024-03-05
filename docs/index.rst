@@ -21,6 +21,7 @@ For an overview of each module, see the links in the left sidebar or below.
     #include <hyperion/mpl/value.h>
 
     #include <concepts>
+    #include <ranges>
 
     using namespace hyperion;
     using namespace hyperion::mpl;
@@ -36,28 +37,34 @@ For an overview of each module, see the links in the left sidebar or below.
     static_assert(constified == List<Pair<const int, const u32>,
                                      Pair<const double, const usize>,
                                      Pair<const float, const i32>>{});
+    static_assert(constified.all_of(is_const));
 
-    constexpr auto val1 = Value<4>{};
-    constexpr auto val2 = Value<2>{};
+    constexpr auto list2 = List<int, const double, float>{};
+    // ranges support is implemented for `mpl::List` at all times,
+    // but usage in practice requires a complete standard library implementation
+    // for ranges. (i.e. `operator|` isn't particularly useful without the
+    // `std::ranges::<things>` to go along with it)
+    constexpr auto ranged
+            = list
+                | std::ranges::views::filter([](MetaType auto type) { return not type.is_const(); })
+                | std::ranges::views::transform([](MetaType auto type) {
+                    return type.as_lvalue_reference().as_volatile();
+                })
+                | std::ranges::views::reverse
+                | std::ranges::views::drop(1_value);
+    static_assert(ranged == List<volatile int&>{});
 
-    constexpr auto meaning_of_life = (val1 * 10_value) + val2;
-
-    static_assert(meaning_of_life == 42);
-
-    template<ValueType TValue>
-    struct add_one {
-        static inline constexpr auto value = TValue::value + 1;
+    constexpr auto add_one = [](MetaValue auto value) {
+        return value + 1_value;
     };
-
-    template<ValueType TValue>
-    struct times_two {
-        static inline constexpr auto value = TValue::value * 2;
+    constexpr auto times_two = [](MetaValue auto value) {
+        return value * 2_value;
     };
 
     static_assert(2_value
-                  .apply<add_one>()
-                  .apply<times_two>()
-                  .apply<add_one>() == 7);
+                  .apply(add_one)
+                  .apply(times_two)
+                  .apply(add_one) == 7);
 
     constexpr auto val3 = 10;
     static_assert(decltype_(val3)
@@ -66,10 +73,8 @@ For an overview of each module, see the links in the left sidebar or below.
                   .apply<std::add_rvalue_reference>()
                   == decltype_<int&&>());
 
-    constexpr auto add_lvalue_reference = [](MetaType auto type)
-        -> std::add_lvalue_reference<typename decltype(type)::type>
-    {
-        return {};
+    constexpr auto add_lvalue_reference = [](MetaType auto type) {
+        return type.as_lvalue_reference();
     };
 
     constexpr auto remove_reference = [](MetaType auto type)
@@ -83,6 +88,11 @@ For an overview of each module, see the links in the left sidebar or below.
                   .apply(add_const)
                   .apply(add_lvalue_reference)
                   == decltype_<const int&>());
+
+    constexpr auto val1 = Value<4>{};
+    constexpr auto val2 = Value<2>{};
+    constexpr auto meaning_of_life = (val1 * 10_value) + val2;
+    static_assert(meaning_of_life == 42);
 
 
 .. toctree::
