@@ -555,24 +555,25 @@ namespace hyperion::mpl {
         /// `sizeof...(TTypes)`
         ///
         /// @param predicate the predicate to satisfy
-        /// @param index The next index to check
         /// @return The index of the first element to satisfy `predicate`, or if no element
         /// satisfies `predicate`, `Value<sizeof...(TTypes)>`
         template<typename TPredicate>
         [[nodiscard]] static constexpr auto
-        find_if_impl([[maybe_unused]] TPredicate&& predicate, // NOLINT(*-missing-std-forward))
-                     [[maybe_unused]] MetaValue auto index) noexcept
-            requires(decltype(index)::value <= sizeof...(TTypes))
-        {
-            if constexpr(detail::at<as_meta<TTypes>...>(index).satisfies(TPredicate{})) {
-                return index;
-            }
-            else if constexpr(decltype(index){} + 1_value < sizeof...(TTypes)) {
-                return find_if_impl(std::forward<TPredicate>(predicate), index + 1_value);
-            }
-            else {
-                return Value<sizeof...(TTypes), usize>{};
-            }
+        find_if_impl([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward))
+            noexcept {
+            constexpr auto values = []<auto... Indices>(std::index_sequence<Indices...>) {
+                return std::array{static_cast<bool>(
+                    detail::at<as_meta<TTypes>...>(Value<Indices>{}).satisfies(TPredicate{}))...};
+            }(std::make_index_sequence<sizeof...(TTypes)>{});
+            constexpr auto first = [values]() {
+                for(auto i = 0_usize; i < values.size(); ++i) {
+                    if(values[i]) {
+                        return i;
+                    }
+                }
+                return values.size();
+            }();
+            return Value<static_cast<usize>(first), usize>{};
         }
 
       public:
@@ -616,7 +617,7 @@ namespace hyperion::mpl {
             requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
                     || requires { (as_meta<TTypes>{}.satisfies(TPredicate{}), ...); }
         [[nodiscard]] constexpr auto find_if(TPredicate&& predicate) const noexcept {
-            auto result = find_if_impl(std::forward<TPredicate>(predicate), 0_value);
+            auto result = find_if_impl(std::forward<TPredicate>(predicate));
             if constexpr(decltype(result){} == Value<sizeof...(TTypes), usize>{}) {
                 return decltype_<not_found_tag>();
             }
@@ -896,7 +897,7 @@ namespace hyperion::mpl {
             requires(MetaPredicateOf<TPredicate, as_meta<TTypes>> && ...)
                     || requires { (as_meta<TTypes>{}.satisfies(TPredicate{}), ...); }
         [[nodiscard]] constexpr auto index_if(TPredicate&& predicate) const noexcept {
-            return find_if_impl(std::forward<TPredicate>(predicate), 0_value);
+            return find_if_impl(std::forward<TPredicate>(predicate));
         }
 
         /// @brief Returns the index of the first element of this `List`
