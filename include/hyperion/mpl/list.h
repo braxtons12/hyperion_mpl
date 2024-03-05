@@ -562,8 +562,11 @@ namespace hyperion::mpl {
         find_if_impl([[maybe_unused]] TPredicate&& predicate) // NOLINT(*-missing-std-forward))
             noexcept {
             constexpr auto values = []<auto... Indices>(std::index_sequence<Indices...>) {
-                return std::array{static_cast<bool>(
-                    detail::at<as_meta<TTypes>...>(Value<Indices>{}).satisfies(TPredicate{}))...};
+                constexpr auto _at = [](MetaValue auto index) noexcept {
+                    return detail::at<as_meta<TTypes>...>(index);
+                };
+                return std::array{
+                    static_cast<bool>(_at(Value<Indices>{}).satisfies(TPredicate{}))...};
             }(std::make_index_sequence<sizeof...(TTypes)>{});
             constexpr auto first = [values]() {
                 for(auto i = 0_usize; i < values.size(); ++i) {
