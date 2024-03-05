@@ -40,6 +40,10 @@ For an overview of each module, see the links in the left sidebar or below.
     static_assert(constified.all_of(is_const));
 
     constexpr auto list2 = List<int, const double, float>{};
+    // ranges support is implemented for `mpl::List` at all times,
+    // but usage in practice requires a complete standard library implementation
+    // for ranges. (i.e. `operator|` isn't particularly useful without the
+    // `std::ranges::<things>` to go along with it)
     constexpr auto ranged
             = list
                 | std::ranges::views::filter([](MetaType auto type) { return not type.is_const(); })
