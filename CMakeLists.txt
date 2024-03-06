@@ -30,7 +30,7 @@ endif()
 if(${HYPERION_USE_FETCH_CONTENT})
     FetchContent_Declare(hyperion_platform
         GIT_REPOSITORY "https://github.com/braxtons12/hyperion_platform"
-        GIT_TAG "origin/main"
+        GIT_TAG "v0.2.2"
         )
     FetchContent_MakeAvailable(hyperion_platform)
 else()
