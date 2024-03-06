@@ -3,8 +3,6 @@ name: XMake
 on:
   push:
     branches: ["*"]
-  pull_request:
-    branches: ["*"]
 
 jobs:
   build-linux-gcc-13-x64:
