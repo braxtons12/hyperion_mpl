@@ -20,7 +20,7 @@ other methods like :cmake:`add_subdirectory`\. Example for :cmake:`FetchContent`
     # Declare the dependency on hyperion-utils and make it available for use
     FetchContent_Declare(hyperion_mpl
         GIT_REPOSITORY "https://github.com/braxtons12/hyperion_mpl"
-        GIT_TAG "origin/main")
+        GIT_TAG "v0.7.1")
     FetchContent_MakeAvailable(hyperion_mpl)
 
     # For this example, we create an executable target and link hyperion::mpl to it
@@ -56,16 +56,15 @@ way to use Hyperion packages. Example:
 
     -- add hyperion_mpl as a required dependency for the project
     add_requires("hyperion_mpl", {
-        -- Don't verify the git commit. This is necessary because hyperion::mpl hasn't reached
-        -- an official release yet, and thus doesn't have a stable git commit to track.
-        -- This allows pulling directly from $HEAD
-        verify = false,
+        system = false,
+        external = true,
     })
     
     -- For this example, we create an executable target and link hyperion::mpl to it
-    target("my_executable")
+    target("my_executable", function()
         set_kind("binary")
         add_packages("hyperion_mpl")
+    end)
 
 Note that with XMake, hyperion::mpl requires the same dependencies as with the CMake build system.
 Third-party dependencies will be pulled from xmake-repo, the package repository/registry for XMake,

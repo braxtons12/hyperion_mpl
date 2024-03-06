@@ -586,7 +586,7 @@ other methods like <code class="code highlight cmake docutils literal highlight-
 <span class="linenos"> 4</span><span class="c"># Declare the dependency on hyperion-utils and make it available for use</span>
 <span class="linenos"> 5</span><span class="nb">FetchContent_Declare</span><span class="p">(</span><span class="s">hyperion_mpl</span>
 <span class="linenos"> 6</span><span class="w">    </span><span class="s">GIT_REPOSITORY</span><span class="w"> </span><span class="s2">&quot;https://github.com/braxtons12/hyperion_mpl&quot;</span>
-<span class="linenos"> 7</span><span class="w">    </span><span class="s">GIT_TAG</span><span class="w"> </span><span class="s2">&quot;origin/main&quot;</span><span class="p">)</span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="s">GIT_TAG</span><span class="w"> </span><span class="s2">&quot;v0.7.1&quot;</span><span class="p">)</span>
 <span class="linenos"> 8</span><span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">hyperion_mpl</span><span class="p">)</span>
 <span class="linenos"> 9</span>
 <span class="linenos">10</span><span class="c"># For this example, we create an executable target and link hyperion::mpl to it</span>
@@ -619,16 +619,15 @@ way to use Hyperion packages. Example:</p>
 <span class="linenos"> 5</span>
 <span class="linenos"> 6</span><span class="c1">-- add hyperion_mpl as a required dependency for the project</span>
 <span class="linenos"> 7</span><span class="n">add_requires</span><span class="p">(</span><span class="s2">&quot;hyperion_mpl&quot;</span><span class="p">,</span> <span class="p">{</span>
-<span class="linenos"> 8</span>    <span class="c1">-- Don&#39;t verify the git commit. This is necessary because hyperion::mpl hasn&#39;t reached</span>
-<span class="linenos"> 9</span>    <span class="c1">-- an official release yet, and thus doesn&#39;t have a stable git commit to track.</span>
-<span class="linenos">10</span>    <span class="c1">-- This allows pulling directly from $HEAD</span>
-<span class="linenos">11</span>    <span class="n">verify</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
-<span class="linenos">12</span><span class="p">})</span>
-<span class="linenos">13</span>
-<span class="linenos">14</span><span class="c1">-- For this example, we create an executable target and link hyperion::mpl to it</span>
-<span class="linenos">15</span><span class="n">target</span><span class="p">(</span><span class="s2">&quot;my_executable&quot;</span><span class="p">)</span>
-<span class="linenos">16</span>    <span class="n">set_kind</span><span class="p">(</span><span class="s2">&quot;binary&quot;</span><span class="p">)</span>
-<span class="linenos">17</span>    <span class="n">add_packages</span><span class="p">(</span><span class="s2">&quot;hyperion_mpl&quot;</span><span class="p">)</span>
+<span class="linenos"> 8</span>    <span class="n">system</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+<span class="linenos"> 9</span>    <span class="n">external</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+<span class="linenos">10</span><span class="p">})</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="c1">-- For this example, we create an executable target and link hyperion::mpl to it</span>
+<span class="linenos">13</span><span class="n">target</span><span class="p">(</span><span class="s2">&quot;my_executable&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">()</span>
+<span class="linenos">14</span>    <span class="n">set_kind</span><span class="p">(</span><span class="s2">&quot;binary&quot;</span><span class="p">)</span>
+<span class="linenos">15</span>    <span class="n">add_packages</span><span class="p">(</span><span class="s2">&quot;hyperion_mpl&quot;</span><span class="p">)</span>
+<span class="linenos">16</span><span class="kr">end</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
