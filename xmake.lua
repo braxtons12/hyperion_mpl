@@ -1,6 +1,6 @@
 ---@diagnostic disable: undefined-global,undefined-field
 set_project("hyperion_mpl")
-set_version("0.7.1")
+set_version("0.7.2")
 
 set_xmakever("2.8.7")
 
@@ -65,8 +65,8 @@ target("hyperion_mpl", function()
         import("hyperion_compiler_settings", { alias = "settings" })
         settings.set_compiler_settings(target)
     end)
-    add_options("hyperion_enable_tracy")
-    add_options("hyperion_enable_testing")
+    add_options("hyperion_enable_tracy", {public = true})
+    add_options("hyperion_enable_testing", {public = true})
 
     add_packages("hyperion_platform", { public = true })
 end)
