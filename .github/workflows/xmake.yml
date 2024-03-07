@@ -20,16 +20,11 @@ jobs:
           sudo apt-get -y install xmake
 
       - name: Configure
-        env:
-          CC: gcc-13
-          CXX: gcc-13
         working-directory: ${{github.workspace}}
-        run: xmake f -c -y --toolchain=envs
+        run: xmake f -c -y --toolchain=gcc-13
 
       - name: Build
         env:
-          CC: gcc-13
-          CXX: gcc-13
           ACTIONS_STEP_DEBUG: true
         working-directory: ${{github.workspace}}
         run: xmake b
@@ -47,16 +42,12 @@ jobs:
 
       - name: Install Package
         env:
-          CC: gcc-13
-          CXX: gcc-13
           ACTIONS_STEP_DEBUG: true
         run: |
           xrepo add-repo -y hyperion "https://github.com/braxtons12/hyperion_packages.git"
           xrepo update-repo -y
-          xrepo install -y --toolchain=envs "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
-          xrepo install -y --toolchain=envs --configs="hyperion_enable_tracy=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
-          xrepo install -y --toolchain=envs --configs="hyperion_enable_testing=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
-          xrepo install -y --toolchain=envs --configs="hyperion_enable_tracy=true,hyperion_enable_testing=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
+          xrepo install -y --toolchain=gcc-13 "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
+          xrepo install -y --toolchain=gcc-13 --configs="hyperion_enable_tracy=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
 
   build-linux-clang-16-x64:
     runs-on: ubuntu-latest
@@ -83,18 +74,13 @@ jobs:
         run: sudo cp /usr/bin/clang-tidy-16 /usr/bin/clang-tidy -f
 
       - name: Configure
-        env:
-          CC: clang-16
-          CXX: clang-16
         working-directory: ${{github.workspace}}
         run: |
           rm -rf build .xmake
-          xmake f -c -y --toolchain=envs
+          xmake f -c -y --toolchain=clang-16
 
       - name: Build
         env:
-          CC: clang-16
-          CXX: clang-16
           ACTIONS_STEP_DEBUG: true
         working-directory: ${{github.workspace}}
         run: |
@@ -114,16 +100,12 @@ jobs:
 
       - name: Install Package
         env:
-          CC: clang-16
-          CXX: clang-16
           ACTIONS_STEP_DEBUG: true
         run: |
           xrepo add-repo -y hyperion "https://github.com/braxtons12/hyperion_packages.git"
           xrepo update-repo -y
-          xrepo install -y --toolchain=envs "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
-          xrepo install -y --toolchain=envs --configs="hyperion_enable_tracy=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
-          xrepo install -y --toolchain=envs --configs="hyperion_enable_testing=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
-          xrepo install -y --toolchain=envs --configs="hyperion_enable_tracy=true,hyperion_enable_testing=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
+          xrepo install -y --toolchain=clang-16 "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
+          xrepo install -y --toolchain=clang-16 --configs="hyperion_enable_tracy=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
 
   build-windows-msvc-x64:
     runs-on: windows-latest
@@ -178,8 +160,6 @@ jobs:
           xrepo update-repo -y
           xrepo install -y --toolchain=msvc "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
           xrepo install -y --toolchain=msvc --configs="hyperion_enable_tracy=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
-          xrepo install -y --toolchain=msvc --configs="hyperion_enable_testing=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
-          xrepo install -y --toolchain=msvc --configs="hyperion_enable_tracy=true,hyperion_enable_testing=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
 
   build-macos-xcode-x64:
     runs-on: macos-latest
@@ -228,5 +208,3 @@ jobs:
           xrepo update-repo -y
           xrepo install -y --toolchain=xcode "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
           xrepo install -y --toolchain=xcode --configs="hyperion_enable_tracy=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
-          xrepo install -y --toolchain=xcode --configs="hyperion_enable_testing=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
-          xrepo install -y --toolchain=xcode --configs="hyperion_enable_tracy=true,hyperion_enable_testing=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"

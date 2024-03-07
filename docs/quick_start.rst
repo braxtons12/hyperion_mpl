@@ -20,7 +20,7 @@ other methods like :cmake:`add_subdirectory`\. Example for :cmake:`FetchContent`
     # Declare the dependency on hyperion-utils and make it available for use
     FetchContent_Declare(hyperion_mpl
         GIT_REPOSITORY "https://github.com/braxtons12/hyperion_mpl"
-        GIT_TAG "v0.7.1")
+        GIT_TAG "v0.8.0")
     FetchContent_MakeAvailable(hyperion_mpl)
 
     # For this example, we create an executable target and link hyperion::mpl to it
