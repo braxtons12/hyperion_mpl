@@ -1,6 +1,6 @@
 ---@diagnostic disable: undefined-global,undefined-field
 set_project("hyperion_mpl")
-set_version("0.7.2")
+set_version("0.8.0")
 
 set_xmakever("2.8.7")
 
@@ -14,17 +14,12 @@ option("hyperion_enable_tracy", function()
     set_default(false)
 end)
 
-option("hyperion_enable_testing", function()
-    set_default(false)
-end)
-
 add_requires("hyperion_platform", {
     system = false,
     external = true,
     configs = {
         languages = "cxx20",
         hyperion_enable_tracy = has_config("hyperion_enable_tracy"),
-        hyperion_enable_testing = has_config("hyperion_enable_testing"),
     }
 })
 
@@ -66,7 +61,6 @@ target("hyperion_mpl", function()
         settings.set_compiler_settings(target)
     end)
     add_options("hyperion_enable_tracy", {public = true})
-    add_options("hyperion_enable_testing", {public = true})
 
     add_packages("hyperion_platform", { public = true })
 end)
