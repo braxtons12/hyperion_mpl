@@ -1,4 +1,5 @@
 #include <hyperion/mpl.h>
+#include <hyperion/platform/types.h>
 
 using namespace hyperion;      // NOLINT(google-build-using-namespace)
 using namespace hyperion::mpl; // NOLINT(google-build-using-namespace)
