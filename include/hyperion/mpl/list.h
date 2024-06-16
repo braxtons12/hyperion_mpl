@@ -1699,16 +1699,6 @@ namespace hyperion::mpl {
         constexpr auto extend_constexpr_lifetime([[maybe_unused]] const TType& value) {
             return TType{};
         }
-    #else
-        ///// @brief Used to extend the lifetime of the given value in a `constexpr` context.
-        ///// MSVC can be bad about assuming an object's lifetime has ended in `constexpr`
-        ///// contexts when it really hasn't.
-        /////
-        ///// This provides usage consistency w/ the hack used for MSVC.
-        //template<typename TType>
-        //constexpr auto extend_constexpr_lifetime(TType&& value) -> decltype(auto) {
-        //    return std::forward<TType>(value);
-        //}
     #endif // HYPERION_PLATFORM_COMPILER_IS_MSVC
 
         /// @brief Statically stack-allocated vector containing elements of type `TType`,
