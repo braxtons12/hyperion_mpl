@@ -1669,6 +1669,14 @@ namespace hyperion::mpl {
                  typename TAdaptor,
                  typename TFunction>
         auto get_function(TFunctor<TBoundRange<TAdaptor, TFunction>>) -> TFunction;
+        template<template<typename...> typename TFunctor,
+                 template<typename...>
+                 typename TBoundRange,
+                 template<typename...>
+                 typename TApplicator,
+                 typename TAdaptor,
+                 typename TFunction>
+        auto get_function(TFunctor<TBoundRange<TAdaptor, TApplicator<TFunction>>>) -> TFunction;
         template<typename TType>
         auto get_function(TType) -> void;
 
