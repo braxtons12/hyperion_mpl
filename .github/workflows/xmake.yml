@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [12, 13]
+        version: [13]
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
@@ -56,14 +56,14 @@ jobs:
         run: |
           xrepo add-repo -y hyperion "https://github.com/braxtons12/hyperion_packages.git"
           xrepo update-repo -y
-          xrepo install -y --toolchain=gcc-${{matrix.version}} "hyperion_platform ${{ steps.extract_branch.outputs.branch }}"
-          xrepo install -y --toolchain=gcc-${{matrix.version}} --configs="hyperion_enable_tracy=true" "hyperion_platform ${{ steps.extract_branch.outputs.branch }}"
+          xrepo install -y --toolchain=gcc-${{matrix.version}} "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
+          xrepo install -y --toolchain=gcc-${{matrix.version}} --configs="hyperion_enable_tracy=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
 
   linux-clang-x64:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [15, 16, 17, 18]
+        version: [16, 17, 18]
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
@@ -116,8 +116,8 @@ jobs:
         run: |
           xrepo add-repo -y hyperion "https://github.com/braxtons12/hyperion_packages.git"
           xrepo update-repo -y
-          xrepo install -y --toolchain=clang-${{matrix.version}} "hyperion_platform ${{ steps.extract_branch.outputs.branch }}"
-          xrepo install -y --toolchain=clang-${{matrix.version}} --configs="hyperion_enable_tracy=true" "hyperion_platform ${{ steps.extract_branch.outputs.branch }}"
+          xrepo install -y --toolchain=clang-${{matrix.version}} "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
+          xrepo install -y --toolchain=clang-${{matrix.version}} --configs="hyperion_enable_tracy=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
 
   windows-msvc-x64:
     runs-on: windows-latest
@@ -175,14 +175,14 @@ jobs:
         run: |
           xrepo add-repo -y hyperion "https://github.com/braxtons12/hyperion_packages.git"
           xrepo update-repo -y
-          xrepo install -y --toolchain=msvc "hyperion_platform ${{ steps.extract_branch.outputs.branch }}"
-          xrepo install -y --toolchain=msvc --configs="hyperion_enable_tracy=true" "hyperion_platform ${{ steps.extract_branch.outputs.branch }}"
+          xrepo install -y --toolchain=msvc "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
+          xrepo install -y --toolchain=msvc --configs="hyperion_enable_tracy=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
 
   macos-clang-x64:
     runs-on: macos-13
     strategy:
       matrix:
-        version: [15, 16, 17, 18]
+        version: [16, 17, 18]
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
@@ -230,6 +230,6 @@ jobs:
         run: |
           xrepo add-repo -y hyperion "https://github.com/braxtons12/hyperion_packages.git"
           xrepo update-repo -y
-          xrepo install -y --toolchain=clang "hyperion_platform ${{ steps.extract_branch.outputs.branch }}"
-          xrepo install -y --toolchain=clang --configs="hyperion_enable_tracy=true" "hyperion_platform ${{ steps.extract_branch.outputs.branch }}"
+          xrepo install -y --toolchain=clang "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
+          xrepo install -y --toolchain=clang --configs="hyperion_enable_tracy=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
 
