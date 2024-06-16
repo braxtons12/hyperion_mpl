@@ -1669,6 +1669,14 @@ namespace hyperion::mpl {
                  typename TAdaptor,
                  typename TFunction>
         auto get_function(TFunctor<TBoundRange<TAdaptor, TFunction>>) -> TFunction;
+        template<template<typename...> typename TFunctor,
+                 template<typename...>
+                 typename TBoundRange,
+                 template<typename...>
+                 typename TApplicator,
+                 typename TAdaptor,
+                 typename TFunction>
+        auto get_function(TFunctor<TBoundRange<TAdaptor, TApplicator<TFunction>>>) -> TFunction;
         template<typename TType>
         auto get_function(TType) -> void;
 
@@ -1690,16 +1698,6 @@ namespace hyperion::mpl {
         template<typename TType>
         constexpr auto extend_constexpr_lifetime([[maybe_unused]] const TType& value) {
             return TType{};
-        }
-    #else
-        /// @brief Used to extend the lifetime of the given value in a `constexpr` context.
-        /// MSVC can be bad about assuming an object's lifetime has ended in `constexpr`
-        /// contexts when it really hasn't.
-        ///
-        /// This provides usage consistency w/ the hack used for MSVC.
-        template<typename TType>
-        constexpr auto extend_constexpr_lifetime(const TType& value) -> decltype(auto) {
-            return value;
         }
     #endif // HYPERION_PLATFORM_COMPILER_IS_MSVC
 
@@ -1865,7 +1863,12 @@ namespace hyperion::mpl {
             constexpr auto indices = [](auto range_obj, MetaValue auto size) {
                 constexpr auto to_process = detail::iota(0_value, size);
                 return detail::to_vector<usize, sizeof...(TTypes)>(range_obj(to_process));
-            }(detail::extend_constexpr_lifetime(range_object), list.size());
+            }
+#if HYPERION_PLATFORM_COMPILER_IS_MSVC
+            (detail::extend_constexpr_lifetime(range_object), list.size());
+#else
+            (range_object, list.size());
+#endif // HYPERION_PLATFORM_COMPILER_IS_MSVC
 
             // use those indices to sift the `list`
             return [indices]<auto... TIndices>(std::index_sequence<TIndices...>, auto _list) {
