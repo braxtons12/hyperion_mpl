@@ -16,7 +16,22 @@ end
 local function _set_compile_options(target)
     if is_mode("release") then
         target:set("optimize", "aggressive")
-        target:add("vectorexts", "all")
+        if target:has_tool("cxx", "cl") then
+            -- do not enable avx512 on MSVC is it has an optimizer error
+            -- that will cause a crash due to misalignment
+            target:add(
+                "vectorexts",
+                "avx",
+                "avx2",
+                "mmx",
+                "neon",
+                "sse",
+                "sse2",
+                "sse3",
+                "sse4.2")
+        else
+            target:add("vectorexts", "all")
+        end
         target:set("strip", "all")
     else
         target:set("optimize", "none")
