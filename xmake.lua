@@ -1,6 +1,6 @@
 ---@diagnostic disable: undefined-global,undefined-field
 set_project("hyperion_mpl")
-set_version("0.8.5")
+set_version("0.8.6")
 
 set_xmakever("2.8.7")
 
