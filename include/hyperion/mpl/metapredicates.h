@@ -1,8 +1,8 @@
 /// @file metapredicates.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Callable definitions for common metaprogramming predicates
-/// @version 0.1
-/// @date 2024-02-23
+/// @version 0.1.1
+/// @date 2025-01-18
 ///
 /// MIT License
 /// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
