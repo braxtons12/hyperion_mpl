@@ -76,6 +76,7 @@ local function _enable_warnings(target)
         target:add("cxflags", "-Wno-unused-local-typedef", { public = true })
         target:add("cxflags", "-Wno-undef", { public = true })
         target:add("cxflags", "-Wno-unknown-warning-option", { public = true })
+        target:add("cxflags", "-Wno-deprecated-ofast", { public = true })
     else
         target:add("cxflags", "-Wall", { public = false })
         target:add("cxflags", "-Wextra", { public = false })
