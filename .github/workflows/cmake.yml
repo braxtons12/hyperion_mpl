@@ -6,7 +6,7 @@ on:
 
 jobs:
   linux-gcc-x64:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         version: [13]
@@ -47,7 +47,7 @@ jobs:
         run: ctest --preset env-cc-release --verbose
 
   linux-clang-x64:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         version: [16, 17, 18]
@@ -161,4 +161,3 @@ jobs:
           ACTIONS_STEP_DEBUG: true
         working-directory: ${{github.workspace}}
         run: ctest --preset env-cc-release --verbose
-
