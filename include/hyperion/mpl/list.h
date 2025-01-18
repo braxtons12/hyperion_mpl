@@ -280,7 +280,112 @@ namespace hyperion::mpl {
         /// @brief Returns whether this `List` is empty
         /// @return whether this `List` is empty, as a `Value` specialization
         [[nodiscard]] constexpr auto is_empty() const noexcept {
-            return Value<sizeof...(TTypes) == 0, bool>{};
+            return Value < sizeof...(TTypes) == 0, bool > {};
+        }
+
+        /// @brief Checks to see if this `List` specialization satisfies the given template
+        /// metafunction predicate, `TPredicate`
+        ///
+        /// # Requirements
+        /// - `TPredicate` must be a `ListMetaFunction`
+        ///     - It must be a template taking a single value parameter,
+        ///     - It must have a `static constexpr` member variable, `value`, or a using alias type,
+        ///     `type`
+        /// - `TPredicate<List>` must be a `MetaValue`
+        /// - The type of the value of `TPredicate`, `TPredicate<List>::value`, must be
+        /// (possibly cv-ref qualified) `bool`)
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// template<typename TList>
+        /// struct are_integral {
+        ///     static inline constexpr auto value
+        ///         = TList{}.all_of(
+        ///         [](MetaType auto type) { return type.template satisfies<std::is_integral>(); });
+        /// };
+        ///
+        /// // `integral` is `Value<true, bool>`
+        /// constexpr auto integral = List<i32, u16>{}.satisfies<are_integral>();
+        /// // `not_integral` is `Value<false, bool>`
+        /// constexpr auto not_integral = List<float, double>{}.satisfies<are_integral>();
+        ///
+        /// static_assert(was_const);
+        /// static_assert(not not_const);
+        /// @endcode
+        ///
+        /// @tparam TPredicate The metafunction predicate to check with
+        /// @return The result of checking this `Type` specialization against `TPredicate`, as a
+        /// `Value` specialization
+        template<template<typename> typename TPredicate>
+        [[nodiscard]] constexpr auto satisfies() const noexcept -> std::enable_if_t<
+            TypeMetaFunction<TPredicate> && MetaValue<TPredicate<List>>
+                && std::same_as<std::remove_const_t<decltype(TPredicate<List>::value)>, bool>,
+            Value<TPredicate<List>::value, bool>> {
+            return {};
+        }
+
+        /// @brief Checks to see if this `List` specialization satisfies the given metafunction
+        /// predicate.
+        ///
+        /// # Requirements
+        /// - If `predicate` is invocable with `List{}`:
+        ///     - The value returned by invoking `predicate` with `List{}` must either be a
+        ///     `MetaValue`, or a `Type` specialization representing a `MetaValue`.
+        ///         - Using `TValue` to represent that `MetaValue` type, the type of the value of
+        ///         `TValue`, that is `decltype(TValue::value)`, must be of type
+        ///         (possibly cv-ref qualified) `bool`
+        ///     - If the above conditions on the return value of `predicate` are not met,
+        ///     the program is ill-formed
+        /// - If `predicate` is not invocable with `List{}`, returns `Value<false>`
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// static constexpr auto are_integral = [](MetaList auto list) {
+        ///     return list.all_of(
+        ///         [](MetaType auto type) { return type.template satisfies<std::is_integral>(); });
+        /// };
+        ///
+        /// constexpr auto integral = List<List<u16>, List<i32>>{}.satisfies(are_integral);
+        /// constexpr auto not_integral = List<List<float>, List<double>>{}.satisfies(are_integral);
+        /// static_assert(integral);
+        /// static_assert(not not_integral);
+        /// @endcode
+        ///
+        /// @tparam TPredicate The type of the metafunction predicate to check with
+        /// @param predicate The metafunction predicate to check with, as a
+        /// `Value` specialization
+        template<typename TPredicate>
+        [[nodiscard]] constexpr auto satisfies(TPredicate&& predicate) const noexcept {
+            constexpr auto invoke = []<typename TPred>(TPred&& pred) noexcept {
+                if constexpr(std::invocable<TPred, List>) {
+                    return std::forward<TPred>(pred)(List{});
+                }
+                else {
+                    return Value<false, bool>{};
+                }
+            };
+
+            [[maybe_unused]] const auto result = invoke(std::forward<TPredicate>(predicate));
+            if constexpr(MetaType<decltype(result)>) {
+                using inner = typename decltype(result)::type;
+                static_assert(MetaValue<inner>,
+                              "Predicates passed to mpl::List::satisfies must return a `MetaValue`"
+                              "or an `mpl::Type<MetaValue>`");
+                static_assert(std::is_same_v<std::remove_cvref_t<decltype(inner::value)>, bool>,
+                              "`MetaValue`s returned by predicates passed to mpl::List::satisfies"
+                              "must have `value` of type (possibly cv-ref qualified) `bool`");
+                return inner{};
+            }
+            else {
+                static_assert(MetaValue<decltype(result)>,
+                              "Predicates passed to mpl::List::satisfies must return a `MetaValue`"
+                              "or an `mpl::Type<MetaValue>`");
+                static_assert(
+                    std::is_same_v<std::remove_cvref_t<decltype(decltype(result)::value)>, bool>,
+                    "`MetaValue`s returned by predicates passed to mpl::List::satisfies"
+                    "must have `value` of type (possibly cv-ref qualified) `bool`");
+                return decltype(result){};
+            }
         }
 
         /// @brief Applies the metafunction `func` to the elements of this `List`,
@@ -1651,8 +1756,7 @@ namespace hyperion::mpl {
         template<template<typename...> typename TBoundRange, typename TAdaptor, typename TFunction>
         auto get_adaptor(TBoundRange<TAdaptor, TFunction>) -> TAdaptor;
         template<template<typename...> typename TFunctor,
-                 template<typename...>
-                 typename TBoundRange,
+                 template<typename...> typename TBoundRange,
                  typename TAdaptor,
                  typename TFunction>
         auto get_adaptor(TFunctor<TBoundRange<TAdaptor, TFunction>>) -> TAdaptor;
@@ -1664,16 +1768,13 @@ namespace hyperion::mpl {
         template<template<typename...> typename TBoundRange, typename TAdaptor, typename TFunction>
         auto get_function(TBoundRange<TAdaptor, TFunction>) -> TFunction;
         template<template<typename...> typename TFunctor,
-                 template<typename...>
-                 typename TBoundRange,
+                 template<typename...> typename TBoundRange,
                  typename TAdaptor,
                  typename TFunction>
         auto get_function(TFunctor<TBoundRange<TAdaptor, TFunction>>) -> TFunction;
         template<template<typename...> typename TFunctor,
-                 template<typename...>
-                 typename TBoundRange,
-                 template<typename...>
-                 typename TApplicator,
+                 template<typename...> typename TBoundRange,
+                 template<typename...> typename TApplicator,
                  typename TAdaptor,
                  typename TFunction>
         auto get_function(TFunctor<TBoundRange<TAdaptor, TApplicator<TFunction>>>) -> TFunction;
@@ -1860,15 +1961,16 @@ namespace hyperion::mpl {
         else {
             // calculate the indices of the "good" or "re-arranged" elements based on the
             // range adaptor in use
-            constexpr auto indices = [](auto range_obj, MetaValue auto size) {
-                constexpr auto to_process = detail::iota(0_value, size);
-                return detail::to_vector<usize, sizeof...(TTypes)>(range_obj(to_process));
-            }
-#if HYPERION_PLATFORM_COMPILER_IS_MSVC
+            constexpr auto indices =
+                [](auto range_obj, MetaValue auto size) {
+                    constexpr auto to_process = detail::iota(0_value, size);
+                    return detail::to_vector<usize, sizeof...(TTypes)>(range_obj(to_process));
+                }
+    #if HYPERION_PLATFORM_COMPILER_IS_MSVC
             (detail::extend_constexpr_lifetime(range_object), list.size());
-#else
+    #else
             (range_object, list.size());
-#endif // HYPERION_PLATFORM_COMPILER_IS_MSVC
+    #endif // HYPERION_PLATFORM_COMPILER_IS_MSVC
 
             // use those indices to sift the `list`
             return [indices]<auto... TIndices>(std::index_sequence<TIndices...>, auto _list) {
@@ -2032,7 +2134,7 @@ namespace hyperion::mpl::_test::list {
 
     static_assert(List<int, double, float>{}.find_if([](auto type) {
         if constexpr(MetaType<decltype(type)>) {
-            return Value<decltype(type){} == decltype_<double>(), bool>{};
+            return Value < decltype(type){} == decltype_<double>(), bool > {};
         }
         else {
             return Value<false>{};
@@ -2041,7 +2143,7 @@ namespace hyperion::mpl::_test::list {
                   "hyperion::mpl::List::find_if test case 1 (failing)");
     static_assert(List<int, double, float>{}.find_if([](auto type) {
         if constexpr(MetaType<decltype(type)>) {
-            return Value<decltype(type){} == decltype_<usize>(), bool>{};
+            return Value < decltype(type){} == decltype_<usize>(), bool > {};
         }
         else {
             return Value<false>{};
@@ -2073,9 +2175,19 @@ namespace hyperion::mpl::_test::list {
     static_assert(not List<Value<1>, Value<2>, Value<3>>{}.all_of(is_const),
                   "hyperion::mpl::List::all_of test case 3 (failing)");
 
+    static constexpr auto are_integral = [](MetaList auto list) {
+        return list.all_of(
+            [](MetaType auto type) { return type.template satisfies<std::is_integral>(); });
+    };
+
+    static_assert(List<List<bool>, List<i32>, List<u16>>{}.all_of(are_integral),
+                  "hyperion::mpl::List::all_of test case 4 (failing)");
+    static_assert(not List<List<float>, List<double>, List<u16>>{}.all_of(are_integral),
+                  "hyperion::mpl::List::all_of test case 5 (failing)");
+
     static_assert(List<int, double, float>{}.any_of([](auto type) {
         if constexpr(MetaType<decltype(type)>) {
-            return Value<decltype(type){} == decltype_<double>(), bool>{};
+            return Value < decltype(type){} == decltype_<double>(), bool > {};
         }
         else {
             return Value<false>{};
@@ -2084,7 +2196,7 @@ namespace hyperion::mpl::_test::list {
                   "hyperion::mpl::List::any_of test case 1 (failing)");
     static_assert(not List<int, double, float>{}.any_of([](auto type) {
         if constexpr(MetaType<decltype(type)>) {
-            return Value<decltype(type){} == decltype_<usize>(), bool>{};
+            return Value < decltype(type){} == decltype_<usize>(), bool > {};
         }
         else {
             return Value<false>{};
@@ -2096,7 +2208,7 @@ namespace hyperion::mpl::_test::list {
 
     static_assert(List<int, double, float>{}.none_of([](auto type) {
         if constexpr(MetaType<decltype(type)>) {
-            return Value<decltype(type){} == decltype_<usize>(), bool>{};
+            return Value < decltype(type){} == decltype_<usize>(), bool > {};
         }
         else {
             return Value<false>{};
@@ -2105,7 +2217,7 @@ namespace hyperion::mpl::_test::list {
                   "hyperion::mpl::List::none_of test case 1 (failing)");
     static_assert(not List<int, double, float>{}.none_of([](auto type) {
         if constexpr(MetaType<decltype(type)>) {
-            return Value<decltype(type){} == decltype_<double>(), bool>{};
+            return Value < decltype(type){} == decltype_<double>(), bool > {};
         }
         else {
             return Value<false>{};

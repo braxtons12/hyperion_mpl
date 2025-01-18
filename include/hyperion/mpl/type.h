@@ -372,7 +372,7 @@ namespace hyperion::mpl {
         /// @endcode
         ///
         /// @tparam TPredicate The type of the metafunction predicate to check with
-        /// @param predicate The metafunction predicate to check with
+        /// @param predicate The metafunction predicate to check with, as a
         /// `Value` specialization
         template<typename TPredicate>
         [[nodiscard]] constexpr auto satisfies(TPredicate&& predicate) const noexcept;
@@ -1706,7 +1706,7 @@ namespace hyperion::mpl {
         if constexpr(MetaType<decltype(result)>) {
             using inner = typename decltype(result)::type;
             static_assert(MetaValue<inner>,
-                          "Predicates passed to mpl::Type::satisifes must return a `MetaValue`"
+                          "Predicates passed to mpl::Type::satisfies must return a `MetaValue`"
                           "or an `mpl::Type<MetaValue>`");
             static_assert(std::is_same_v<std::remove_cvref_t<decltype(inner::value)>, bool>,
                           "`MetaValue`s returned by predicates passed to mpl::Type::satisfies"
@@ -1715,7 +1715,7 @@ namespace hyperion::mpl {
         }
         else {
             static_assert(MetaValue<decltype(result)>,
-                          "Predicates passed to mpl::Type::satisifes must return a `MetaValue`"
+                          "Predicates passed to mpl::Type::satisfies must return a `MetaValue`"
                           "or an `mpl::Type<MetaValue>`");
             static_assert(
                 std::is_same_v<std::remove_cvref_t<decltype(decltype(result)::value)>, bool>,

@@ -442,6 +442,20 @@ namespace hyperion::mpl {
         struct is_instantiatable_with_value<TTemplate> : std::true_type { };
 
         template<template<typename> typename TTemplate>
+        struct is_instantiatable_with_pair : std::false_type { };
+
+        template<template<typename> typename TTemplate>
+            requires requires { typename TTemplate<Pair<int, bool>>; }
+        struct is_instantiatable_with_pair<TTemplate> : std::true_type { };
+
+        template<template<typename> typename TTemplate>
+        struct is_instantiatable_with_list : std::false_type { };
+
+        template<template<typename> typename TTemplate>
+            requires requires { typename TTemplate<List<int, bool>>; }
+        struct is_instantiatable_with_list<TTemplate> : std::true_type { };
+
+        template<template<typename> typename TTemplate>
         struct is_type_to_type : std::false_type { };
 
         template<template<typename> typename TTemplate>
@@ -470,6 +484,34 @@ namespace hyperion::mpl {
         template<template<auto> typename TTemplate>
             requires is_instantiatable_with_value<TTemplate>::value && MetaValue<TTemplate<true>>
         struct is_value_to_value<TTemplate> : std::true_type { };
+
+        template<template<typename> typename TTemplate>
+        struct is_pair_to_type : std::false_type { };
+
+        template<template<typename> typename TTemplate>
+            requires is_instantiatable_with_pair<TTemplate>::value && MetaType<TTemplate<Pair<int, bool>>>
+        struct is_pair_to_type<TTemplate> : std::true_type { };
+
+        template<template<typename> typename TTemplate>
+        struct is_pair_to_value : std::false_type { };
+
+        template<template<typename> typename TTemplate>
+            requires is_instantiatable_with_pair<TTemplate>::value && MetaValue<TTemplate<Pair<int, bool>>>
+        struct is_pair_to_value<TTemplate> : std::true_type { };
+
+        template<template<typename> typename TTemplate>
+        struct is_list_to_type : std::false_type { };
+
+        template<template<typename> typename TTemplate>
+            requires is_instantiatable_with_list<TTemplate>::value && MetaType<TTemplate<List<int, bool>>>
+        struct is_list_to_type<TTemplate> : std::true_type { };
+
+        template<template<typename> typename TTemplate>
+        struct is_list_to_value : std::false_type { };
+
+        template<template<typename> typename TTemplate>
+            requires is_instantiatable_with_list<TTemplate>::value && MetaValue<TTemplate<List<int, bool>>>
+        struct is_list_to_value<TTemplate> : std::true_type { };
     } // namespace detail
 
     /// @brief A `TypeMetaFunction` is a template metafunction that accepts a single type parameter
@@ -483,9 +525,9 @@ namespace hyperion::mpl {
     concept TypeMetaFunction
         = detail::is_type_to_type<TTemplate>::value || detail::is_type_to_value<TTemplate>::value;
 
-    /// @brief A `TypeMetaFunction` is a template metafunction that accepts a single value parameter
-    /// and contains either a `static constexpr` member variable, `value`, or a member using alias
-    /// type, `type`
+    /// @brief A `ValueMetaFunction` is a template metafunction that accepts a single value
+    /// parameter and contains either a `static constexpr` member variable, `value`, or a member
+    /// using alias type, `type`
     ///
     /// @tparam TTemplate The template to check
     /// @ingroup metatypes
@@ -493,6 +535,28 @@ namespace hyperion::mpl {
     template<template<auto> typename TTemplate>
     concept ValueMetaFunction
         = detail::is_value_to_type<TTemplate>::value || detail::is_value_to_value<TTemplate>::value;
+
+    /// @brief A `PairMetaFunction` is a template metafunction that accepts a single pair parameter
+    /// and contains either a `static constexpr` member variable, `value`, or a member using alias
+    /// type, `type`
+    ///
+    /// @tparam TTemplate The template to check
+    /// @ingroup metatypes
+    /// @headerfile hyperion/mpl/metatypes.h
+    template<template<typename> typename TTemplate>
+    concept PairMetaFunction
+        = detail::is_pair_to_type<TTemplate>::value || detail::is_pair_to_value<TTemplate>::value;
+
+    /// @brief A `ListMetaFunction` is a template metafunction that accepts a single list parameter
+    /// and contains either a `static constexpr` member variable, `value`, or a member using alias
+    /// type, `type`
+    ///
+    /// @tparam TTemplate The template to check
+    /// @ingroup metatypes
+    /// @headerfile hyperion/mpl/metatypes.h
+    template<template<typename> typename TTemplate>
+    concept ListMetaFunction
+        = detail::is_list_to_type<TTemplate>::value || detail::is_list_to_value<TTemplate>::value;
 
     // clang-format off
 
@@ -505,10 +569,11 @@ namespace hyperion::mpl {
     /// @headerfile hyperion/mpl/metatypes.h
     template<typename TFunction, typename TType>
     concept MetaFunctionOf = std::is_invocable_v<TFunction, TType>
-                             && (MetaType<TType> || MetaValue<TType> || MetaPair<TType>)
+                             && (MetaType<TType> || MetaValue<TType> || MetaPair<TType> || MetaList<TType>)
                              && (MetaType<std::invoke_result_t<TFunction, TType>>
                                  || MetaValue<std::invoke_result_t<TFunction, TType>>
-                                 || MetaPair<std::invoke_result_t<TFunction, TType>>);
+                                 || MetaPair<std::invoke_result_t<TFunction, TType>>
+                                 || MetaList<std::invoke_result_t<TFunction, TType>>);
 
     // clang-format on
 
@@ -522,7 +587,8 @@ namespace hyperion::mpl {
     template<typename TFunction>
     concept MetaFunction
         = MetaFunctionOf<TFunction, Type<bool>> || MetaFunctionOf<TFunction, Value<true, bool>>
-          || MetaFunctionOf<TFunction, Pair<Type<bool>, Type<bool>>>;
+          || MetaFunctionOf<TFunction, Pair<Type<bool>, Type<bool>>>
+          || MetaFunctionOf<TFunction, List<Type<bool>, Type<float>>>;
 
     /// @brief `meta_result` is a type trait representing the invoke result of a callable
     /// metafunction, `TFunction`, with a metaprogramming type, `TType`
@@ -628,10 +694,62 @@ namespace hyperion::mpl::_test::metatypes {
     constexpr auto type_to_value = []([[maybe_unused]] const MetaType auto& type) -> Value<true> {
         return {};
     };
+    constexpr auto type_to_pair
+        = []([[maybe_unused]] const MetaType auto& type) -> Pair<Type<bool>, Type<bool>> {
+        return {};
+    };
+
+    template<typename... TTypes>
+    struct TestList {
+    };
+
+    constexpr auto type_to_list
+        = []([[maybe_unused]] const MetaType auto& type) -> TestList<bool, bool> {
+        return {};
+    };
+
     constexpr auto value_to_type = []([[maybe_unused]] const MetaValue auto& type) -> Type<bool> {
         return {};
     };
     constexpr auto value_to_value = []([[maybe_unused]] const MetaValue auto& type) -> Value<true> {
+        return {};
+    };
+    constexpr auto value_to_pair
+        = []([[maybe_unused]] const MetaValue auto& type) -> Pair<Type<bool>, Type<bool>> {
+        return {};
+    };
+    constexpr auto value_to_list
+        = []([[maybe_unused]] const MetaValue auto& type) -> TestList<bool, bool> {
+        return {};
+    };
+
+    constexpr auto pair_to_type = []([[maybe_unused]] const MetaPair auto& pair) -> Type<bool> {
+        return {};
+    };
+    constexpr auto pair_to_value = []([[maybe_unused]] const MetaPair auto& pair) -> Value<true> {
+        return {};
+    };
+    constexpr auto pair_to_pair
+        = []([[maybe_unused]] const MetaPair auto& pair) -> Pair<Type<bool>, Type<bool>> {
+        return {};
+    };
+    constexpr auto pair_to_list
+        = []([[maybe_unused]] const MetaPair auto& pair) -> TestList<bool, bool> {
+        return {};
+    };
+
+    constexpr auto list_to_type = []([[maybe_unused]] const MetaList auto& list) -> Type<bool> {
+        return {};
+    };
+    constexpr auto list_to_value = []([[maybe_unused]] const MetaList auto& list) -> Value<true> {
+        return {};
+    };
+    constexpr auto list_to_pair
+        = []([[maybe_unused]] const MetaList auto& list) -> Pair<Type<bool>, Type<bool>> {
+        return {};
+    };
+    constexpr auto list_to_list
+        = []([[maybe_unused]] const MetaList auto& list) -> TestList<bool, bool> {
         return {};
     };
 
@@ -672,10 +790,37 @@ namespace hyperion::mpl::_test::metatypes {
                   "hyperion::mpl::MetaFunction test case 1 (failing)");
     static_assert(MetaFunction<decltype(type_to_value)>,
                   "hyperion::mpl::MetaFunction test case 2 (failing)");
-    static_assert(MetaFunction<decltype(value_to_type)>,
+    static_assert(MetaFunction<decltype(type_to_pair)>,
                   "hyperion::mpl::MetaFunction test case 3 (failing)");
-    static_assert(MetaFunction<decltype(value_to_value)>,
+    static_assert(MetaFunction<decltype(type_to_list)>,
                   "hyperion::mpl::MetaFunction test case 4 (failing)");
+
+    static_assert(MetaFunction<decltype(value_to_type)>,
+                  "hyperion::mpl::MetaFunction test case 5 (failing)");
+    static_assert(MetaFunction<decltype(value_to_value)>,
+                  "hyperion::mpl::MetaFunction test case 6 (failing)");
+    static_assert(MetaFunction<decltype(value_to_pair)>,
+                  "hyperion::mpl::MetaFunction test case 7 (failing)");
+    static_assert(MetaFunction<decltype(value_to_list)>,
+                  "hyperion::mpl::MetaFunction test case 8 (failing)");
+
+    static_assert(MetaFunction<decltype(pair_to_type)>,
+                  "hyperion::mpl::MetaFunction test case 9 (failing)");
+    static_assert(MetaFunction<decltype(pair_to_value)>,
+                  "hyperion::mpl::MetaFunction test case 10 (failing)");
+    static_assert(MetaFunction<decltype(pair_to_pair)>,
+                  "hyperion::mpl::MetaFunction test case 11 (failing)");
+    static_assert(MetaFunction<decltype(pair_to_list)>,
+                  "hyperion::mpl::MetaFunction test case 12 (failing)");
+
+    static_assert(MetaFunction<decltype(list_to_type)>,
+                  "hyperion::mpl::MetaFunction test case 13 (failing)");
+    static_assert(MetaFunction<decltype(list_to_value)>,
+                  "hyperion::mpl::MetaFunction test case 14 (failing)");
+    static_assert(MetaFunction<decltype(list_to_pair)>,
+                  "hyperion::mpl::MetaFunction test case 15 (failing)");
+    static_assert(MetaFunction<decltype(list_to_list)>,
+                  "hyperion::mpl::MetaFunction test case 16 (failing)");
 
     static_assert(std::is_same_v<meta_result_t<decltype(type_to_type), Type<bool>>, Type<bool>>,
                   "hyperion::mpl::meta_result test case 1 (failing)");
