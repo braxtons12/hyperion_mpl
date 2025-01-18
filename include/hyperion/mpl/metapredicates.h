@@ -1,7 +1,7 @@
 /// @file metapredicates.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Callable definitions for common metaprogramming predicates
-/// @version 0.1.1
+/// @version 0.1.2
 /// @date 2025-01-18
 ///
 /// MIT License
@@ -1872,7 +1872,7 @@ namespace hyperion::mpl::_test::metapredicates {
         "hyperion::mpl::noexcept_copy_constructible predicate test case 3 (failing)");
     static_assert(
         // MSVC and GCC override our `noexcept(false) above`
-        HYPERION_PLATFORM_COMPILER_IS_GCC ?
+        HYPERION_PLATFORM_COMPILER_IS_GCC &&  __GNUC__ < 14 ?
             static_cast<bool>(decltype_<trivially_copy_constructible>().satisfies(
                 mpl::noexcept_copy_constructible)) :
             not decltype_<trivially_copy_constructible>().satisfies(
@@ -1938,7 +1938,7 @@ namespace hyperion::mpl::_test::metapredicates {
         "hyperion::mpl::noexcept_move_constructible predicate test case 3 (failing)");
     static_assert(
         // MSVC and GCC override our `noexcept(false) above`
-        HYPERION_PLATFORM_COMPILER_IS_GCC ?
+        HYPERION_PLATFORM_COMPILER_IS_GCC && __GNUC__ < 14 ?
             static_cast<bool>(decltype_<trivially_move_constructible>().satisfies(
                 mpl::noexcept_move_constructible)) :
             not decltype_<trivially_move_constructible>().satisfies(
@@ -2002,7 +2002,7 @@ namespace hyperion::mpl::_test::metapredicates {
                   "hyperion::mpl::noexcept_copy_assignable predicate test case 3 (failing)");
     static_assert(
         // GCC overrides our `noexcept(false) above`
-        HYPERION_PLATFORM_COMPILER_IS_GCC ?
+        HYPERION_PLATFORM_COMPILER_IS_GCC && __GNUC__ < 14 ?
             decltype_<trivially_copy_assignable>().satisfies(mpl::noexcept_copy_assignable) :
             static_cast<bool>(not decltype_<trivially_copy_assignable>().satisfies(
                 mpl::noexcept_copy_assignable)),
@@ -2064,7 +2064,7 @@ namespace hyperion::mpl::_test::metapredicates {
                   "hyperion::mpl::noexcept_move_assignable predicate test case 3 (failing)");
     static_assert(
         // GCC overrides our `noexcept(false) above`
-        HYPERION_PLATFORM_COMPILER_IS_GCC ?
+        HYPERION_PLATFORM_COMPILER_IS_GCC && __GNUC__ < 14 ?
             decltype_<trivially_move_assignable>().satisfies(mpl::noexcept_move_assignable) :
             static_cast<bool>(not decltype_<trivially_move_assignable>().satisfies(
                 mpl::noexcept_move_assignable)),
@@ -2123,7 +2123,7 @@ namespace hyperion::mpl::_test::metapredicates {
                   "hyperion::mpl::noexcept_destructible predicate test case 3 (failing)");
     static_assert(
         // MSVC and GCC override our `noexcept(false) above`
-        HYPERION_PLATFORM_COMPILER_IS_GCC ?
+        HYPERION_PLATFORM_COMPILER_IS_GCC && __GNUC__ < 14 ?
             static_cast<bool>(
                 decltype_<trivially_destructible>().satisfies(mpl::noexcept_destructible)) :
             not decltype_<trivially_destructible>().satisfies(mpl::noexcept_destructible),
