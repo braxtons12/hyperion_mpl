@@ -1,7 +1,7 @@
-/// @file main.cpp
+/// @file test_main.cpp
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief simple example / test file
-/// @version 0.1.1
+/// @version 0.1
 /// @date 2025-07-10
 ///
 /// MIT License
@@ -24,6 +24,17 @@
 /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
+
+#include "concepts/comparable.h" // NOLINT(misc-include-cleaner)
+#include "concepts/operator_able.h" // NOLINT(misc-include-cleaner)
+#include "list.h" // NOLINT(misc-include-cleaner)
+#include "metapredicates.h" // NOLINT(misc-include-cleaner)
+#include "metatypes.h" // NOLINT(misc-include-cleaner)
+#include "pair.h" // NOLINT(misc-include-cleaner)
+#include "type.h" // NOLINT(misc-include-cleaner)
+#include "type_traits/is_comparable.h" // NOLINT(misc-include-cleaner)
+#include "type_traits/is_operator_able.h" // NOLINT(misc-include-cleaner)
+#include "value.h" // NOLINT(misc-include-cleaner)
 
 #include <hyperion/mpl/list.h>
 #include <hyperion/mpl/metapredicates.h>

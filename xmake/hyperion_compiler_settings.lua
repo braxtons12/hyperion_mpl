@@ -49,6 +49,7 @@ local function _set_compile_options(target)
         target:add("cxflags", "/sdl", { public = false })
     elseif target:has_tool("cxx", "clang", "clang++") then
         target:add("cxflags", "-fsized-deallocation", { public = true })
+        target:add("cxflags", "-ferror-limit=0", { public = true })
     end
 end
 

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(hyperion_mpl LANGUAGES CXX VERSION 0.9.2)
+project(hyperion_mpl LANGUAGES CXX VERSION 0.10.0)
 
 include(CTest)
 
@@ -24,7 +24,7 @@ endif()
 if(${HYPERION_USE_FETCH_CONTENT})
     FetchContent_Declare(hyperion_platform
         GIT_REPOSITORY "https://github.com/braxtons12/hyperion_platform"
-        GIT_TAG "v0.5.3"
+        GIT_TAG "v0.5.4"
         SYSTEM
     )
     FetchContent_MakeAvailable(hyperion_platform)
@@ -91,6 +91,18 @@ hyperion_enable_warnings(hyperion_mpl_main)
 
 add_test(NAME hyperion_mpl_main
          COMMAND hyperion_mpl_main)
+
+add_executable(hyperion_mpl_test ${CMAKE_CURRENT_SOURCE_DIR}/src/test/test_main.cpp)
+target_link_libraries(hyperion_mpl_test
+    PRIVATE
+    hyperion::mpl
+)
+
+hyperion_compile_settings(hyperion_mpl_test)
+hyperion_enable_warnings(hyperion_mpl_test)
+
+add_test(NAME hyperion_mpl_test
+         COMMAND hyperion_mpl_test)
 
 set(HYPERION_MPL_DOXYGEN_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/docs/_build/html")
 set(HYPERION_MPL_DOXYGEN_HTML "${HYPERION_MPL_DOXYGEN_OUTPUT_DIR}/index.html")

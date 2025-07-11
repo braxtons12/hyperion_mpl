@@ -2,11 +2,11 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Supplemental C++20 concept definitions to those provided in
 /// `#include <concepts>` to provide functionality missing from the standard
-/// @version 0.1
-/// @date 2024-01-31
+/// @version 0.1.1
+/// @date 2025-07-08
 ///
 /// MIT License
-/// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
+/// @copyright Copyright (c) 2025 Braxton Salyer <braxtonsalyer@gmail.com>
 ///
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
@@ -29,8 +29,9 @@
 #ifndef HYPERION_MPL_CONCEPTS_STD_SUPPLEMENTAL_H
 #define HYPERION_MPL_CONCEPTS_STD_SUPPLEMENTAL_H
 
-#include <hyperion/mpl/type_traits/std_supplemental.h>
 #include <hyperion/platform/def.h>
+//
+#include <hyperion/mpl/type_traits/std_supplemental.h>
 
 HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
 

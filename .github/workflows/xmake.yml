@@ -6,10 +6,10 @@ on:
 
 jobs:
   linux-gcc-x64:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [13]
+        version: [13, 14]
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
@@ -60,10 +60,10 @@ jobs:
           xrepo install -y --toolchain=gcc-${{matrix.version}} --configs="hyperion_enable_tracy=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
 
   linux-clang-x64:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [16, 17, 18]
+        version: [16, 17, 18, 19, 20]
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
@@ -79,11 +79,21 @@ jobs:
         run: |
           wget https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
-          sudo ./llvm.sh ${{matrix.version}}
-          sudo apt-get -y install clang-tidy-${{matrix.version}}
+          if [[ ${{matrix.version}} == 20 \
+          ]]; then
+            sudo ./llvm.sh ${{matrix.version}}
+            sudo apt-get install -y clang-tidy-${{matrix.version}}
+          else
+            sudo apt-get install -y llvm-${{matrix.version}} clang-${{matrix.version}} clang-tidy-${{matrix.version}}
+          fi
 
       - name: Replace clang-tidy
-        run: sudo cp /usr/bin/clang-tidy-${{matrix.version}} /usr/bin/clang-tidy -f
+        run: |
+          if [[ "$(realpath --canonicalize-existing /usr/bin/clang-tidy-${{matrix.version}})" \
+              != "$(realpath --canonicalize-existing /usr/bin/clang-tidy)" \
+          ]]; then
+            sudo cp /usr/bin/clang-tidy-${{matrix.version}} /usr/bin/clang-tidy -f
+          fi
 
       - name: Configure
         working-directory: ${{github.workspace}}
@@ -143,9 +153,6 @@ jobs:
       - name: Install XMake
         run: |
           scoop install xmake
-          xmake update -sfy master
-          Start-Sleep -Seconds 2
-          xmake update -fy master
 
       - name: Configure
         working-directory: ${{github.workspace}}
@@ -182,7 +189,7 @@ jobs:
     runs-on: macos-13
     strategy:
       matrix:
-        version: [16, 17, 18]
+        version: [16, 17, 18, 19, 20]
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
@@ -196,14 +203,17 @@ jobs:
       - name: Install LLVM
         run: |
           brew install llvm@${{matrix.version}}
-          echo "PATH=$(brew --prefix llvm@${{matrix.version}})/bin:$PATH" >> $GITHUB_ENV
-          echo "CC=$(brew --prefix llvm@${{matrix.version}})/bin/clang" >> $GITHUB_ENV
-          echo "CXX=$(brew --prefix llvm@${{matrix.version}})/bin/clang++" >> $GITHUB_ENV
-          echo "LDFLAGS='-L$(brew --prefix llvm@${{matrix.version}})/lib/c++ -Wl,-rpath,$(brew --prefix llvm@${{matrix.version}})/lib/c++'" >> $GITHUB_ENV
+          echo "$(brew --prefix llvm@${{matrix.version}})/bin"
+          ln -s "$(brew --prefix llvm@${{matrix.version}})/bin/clang++" "$(brew --prefix llvm@${{matrix.version}})/bin/clang++-${{matrix.version}}"
+          ls "$(brew --prefix llvm@${{matrix.version}})/bin"
+          echo "$(brew --prefix llvm@${{matrix.version}})/bin" >> $GITHUB_PATH
 
       - name: Configure
         working-directory: ${{github.workspace}}
-        run: xmake f -c -y --toolchain=clang --hyperion_enable_tracy=y
+        run: |
+          xmake f -c -y --toolchain=clang-${{matrix.version}} --hyperion_enable_tracy=y
+          xmake project -k compile_commands
+          sed -i '' 's/"-I"/"-isystem"/g' compile_commands.json
 
       - name: Build
         env:
@@ -211,7 +221,12 @@ jobs:
         working-directory: ${{github.workspace}}
         run: |
           xmake b
-          xmake check clang.tidy
+          # disable clang-tidy on clang 19 and 20 because it is scanning errors
+          # within standard library headers
+          if [[ ${{matrix.version}} != 19 && ${{matrix.version}} != 20 \
+          ]]; then
+            xmake check clang.tidy
+          fi
 
       - name: Test
         env:
@@ -230,5 +245,5 @@ jobs:
         run: |
           xrepo add-repo -y hyperion "https://github.com/braxtons12/hyperion_packages.git"
           xrepo update-repo -y
-          xrepo install -y --toolchain=clang "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
-          xrepo install -y --toolchain=clang --configs="hyperion_enable_tracy=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
+          xrepo install -y --toolchain=clang-${{matrix.version}} "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"
+          xrepo install -y --toolchain=clang-${{matrix.version}} --configs="hyperion_enable_tracy=true" "hyperion_mpl ${{ steps.extract_branch.outputs.branch }}"

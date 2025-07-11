@@ -1,8 +1,8 @@
 ---@diagnostic disable: undefined-global,undefined-field
 set_project("hyperion_mpl")
-set_version("0.9.2")
+set_version("0.10.0")
 
-set_xmakever("2.8.7")
+set_xmakever("3.0.0")
 
 set_languages("cxx20")
 
@@ -76,6 +76,19 @@ target("hyperion_mpl_main", function()
         settings.set_compiler_settings(target)
     end)
     add_tests("hyperion_mpl_main")
+end)
+
+target("hyperion_mpl_test", function()
+    set_kind("binary")
+    set_languages("cxx20")
+    add_files("$(projectdir)/src/test/test_main.cpp", { prefixdir = "hyperion/mpl" })
+    add_deps("hyperion_mpl")
+    set_default(true)
+    on_config(function(target)
+        import("hyperion_compiler_settings", { alias = "settings" })
+        settings.set_compiler_settings(target)
+    end)
+    add_tests("hyperion_mpl_test")
 end)
 
 target("hyperion_mpl_docs", function()
