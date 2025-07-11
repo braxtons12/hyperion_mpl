@@ -1,8 +1,8 @@
 /// @file value.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming value type
-/// @version 0.5.1
-/// @date 2025-07-08
+/// @version 0.6.0
+/// @date 2025-07-10
 ///
 /// MIT License
 /// @copyright Copyright (c) 2025 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -65,9 +65,6 @@
 /// @}
 
 namespace hyperion::mpl {
-    template<typename TType>
-    struct Type;
-
     template<auto TValue, typename TType>
     struct Value;
 
