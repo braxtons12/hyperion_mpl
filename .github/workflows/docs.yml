@@ -8,20 +8,23 @@ jobs:
   build:
     strategy:
       fail-fast: false
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Doxygen
         uses: ssciwr/doxygen-install@v1
         with:
-          version: "1.10.0"
+          version: "1.14.0"
+
+      - name: Update apt
+        run: sudo apt-get -y update
 
       - name: Install Graphviz
         run: sudo apt-get -y install graphviz
 
       - name: Install LibGS
-        run: sudo apt-get -y install libgs9 libgs9-common
+        run: sudo apt-get -y install libgs10 libgs10-common
 
       - name: Install xmake
         run: |

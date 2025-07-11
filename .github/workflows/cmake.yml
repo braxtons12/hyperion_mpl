@@ -6,10 +6,10 @@ on:
 
 jobs:
   linux-gcc-x64:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [13]
+        version: [13, 14]
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
@@ -47,10 +47,10 @@ jobs:
         run: ctest --preset env-cc-release --verbose
 
   linux-clang-x64:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [16, 17, 18]
+        version: [16, 17, 18, 19, 20]
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
@@ -60,11 +60,21 @@ jobs:
         run: |
           wget https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
-          sudo ./llvm.sh ${{matrix.version}}
-          sudo apt-get -y install clang-tidy-${{matrix.version}}
+          if [[ ${{matrix.version}} == 20 \
+          ]]; then
+            sudo ./llvm.sh ${{matrix.version}}
+            sudo apt-get install -y clang-tidy-${{matrix.version}}
+          else
+            sudo apt-get install -y llvm-${{matrix.version}} clang-${{matrix.version}} clang-tidy-${{matrix.version}}
+          fi
 
       - name: Replace clang-tidy
-        run: sudo cp /usr/bin/clang-tidy-${{matrix.version}} /usr/bin/clang-tidy -f
+        run: |
+          if [[ "$(realpath --canonicalize-existing /usr/bin/clang-tidy-${{matrix.version}})" \
+              != "$(realpath --canonicalize-existing /usr/bin/clang-tidy)" \
+          ]]; then
+            sudo cp /usr/bin/clang-tidy-${{matrix.version}} /usr/bin/clang-tidy -f
+          fi
 
       - name: Configure
         env:
@@ -73,7 +83,7 @@ jobs:
         working-directory: ${{github.workspace}}
         run: |
           rm -rf build
-          cmake --preset env-cc-release
+          cmake --preset env-cc-release -DHYPERION_ENABLE_TRACY=ON
 
       - name: Build
         env:
@@ -114,7 +124,7 @@ jobs:
 
       - name: Configure
         working-directory: ${{github.workspace}}
-        run: cmake --preset msvc-release
+        run: cmake --preset msvc-release -DHYPERION_ENABLE_TRACY=ON
           
       - name: Build
         env:
@@ -132,7 +142,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        version: [16, 17, 18]
+        version: [16, 17, 18, 19, 20]
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
@@ -141,14 +151,14 @@ jobs:
       - name: Install LLVM
         run: |
           brew install llvm@${{matrix.version}}
-          echo "PATH=$(brew --prefix llvm@${{matrix.version}})/bin:$PATH" >> $GITHUB_ENV
+          echo "$(brew --prefix llvm@${{matrix.version}})/bin" >> $GITHUB_PATH
           echo "CC=$(brew --prefix llvm@${{matrix.version}})/bin/clang" >> $GITHUB_ENV
           echo "CXX=$(brew --prefix llvm@${{matrix.version}})/bin/clang++" >> $GITHUB_ENV
           echo "LDFLAGS='-L$(brew --prefix llvm@${{matrix.version}})/lib/c++ -Wl,-rpath,$(brew --prefix llvm@${{matrix.version}})/lib/c++'" >> $GITHUB_ENV
 
       - name: Configure
         working-directory: ${{github.workspace}}
-        run: cmake --preset env-cc-release
+        run: cmake --preset env-cc-release -DHYPERION_ENABLE_TRACY=ON
 
       - name: Build
         env:
