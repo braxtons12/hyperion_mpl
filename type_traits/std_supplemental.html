@@ -30,7 +30,7 @@
   <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
   
   <!-- So that users can add custom icons -->
@@ -578,7 +578,7 @@
 <h1>Standard Supplemental Type Traits<a class="headerlink" href="#standard-supplemental-type-traits" title="Link to this heading">#</a></h1>
 <dl>
 <dt class="sig sig-object cpp">
-<span class="target" id="group__std__supplemental__traits"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">std_supplemental_traits</span></span></dt>
+<span class="target" id="group__std__supplemental__traits"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">Standard</span> <span class="pre">Supplemental</span> <span class="pre">Type</span> <span class="pre">Traits</span></span></dt>
 <dd><p>Assortment of type traits to supplement those provided by the standard. These are generally either similar to existing traits, but implemented more or less stringently to account for use-cases in which the standard implementations are incompatible, or completely novel traits, filling in gaps in the API surface that the standard doesn’t cover.</p>
 <section id="group__std__supplemental__traits_1autotoc_md262">
 <h2>Example:<a class="headerlink" href="#group__std__supplemental__traits_1autotoc_md262" title="Link to this heading">#</a></h2>
@@ -604,7 +604,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-variables">Variables</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4I0E22is_trivially_movable_v">
-<span id="_CPPv3I0E22is_trivially_movable_v"></span><span id="_CPPv2I0E22is_trivially_movable_v"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="group__std__supplemental__traits_1ga198677ce1b29aa605bbbb47d8d04a0ab"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_trivially_movable_v</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">is_trivially_movable</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E22is_trivially_movable_v" title="is_trivially_movable_v::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><a class="headerlink" href="#_CPPv4I0E22is_trivially_movable_v" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3I0E22is_trivially_movable_v"></span><span id="_CPPv2I0E22is_trivially_movable_v"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="group__std__supplemental__traits_1ga198677ce1b29aa605bbbb47d8d04a0ab"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_trivially_movable_v</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">is_trivially_movable</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E22is_trivially_movable_v" title="is_trivially_movable_v::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><a class="headerlink" href="#_CPPv4I0E22is_trivially_movable_v" title="Link to this definition">#</a><br /></dt>
 <dd><p><a class="reference internal" href="../value.html#structhyperion_1_1mpl_1_1Value"><span class="std std-ref">Value</span></a> of the type trait <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1type__traits_1_1is__trivially__movable"><span class="std std-ref"><span class="pre">is_trivially_movable</span></span></a></code>. Requires that the type <code class="docutils literal notranslate"><span class="pre">TType</span></code> is trivially movable. A type that is trivially movable is both trivially move constructible and trivially move assignable. </p>
 <p>For a type to be trivially move constructible, the type must be move constructible, and its move constructor must either <em>not</em> be user provided in any way, or explicitly defaulted by declaring it as <code class="docutils literal notranslate"><span class="pre">=</span> <span class="pre">default</span></code>. Similarly, for a type to be trivially move assignable, the type must be move assignable, and its move assignment operator must either <em>not</em> be user provided in any way, or explicitly defaulted by declaring it as <code class="docutils literal notranslate"><span class="pre">=</span> <span class="pre">default</span></code>.</p>
 <dl class="field-list simple">
@@ -681,7 +681,7 @@
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0E22is_trivially_movable_v"><code class="docutils literal notranslate"><span class="pre">is_trivially_movable_v</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN8hyperion3mpl11type_traits20is_trivially_movableE"><code class="docutils literal notranslate"><span class="pre">is_trivially_movable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN8hyperion3mpl11type_traits20is_trivially_movableE"><code class="docutils literal notranslate"><span class="pre">hyperion::mpl::type_traits::is_trivially_movable</span></code></a></li>
 </ul>
   </nav></div>
 
@@ -719,7 +719,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>
