@@ -79,6 +79,7 @@ jobs:
         run: |
           wget https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
+          if [[ ${{matrix.version}} == 20 \
           ]]; then
             sudo ./llvm.sh ${{matrix.version}}
             sudo apt-get install -y clang-tidy-${{matrix.version}}
@@ -220,7 +221,12 @@ jobs:
         working-directory: ${{github.workspace}}
         run: |
           xmake b
-          xmake check clang.tidy
+          # disable clang-tidy on clang 19 and 20 because it is scanning errors
+          # within standard library headers
+          if [[ ${{matrix.version}} != 19 && ${{matrix.version}} != 20 \
+          ]]; then
+            xmake check clang.tidy
+          fi
 
       - name: Test
         env:
