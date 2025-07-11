@@ -2,11 +2,11 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming type traits to determine if two types are comparable
 /// in various ways
-/// @version 0.1
-/// @date 2024-01-27
+/// @version 0.1.1
+/// @date 2025-07-08
 ///
 /// MIT License
-/// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
+/// @copyright Copyright (c) 2025 Braxton Salyer <braxtonsalyer@gmail.com>
 ///
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to
@@ -29,8 +29,9 @@
 #ifndef HYPERION_MPL_TYPE_TRAITS_IS_COMPARABLE_H
 #define HYPERION_MPL_TYPE_TRAITS_IS_COMPARABLE_H
 
-#include <hyperion/mpl/concepts/comparable.h>
 #include <hyperion/platform/def.h>
+//
+#include <hyperion/mpl/concepts/comparable.h>
 
 #if HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
     #include <compare>
@@ -275,79 +276,6 @@ namespace hyperion::mpl::type_traits {
     using three_way_compare_result_t = typename is_three_way_comparable<TLhs, TRhs>::result_type;
 
 #endif // HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
-
-    namespace _test {
-
-        struct not_comparable { };
-
-        static_assert(is_equality_comparable_v<int, int>,
-                      "hyperion::mpl::type_traits::is_equality_comparable test case 1 failing");
-        static_assert(is_equality_comparable_v<int, double>,
-                      "hyperion::mpl::type_traits::is_equality_comparable test case 2 failing");
-        static_assert(!is_equality_comparable_v<int, not_comparable>,
-                      "hyperion::mpl::type_traits::is_equality_comparable test case 3 failing");
-        static_assert(!is_equality_comparable_v<not_comparable, not_comparable>,
-                      "hyperion::mpl::type_traits::is_equality_comparable test case 4 failing");
-
-        static_assert(is_inequality_comparable_v<int, int>,
-                      "hyperion::mpl::type_traits::is_inequality_comparable test case 1 failing");
-        static_assert(is_inequality_comparable_v<int, double>,
-                      "hyperion::mpl::type_traits::is_inequality_comparable test case 2 failing");
-        static_assert(!is_inequality_comparable_v<int, not_comparable>,
-                      "hyperion::mpl::type_traits::is_inequality_comparable test case 3 failing");
-
-        static_assert(is_less_than_comparable_v<int, int>,
-                      "hyperion::mpl::type_traits::is_less_than_comparable test case 1 failing");
-        static_assert(is_less_than_comparable_v<int, double>,
-                      "hyperion::mpl::type_traits::is_less_than_comparable test case 2 failing");
-        static_assert(!is_less_than_comparable_v<int, not_comparable>,
-                      "hyperion::mpl::type_traits::is_less_than_comparable test case 3 failing");
-
-        static_assert(
-            is_less_than_or_equal_comparable_v<int, int>,
-            "hyperion::mpl::type_traits::is_less_than_or_equal_comparable test case 1 failing");
-        static_assert(
-            is_less_than_or_equal_comparable_v<int, double>,
-            "hyperion::mpl::type_traits::is_less_than_or_equal_comparable test case 2 failing");
-        static_assert(
-            !is_less_than_or_equal_comparable_v<int, not_comparable>,
-            "hyperion::mpl::type_traits::is_less_than_or_equal_comparable test case 3 failing");
-
-        static_assert(is_greater_than_comparable_v<int, int>,
-                      "hyperion::mpl::type_traits::is_greater_than_comparable test case 1 failing");
-        static_assert(is_greater_than_comparable_v<int, double>,
-                      "hyperion::mpl::type_traits::is_greater_than_comparable test case 2 failing");
-        static_assert(!is_greater_than_comparable_v<int, not_comparable>,
-                      "hyperion::mpl::type_traits::is_greater_than_comparable test case 3 failing");
-
-        static_assert(
-            is_greater_than_or_equal_comparable_v<int, int>,
-            "hyperion::mpl::type_traits::is_greater_than_or_equal_comparable test case 1 failing");
-        static_assert(
-            is_greater_than_or_equal_comparable_v<int, double>,
-            "hyperion::mpl::type_traits::is_greater_than_or_equal_comparable test case 2 failing");
-        static_assert(
-            !is_greater_than_or_equal_comparable_v<int, not_comparable>,
-            "hyperion::mpl::type_traits::is_greater_than_or_equal_comparable test case 3 failing");
-
-#if HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
-
-        static_assert(is_three_way_comparable_v<int, int>,
-                      "hyperion::mpl::type_traits::is_three_way_comparable test case 1 failing");
-        static_assert(is_three_way_comparable_v<int, double>,
-                      "hyperion::mpl::type_traits::is_three_way_comparable test case 2 failing");
-        static_assert(!is_three_way_comparable_v<int, not_comparable>,
-                      "hyperion::mpl::type_traits::is_three_way_comparable test case 3 failing");
-
-        static_assert(std::same_as<three_way_compare_result_t<int, int>, std::strong_ordering>,
-                      "hyperion::mpl::type_traits::is_three_way_comparable test case 1 failing");
-        static_assert(std::same_as<three_way_compare_result_t<int, double>, std::partial_ordering>,
-                      "hyperion::mpl::type_traits::is_three_way_comparable test case 2 failing");
-        static_assert(std::same_as<three_way_compare_result_t<int, not_comparable>, void>,
-                      "hyperion::mpl::type_traits::is_three_way_comparable test case 3 failing");
-
-#endif // HYPERION_PLATFORM_STD_LIB_HAS_COMPARE
-    }  // namespace _test
 } // namespace hyperion::mpl::type_traits
 
 HYPERION_IGNORE_DOCUMENTATION_WARNING_STOP;

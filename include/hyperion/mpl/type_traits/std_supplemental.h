@@ -2,11 +2,11 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Supplemental type traits to those provided in `#include <type_traits>`
 /// to provide functionality missing from the standard
-/// @version 0.1
-/// @date 2024-01-31
+/// @version 0.1.1
+/// @date 2025-07-08
 ///
 /// MIT License
-/// @copyright Copyright (c) 2024 Braxton Salyer <braxtonsalyer@gmail.com>
+/// @copyright Copyright (c) 2025 Braxton Salyer <braxtonsalyer@gmail.com>
 ///
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
@@ -30,6 +30,7 @@
 #define HYPERION_MPL_TYPE_TRAITS_STD_SUPPLEMENTAL_H
 
 #include <hyperion/platform/def.h>
+
 #include <type_traits>
 
 HYPERION_IGNORE_DOCUMENTATION_WARNING_START;

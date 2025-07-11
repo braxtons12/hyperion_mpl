@@ -45,7 +45,7 @@ function(hyperion_compile_settings TARGET)
     endif()
 
     if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMILER_ID STREQUAL "clang")
-        target_compile_options(${TARGET} ${PUBLIC_VISIBILITY} -fsized-deallocation)
+        target_compile_options(${TARGET} ${PUBLIC_VISIBILITY} -fsized-deallocation -ferror-limit=0)
     endif()
 
     if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMILER_ID STREQUAL "clang")
