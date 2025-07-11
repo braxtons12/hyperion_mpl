@@ -1,8 +1,8 @@
 /// @file type.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Metaprogramming type wrapper for use as metafunction parameter and return type
-/// @version 0.1.2
-/// @date 2025-07-08
+/// @version 0.2.0
+/// @date 2025-07-10
 ///
 /// MIT License
 /// @copyright Copyright (c) 2025 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -26,12 +26,13 @@
 /// SOFTWARE.
 
 #ifndef HYPERION_MPL_TYPE_H
-    #define HYPERION_MPL_TYPE_H
+#define HYPERION_MPL_TYPE_H
 
 #include <hyperion/platform/def.h>
 #include <hyperion/platform/types.h>
 //
 #include <hyperion/mpl/metatypes.h>
+#include <hyperion/mpl/value.h>
 
 #include <concepts>
 #include <type_traits>
@@ -58,9 +59,6 @@
 /// @}
 
 namespace hyperion::mpl {
-    template<auto TValue, typename TType>
-    struct Value;
-
     /// @brief `Type` is a metaprogramming type wrapper used for storing, communicating,
     /// operating on, and otherwis working with types.
     ///
@@ -329,10 +327,10 @@ namespace hyperion::mpl {
         /// @return The result of checking this `Type` specialization against `TPredicate`, as a
         /// `Value` specialization
         template<template<typename> typename TPredicate>
-        [[nodiscard]] constexpr auto satisfies() const noexcept -> std::enable_if_t<
-            TypeMetaFunction<TPredicate> && MetaValue<TPredicate<type>>
-                && std::same_as<std::remove_const_t<decltype(TPredicate<type>::value)>, bool>,
-            Value<TPredicate<type>::value, bool>>;
+        [[nodiscard]] constexpr auto
+        satisfies() const noexcept -> Value<TPredicate<type>::value, bool> {
+            return {};
+        }
 
         /// @brief Checks to see if this `Type` specialization satisfies the given metafunction
         /// predicate.
@@ -398,7 +396,9 @@ namespace hyperion::mpl {
         /// @return Whether `this` and `rhs` are the same `Type` specialization
         template<typename TRhs>
         [[nodiscard]] constexpr auto is([[maybe_unused]] const Type<TRhs>& rhs) const noexcept
-            -> Value<std::same_as<type, TRhs>, bool>;
+            -> Value<std::same_as<type, TRhs>, bool> {
+            return {};
+        }
 
         /// @brief Returns whether the `type` of `this` `Type` specialization is the same as,
         /// or a cv-ref qualification of, the `type` of the given one.
@@ -445,10 +445,10 @@ namespace hyperion::mpl {
         /// @endcode
         ///
         /// @return Whether the `type` of `this` is `const`
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_const() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_const_v<std::remove_reference_t<TDelay>>, bool>>;
+        [[nodiscard]] constexpr auto
+        is_const() const noexcept -> Value<std::is_const_v<std::remove_reference_t<type>>, bool> {
+            return {};
+        }
 
         /// @brief Returns whether the `type` of `this` `Type` specialization is an lvalue reference
         ///
@@ -462,10 +462,10 @@ namespace hyperion::mpl {
         /// @endcode
         ///
         /// @return Whether the `type` of `this` is an lvalue reference
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_lvalue_reference() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_lvalue_reference_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto
+        is_lvalue_reference() const noexcept -> Value<std::is_lvalue_reference_v<type>, bool> {
+            return {};
+        }
 
         /// @brief Returns whether the `type` of `this` `Type` specialization is an rvalue reference
         ///
@@ -479,10 +479,10 @@ namespace hyperion::mpl {
         /// @endcode
         ///
         /// @return Whether the `type` of `this` is an rvalue reference
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_rvalue_reference() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_rvalue_reference_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto
+        is_rvalue_reference() const noexcept -> Value<std::is_rvalue_reference_v<type>, bool> {
+            return {};
+        }
 
         /// @brief Returns whether the `type` of `this` `Type` specialization is `volatile`
         ///
@@ -496,10 +496,10 @@ namespace hyperion::mpl {
         /// @endcode
         ///
         /// @return Whether the `type` of `this` is `volatile`
-        template<typename TDelay = type>
         [[nodiscard]] constexpr auto is_volatile() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_volatile_v<std::remove_reference_t<TDelay>>, bool>>;
+            -> Value<std::is_volatile_v<std::remove_reference_t<type>>, bool> {
+            return {};
+        }
 
         /// @brief Returns a `Type` specialization representing the `const`-qualified version of
         /// the type `this` specialization represents.
@@ -652,7 +652,9 @@ namespace hyperion::mpl {
         template<typename TRhs>
         [[nodiscard]] constexpr auto
         is_convertible_to([[maybe_unused]] const Type<TRhs>& rhs) const noexcept
-            -> Value<std::convertible_to<type, TRhs>, bool>;
+            -> Value<std::convertible_to<type, TRhs>, bool> {
+            return {};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is derived from
         /// the type `rhs` represents, as a `Value` specialization.
@@ -683,7 +685,9 @@ namespace hyperion::mpl {
         template<typename TRhs>
         [[nodiscard]] constexpr auto
         is_derived_from([[maybe_unused]] const Type<TRhs>& rhs) const noexcept
-            -> Value<std::derived_from<type, TRhs> && !std::same_as<type, TRhs>, bool>;
+            -> Value<std::derived_from<type, TRhs> && !std::same_as<type, TRhs>, bool> {
+            return {};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is a base class
         /// of the type `rhs` represents, as a `Value` specialization.
@@ -714,7 +718,9 @@ namespace hyperion::mpl {
         template<typename TRhs>
         [[nodiscard]] constexpr auto
         is_base_of([[maybe_unused]] const Type<TRhs>& rhs) const noexcept
-            -> Value<std::derived_from<TRhs, type> && !std::same_as<type, TRhs>, bool>;
+            -> Value<std::derived_from<TRhs, type> && !std::same_as<type, TRhs>, bool> {
+            return {};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is constructible
         /// from arguments of types `TTypes...`, as a `Value` specialization.
@@ -742,11 +748,12 @@ namespace hyperion::mpl {
         /// @return whether the type `this` represents is constructible from arguments of types
         /// `TTypes...`, as a `Value` specialization
         template<template<typename...> typename TList, typename... TTypes>
+            requires(!MetaType<TList<TTypes...>>)
         [[nodiscard]] constexpr auto
-        is_constructible_from([[maybe_unused]] const TList<TTypes...>& list) const noexcept
-            -> std::enable_if_t<
-                !MetaType<TList<TTypes...>>,
-                Value<std::is_constructible_v<type, detail::convert_to_raw_t<TTypes>...>, bool>>;
+        is_constructible_from([[maybe_unused]] const TList<TTypes...>& list) const noexcept {
+            return Value<std::is_constructible_v<type, detail::convert_to_raw_t<TTypes>...>,
+                         bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is constructible
         /// from arguments of types `TTypes...`, as a `Value` specialization.
@@ -776,8 +783,9 @@ namespace hyperion::mpl {
         /// `TTypes...`, as a `Value` specialization
         template<typename... TTypes>
         [[nodiscard]] constexpr auto
-        is_constructible_from([[maybe_unused]] const Type<TTypes>&... list) const noexcept
-            -> Value<std::is_constructible_v<type, TTypes...>, bool>;
+        is_constructible_from([[maybe_unused]] const Type<TTypes>&... list) const noexcept {
+            return Value<std::is_constructible_v<type, TTypes...>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
         /// constructible from arguments of types `TTypes...`, as a `Value` specialization.
@@ -808,12 +816,13 @@ namespace hyperion::mpl {
         /// @return whether the type `this` represents is `noexcept` constructible from arguments of
         /// types `TTypes...`, as a `Value` specialization
         template<template<typename...> typename TList, typename... TTypes>
-        [[nodiscard]] constexpr auto
-        is_noexcept_constructible_from([[maybe_unused]] const TList<TTypes...>& list) const noexcept
-            -> std::enable_if_t<
-                !MetaType<TList<TTypes...>>,
-                Value<std::is_nothrow_constructible_v<type, detail::convert_to_raw_t<TTypes>...>,
-                      bool>>;
+            requires(!MetaType<TList<TTypes...>>)
+        [[nodiscard]] constexpr auto is_noexcept_constructible_from(
+            [[maybe_unused]] const TList<TTypes...>& list) const noexcept //
+        {
+            return Value<std::is_nothrow_constructible_v<type, detail::convert_to_raw_t<TTypes>...>,
+                         bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
         /// constructible from arguments of types `TTypes...`, as a `Value` specialization.
@@ -845,9 +854,10 @@ namespace hyperion::mpl {
         /// @return whether the type `this` represents is `noexcept` constructible from arguments of
         /// types `TTypes...`, as a `Value` specialization
         template<typename... TTypes>
-        [[nodiscard]] constexpr auto
-        is_noexcept_constructible_from([[maybe_unused]] const Type<TTypes>&... list) const noexcept
-            -> Value<std::is_nothrow_constructible_v<type, TTypes...>, bool>;
+        [[nodiscard]] constexpr auto is_noexcept_constructible_from(
+            [[maybe_unused]] const Type<TTypes>&... list) const noexcept {
+            return Value<std::is_nothrow_constructible_v<type, TTypes...>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is default
         /// constructible, as a `Value` specialization.
@@ -872,10 +882,9 @@ namespace hyperion::mpl {
         ///
         /// @return whether the type `this` represents is default constructible, as a `Value`
         /// specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_default_constructible() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_default_constructible_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_default_constructible() const noexcept {
+            return Value<std::is_default_constructible_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
         /// default constructible, as a `Value` specialization.
@@ -905,11 +914,9 @@ namespace hyperion::mpl {
         ///
         /// @return whether the type `this` represents is `noexcept` default constructible, as a
         /// `Value` specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_noexcept_default_constructible() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-
-                                Value<std::is_nothrow_default_constructible_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_noexcept_default_constructible() const noexcept {
+            return Value<std::is_nothrow_default_constructible_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is trivially
         /// default constructible, as a `Value` specialization.
@@ -939,11 +946,9 @@ namespace hyperion::mpl {
         ///
         /// @return whether the type `this` represents is trivially default constructible, as a
         /// `Value` specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_trivially_default_constructible() const noexcept
-
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_trivially_default_constructible_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_trivially_default_constructible() const noexcept {
+            return Value<std::is_trivially_default_constructible_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is copy
         /// constructible, as a `Value` specialization.
@@ -968,10 +973,9 @@ namespace hyperion::mpl {
         ///
         /// @return whether the type `this` represents is copy constructible, as a `Value`
         /// specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_copy_constructible() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_copy_constructible_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_copy_constructible() const noexcept {
+            return Value<std::is_copy_constructible_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
         /// copy constructible, as a `Value` specialization.
@@ -1001,11 +1005,9 @@ namespace hyperion::mpl {
         ///
         /// @return whether the type `this` represents is `noexcept` copy constructible, as a
         /// `Value` specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_noexcept_copy_constructible() const noexcept
-
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_nothrow_copy_constructible_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_noexcept_copy_constructible() const noexcept {
+            return Value<std::is_nothrow_copy_constructible_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is trivially
         /// copy constructible, as a `Value` specialization.
@@ -1035,10 +1037,9 @@ namespace hyperion::mpl {
         ///
         /// @return whether the type `this` represents is trivially copy constructible, as a
         /// `Value` specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_trivially_copy_constructible() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_trivially_copy_constructible_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_trivially_copy_constructible() const noexcept {
+            return Value<std::is_trivially_copy_constructible_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is move
         /// constructible, as a `Value` specialization.
@@ -1063,10 +1064,9 @@ namespace hyperion::mpl {
         ///
         /// @return whether the type `this` represents is move constructible, as a `Value`
         /// specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_move_constructible() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_move_constructible_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_move_constructible() const noexcept {
+            return Value<std::is_move_constructible_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
         /// move constructible, as a `Value` specialization.
@@ -1096,10 +1096,9 @@ namespace hyperion::mpl {
         ///
         /// @return whether the type `this` represents is `noexcept` move constructible, as a
         /// `Value` specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_noexcept_move_constructible() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_nothrow_move_constructible_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_noexcept_move_constructible() const noexcept {
+            return Value<std::is_nothrow_move_constructible_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is trivially
         /// move constructible, as a `Value` specialization.
@@ -1129,10 +1128,9 @@ namespace hyperion::mpl {
         ///
         /// @return whether the type `this` represents is trivially move constructible, as a
         /// `Value` specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_trivially_move_constructible() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_trivially_move_constructible_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_trivially_move_constructible() const noexcept {
+            return Value<std::is_trivially_move_constructible_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is copy
         /// assignable, as a `Value` specialization.
@@ -1157,10 +1155,9 @@ namespace hyperion::mpl {
         ///
         /// @return whether the type `this` represents is copy assignable, as a `Value`
         /// specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_copy_assignable() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_copy_assignable_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_copy_assignable() const noexcept {
+            return Value<std::is_copy_assignable_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
         /// copy assignable, as a `Value` specialization.
@@ -1190,10 +1187,9 @@ namespace hyperion::mpl {
         ///
         /// @return whether the type `this` represents is `noexcept` copy assignable, as a
         /// `Value` specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_noexcept_copy_assignable() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_nothrow_copy_assignable_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_noexcept_copy_assignable() const noexcept {
+            return Value<std::is_nothrow_copy_assignable_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is trivially
         /// copy assignable, as a `Value` specialization.
@@ -1223,10 +1219,9 @@ namespace hyperion::mpl {
         ///
         /// @return whether the type `this` represents is trivially copy assignable, as a
         /// `Value` specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_trivially_copy_assignable() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_trivially_copy_assignable_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_trivially_copy_assignable() const noexcept {
+            return Value<std::is_trivially_copy_assignable_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is move
         /// assignable, as a `Value` specialization.
@@ -1251,10 +1246,9 @@ namespace hyperion::mpl {
         ///
         /// @return whether the type `this` represents is move assignable, as a `Value`
         /// specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_move_assignable() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_move_assignable_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_move_assignable() const noexcept {
+            return Value<std::is_move_assignable_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
         /// move assignable, as a `Value` specialization.
@@ -1284,10 +1278,9 @@ namespace hyperion::mpl {
         ///
         /// @return whether the type `this` represents is `noexcept` move assignable, as a
         /// `Value` specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_noexcept_move_assignable() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_nothrow_move_assignable_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_noexcept_move_assignable() const noexcept {
+            return Value<std::is_nothrow_move_assignable_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is trivially
         /// move assignable, as a `Value` specialization.
@@ -1317,10 +1310,9 @@ namespace hyperion::mpl {
         ///
         /// @return whether the type `this` represents is trivially move assignable, as a
         /// `Value` specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_trivially_move_assignable() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_trivially_move_assignable_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_trivially_move_assignable() const noexcept {
+            return Value<std::is_trivially_move_assignable_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is
         /// destructible, as a `Value` specialization.
@@ -1345,10 +1337,9 @@ namespace hyperion::mpl {
         ///
         /// @return whether the type `this` represents is destructible, as a `Value`
         /// specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_destructible() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_destructible_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_destructible() const noexcept {
+            return Value<std::is_destructible_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
         /// destructible, as a `Value` specialization.
@@ -1378,10 +1369,9 @@ namespace hyperion::mpl {
         ///
         /// @return whether the type `this` represents is `noexcept` destructible, as a
         /// `Value` specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_noexcept_destructible() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_nothrow_destructible_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_noexcept_destructible() const noexcept {
+            return Value<std::is_nothrow_destructible_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is trivially
         /// destructible, as a `Value` specialization.
@@ -1410,10 +1400,9 @@ namespace hyperion::mpl {
         ///
         /// @return whether the type `this` represents is trivially destructible, as a
         /// `Value` specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_trivially_destructible() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_trivially_destructible_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_trivially_destructible() const noexcept {
+            return Value<std::is_trivially_destructible_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is swappable,
         /// as a `Value` specialization.
@@ -1439,10 +1428,9 @@ namespace hyperion::mpl {
         /// @endcode
         ///
         /// @return whether the type `this` represents is swappable, as a `Value` specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto
-        is_swappable() const noexcept -> std::enable_if_t<std::same_as<TDelay, type>,
-                                                          Value<std::is_swappable_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_swappable() const noexcept {
+            return Value<std::is_swappable_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
         /// swappable, as a `Value` specialization.
@@ -1473,10 +1461,9 @@ namespace hyperion::mpl {
         /// @endcode
         ///
         /// @return whether the type `this` represents is swappable, as a `Value` specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto is_noexcept_swappable() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>,
-                                Value<std::is_nothrow_swappable_v<TDelay>, bool>>;
+        [[nodiscard]] constexpr auto is_noexcept_swappable() const noexcept {
+            return Value<std::is_nothrow_swappable_v<type>, bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is swappable
         /// with the type `rhs` represents, as a `Value` specialization.
@@ -1510,15 +1497,16 @@ namespace hyperion::mpl {
         /// as a `Value` specialization
         template<typename TRhs = type>
         [[nodiscard]] constexpr auto
-        is_swappable_with([[maybe_unused]] const Type<TRhs>& rhs = Type<TRhs>{}) const noexcept
-            -> Value<
+        is_swappable_with([[maybe_unused]] const Type<TRhs>& rhs = Type<TRhs>{}) const noexcept {
+            return Value<
                 std::is_swappable_with_v<std::conditional_t<std::is_reference_v<type>,
                                                             type,
                                                             std::add_lvalue_reference_t<type>>,
                                          std::conditional_t<std::is_reference_v<TRhs>,
                                                             TRhs,
                                                             std::add_lvalue_reference_t<TRhs>>>,
-                bool>;
+                bool>{};
+        }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is `noexcept`
         /// swappable with the type `rhs` represents, as a `Value` specialization.
@@ -1557,24 +1545,26 @@ namespace hyperion::mpl {
         /// @return whether the type `this` represents is `noexcept` swappable with the type `rhs`
         /// represents, as a `Value` specialization
         template<typename TRhs = type>
-        [[nodiscard]] constexpr auto
-        is_noexcept_swappable_with([[maybe_unused]] const Type<TRhs>& rhs
-                                   = Type<TRhs>{}) const noexcept
-            -> Value<std::is_nothrow_swappable_with_v<
-                         std::conditional_t<std::is_reference_v<type>,
-                                            type,
-                                            std::add_lvalue_reference_t<type>>,
-                         std::conditional_t<std::is_reference_v<TRhs>,
-                                            TRhs,
-                                            std::add_lvalue_reference_t<TRhs>>>,
-                     bool>;
+        [[nodiscard]] constexpr auto is_noexcept_swappable_with(   //
+            [[maybe_unused]] const Type<TRhs>& rhs = Type<TRhs>{}) //
+            const noexcept                                         //
+        {
+            return Value<std::is_nothrow_swappable_with_v<
+                             std::conditional_t<std::is_reference_v<type>,
+                                                type,
+                                                std::add_lvalue_reference_t<type>>,
+                             std::conditional_t<std::is_reference_v<TRhs>,
+                                                TRhs,
+                                                std::add_lvalue_reference_t<TRhs>>>,
+                         bool>{};
+        }
 
         /// @brief Returns the `sizeof` the type `this` `Type` specialization represents,
         /// as a `Value` specialization.
         /// @return the `sizeof` the type `this` represents, as a `Value` specialization
-        template<typename TDelay = type>
-        [[nodiscard]] constexpr auto sizeof_() const noexcept
-            -> std::enable_if_t<std::same_as<TDelay, type>, Value<sizeof(TDelay), usize>>;
+        [[nodiscard]] constexpr auto sizeof_() const noexcept {
+            return Value<sizeof(type), usize>{};
+        }
     };
 
     /// @brief Returns an `mpl::Type` representing the type of the given argument
@@ -1675,21 +1665,11 @@ namespace hyperion::mpl {
 } // namespace hyperion::mpl
 
 #ifndef HYPERION_MPL_VALUE_H
-    // NOLINTNEXTLINE(misc-header-include-cycle)
+  // NOLINTNEXTLINE(misc-header-include-cycle)
     #include <hyperion/mpl/value.h>
 #endif
 
 namespace hyperion::mpl {
-
-    template<typename TType>
-    template<template<typename> typename TPredicate>
-    [[nodiscard]] constexpr auto Type<TType>::satisfies() const noexcept -> std::enable_if_t<
-        TypeMetaFunction<TPredicate> && MetaValue<TPredicate<type>>
-            && std::same_as<std::remove_const_t<decltype(TPredicate<type>::value)>, bool>,
-        Value<TPredicate<type>::value, bool>> {
-        return {};
-    }
-
     template<typename TType>
     template<typename TPredicate>
     [[nodiscard]] constexpr auto Type<TType>::satisfies(TPredicate&& predicate) const noexcept {
@@ -1725,305 +1705,6 @@ namespace hyperion::mpl {
                 "must have `value` of type (possibly cv-ref qualified) `bool`");
             return decltype(result){};
         }
-    }
-
-    template<typename TType>
-    template<typename TRhs>
-    [[nodiscard]] constexpr auto
-    Type<TType>::is([[maybe_unused]] const Type<TRhs>& rhs) const noexcept
-        -> Value<std::same_as<type, TRhs>, bool> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_const() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_const_v<std::remove_reference_t<TDelay>>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_lvalue_reference() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_lvalue_reference_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_rvalue_reference() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_rvalue_reference_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_volatile() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_volatile_v<std::remove_reference_t<TDelay>>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TRhs>
-    [[nodiscard]] constexpr auto
-    Type<TType>::is_convertible_to([[maybe_unused]] const Type<TRhs>& rhs) const noexcept
-        -> Value<std::convertible_to<type, TRhs>, bool> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TRhs>
-    [[nodiscard]] constexpr auto
-    Type<TType>::is_derived_from([[maybe_unused]] const Type<TRhs>& rhs) const noexcept
-        -> Value<std::derived_from<type, TRhs> && !std::same_as<type, TRhs>, bool> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TRhs>
-    [[nodiscard]] constexpr auto
-    Type<TType>::is_base_of([[maybe_unused]] const Type<TRhs>& rhs) const noexcept
-        -> Value<std::derived_from<TRhs, type> && !std::same_as<type, TRhs>, bool> {
-        return {};
-    }
-
-    template<typename TType>
-    template<template<typename...> typename TList, typename... TTypes>
-    [[nodiscard]] constexpr auto
-    Type<TType>::is_constructible_from([[maybe_unused]] const TList<TTypes...>& list) const noexcept
-        -> std::enable_if_t<
-            !MetaType<TList<TTypes...>>,
-            Value<std::is_constructible_v<type, detail::convert_to_raw_t<TTypes>...>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename... TTypes>
-    [[nodiscard]] constexpr auto
-    Type<TType>::is_constructible_from([[maybe_unused]] const Type<TTypes>&... list) const noexcept
-        -> Value<std::is_constructible_v<type, TTypes...>, bool> {
-        return {};
-    }
-
-    template<typename TType>
-    template<template<typename...> typename TList, typename... TTypes>
-    [[nodiscard]] constexpr auto Type<TType>::is_noexcept_constructible_from(
-        [[maybe_unused]] const TList<TTypes...>& list) const noexcept
-        -> std::enable_if_t<
-            !MetaType<TList<TTypes...>>,
-            Value<std::is_nothrow_constructible_v<type, detail::convert_to_raw_t<TTypes>...>,
-                  bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename... TTypes>
-    [[nodiscard]] constexpr auto Type<TType>::is_noexcept_constructible_from(
-        [[maybe_unused]] const Type<TTypes>&... list) const noexcept
-        -> Value<std::is_nothrow_constructible_v<type, TTypes...>, bool> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_default_constructible() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_default_constructible_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_noexcept_default_constructible() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_nothrow_default_constructible_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_trivially_default_constructible() const noexcept
-
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_trivially_default_constructible_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_copy_constructible() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_copy_constructible_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_noexcept_copy_constructible() const noexcept
-
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_nothrow_copy_constructible_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_trivially_copy_constructible() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_trivially_copy_constructible_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_move_constructible() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_move_constructible_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_noexcept_move_constructible() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_nothrow_move_constructible_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_trivially_move_constructible() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_trivially_move_constructible_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_copy_assignable() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_copy_assignable_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_noexcept_copy_assignable() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_nothrow_copy_assignable_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_trivially_copy_assignable() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_trivially_copy_assignable_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_move_assignable() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_move_assignable_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_noexcept_move_assignable() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_nothrow_move_assignable_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_trivially_move_assignable() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_trivially_move_assignable_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_destructible() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_destructible_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_noexcept_destructible() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_nothrow_destructible_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_trivially_destructible() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_trivially_destructible_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_swappable() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>, Value<std::is_swappable_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::is_noexcept_swappable() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>,
-                            Value<std::is_nothrow_swappable_v<TDelay>, bool>> {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TRhs>
-    [[nodiscard]] constexpr auto
-    Type<TType>::is_swappable_with([[maybe_unused]] const Type<TRhs>& rhs) const noexcept -> Value<
-        std::is_swappable_with_v<
-            std::conditional_t<std::is_reference_v<type>, type, std::add_lvalue_reference_t<type>>,
-            std::conditional_t<std::is_reference_v<TRhs>, TRhs, std::add_lvalue_reference_t<TRhs>>>,
-        bool>
-
-    {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TRhs>
-    [[nodiscard]] constexpr auto
-    Type<TType>::is_noexcept_swappable_with([[maybe_unused]] const Type<TRhs>& rhs) const noexcept
-        -> Value<
-            std::is_nothrow_swappable_with_v<std::conditional_t<std::is_reference_v<type>,
-                                                                type,
-                                                                std::add_lvalue_reference_t<type>>,
-                                             std::conditional_t<std::is_reference_v<TRhs>,
-                                                                TRhs,
-                                                                std::add_lvalue_reference_t<TRhs>>>,
-            bool>
-
-    {
-        return {};
-    }
-
-    template<typename TType>
-    template<typename TDelay>
-    [[nodiscard]] constexpr auto Type<TType>::sizeof_() const noexcept
-        -> std::enable_if_t<std::same_as<TDelay, type>, Value<sizeof(TDelay), usize>> {
-        return {};
     }
 } // namespace hyperion::mpl
 
