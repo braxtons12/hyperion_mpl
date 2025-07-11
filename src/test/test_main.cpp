@@ -2,7 +2,7 @@
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief simple example / test file
 /// @version 0.1
-/// @date 2025-07-08
+/// @date 2025-07-10
 ///
 /// MIT License
 /// @copyright Copyright (c) 2025 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -25,18 +25,21 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
 
-#include "concepts/comparable.h"
-#include "concepts/operator_able.h"
-#include "list.h"
-#include "metapredicates.h"
-#include "metatypes.h"
-#include "pair.h"
-#include "type.h"
-#include "type_traits/is_comparable.h"
-#include "type_traits/is_operator_able.h"
-#include "value.h"
+#include "concepts/comparable.h" // NOLINT(misc-include-cleaner)
+#include "concepts/operator_able.h" // NOLINT(misc-include-cleaner)
+#include "list.h" // NOLINT(misc-include-cleaner)
+#include "metapredicates.h" // NOLINT(misc-include-cleaner)
+#include "metatypes.h" // NOLINT(misc-include-cleaner)
+#include "pair.h" // NOLINT(misc-include-cleaner)
+#include "type.h" // NOLINT(misc-include-cleaner)
+#include "type_traits/is_comparable.h" // NOLINT(misc-include-cleaner)
+#include "type_traits/is_operator_able.h" // NOLINT(misc-include-cleaner)
+#include "value.h" // NOLINT(misc-include-cleaner)
 
-#include <hyperion/mpl.h>
+#include <hyperion/mpl/list.h>
+#include <hyperion/mpl/metapredicates.h>
+#include <hyperion/mpl/metatypes.h>
+#include <hyperion/mpl/value.h>
 #include <hyperion/platform/types.h>
 
 using namespace hyperion;      // NOLINT(google-build-using-namespace)
