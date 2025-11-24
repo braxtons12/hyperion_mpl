@@ -503,6 +503,64 @@ namespace hyperion::mpl {
     };
 
     /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is reference qualified.
+    ///
+    /// Determines whether the represented type is reference qualified as
+    /// if by `decltype_(type).is_reference()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// constexpr auto example1 = decltype_<const int&&>{};
+    /// constexpr auto example2 = decltype_<int&>{};
+    /// constexpr auto example3 = decltype_<int>{};
+    ///
+    /// static_assert(example1.satisfies(is_reference));
+    /// static_assert(example2.satisfies(is_reference));
+    /// static_assert(not example3.satisfies(is_reference));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is a reference
+    /// @return whether the type represented by `type` is a reference
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
+    constexpr auto is_reference = [](MetaType auto type) noexcept {
+        return decltype_(type).is_reference();
+    };
+
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is a pointer.
+    ///
+    /// Determines whether the represented type is a pointer as
+    /// if by `decltype_(type).is_pointer()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// constexpr auto example1 = decltype_<const int&&>{};
+    /// constexpr auto example2 = decltype_<int*>{};
+    /// constexpr auto example3 = decltype_<const int*>{};
+    /// constexpr auto example4 = decltype_<int>{};
+    ///
+    /// static_assert(not example1.satisfies(is_pointer));
+    /// static_assert(example2.satisfies(is_pointer));
+    /// static_assert(example3.satisfies(is_pointer));
+    /// static_assert(not example4.satisfies(is_poitner));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is a pointer
+    /// @return whether the type represented by `type` is a pointer
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
+    constexpr auto is_pointer = [](MetaType auto type) noexcept {
+        return decltype_(type).is_pointer();
+    };
+
+    /// @brief Metaprogramming predicate object used to query whether a
     /// `MetaType` argument represents a type that is `volatile` qualified.
     ///
     /// Determines whether the represented type is `volatile` as if by

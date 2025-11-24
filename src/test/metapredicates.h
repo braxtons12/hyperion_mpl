@@ -91,24 +91,38 @@ namespace hyperion::mpl::_test::metapredicates {
                   "hyperion::mpl::qualification_of predicate test case 4 (failing)");
 
     static_assert(decltype_<const int>().satisfies(is_const),
-                  "hyperion::mpl::is_const predicat test case 1 (failing)");
+                  "hyperion::mpl::is_const predicate test case 1 (failing)");
     static_assert(not decltype_<int>().satisfies(is_const),
-                  "hyperion::mpl::is_const predicat test case 2 (failing)");
+                  "hyperion::mpl::is_const predicate test case 2 (failing)");
 
     static_assert(decltype_<int&>().satisfies(is_lvalue_reference),
-                  "hyperion::mpl::is_lvalue_reference predicat test case 1 (failing)");
+                  "hyperion::mpl::is_lvalue_reference predicate test case 1 (failing)");
     static_assert(not decltype_<int>().satisfies(is_lvalue_reference),
-                  "hyperion::mpl::is_lvalue_reference predicat test case 2 (failing)");
+                  "hyperion::mpl::is_lvalue_reference predicate test case 2 (failing)");
 
     static_assert(decltype_<int&&>().satisfies(is_rvalue_reference),
-                  "hyperion::mpl::is_rvalue_reference predicat test case 1 (failing)");
+                  "hyperion::mpl::is_rvalue_reference predicate test case 1 (failing)");
     static_assert(not decltype_<int>().satisfies(is_rvalue_reference),
-                  "hyperion::mpl::is_rvalue_reference predicat test case 2 (failing)");
+                  "hyperion::mpl::is_rvalue_reference predicate test case 2 (failing)");
+
+    static_assert(decltype_<int&>().satisfies(is_reference),
+                  "hyperion::mpl::is_reference predicate test case 1 (failing)");
+    static_assert(not decltype_<int>().satisfies(is_reference),
+                  "hyperion::mpl::is_reference predicate test case 2 (failing)");
+    static_assert(decltype_<int&&>().satisfies(is_reference),
+                  "hyperion::mpl::is_reference predicate test case 3 (failing)");
+
+    static_assert(decltype_<int*>().satisfies(is_pointer),
+                  "hyperion::mpl::is_pointer predicate test case 1 (failing)");
+    static_assert(not decltype_<int>().satisfies(is_pointer),
+                  "hyperion::mpl::is_pointer predicate test case 2 (failing)");
+    static_assert(decltype_<const int* const>().satisfies(is_pointer),
+                  "hyperion::mpl::is_pointer predicate test case 3 (failing)");
 
     static_assert(decltype_<volatile int>().satisfies(is_volatile),
-                  "hyperion::mpl::is_volatile predicat test case 1 (failing)");
+                  "hyperion::mpl::is_volatile predicate test case 1 (failing)");
     static_assert(not decltype_<int>().satisfies(is_volatile),
-                  "hyperion::mpl::is_volatile predicat test case 2 (failing)");
+                  "hyperion::mpl::is_volatile predicate test case 2 (failing)");
 
     struct empty { };
 
