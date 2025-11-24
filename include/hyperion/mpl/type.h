@@ -1,8 +1,8 @@
 /// @file type.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Metaprogramming type wrapper for use as metafunction parameter and return type
-/// @version 0.2.0
-/// @date 2025-07-10
+/// @version 0.3.0
+/// @date 2025-11-24
 ///
 /// MIT License
 /// @copyright Copyright (c) 2025 Braxton Salyer <braxtonsalyer@gmail.com>

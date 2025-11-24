@@ -1,8 +1,8 @@
 /// @file metapredicates.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Tests for metapredicates.h
-/// @version 0.1.3
-/// @date 2025-07-08
+/// @version 0.2.0
+/// @date 2025-11-24
 ///
 /// MIT License
 /// @copyright Copyright (c) 2025 Braxton Salyer <braxtonsalyer@gmail.com>

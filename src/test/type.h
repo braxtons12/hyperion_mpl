@@ -1,8 +1,8 @@
 /// @file type.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Test for type.h
-/// @version 0.1.2
-/// @date 2025-07-08
+/// @version 0.3.0
+/// @date 2025-11-24
 ///
 /// MIT License
 /// @copyright Copyright (c) 2025 Braxton Salyer <braxtonsalyer@gmail.com>
