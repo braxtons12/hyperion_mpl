@@ -1857,8 +1857,10 @@ namespace hyperion::mpl {
         /// @param end The one-after-the-end value
         /// @return a range of values from `begin` to `end`
         constexpr auto iota(MetaValue auto begin, MetaValue auto end) noexcept
+#if !HYPERION_PLATFORM_COMPILER_IS_MSVC
             -> std::array<std::remove_cvref_t<decltype(decltype(begin)::value)>,
                           decltype(end)::value - decltype(begin)::value>
+#endif // !HYPERION_PLATFORM_COMPILER_IS_MSVC
         {
             std::array<
                 std::remove_cvref_t<decltype(decltype(begin)::value)>,
@@ -1878,7 +1880,11 @@ namespace hyperion::mpl {
         /// @return a `static_vector<TType, TCapacity>` containing the elements
         /// of the `range`
         template<typename TType, usize TCapacity>
-        constexpr auto to_vector(auto&& range) noexcept -> static_vector<TType, TCapacity> {
+        constexpr auto to_vector(auto&& range) noexcept
+#if !HYPERION_PLATFORM_COMPILER_IS_MSVC
+            -> static_vector<TType, TCapacity>
+#endif // !HYPERION_PLATFORM_COMPILER_IS_MSVC
+        {
             static_vector<TType, TCapacity> arr{};
             for(const auto& elem : range) {
                 arr.push_back(elem);
