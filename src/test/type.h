@@ -360,12 +360,51 @@ namespace hyperion::mpl::_test::type {
     static_assert(!decltype_<int>().is_volatile(),
                   "hyperion::mpl::Type::is_volatile test case 3 (failing)");
 
+    struct empty { };
+
+    static_assert(decltype_<empty>().is_empty(),
+                  "hyperion::mpl::Type::is_empty test case 1 (failing)");
+    static_assert(not decltype_<int>().is_empty(),
+                  "hyperion::mpl::Type::is_empty test case 2 (failing)");
+
+    struct not_trivial {
+        not_trivial(const not_trivial&);
+    };
+    static_assert(decltype_<empty>().is_trivial(),
+                  "hyperion::mpl::Type::is_trivial test case 1 (failing)");
+    static_assert(decltype_<int>().is_trivial(),
+                  "hyperion::mpl::Type::is_trivial test case 2 (failing)");
+    static_assert(not decltype_<not_trivial>().is_trivial(),
+                  "hyperion::mpl::Type::is_trivial test case 3 (failing)");
+
     static_assert(decltype_<int&&>().is_rvalue_reference(),
                   "hyperion::mpl::Type::is_rvalue_reference test case 1 (failing)");
     static_assert(decltype_<const int&&>().is_rvalue_reference(),
                   "hyperion::mpl::Type::is_rvalue_reference test case 2 (failing)");
     static_assert(!decltype_<int>().is_rvalue_reference(),
                   "hyperion::mpl::Type::is_rvalue_reference test case 3 (failing)");
+
+    static_assert(decltype_<int&>().is_reference(),
+                  "hyperion::mpl::Type::is_reference test case 1 (failing)");
+    static_assert(decltype_<const int&>().is_reference(),
+                  "hyperion::mpl::Type::is_reference test case 2 (failing)");
+    static_assert(decltype_<int&&>().is_reference(),
+                  "hyperion::mpl::Type::is_reference test case 3 (failing)");
+    static_assert(decltype_<const int&&>().is_reference(),
+                  "hyperion::mpl::Type::is_reference test case 4 (failing)");
+    static_assert(not decltype_<int>().is_reference(),
+                  "hyperion::mpl::Type::is_reference test case 5 (failing)");
+
+    static_assert(not decltype_<int>().is_pointer(),
+                  "hyperion::mpl::Type::is_pointer test case 1 (failing)");
+    static_assert(decltype_<int*>().is_pointer(),
+                  "hyperion::mpl::Type::is_pointer test case 2 (failing)");
+    static_assert(decltype_<int* const>().is_pointer(),
+                  "hyperion::mpl::Type::is_pointer test case 3 (failing)");
+    static_assert(decltype_<const int*>().is_pointer(),
+                  "hyperion::mpl::Type::is_pointer test case 4 (failing)");
+    static_assert(decltype_<const int* const>().is_pointer(),
+                  "hyperion::mpl::Type::is_pointer test case 5 (failing)");
 
     static_assert(decltype_<int>().as_const() == decltype_<const int>(),
                   "hyperion::mpl::Type::as_const test case 1 (failing)");
@@ -394,6 +433,116 @@ namespace hyperion::mpl::_test::type {
                   "hyperion::mpl::Type::as_rvalue_reference test case 2 (failing)");
     static_assert(decltype_<int>().as_rvalue_reference() != decltype_<int>(),
                   "hyperion::mpl::Type::as_rvalue_reference test case 3 (failing)");
+
+    static_assert(decltype_<int>().as_pointer() == decltype_<int*>(),
+                  "hyperion::mpl::Type::as_pointer test case 1 (failing)");
+    static_assert(decltype_<const int>().as_pointer() == decltype_<const int*>(),
+                  "hyperion::mpl::Type::as_pointer test case 2 (failing)");
+    static_assert(decltype_<int&>().as_pointer() == decltype_<int*>(),
+                  "hyperion::mpl::Type::as_pointer test case 3 (failing)");
+    static_assert(decltype_<int*>().as_pointer() == decltype_<int**>(),
+                  "hyperion::mpl::Type::as_pointer test case 4 (failing)");
+
+    static_assert(decltype_<int>().remove_lvalue_reference() == decltype_<int>(),
+                  "hyperion::mpl::Type::remove_lvalue_reference test case 1 (failing)");
+    static_assert(decltype_<const int>().remove_lvalue_reference() == decltype_<const int>(),
+                  "hyperion::mpl::Type::remove_lvalue_reference test case 2 (failing)");
+    static_assert(decltype_<int&>().remove_lvalue_reference() == decltype_<int>(),
+                  "hyperion::mpl::Type::remove_lvalue_reference test case 3 (failing)");
+    static_assert(decltype_<const int&>().remove_lvalue_reference() == decltype_<const int>(),
+                  "hyperion::mpl::Type::remove_lvalue_reference test case 4 (failing)");
+    static_assert(decltype_<int&&>().remove_lvalue_reference() == decltype_<int&&>(),
+                  "hyperion::mpl::Type::remove_lvalue_reference test case 5 (failing)");
+    static_assert(decltype_<const int&&>().remove_lvalue_reference() == decltype_<const int&&>(),
+                  "hyperion::mpl::Type::remove_lvalue_reference test case 6 (failing)");
+
+    static_assert(decltype_<int>().remove_rvalue_reference() == decltype_<int>(),
+                  "hyperion::mpl::Type::remove_rvalue_reference test case 1 (failing)");
+    static_assert(decltype_<const int>().remove_rvalue_reference() == decltype_<const int>(),
+                  "hyperion::mpl::Type::remove_rvalue_reference test case 2 (failing)");
+    static_assert(decltype_<int&>().remove_rvalue_reference() == decltype_<int&>(),
+                  "hyperion::mpl::Type::remove_rvalue_reference test case 3 (failing)");
+    static_assert(decltype_<const int&>().remove_rvalue_reference() == decltype_<const int&>(),
+                  "hyperion::mpl::Type::remove_rvalue_reference test case 4 (failing)");
+    static_assert(decltype_<int&&>().remove_rvalue_reference() == decltype_<int>(),
+                  "hyperion::mpl::Type::remove_rvalue_reference test case 5 (failing)");
+    static_assert(decltype_<const int&&>().remove_rvalue_reference() == decltype_<const int>(),
+                  "hyperion::mpl::Type::remove_rvalue_reference test case 6 (failing)");
+
+    static_assert(decltype_<int>().remove_reference() == decltype_<int>(),
+                  "hyperion::mpl::Type::remove_reference  test case 1 (failing)");
+    static_assert(decltype_<const int>().remove_reference() == decltype_<const int>(),
+                  "hyperion::mpl::Type::remove_reference  test case 2 (failing)");
+    static_assert(decltype_<int&>().remove_reference() == decltype_<int>(),
+                  "hyperion::mpl::Type::remove_reference  test case 3 (failing)");
+    static_assert(decltype_<const int&>().remove_reference() == decltype_<const int>(),
+                  "hyperion::mpl::Type::remove_reference  test case 4 (failing)");
+    static_assert(decltype_<int&&>().remove_reference() == decltype_<int>(),
+                  "hyperion::mpl::Type::remove_reference  test case 5 (failing)");
+    static_assert(decltype_<const int&&>().remove_reference() == decltype_<const int>(),
+                  "hyperion::mpl::Type::remove_reference  test case 6 (failing)");
+
+    static_assert(decltype_<int>().remove_const() == decltype_<int>(),
+                  "hyperion::mpl::Type::remove_const  test case 1 (failing)");
+    static_assert(decltype_<const int>().remove_const() == decltype_<int>(),
+                  "hyperion::mpl::Type::remove_const  test case 2 (failing)");
+    static_assert(decltype_<int&>().remove_const() == decltype_<int&>(),
+                  "hyperion::mpl::Type::remove_const  test case 3 (failing)");
+    static_assert(decltype_<const int&>().remove_const() == decltype_<int&>(),
+                  "hyperion::mpl::Type::remove_const  test case 4 (failing)");
+    static_assert(decltype_<int&&>().remove_const() == decltype_<int&&>(),
+                  "hyperion::mpl::Type::remove_const  test case 5 (failing)");
+    static_assert(decltype_<const int&&>().remove_const() == decltype_<int&&>(),
+                  "hyperion::mpl::Type::remove_const  test case 6 (failing)");
+    static_assert(decltype_<const int*>().remove_const() == decltype_<const int*>(),
+                  "hyperion::mpl::Type::remove_const  test case 7 (failing)");
+    static_assert(decltype_<const int* const>().remove_const() == decltype_<const int*>(),
+                  "hyperion::mpl::Type::remove_const  test case 8 (failing)");
+
+    static_assert(decltype_<int>().remove_volatile() == decltype_<int>(),
+                  "hyperion::mpl::Type::remove_volatile  test case 1 (failing)");
+    static_assert(decltype_<volatile int>().remove_volatile() == decltype_<int>(),
+                  "hyperion::mpl::Type::remove_volatile  test case 2 (failing)");
+    static_assert(decltype_<int&>().remove_volatile() == decltype_<int&>(),
+                  "hyperion::mpl::Type::remove_volatile  test case 3 (failing)");
+    static_assert(decltype_<volatile int&>().remove_volatile() == decltype_<int&>(),
+                  "hyperion::mpl::Type::remove_volatile  test case 4 (failing)");
+    static_assert(decltype_<int&&>().remove_volatile() == decltype_<int&&>(),
+                  "hyperion::mpl::Type::remove_volatile  test case 5 (failing)");
+    static_assert(decltype_<volatile int&&>().remove_volatile() == decltype_<int&&>(),
+                  "hyperion::mpl::Type::remove_volatile  test case 6 (failing)");
+    static_assert(decltype_<volatile int*>().remove_volatile() == decltype_<volatile int*>(),
+                  "hyperion::mpl::Type::remove_volatile  test case 7 (failing)");
+    static_assert(decltype_<volatile int* volatile>().remove_volatile()
+                      == decltype_<volatile int*>(),
+                  "hyperion::mpl::Type::remove_volatile  test case 8 (failing)");
+
+    static_assert(decltype_<int>().unqualified() == decltype_<int>(),
+                  "hyperion::mpl::Type::unqualified  test case 1 (failing)");
+    static_assert(decltype_<const int>().unqualified() == decltype_<int>(),
+                  "hyperion::mpl::Type::unqualified  test case 2 (failing)");
+    static_assert(decltype_<int&>().unqualified() == decltype_<int>(),
+                  "hyperion::mpl::Type::unqualified  test case 3 (failing)");
+    static_assert(decltype_<const int&>().unqualified() == decltype_<int>(),
+                  "hyperion::mpl::Type::unqualified  test case 4 (failing)");
+    static_assert(decltype_<int&&>().unqualified() == decltype_<int>(),
+                  "hyperion::mpl::Type::unqualified  test case 5 (failing)");
+    static_assert(decltype_<const int&&>().unqualified() == decltype_<int>(),
+                  "hyperion::mpl::Type::unqualified  test case 6 (failing)");
+    static_assert(decltype_<const int*>().unqualified() == decltype_<const int*>(),
+                  "hyperion::mpl::Type::unqualified  test case 7 (failing)");
+    static_assert(decltype_<const int* const>().unqualified() == decltype_<const int*>(),
+                  "hyperion::mpl::Type::unqualified  test case 8 (failing)");
+    static_assert(decltype_<volatile int>().unqualified() == decltype_<int>(),
+                  "hyperion::mpl::Type::unqualified  test case 9 (failing)");
+    static_assert(decltype_<volatile int&>().unqualified() == decltype_<int>(),
+                  "hyperion::mpl::Type::unqualified  test case 10 (failing)");
+    static_assert(decltype_<volatile int&&>().unqualified() == decltype_<int>(),
+                  "hyperion::mpl::Type::unqualified  test case 11 (failing)");
+    static_assert(decltype_<volatile int*>().unqualified() == decltype_<volatile int*>(),
+                  "hyperion::mpl::Type::unqualified  test case 12 (failing)");
+    static_assert(decltype_<volatile int* volatile>().unqualified() == decltype_<volatile int*>(),
+                  "hyperion::mpl::Type::unqualified  test case 13 (failing)");
 
     struct not_convertible { };
 
@@ -779,6 +928,48 @@ namespace hyperion::mpl::_test::type {
                   "hyperion::mpl::Type::is_trivially_move_assignable test case 4 (failing)");
     static_assert(!decltype_<not_trivially_move_assignable>().is_trivially_move_assignable(),
                   "hyperion::mpl::Type::is_trivially_move_assignable test case 5 (failing)");
+
+    template<typename T>
+    struct assignable_from {
+        auto operator=(T) -> assignable_from& {
+            return *this;
+        }
+    };
+
+    template<typename T>
+    struct noexcept_assignable_from {
+        auto operator=(T) -> noexcept_assignable_from& {
+            return *this;
+        }
+    };
+
+    static_assert(decltype_<assignable_from<int>>().is_assignable_from(decltype_<int>()),
+                  "hyperion::mpl::Type::is_assignable_from test case 1 (failing)");
+    static_assert(
+        decltype_<assignable_from<int>>().is_assignable_from(decltype_<assignable_from<int>>()),
+        "hyperion::mpl::Type::is_assignable_from test case 2 (failing)");
+    static_assert(not decltype_<assignable_from<int>>().is_assignable_from(decltype_<base_type>()),
+                  "hyperion::mpl::Type::is_assignable_from test case 3 (failing)");
+
+    static_assert(decltype_<assignable_from<int>>().is_noexcept_assignable_from(
+                      decltype_<assignable_from<int>>()),
+                  "hyperion::mpl::Type::is_noexcept_assignable_from test case 1 (failing)");
+    static_assert(
+        not decltype_<assignable_from<int>>().is_noexcept_assignable_from(decltype_<int>()),
+        "hyperion::mpl::Type::is_noexcept_assignable_from test case 2 (failing)");
+    static_assert(
+        not decltype_<assignable_from<int>>().is_noexcept_assignable_from(decltype_<base_type>()),
+        "hyperion::mpl::Type::is_noexcept_assignable_from test case 3 (failing)");
+
+    static_assert(decltype_<assignable_from<int>>().is_trivially_assignable_from(
+                      decltype_<assignable_from<int>>()),
+                  "hyperion::mpl::Type::is_trivially_assignable_from test case 1 (failing)");
+    static_assert(
+        not decltype_<assignable_from<int>>().is_trivially_assignable_from(decltype_<int>()),
+        "hyperion::mpl::Type::is_trivially_assignable_from test case 2 (failing)");
+    static_assert(
+        not decltype_<assignable_from<int>>().is_trivially_assignable_from(decltype_<base_type>()),
+        "hyperion::mpl::Type::is_trivially_assignable_from test case 3 (failing)");
 
     // NOLINTNEXTLINE(*-special-member-functions)
     struct not_destructible {

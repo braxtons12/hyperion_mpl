@@ -28,6 +28,7 @@
 #ifndef HYPERION_MPL_TYPE_H
 #define HYPERION_MPL_TYPE_H
 
+
 #include <hyperion/platform/def.h>
 #include <hyperion/platform/types.h>
 //
@@ -484,6 +485,42 @@ namespace hyperion::mpl {
             return {};
         }
 
+        /// @brief Returns whether the `type` of `this` `Type` specialization is a reference
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto intref_t = decltype_<int&>();
+        /// constexpr auto intrefref_t = decltype_<int&&>();
+        ///
+        /// static_assert(not int_t.is_reference());
+        /// static_assert(intref_t.is_reference());
+        /// static_assert(intrefref_t.is_reference());
+        /// @endcode
+        ///
+        /// @return Whether the `type` of `this` is a reference
+        [[nodiscard]] constexpr auto
+        is_reference() const noexcept -> Value<std::is_reference_v<type>, bool> {
+            return {};
+        }
+
+        /// @brief Returns whether the `type` of `this` `Type` specialization is a pointer
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// contexpr auto int_t = decltype_<int>();
+        /// constexpr auto int_ptr_t = decltype_<int*>();
+        ///
+        /// static_assert(not int_t.is_pointer());
+        /// static_asser(int_ptr_t.is_pointer());
+        /// @endcode
+        ///
+        /// @return Whether the `type` of `this` is a pointer
+        [[nodiscard]] constexpr auto
+        is_pointer() const noexcept -> Value<std::is_pointer_v<type>, bool> {
+            return {};
+        }
+
         /// @brief Returns whether the `type` of `this` `Type` specialization is `volatile`
         ///
         /// # Example
@@ -498,6 +535,49 @@ namespace hyperion::mpl {
         /// @return Whether the `type` of `this` is `volatile`
         [[nodiscard]] constexpr auto is_volatile() const noexcept
             -> Value<std::is_volatile_v<std::remove_reference_t<type>>, bool> {
+            return {};
+        }
+
+        /// @brief Returns whether the `type` of `this` `Type` specialization is empty
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct empty {};
+        /// constexpr auto yes = decltype_<empty>();
+        /// constexpr auto no = decltype_<int>();
+        ///
+        /// static_assert(yes.is_empty());
+        /// static_assert(not no.is_empty());
+        /// @endcode
+        ///
+        /// @return Whether the `type` of `this` is empty
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
+        [[nodiscard]] constexpr auto
+        is_empty() const noexcept -> Value<std::is_empty_v<TDelay>, bool> {
+            return {};
+        }
+
+        /// @brief Returns whether the `type` of `this` `Type` specialization is trivial
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct trivial {};
+        /// struct not_trivial {
+        ///     not_trivial(const not_trivial&);
+        /// }
+        /// constexpr auto yes = decltype_<trivial>();
+        /// constexpr auto no = decltype_<not_trivial>();
+        ///
+        /// static_assert(yes.is_trivial());
+        /// static_assert(not no.is_trivial());
+        /// @endcode
+        ///
+        /// @return Whether the `type` of `this` is trivial
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
+        [[nodiscard]] constexpr auto
+        is_trivial() const noexcept -> Value<std::is_trivial_v<TDelay>, bool> {
             return {};
         }
 
@@ -568,7 +648,7 @@ namespace hyperion::mpl {
         /// version of the type `this` specialization represents.
         ///
         /// The application of rvalue reference _does not_ follow the same application as other
-        /// mechanisms, like `std::add_rvalue_reference`,  That is, where
+        /// mechanisms, like `std::add_rvalue_reference`.  That is, where
         /// `std::add_rvalue_reference<int&>` would yield `int&`,
         /// `decltype_<int&>().as_rvalue_reference()` will yield `Type<int&&>`.
         ///
@@ -592,6 +672,30 @@ namespace hyperion::mpl {
             else {
                 return Type<std::add_rvalue_reference_t<base_type>>{};
             }
+        }
+
+        /// @brief Returns a `Type` specialization representing a poitner to the type `this`
+        /// specialization represents.
+        ///
+        /// The application of pointer follows the same application as other mechanisms,
+        /// such as `std::add_pointer`. That is, when `type` is a reference type, this strips the
+        /// the reference and returns a pointer to the referred-to type.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto int_ref_t = decltype_<int&>();
+        ///
+        /// static_assert(int_t.as_pointer() == decltype_<int*>());
+        /// static_assert(int_ref_t.as_pointer() == decltype_<int*>());
+        /// @endcode
+        ///
+        /// @return the `Type` specialization representing `type*`
+        template<typename TDelay = type>
+            requires std::same_as<TDelay, type>
+        [[nodiscard]] constexpr auto as_pointer() const noexcept {
+            using base_type = std::remove_reference_t<TDelay>;
+            return Type<std::add_pointer_t<base_type>>{};
         }
 
         /// @brief Returns a `Type` specialization representing the `volatile`-qualified version of
@@ -626,6 +730,189 @@ namespace hyperion::mpl {
             else {
                 return Type<volatilified>{};
             }
+        }
+
+        /// @brief Returns a `Type` specialization representing the non-lvalue reference qualified
+        /// version of the type `this` specialization represents.
+        ///
+        /// That is, if the type `this` specialization represents is lvalue reference qualified,
+        /// this returns a `Type` specialization representing the referred-to type. If the type
+        /// `this` specialization represents is _not_ lvalue reference qualified, returns the same
+        /// specialization as `this`.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto int_ref_t = decltype_<int&>();
+        /// constexpr auto int_refref_t = decltype_<int&&>();
+        ///
+        /// static_assert(int_t.remove_lvalue_reference() == decltype_<int>());
+        /// static_assert(int_ref_t.remove_lvalue_reference() = decltype_<int>());
+        /// static_assert(int_refref_t.remove_lvalue_reference() == decltype_<int&&>());
+        /// @endcode
+        ///
+        /// @return the `Type` specialization representing the non-lvalue reference qualified `type`
+        [[nodiscard]] constexpr auto remove_lvalue_reference() const noexcept {
+            if constexpr(Type<type>{}.is_lvalue_reference()) {
+                return Type<std::remove_reference_t<type>>{};
+            }
+            else {
+                return *this;
+            }
+        }
+
+        /// @brief Returns a `Type` specialization representing the non-rvalue reference qualified
+        /// version of the type `this` specialization represents.
+        ///
+        /// That is, if the type `this` specialization represents is rvalue reference qualified,
+        /// this returns a `Type` specialization representing the referred-to type. If the type
+        /// `this` specialization represents is _not_ rvalue reference qualified, returns the same
+        /// specialization as `this`.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto int_ref_t = decltype_<int&>();
+        /// constexpr auto int_refref_t = decltype_<int&&>();
+        ///
+        /// static_assert(int_t.remove_rvalue_reference() == decltype_<int>());
+        /// static_assert(int_ref_t.remove_rvalue_reference() = decltype_<int&>());
+        /// static_assert(int_refref_t.remove_rvalue_reference() == decltype_<int>());
+        /// @endcode
+        ///
+        /// @return the `Type` specialization representing the non-rvalue reference qualified `type`
+        [[nodiscard]] constexpr auto remove_rvalue_reference() const noexcept {
+            if constexpr(Type<type>{}.is_rvalue_reference()) {
+                return Type<std::remove_reference_t<type>>{};
+            }
+            else {
+                return *this;
+            }
+        }
+
+        /// @brief Returns a `Type` specialization representing the non-reference qualified
+        /// version of the type `this` specialization represents.
+        ///
+        /// That is, if the type `this` specialization represents is reference qualified,
+        /// this returns a `Type` specialization representing the referred-to type. If the type
+        /// `this` specialization represents is _not_ reference qualified, returns the same
+        /// specialization as `this`.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto int_ref_t = decltype_<int&>();
+        /// constexpr auto int_refref_t = decltype_<int&&>();
+        ///
+        /// static_assert(int_t.remove_reference() == decltype_<int>());
+        /// static_assert(int_ref_t.remove_reference() = decltype_<int>());
+        /// static_assert(int_refref_t.remove_reference() == decltype_<int>());
+        /// @endcode
+        ///
+        /// @return the `Type` specialization representing the non-reference qualified `type`
+        [[nodiscard]] constexpr auto remove_reference() const noexcept {
+            if constexpr(Type<type>{}.is_reference()) {
+                return Type<std::remove_reference_t<type>>{};
+            }
+            else {
+                return *this;
+            }
+        }
+
+        /// @brief Returns a `Type` specialization representing the non-const qualified
+        /// version of the type `this` specialization represents.
+        ///
+        /// If the type `this` specialization represents is reference-qualified, removes const
+        /// qualification from the referred-to type, if any. Otherwise, removes const qualifiication
+        /// from the type `this` specialization represents.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto const_int_t = decltype_<const int>();
+        /// constexpr auto const_int_ref_t = decltype_<const int&>();
+        ///
+        /// static_assert(int_t.remove_const() == decltype_<int>());
+        /// static_assert(const_int_t.remove_const() = decltype_<int>());
+        /// static_assert(const_int_ref_t.remove_const() == decltype_<int&>());
+        /// @endcode
+        ///
+        /// @return the `Type` specialization representing the non-const qualified `type`
+        [[nodiscard]] constexpr auto remove_const() const noexcept {
+            constexpr auto self = Type<type>{};
+            if constexpr(self.is_const() && self.is_lvalue_reference()) {
+                using unref_t = std::remove_reference_t<type>;
+                using unconst_t = std::remove_const_t<unref_t>;
+                return Type<std::add_lvalue_reference_t<unconst_t>>{};
+            }
+            else if constexpr(self.is_const() && self.is_rvalue_reference()) {
+                using unref_t = std::remove_reference_t<type>;
+                using unconst_t = std::remove_const_t<unref_t>;
+                return Type<std::add_rvalue_reference_t<unconst_t>>{};
+            }
+            else {
+                return Type<std::remove_const_t<type>>{};
+            }
+        }
+
+        /// @brief Returns a `Type` specialization representing the non-volatile qualified
+        /// version of the type `this` specialization represents.
+        ///
+        /// If the type `this` specialization represents is reference-qualified, removes volatile
+        /// qualification from the referred-to type, if any. Otherwise, removes volatile
+        /// qualifiication from the type `this` specialization represents.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto volatile_int_t = decltype_<volatile int>();
+        /// constexpr auto volatile_int_ref_t = decltype_<volatile int&>();
+        ///
+        /// static_assert(int_t.remove_volatile() == decltype_<int>());
+        /// static_assert(volatile_int_t.remove_volatile() = decltype_<int>());
+        /// static_assert(volatile_int_ref_t.remove_volatile() == decltype_<int&>());
+        /// @endcode
+        ///
+        /// @return the `Type` specialization representing the non-volatile qualified `type`
+        [[nodiscard]] constexpr auto remove_volatile() const noexcept {
+            constexpr auto self = Type<type>{};
+            if constexpr(self.is_volatile() && self.is_lvalue_reference()) {
+                using unref_t = std::remove_reference_t<type>;
+                using unvolatile_t = std::remove_volatile_t<unref_t>;
+                return Type<std::add_lvalue_reference_t<unvolatile_t>>{};
+            }
+            else if constexpr(self.is_volatile() && self.is_rvalue_reference()) {
+                using unref_t = std::remove_reference_t<type>;
+                using unvolatile_t = std::remove_volatile_t<unref_t>;
+                return Type<std::add_rvalue_reference_t<unvolatile_t>>{};
+            }
+            else {
+                return Type<std::remove_volatile_t<type>>{};
+            }
+        }
+
+        /// @brief Returns a `Type` specialization representing the unqualified
+        /// version of the type `this` specialization represents.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto const_int_t = decltype_<const int>();
+        /// constexpr auto const_int_ref_t = decltype_<volatile int&>();
+        /// constexpr auto volatile_int_t = decltype_<volatile int>();
+        /// constexpr auto volatile_int_ref_t = decltype_<volatile int&>();
+        ///
+        /// static_assert(int_t.unqualified() == decltype_<int>());
+        /// static_assert(const_int_t.unqualified() == decltype_<int>());
+        /// static_assert(const_int_ref_t.unqualified() == decltype_<int>());
+        /// static_assert(volatile_int_t.unqualified() = decltype_<int>());
+        /// static_assert(volatile_int_ref_t.unqualified() == decltype_<int>());
+        /// @endcode
+        ///
+        /// @return the `Type` specialization representing the non-volatile qualified `type`
+        [[nodiscard]] constexpr auto
+        unqualified() const noexcept -> Type<std::remove_cvref_t<type>> {
+            return Type<std::remove_cvref_t<type>>{};
         }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is convertible
@@ -1312,6 +1599,149 @@ namespace hyperion::mpl {
         /// `Value` specialization
         [[nodiscard]] constexpr auto is_trivially_move_assignable() const noexcept {
             return Value<std::is_trivially_move_assignable_v<type>, bool>{};
+        }
+
+        /// @brief Returns whether a variable of the type `type` of `this` `Type` specialization
+        /// is assignable from a value of the `type` of the given one, as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct assignable {
+        ///     auto operator=(int) -> assignable&;
+        /// };
+        /// struct trivially_assignable {
+        ///     auto operator=(int) -> trivially_assignable& = default;
+        /// };
+        /// struct not_assignable {
+        /// };
+        ///
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto assignable_t = decltype_<assignable>();
+        /// constexpr auto trivially_assignable_t = decltype_<trivially_assignable>();
+        /// constexpr auto not_assignable_t = decltype_<not_assignable>();
+        ///
+        /// static_assert(int_t.is_assignable_from(decltype_<int>()));
+        /// static_assert(assignable_t.is_assignable_from(decltype_<int>()));
+        /// static_assert(trivially_assignable_t.is_assignable_from(decltype_<int>()));
+        /// static_assert(not not_assignable_.is_assignable_from(decltype_<int>()));
+        /// @endcode
+        ///
+        /// @tparam TRhs The `type` of the `Type` specialization of `rhs`
+        /// @param rhs The `Type` specialization to compare to
+        /// @return Whether a variable of the `type` of `this` is assignable from the `type` of rhs
+        template<typename TRhs>
+        [[nodiscard]] constexpr auto
+        is_assignable_from([[maybe_unused]] const Type<TRhs>& rhs) const noexcept {
+            // clang-format off
+            return Value<
+                std::is_assignable_v<
+                    std::conditional_t<
+                        std::is_reference_v<type>,
+                        type,
+                        std::add_lvalue_reference_t<type>
+                    >,
+                    TRhs
+                >,
+                bool
+            >{};
+            // clang-format on
+        }
+
+        /// @brief Returns whether a variable of the type `type` of `this` `Type` specialization
+        /// is noexcept assignable from a value of the `type` of the given one,
+        /// as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct assignable {
+        ///     auto operator=(int) -> assignable&;
+        /// };
+        /// struct noexcept_assignable {
+        ///     auto operator=(int) noexcept -> noexcept_assignable&;
+        /// };
+        /// struct not_assignable {
+        /// };
+        ///
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto assignable_t = decltype_<assignable>();
+        /// constexpr auto noexcept_assignable_t = decltype_<noexcept_assignable>();
+        /// constexpr auto not_assignable_t = decltype_<not_assignable>();
+        ///
+        /// static_assert(int_t.is_noexcept_assignable_from(decltype_<int>()));
+        /// static_assert(not assignable_t.is_noexcept_assignable_from(decltype_<int>()));
+        /// static_assert(noexcept_assignable_t.is_noexcept_assignable_from(decltype_<int>()));
+        /// static_assert(not not_assignable_.is_noexcept_assignable_from(decltype_<int>()));
+        /// @endcode
+        ///
+        /// @tparam TRhs The `type` of the `Type` specialization of `rhs`
+        /// @param rhs The `Type` specialization to compare to
+        /// @return Whether a variable of the `type` of `this` is noexcept assignable
+        /// from the `type` of rhs
+        template<typename TRhs>
+        [[nodiscard]] constexpr auto
+        is_noexcept_assignable_from([[maybe_unused]] const Type<TRhs>& rhs) const noexcept {
+            // clang-format off
+            return Value<
+                std::is_nothrow_assignable_v<
+                    std::conditional_t<
+                        std::is_reference_v<type>,
+                        type,
+                        std::add_lvalue_reference_t<type>
+                    >,
+                    TRhs
+                >,
+                bool
+            >{};
+            // clang-format on
+        }
+
+        /// @brief Returns whether a variable of the type `type` of `this` `Type` specialization
+        /// is trivially assignable from a value of the `type` of the given one,
+        /// as a `Value` specialization.
+        ///
+        /// # Example
+        /// @code {.cpp}
+        /// struct assignable {
+        ///     auto operator=(int) -> assignable&;
+        /// };
+        /// struct trivially_assignable {
+        ///     auto operator=(const trivially_assignable&) noexcept
+        ///         -> trivially_assignable& = default;
+        /// };
+        /// struct trivial {
+        /// };
+        ///
+        /// constexpr auto int_t = decltype_<int>();
+        /// constexpr auto assignable_t = decltype_<assignable>();
+        /// constexpr auto trivially_assignable_t = decltype_<trivially_assignable>();
+        /// constexpr auto trivial_t = decltype_<trivial>();
+        ///
+        /// static_assert(int_t.is_trivially_assignable_from(decltype_<int>()));
+        /// static_assert(not assignable_t.is_trivially_assignable_from(decltype_<int>()));
+        /// static_assert(trivially_assignable_t.is_trivially_assignable_from(decltype_<trivially_assignable>()));
+        /// static_assert(trivial_t.is_trivially_assignable_from(decltype_<trivial>()));
+        /// @endcode
+        ///
+        /// @tparam TRhs The `type` of the `Type` specialization of `rhs`
+        /// @param rhs The `Type` specialization to compare to
+        /// @return Whether a variable of the `type` of `this` is trivially assignable
+        /// from the `type` of rhs
+        template<typename TRhs>
+        [[nodiscard]] constexpr auto
+        is_trivially_assignable_from([[maybe_unused]] const Type<TRhs>& rhs) const noexcept {
+            // clang-format off
+            return Value<
+                std::is_trivially_assignable_v<
+                    std::conditional_t<
+                        std::is_reference_v<type>,
+                        type,
+                        std::add_lvalue_reference_t<type>
+                    >,
+                    TRhs
+                >,
+                bool
+            >{};
+            // clang-format on
         }
 
         /// @brief Returns whether the type `this` `Type` specialization represents is
