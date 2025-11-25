@@ -568,9 +568,9 @@
 <dt class="sig sig-object cpp">
 <span class="target" id="group__metatypes"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">Metaprogramming</span> <span class="pre">Type</span> <span class="pre">Requirements</span></span></dt>
 <dd><p>Hyperion provides <code class="docutils literal notranslate"><span class="pre">concept</span></code> and type trait definitions outlining the requirements for various categories of metaprogramming types.</p>
-<section id="group__metatypes_1autotoc_md159">
-<h2>Example<a class="headerlink" href="#group__metatypes_1autotoc_md159" title="Link to this heading">#</a></h2>
-<div class="highlight-cpp notranslate" id="group__metatypes_1autotoc_md159"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/mpl/metatypes.h&gt;</span>
+<section id="group__metatypes_1autotoc_md173">
+<h2>Example<a class="headerlink" href="#group__metatypes_1autotoc_md173" title="Link to this heading">#</a></h2>
+<div class="highlight-cpp notranslate" id="group__metatypes_1autotoc_md173"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/mpl/metatypes.h&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/mpl/value.h&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;hyperion/mpl/type.h&gt;</span>
 
@@ -648,9 +648,9 @@
 <span id="_CPPv3I00E13meta_result_t"></span><span id="_CPPv2I00E13meta_result_t"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TFunction</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="group__metatypes_1ga39dc36a98c81c3448ee3df72bda9b45b"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">meta_result_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00E11meta_result" title="meta_result"><span class="n"><span class="pre">meta_result</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00E13meta_result_t" title="meta_result_t::TFunction"><span class="n"><span class="pre">TFunction</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00E13meta_result_t" title="meta_result_t::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type</span></span><a class="headerlink" href="#_CPPv4I00E13meta_result_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Shorthand alias to the member using alias type, <code class="docutils literal notranslate"><span class="pre">type</span></code>, of the type trait <code class="docutils literal notranslate"><a class="reference internal" href="#structmeta__result"><span class="std std-ref"><span class="pre">meta_result</span></span></a></code>. Represents the invoke result of a callable metafunction, <code class="docutils literal notranslate"><span class="pre">TFunction</span></code>, with a metaprogramming type, <code class="docutils literal notranslate"><span class="pre">TType</span></code></p>
 <p>If <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> is a <code class="docutils literal notranslate"><span class="pre">MetaFunctionOf</span><span class="pre">&lt;TType&gt;</span></code>, using aliases to the resulting type of invoking a <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> with a <code class="docutils literal notranslate"><span class="pre">TType</span></code>. If <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> is not a <code class="docutils literal notranslate"><span class="pre">MetaFunctionOf</span><span class="pre">&lt;TType&gt;</span></code>, the program is ill-formed.</p>
-<section id="group__metatypes_1autotoc_md161">
-<h2>Requirements<a class="headerlink" href="#group__metatypes_1autotoc_md161" title="Link to this heading">#</a></h2>
-<p id="group__metatypes_1autotoc_md161"><ul class="simple">
+<section id="group__metatypes_1autotoc_md175">
+<h2>Requirements<a class="headerlink" href="#group__metatypes_1autotoc_md175" title="Link to this heading">#</a></h2>
+<p id="group__metatypes_1autotoc_md175"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TFunction</span></code> must be a <code class="docutils literal notranslate"><span class="pre">MetaFunctionOf</span><span class="pre">&lt;TType&gt;</span></code><ul>
 <li><p>It must be a callable invocable with <code class="docutils literal notranslate"><span class="pre">TType</span></code></p></li>
 <li><p>The result of invoking <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> with <code class="docutils literal notranslate"><span class="pre">TType</span></code> must be either a <code class="docutils literal notranslate"><span class="pre">MetaType</span></code> or a <code class="docutils literal notranslate"><span class="pre">MetaValue</span></code></p></li>
@@ -690,9 +690,9 @@
 <span id="_CPPv3I0E14is_meta_type_v"></span><span id="_CPPv2I0E14is_meta_type_v"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="group__metatypes_1gacfb0accbe86aff99af93542f465521c7"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_meta_type_v</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">is_meta_type</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E14is_meta_type_v" title="is_meta_type_v::TType"><span class="n"><span class="pre">TType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><a class="headerlink" href="#_CPPv4I0E14is_meta_type_v" title="Link to this definition">#</a><br /></dt>
 <dd><p><a class="reference internal" href="value.html#structhyperion_1_1mpl_1_1Value"><span class="std std-ref">Value</span></a> of the type trait <code class="docutils literal notranslate"><a class="reference internal" href="#structhyperion_1_1mpl_1_1is__meta__type"><span class="std std-ref"><span class="pre">is_meta_type</span></span></a></code>. Used to determine whether type <code class="docutils literal notranslate"><span class="pre">TType</span></code> is a metaprogramming type wrapper type. </p>
 <p>A metaprogramming type wrapper type is any type that represents another type, via a member using alias type <code class="docutils literal notranslate"><span class="pre">type</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">bool;</span></code>).</p>
-<section id="group__metatypes_1autotoc_md165">
-<h2>Requirements<a class="headerlink" href="#group__metatypes_1autotoc_md165" title="Link to this heading">#</a></h2>
-<p id="group__metatypes_1autotoc_md165"><ul class="simple">
+<section id="group__metatypes_1autotoc_md179">
+<h2>Requirements<a class="headerlink" href="#group__metatypes_1autotoc_md179" title="Link to this heading">#</a></h2>
+<p id="group__metatypes_1autotoc_md179"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must have a member using alias type <code class="docutils literal notranslate"><span class="pre">type</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">bool;</span></code>).</p></li>
 </ul>
 </p>
@@ -744,9 +744,9 @@
 <em>#include &lt;hyperion/mpl/metatypes.h&gt;</em></div>
 <p><a class="reference internal" href="type.html#structhyperion_1_1mpl_1_1Type"><span class="std std-ref">Type</span></a> trait to determine whether type <code class="docutils literal notranslate"><span class="pre">TType</span></code> is a metaprogramming type wrapper type. </p>
 <p>A metaprogramming type wrapper type is any type that represents another type, via a member using alias type <code class="docutils literal notranslate"><span class="pre">type</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">bool;</span></code>).</p>
-<section id="structhyperion_1_1mpl_1_1is__meta__type_1autotoc_md164">
-<h2>Requirements<a class="headerlink" href="#structhyperion_1_1mpl_1_1is__meta__type_1autotoc_md164" title="Link to this heading">#</a></h2>
-<p id="structhyperion_1_1mpl_1_1is__meta__type_1autotoc_md164"><ul class="simple">
+<section id="structhyperion_1_1mpl_1_1is__meta__type_1autotoc_md178">
+<h2>Requirements<a class="headerlink" href="#structhyperion_1_1mpl_1_1is__meta__type_1autotoc_md178" title="Link to this heading">#</a></h2>
+<p id="structhyperion_1_1mpl_1_1is__meta__type_1autotoc_md178"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must have a member using alias type <code class="docutils literal notranslate"><span class="pre">type</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">bool;</span></code>).</p></li>
 </ul>
 </p>
@@ -785,9 +785,9 @@
 <em>#include &lt;hyperion/mpl/metatypes.h&gt;</em></div>
 <p><code class="docutils literal notranslate"><a class="reference internal" href="#structmeta__result"><span class="std std-ref"><span class="pre">meta_result</span></span></a></code> is a type trait representing the invoke result of a callable metafunction, <code class="docutils literal notranslate"><span class="pre">TFunction</span></code>, with a metaprogramming type, <code class="docutils literal notranslate"><span class="pre">TType</span></code></p>
 <p>If <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> is a <code class="docutils literal notranslate"><span class="pre">MetaFunctionOf</span><span class="pre">&lt;TType&gt;</span></code>, contains the member using alias type, <code class="docutils literal notranslate"><span class="pre">type</span></code>, that is the resulting type of invoking a <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> with a <code class="docutils literal notranslate"><span class="pre">TType</span></code>. If <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> is not a <code class="docutils literal notranslate"><span class="pre">MetaFunctionOf</span><span class="pre">&lt;TType&gt;</span></code>, the program is ill-formed.</p>
-<section id="structmeta__result_1autotoc_md160">
-<h2>Requirements<a class="headerlink" href="#structmeta__result_1autotoc_md160" title="Link to this heading">#</a></h2>
-<p id="structmeta__result_1autotoc_md160"><ul class="simple">
+<section id="structmeta__result_1autotoc_md174">
+<h2>Requirements<a class="headerlink" href="#structmeta__result_1autotoc_md174" title="Link to this heading">#</a></h2>
+<p id="structmeta__result_1autotoc_md174"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TFunction</span></code> must be a <code class="docutils literal notranslate"><span class="pre">MetaFunctionOf</span><span class="pre">&lt;TType&gt;</span></code><ul>
 <li><p>It must be a callable invocable with <code class="docutils literal notranslate"><span class="pre">TType</span></code></p></li>
 <li><p>The result of invoking <code class="docutils literal notranslate"><span class="pre">TFunction</span></code> with <code class="docutils literal notranslate"><span class="pre">TType</span></code> must be either a <code class="docutils literal notranslate"><span class="pre">MetaType</span></code> or a <code class="docutils literal notranslate"><span class="pre">MetaValue</span></code></p></li>
@@ -816,9 +816,9 @@
 <em>#include &lt;hyperion/mpl/metatypes.h&gt;</em></div>
 <p>Concept specifying the requirements for a metaprogramming value type. </p>
 <p>A metaprogramming value type is any type that has a <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">constexpr</span></code> member variable named <code class="docutils literal notranslate"><span class="pre">value</span></code>.</p>
-<section id="concepthyperion_1_1mpl_1_1MetaValue_1autotoc_md162">
-<h2>Requirements<a class="headerlink" href="#concepthyperion_1_1mpl_1_1MetaValue_1autotoc_md162" title="Link to this heading">#</a></h2>
-<p id="concepthyperion_1_1mpl_1_1MetaValue_1autotoc_md162"><ul class="simple">
+<section id="concepthyperion_1_1mpl_1_1MetaValue_1autotoc_md176">
+<h2>Requirements<a class="headerlink" href="#concepthyperion_1_1mpl_1_1MetaValue_1autotoc_md176" title="Link to this heading">#</a></h2>
+<p id="concepthyperion_1_1mpl_1_1MetaValue_1autotoc_md176"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must have a <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">constexpr</span></code> member variable named <code class="docutils literal notranslate"><span class="pre">value</span></code>.</p></li>
 </ul>
 </p>
@@ -838,9 +838,9 @@
 <em>#include &lt;hyperion/mpl/metatypes.h&gt;</em></div>
 <p>Concept specifying the requirements for a metaprogramming type wrapper type. </p>
 <p>A metaprogramming type wrapper type is any type that represents another type, via a member using alias type <code class="docutils literal notranslate"><span class="pre">type</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">bool;</span></code>).</p>
-<section id="concepthyperion_1_1mpl_1_1MetaType_1autotoc_md163">
-<h2>Requirements<a class="headerlink" href="#concepthyperion_1_1mpl_1_1MetaType_1autotoc_md163" title="Link to this heading">#</a></h2>
-<p id="concepthyperion_1_1mpl_1_1MetaType_1autotoc_md163"><ul class="simple">
+<section id="concepthyperion_1_1mpl_1_1MetaType_1autotoc_md177">
+<h2>Requirements<a class="headerlink" href="#concepthyperion_1_1mpl_1_1MetaType_1autotoc_md177" title="Link to this heading">#</a></h2>
+<p id="concepthyperion_1_1mpl_1_1MetaType_1autotoc_md177"><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TType</span></code> must have a member using alias type <code class="docutils literal notranslate"><span class="pre">type</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">bool;</span></code>).</p></li>
 </ul>
 </p>
