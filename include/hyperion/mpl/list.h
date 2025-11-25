@@ -1,8 +1,8 @@
 /// @file list.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Meta-programming facilities for working with a list of types or values
-/// @version 0.8.1
-/// @date 2025-07-08
+/// @version 0.8.2
+/// @date 2025-11-24
 ///
 /// MIT License
 /// @copyright Copyright (c) 2025 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -511,8 +511,8 @@ namespace hyperion::mpl {
             requires(std::invocable<TVisitor, as_meta<TTypes>> && ...)
                     && (std::same_as<std::invoke_result_t<TVisitor, as_meta<TTypes>>, void> && ...)
                     && (TCount::value <= sizeof...(TTypes))
-        constexpr auto for_each_n(TVisitor&& vis, [[maybe_unused]] TCount count) const noexcept
-            -> void {
+        constexpr auto
+        for_each_n(TVisitor&& vis, [[maybe_unused]] TCount count) const noexcept -> void {
             return typename detail::
                 pop_back_base<List, std::make_index_sequence<TCount::value>, TTypes...>::remaining{}
                     .for_each(std::forward<TVisitor>(vis));
@@ -1847,6 +1847,8 @@ namespace hyperion::mpl {
             usize m_size = 0_usize;
         };
 
+        // clang-format off
+
         /// @brief Return a range of size `end - begin`,
         /// starting at `begin` and incrementing for each successive element,
         /// until the size is reached.
@@ -1854,10 +1856,18 @@ namespace hyperion::mpl {
         /// @param begin The initial value
         /// @param end The one-after-the-end value
         /// @return a range of values from `begin` to `end`
-        constexpr auto iota(MetaValue auto begin, MetaValue auto end) noexcept {
-            std::array<std::remove_cvref_t<decltype(decltype(begin)::value)>,
-                       decltype(end)::value - decltype(begin)::value>
+        constexpr auto iota(MetaValue auto begin, MetaValue auto end) noexcept
+#if !HYPERION_PLATFORM_COMPILER_IS_MSVC
+            -> std::array<std::remove_cvref_t<decltype(decltype(begin)::value)>,
+                          decltype(end)::value - decltype(begin)::value>
+#endif // !HYPERION_PLATFORM_COMPILER_IS_MSVC
+        {
+            std::array<
+                std::remove_cvref_t<decltype(decltype(begin)::value)>,
+                decltype(end)::value - decltype(begin)::value
+            >
                 range{};
+            //clang-format on
             auto curr = decltype(begin)::value;
             for(auto& elem : range) {
                 elem = curr++;
@@ -1870,7 +1880,11 @@ namespace hyperion::mpl {
         /// @return a `static_vector<TType, TCapacity>` containing the elements
         /// of the `range`
         template<typename TType, usize TCapacity>
-        constexpr auto to_vector(auto&& range) noexcept {
+        constexpr auto to_vector(auto&& range) noexcept
+#if !HYPERION_PLATFORM_COMPILER_IS_MSVC
+            -> static_vector<TType, TCapacity>
+#endif // !HYPERION_PLATFORM_COMPILER_IS_MSVC
+        {
             static_vector<TType, TCapacity> arr{};
             for(const auto& elem : range) {
                 arr.push_back(elem);

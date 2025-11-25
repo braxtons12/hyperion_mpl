@@ -1,8 +1,8 @@
 /// @file metapredicates.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Callable definitions for common metaprogramming predicates
-/// @version 0.1.3
-/// @date 2025-07-08
+/// @version 0.2.0
+/// @date 2025-11-24
 ///
 /// MIT License
 /// @copyright Copyright (c) 2025 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -26,16 +26,13 @@
 /// SOFTWARE.
 
 #ifndef HYPERION_MPL_METAPREDICATES_H
-    #define HYPERION_MPL_METAPREDICATES_H
+#define HYPERION_MPL_METAPREDICATES_H
 
 #include <hyperion/platform/def.h>
 //
 #include <hyperion/mpl/metatypes.h>
 #include <hyperion/mpl/type.h>
 #include <hyperion/mpl/value.h>
-
-#include <concepts>
-#include <type_traits>
 
 /// @ingroup mpl
 /// @{
@@ -139,9 +136,9 @@ namespace hyperion::mpl {
                          || (MetaType<decltype(element)> && MetaType<decltype(value)>)
                          || (MetaPair<decltype(element)> && MetaPair<decltype(value)>))
             {
-                return Value < detail::convert_to_meta_t<decltype(element)>{}
-                           == detail::convert_to_meta_t<decltype(value)>{},
-                       bool > {};
+                return Value<detail::convert_to_meta_t<decltype(element)>{}
+                                 == detail::convert_to_meta_t<decltype(value)>{},
+                             bool>{};
             }
             else {
                 return Value<false>{};
@@ -417,7 +414,7 @@ namespace hyperion::mpl {
         };
     }
 
-HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
+    HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
 
     /// @brief Metaprogramming predicate object used to query whether a
     /// `MetaType` argument represents a type that is `const` qualified.
@@ -506,6 +503,64 @@ HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
     };
 
     /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is reference qualified.
+    ///
+    /// Determines whether the represented type is reference qualified as
+    /// if by `decltype_(type).is_reference()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// constexpr auto example1 = decltype_<const int&&>{};
+    /// constexpr auto example2 = decltype_<int&>{};
+    /// constexpr auto example3 = decltype_<int>{};
+    ///
+    /// static_assert(example1.satisfies(is_reference));
+    /// static_assert(example2.satisfies(is_reference));
+    /// static_assert(not example3.satisfies(is_reference));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is a reference
+    /// @return whether the type represented by `type` is a reference
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
+    constexpr auto is_reference = [](MetaType auto type) noexcept {
+        return decltype_(type).is_reference();
+    };
+
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is a pointer.
+    ///
+    /// Determines whether the represented type is a pointer as
+    /// if by `decltype_(type).is_pointer()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// constexpr auto example1 = decltype_<const int&&>{};
+    /// constexpr auto example2 = decltype_<int*>{};
+    /// constexpr auto example3 = decltype_<const int*>{};
+    /// constexpr auto example4 = decltype_<int>{};
+    ///
+    /// static_assert(not example1.satisfies(is_pointer));
+    /// static_assert(example2.satisfies(is_pointer));
+    /// static_assert(example3.satisfies(is_pointer));
+    /// static_assert(not example4.satisfies(is_poitner));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is a pointer
+    /// @return whether the type represented by `type` is a pointer
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
+    constexpr auto is_pointer = [](MetaType auto type) noexcept {
+        return decltype_(type).is_pointer();
+    };
+
+    /// @brief Metaprogramming predicate object used to query whether a
     /// `MetaType` argument represents a type that is `volatile` qualified.
     ///
     /// Determines whether the represented type is `volatile` as if by
@@ -533,7 +588,59 @@ HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
         return decltype_(type).is_volatile();
     };
 
-HYPERION_IGNORE_DOCUMENTATION_WARNING_STOP;
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is empty.
+    ///
+    /// Determines whether the represented type is empty as if by
+    /// `decltype_(type).is_empty()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct empty {};
+    /// static_assert(decltype_<empty>().satisfies(is_empty));
+    /// static_assert(not decltype_<int>().satisfies(is_empty));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is empty
+    /// @return whether the type represented by `type` is empty
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
+    constexpr auto is_empty = [](MetaType auto type) noexcept {
+        return decltype_(type).is_empty();
+    };
+
+    /// @brief Metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is trivial.
+    ///
+    /// Determines whether the represented type is trivial as if by
+    /// `decltype_(type).is_trivial()`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct trivial {};
+    /// struct not_trivial {
+    ///     not_trivial(const not_trivial&);
+    /// }
+    /// static_assert(decltype_<trivial>().satisfies(is_trivial));
+    /// static_assert(decltype_<int>().satisfies(is_trivial));
+    /// static_assert(not decltype_<not_trivial>().satisfies(is_trivial));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check that is trivial
+    /// @return whether the type represented by `type` is trivial
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
+    constexpr auto is_trivial = [](MetaType auto type) noexcept {
+        return decltype_(type).is_trivial();
+    };
+
+    HYPERION_IGNORE_DOCUMENTATION_WARNING_STOP;
 
     /// @brief Returns a metaprogramming predicate object used to query whether a
     /// `MetaType` argument represents a type that is convertible to the type
@@ -810,7 +917,7 @@ HYPERION_IGNORE_DOCUMENTATION_WARNING_STOP;
         };
     }
 
-HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
+    HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
 
     /// @brief Metaprogramming predicate object used to query whether a
     /// `MetaType` argument represents a type that is default constructible.
@@ -1315,6 +1422,132 @@ HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
         return decltype_(type).is_noexcept_move_assignable();
     };
 
+    /// @brief Returns a metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is assignable from a value of type `type`.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent to
+    /// `constexpr operator()(MetaType auto self) noexcept`, that when invoked, returns
+    /// whether `self` represents a type assignable from a value of the type represented by `type`,
+    /// determined as if by `decltype_(self).is_assignable_from(decltype_(type))`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct example {
+    ///     auto operator=(int) -> example&;
+    /// };
+    /// constexpr auto example1 = decltype_<example>{};
+    ///
+    /// static_assert(example1.satisfies(assignable_from(decltype_<example>())));
+    /// static_assert(example1.satisfies(assignable_from(decltype_<int>())));
+    /// static_assert(not example1.satisfies(assignable_from(decltype_<std::string>())));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check for assignability from
+    /// @return A metaprogramming predicate object to check that an argument represents
+    /// a type that is assignable from an argument of the type represented by `type`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
+    constexpr auto assignable_from(MetaType auto type) noexcept {
+        return [](MetaType auto self) noexcept {
+            return decltype_(self).is_assignable_from(decltype(type){});
+        };
+    }
+
+    /// @brief Returns a metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is `noexcept` assignable
+    /// from a value of type `type`.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent to
+    /// `constexpr operator()(MetaType auto self) noexcept`, that when invoked, returns
+    /// whether `self` represents a type `noexcept` assignable from a value of the type
+    /// represented by `type`, determined as if by
+    /// `decltype_(self).is_noexcept_assignable_from(decltype_(type))`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct yes {
+    ///     auto operator=(int) noexcept -> example&;
+    /// };
+    ///
+    /// struct no {
+    ///     auto operator=(int) -> example&;
+    /// };
+    ///
+    /// constexpr auto example1 = decltype_<yes>{};
+    /// constexpr auto example2 = decltype_<no>{};
+    ///
+    /// static_assert(example1.satisfies(noexcept_assignable_from(decltype_<yes>())));
+    /// static_assert(example1.satisfies(noexcept_assignable_from(decltype_<int>())));
+    /// static_assert(not example1.satisfies(noexcept_assignable_from(decltype_<std::string>())));
+    /// static_assert(not example2.satisfies(noexcept_assignable_from(decltype_<int>())));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check for assignability from
+    /// @return A metaprogramming predicate object to check that an argument represents
+    /// a type that is `noexcept` assignable from an argument of the type represented by `type`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
+    constexpr auto noexcept_assignable_from(MetaType auto type) noexcept {
+        return [](MetaType auto self) noexcept {
+            return decltype_(self).is_noexcept_assignable_from(decltype(type){});
+        };
+    }
+
+    /// @brief Returns a metaprogramming predicate object used to query whether a
+    /// `MetaType` argument represents a type that is trivially assignable
+    /// from a value of type `type`.
+    ///
+    /// The returned metaprogramming predicate object has call operator equivalent to
+    /// `constexpr operator()(MetaType auto self) noexcept`, that when invoked, returns
+    /// whether `self` represents a type trivially assignable from a value of the type
+    /// represented by `type`, determined as if by
+    /// `decltype_(self).is_trivially_assignable_from(decltype_(type))`.
+    ///
+    /// # Requirements
+    /// - `type` must be an instance of a `MetaType`
+    ///
+    /// # Example
+    /// @code {.cpp}
+    /// struct first {
+    /// };
+    ///
+    /// struct second {
+    ///     auto operator=(const second&) noexcept -> second& = default;
+    ///     auto operator=(second&&) noexcept -> second& = default;
+    /// };
+    ///
+    /// struct third {
+    ///     auto operator=(const second&) noexcept -> third&;
+    ///     auto operator=(second&&) noexcept -> third&;
+    /// };
+    ///
+    /// constexpr auto example1 = decltype_<first>{};
+    /// constexpr auto example2 = decltype_<second>{};
+    /// constexpr auto example3 = decltype_<third>{};
+    ///
+    /// static_assert(example1.satisfies(trivially_assignable_from(decltype_<first>())));
+    /// static_assert(example2.satisfies(trivially_assignable_from(decltype_<second>())));
+    /// static_assert(not example1.satisfies(trivially_assignable_from(decltype_<std::string>())));
+    /// static_assert(not example3.satisfies(trivially_assignable_from(decltype_<third>())));
+    /// @endcode
+    ///
+    /// @param type The `MetaType` representing the type to check for assignability from
+    /// @return A metaprogramming predicate object to check that an argument represents
+    /// a type that is trivially assignable from an argument of the type represented by `type`
+    /// @ingroup metapredicates
+    /// @headerfile hyperion/mpl/metapredicates.h
+    constexpr auto trivially_assignable_from(MetaType auto type) noexcept {
+        return [](MetaType auto self) noexcept {
+            return decltype_(self).is_trivially_assignable_from(decltype(type){});
+        };
+    }
+
     /// @brief Metaprogramming predicate object used to query whether a
     /// `MetaType` argument represents a type that is trivially move assignable.
     ///
@@ -1531,7 +1764,7 @@ HYPERION_IGNORE_DOCUMENTATION_WARNING_START;
         return decltype_(type).is_noexcept_swappable();
     };
 
-HYPERION_IGNORE_DOCUMENTATION_WARNING_STOP;
+    HYPERION_IGNORE_DOCUMENTATION_WARNING_STOP;
 
     /// @brief Returns a metaprogramming predicate object used to query whether a
     /// `MetaType` argument represents a type that is swappable with the type
@@ -1544,7 +1777,7 @@ HYPERION_IGNORE_DOCUMENTATION_WARNING_STOP;
     /// The returned metaprogramming predicate object has call operator equivalent to
     /// `constexpr operator()(MetaType auto arg) noexcept`, that when invoked, returns
     /// whether `arg` represents a type swappable with the type represented by `type`,
-    /// determined as if by `decltype_(element).is_swappable_with(decltype_(type))`.
+    /// determined as if by `decltype_(arg).is_swappable_with(decltype_(type))`.
     ///
     /// # Requirements
     /// - `type` must be an instance of a `MetaType`
@@ -1590,7 +1823,7 @@ HYPERION_IGNORE_DOCUMENTATION_WARNING_STOP;
     /// to `constexpr operator()(MetaType auto arg) noexcept`, that when invoked,
     /// returns whether `arg` represents a type `noexcept` swappable with the type
     /// represented by `type`, determined as if by
-    /// `decltype_(element).is_noexcept_swappable_with(decltype_(type))`.
+    /// `decltype_(arg).is_noexcept_swappable_with(decltype_(type))`.
     ///
     /// # Requirements
     /// - `type` must be an instance of a `MetaType`

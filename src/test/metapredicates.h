@@ -1,8 +1,8 @@
 /// @file metapredicates.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Tests for metapredicates.h
-/// @version 0.1.3
-/// @date 2025-07-08
+/// @version 0.2.0
+/// @date 2025-11-24
 ///
 /// MIT License
 /// @copyright Copyright (c) 2025 Braxton Salyer <braxtonsalyer@gmail.com>
@@ -91,24 +91,55 @@ namespace hyperion::mpl::_test::metapredicates {
                   "hyperion::mpl::qualification_of predicate test case 4 (failing)");
 
     static_assert(decltype_<const int>().satisfies(is_const),
-                  "hyperion::mpl::is_const predicat test case 1 (failing)");
+                  "hyperion::mpl::is_const predicate test case 1 (failing)");
     static_assert(not decltype_<int>().satisfies(is_const),
-                  "hyperion::mpl::is_const predicat test case 2 (failing)");
+                  "hyperion::mpl::is_const predicate test case 2 (failing)");
 
     static_assert(decltype_<int&>().satisfies(is_lvalue_reference),
-                  "hyperion::mpl::is_lvalue_reference predicat test case 1 (failing)");
+                  "hyperion::mpl::is_lvalue_reference predicate test case 1 (failing)");
     static_assert(not decltype_<int>().satisfies(is_lvalue_reference),
-                  "hyperion::mpl::is_lvalue_reference predicat test case 2 (failing)");
+                  "hyperion::mpl::is_lvalue_reference predicate test case 2 (failing)");
 
     static_assert(decltype_<int&&>().satisfies(is_rvalue_reference),
-                  "hyperion::mpl::is_rvalue_reference predicat test case 1 (failing)");
+                  "hyperion::mpl::is_rvalue_reference predicate test case 1 (failing)");
     static_assert(not decltype_<int>().satisfies(is_rvalue_reference),
-                  "hyperion::mpl::is_rvalue_reference predicat test case 2 (failing)");
+                  "hyperion::mpl::is_rvalue_reference predicate test case 2 (failing)");
+
+    static_assert(decltype_<int&>().satisfies(is_reference),
+                  "hyperion::mpl::is_reference predicate test case 1 (failing)");
+    static_assert(not decltype_<int>().satisfies(is_reference),
+                  "hyperion::mpl::is_reference predicate test case 2 (failing)");
+    static_assert(decltype_<int&&>().satisfies(is_reference),
+                  "hyperion::mpl::is_reference predicate test case 3 (failing)");
+
+    static_assert(decltype_<int*>().satisfies(is_pointer),
+                  "hyperion::mpl::is_pointer predicate test case 1 (failing)");
+    static_assert(not decltype_<int>().satisfies(is_pointer),
+                  "hyperion::mpl::is_pointer predicate test case 2 (failing)");
+    static_assert(decltype_<const int* const>().satisfies(is_pointer),
+                  "hyperion::mpl::is_pointer predicate test case 3 (failing)");
 
     static_assert(decltype_<volatile int>().satisfies(is_volatile),
-                  "hyperion::mpl::is_volatile predicat test case 1 (failing)");
+                  "hyperion::mpl::is_volatile predicate test case 1 (failing)");
     static_assert(not decltype_<int>().satisfies(is_volatile),
-                  "hyperion::mpl::is_volatile predicat test case 2 (failing)");
+                  "hyperion::mpl::is_volatile predicate test case 2 (failing)");
+
+    struct empty { };
+
+    static_assert(decltype_<empty>().satisfies(is_empty),
+                  "hyperion::mpl::is_empty test case 1 (failing)");
+    static_assert(not decltype_<int>().satisfies(is_empty),
+                  "hyperion::mpl::is_empty test case 2 (failing)");
+
+    struct not_trivial {
+        not_trivial(const not_trivial&);
+    };
+    static_assert(decltype_<empty>().satisfies(is_trivial),
+                  "hyperion::mpl::is_trivial test case 1 (failing)");
+    static_assert(decltype_<int>().satisfies(is_trivial),
+                  "hyperion::mpl::is_trivial test case 2 (failing)");
+    static_assert(not decltype_<not_trivial>().satisfies(is_trivial),
+                  "hyperion::mpl::is_trivial test case 3 (failing)");
 
     struct not_convertible { };
 
@@ -503,6 +534,52 @@ namespace hyperion::mpl::_test::metapredicates {
                   "hyperion::mpl::trivially_move_assignable predicate test case 4 (failing)");
     static_assert(not decltype_<not_move_assignable>().satisfies(mpl::trivially_move_assignable),
                   "hyperion::mpl::trivially_move_assignable predicate test case 5 (failing)");
+
+    struct base_type { };
+
+    template<typename T>
+    struct assignable_from {
+        auto operator=(T) -> assignable_from& {
+            return *this;
+        }
+    };
+
+    template<typename T>
+    struct noexcept_assignable_from {
+        auto operator=(T) -> noexcept_assignable_from& {
+            return *this;
+        }
+    };
+
+    static_assert(
+        decltype_<assignable_from<int>>().satisfies(mpl::assignable_from(decltype_<int>())),
+        "hyperion::mpl::assignable_from test case 1 (failing)");
+    static_assert(decltype_<assignable_from<int>>().satisfies(
+                      mpl::assignable_from(decltype_<assignable_from<int>>())),
+                  "hyperion::mpl::assignable_from test case 2 (failing)");
+    static_assert(not decltype_<assignable_from<int>>().satisfies(
+                      mpl::assignable_from(decltype_<base_type>())),
+                  "hyperion::mpl::assignable_from test case 3 (failing)");
+
+    static_assert(decltype_<assignable_from<int>>().satisfies(
+                      mpl::noexcept_assignable_from(decltype_<assignable_from<int>>())),
+                  "hyperion::mpl::noexcept_assignable_from test case 1 (failing)");
+    static_assert(not decltype_<assignable_from<int>>().satisfies(
+                      mpl::noexcept_assignable_from(decltype_<int>())),
+                  "hyperion::mpl::noexcept_assignable_from test case 2 (failing)");
+    static_assert(not decltype_<assignable_from<int>>().satisfies(
+                      mpl::noexcept_assignable_from(decltype_<base_type>())),
+                  "hyperion::mpl::noexcept_assignable_from test case 3 (failing)");
+
+    static_assert(decltype_<assignable_from<int>>().satisfies(
+                      mpl::trivially_assignable_from(decltype_<assignable_from<int>>())),
+                  "hyperion::mpl::trivially_assignable_from test case 1 (failing)");
+    static_assert(not decltype_<assignable_from<int>>().satisfies(
+                      mpl::trivially_assignable_from(decltype_<int>())),
+                  "hyperion::mpl::trivially_assignable_from test case 2 (failing)");
+    static_assert(not decltype_<assignable_from<int>>().satisfies(
+                      mpl::trivially_assignable_from(decltype_<base_type>())),
+                  "hyperion::mpl::trivially_assignable_from test case 3 (failing)");
 
     // NOLINTNEXTLINE(*-special-member-functions)
     struct not_destructible {

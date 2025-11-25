@@ -1,8 +1,8 @@
 /// @file list.h
 /// @author Braxton Salyer <braxtonsalyer@gmail.com>
 /// @brief Tests for list.h
-/// @version 0.8.1
-/// @date 2025-07-08
+/// @version 0.8.2
+/// @date 2025-11-24
 ///
 /// MIT License
 /// @copyright Copyright (c) 2025 Braxton Salyer <braxtonsalyer@gmail.com>
